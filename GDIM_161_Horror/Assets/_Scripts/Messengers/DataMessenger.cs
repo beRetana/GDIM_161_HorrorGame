@@ -40,7 +40,7 @@ namespace MessengerSystem
         #region Bool
 
         // String-Key Based Methods
-        private static bool GetBool(string key)
+        public static bool GetBool(string key)
         {
             if (!_boolsDictionary.TryGetValue(key, out bool v))
             {
@@ -50,17 +50,17 @@ namespace MessengerSystem
             return v;
         }
 
-        private static void SetBool(string key, bool value)
+        public static void SetBool(string key, bool value)
         {
             _boolsDictionary[key] = value;
         }
 
-        private static void ToggleBool(string key)
+        public static void ToggleBool(string key)
         {
             _boolsDictionary[key] = !_boolsDictionary[key];
         }
 
-        private static IEnumerator WaitForBool(string key, bool doInvert = false)
+        public static IEnumerator WaitForBool(string key, bool doInvert = false)
         {
             while (doInvert ? !GetBool(key) : GetBool(key)) yield return null;
         }
@@ -97,7 +97,7 @@ namespace MessengerSystem
         #region Float
 
         // String-key Based Methods
-        private static float GetFloat(string key)
+        public static float GetFloat(string key)
         {
             if (!_floatsDictionary.TryGetValue(key, out float v))
             {
@@ -107,7 +107,7 @@ namespace MessengerSystem
             return v;
         }
 
-        private static void SetFloat(string key, float value)
+        public static void SetFloat(string key, float value)
         {
             _floatsDictionary[key] = value;
         }
@@ -128,7 +128,7 @@ namespace MessengerSystem
         #region GameObject
 
         // String-Key Based Methods
-        private static GameObject GetGameObject(string key)
+        public static GameObject GetGameObject(string key)
         {
             if (!_gameObjectsDictionary.TryGetValue(key, out GameObject obj))
             {
@@ -138,7 +138,7 @@ namespace MessengerSystem
             return obj;
         }
         
-        private static void SetGameObject(string key, GameObject obj)
+        public static void SetGameObject(string key, GameObject obj)
         {
             _gameObjectsDictionary[key] = obj;
         }
@@ -159,7 +159,7 @@ namespace MessengerSystem
         #region Int
 
         // String-Key Based Methods
-        private static int GetInt(string key)
+        public static int GetInt(string key)
         {
             if (!_intsDictionary.TryGetValue(key, out int v))
             {
@@ -169,7 +169,7 @@ namespace MessengerSystem
             return v;
         }
 
-        private static void SetInt(string key, int value)
+        public static void SetInt(string key, int value)
         {
             _intsDictionary[key] = value;
         }
@@ -190,7 +190,7 @@ namespace MessengerSystem
         #region Quaternion
 
         // String-Key Based Methods
-        private static Quaternion GetQuaternion(string key)
+        public static Quaternion GetQuaternion(string key)
         {
             if (!_quaternionsDictionary.TryGetValue(key, out Quaternion v))
             {
@@ -200,7 +200,7 @@ namespace MessengerSystem
             return v;
         }
 
-        private static void SetQuaternion(string key, Quaternion value)
+        public static void SetQuaternion(string key, Quaternion value)
         {
             _quaternionsDictionary[key] = value;
         }
@@ -221,7 +221,7 @@ namespace MessengerSystem
         #region ScriptableObject
 
         // String-Key Based Methods
-        private static ScriptableObject GetScriptableObject(string key)
+        public static ScriptableObject GetScriptableObject(string key)
         {
             if (!_scriptableObjectsDictionary.TryGetValue(key, out ScriptableObject obj))
             {
@@ -231,7 +231,7 @@ namespace MessengerSystem
             return obj;
         }
 
-        private static void SetScriptableObject(string key, ScriptableObject obj)
+        public static void SetScriptableObject(string key, ScriptableObject obj)
         {
             _scriptableObjectsDictionary[key] = obj;
         }
@@ -252,7 +252,7 @@ namespace MessengerSystem
         #region String
 
         // String-Key Based Methods
-        private static string GetString(string key)
+        public static string GetString(string key)
         {
             if (!_stringsDictionary.TryGetValue(key, out string v))
             {
@@ -262,7 +262,7 @@ namespace MessengerSystem
             return v;
         }
         
-        private static void SetString(string key, string value)
+        public static void SetString(string key, string value)
         {
             _stringsDictionary[key] = value;
         }
@@ -346,7 +346,7 @@ namespace MessengerSystem
         #region Vector3
 
         // String-Key Based Methods
-        private static Vector3 GetVector3(string key)
+        public static Vector3 GetVector3(string key)
         {
             if (!_vector3sDictionary.TryGetValue(key, out Vector3 v))
             {
