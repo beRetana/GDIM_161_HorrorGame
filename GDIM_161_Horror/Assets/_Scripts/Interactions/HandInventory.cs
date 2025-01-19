@@ -66,18 +66,19 @@ public class HandInventory : MonoBehaviour
         }*/
     }
 
+    /// <summary>
+    /// Traces a ray from the center of the screen of a lenght then checks certain conditions.
+    /// </summary>
     void CheckForInteractables(){
         Ray rayToInteract = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
 
         // If we hit something in the layer.
         if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, pickUpRange, interactableLayer))
         {
-            Debug.Log(interactableComponent);
             // If we didn't hit something before.
             if (interactableComponent == null)
             {
                 // Report it as detected
-                Debug.Log(hitInfo.transform.gameObject);
                 interactableComponent = hitInfo.transform.gameObject.GetComponent<IInteractable>();
                 interactableComponent.Detected();
                 mouse.GetComponent<MouseUI>().InteractionEffect();
@@ -86,7 +87,6 @@ public class HandInventory : MonoBehaviour
             else if (hitInfo.transform.gameObject.GetComponent<IInteractable>() != interactableComponent)
             {
                 // Stop animation and start the new one
-                Debug.Log("Stop animation and start the new one");
                 interactableComponent.StoppedDetecting();
                 interactableComponent = hitInfo.transform?.gameObject.GetComponent<IInteractable>();
                 interactableComponent?.Detected();
@@ -95,7 +95,6 @@ public class HandInventory : MonoBehaviour
         // If we didn't hit anything did we hit something before?
         else if (interactableComponent != null)
         {
-            Debug.Log("If we didn't hit anything did we hit something before?");
             interactableComponent.StoppedDetecting();
             mouse.GetComponent<MouseUI>()?.DefaultEffect();
             interactableComponent = null;
