@@ -44,7 +44,8 @@ namespace MessengerSystem
 
         public enum GameObjectKey
         {
-
+            Player,
+            MouseUI
         }
 
         public enum ScriptableObjectKey

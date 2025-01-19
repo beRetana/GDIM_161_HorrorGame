@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace QFSW.QC.Editor.Tools
 {
+    [Obsolete]
     public static class SymbolEditor
     {
         public static IEnumerable<T> AsEnumerable<T>(this T val)
