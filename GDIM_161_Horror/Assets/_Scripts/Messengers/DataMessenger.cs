@@ -150,9 +150,10 @@ namespace MessengerSystem
             return GetGameObject(key.ToString());
         }
 
-        public static void SetGameObject(MessengerKeys.GameObjectKey key, GameObject obj)
+        public static string SetGameObject(MessengerKeys.GameObjectKey key, GameObject obj)
         {
             SetGameObject(key.ToString(), obj);
+            return key.ToString();
         }
 
         #endregion GameObject

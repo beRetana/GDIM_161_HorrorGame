@@ -43,7 +43,8 @@ public class HandInventory : MonoBehaviour
     void Start()
     {
         mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI);
-        //playerID = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.)
+        playerID = gameObject.GetComponent<PlayerBase>().ID();
+        Debug.Log($"{this.name} is attatched to PlayerID:{playerID}");
     }
 
     void OnEnable()
@@ -84,6 +85,8 @@ public class HandInventory : MonoBehaviour
             {
                 // Report it as detected
                 interactableComponent = hitInfo.transform.gameObject.GetComponent<IInteractable>();
+                Debug.Log(interactableComponent);
+                Debug.Log(playerID);
                 interactableComponent.Detected(playerID);
                 mouse.GetComponent<MouseUI>().InteractionEffect();
             } 

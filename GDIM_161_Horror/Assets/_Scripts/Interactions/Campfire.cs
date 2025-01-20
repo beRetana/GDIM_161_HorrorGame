@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Campfire : InteractableObject
+public class Campfire : InteractableObject, IInteractable
 {
     #region Variables
     [Header("Timer")]

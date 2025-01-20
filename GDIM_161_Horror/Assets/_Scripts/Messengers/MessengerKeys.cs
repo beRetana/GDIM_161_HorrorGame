@@ -44,6 +44,7 @@ namespace MessengerSystem
 
         public enum GameObjectKey
         {
+            PlayerManager,
             Player1,
             Player2,
             Player3,

@@ -8,8 +8,12 @@ public class PlayerBase : MonoBehaviour
     private static int _staticClassID = 1;
     private int _myID;
 
+    public delegate void PlayerSpawn(PlayerBase player);
+    public static event PlayerSpawn OnPlayerSpawn;
+
     private void Awake()
     {
+
         if(_staticClassID > 4)
         {
             Debug.LogError($"Invalid Player Amount: {_staticClassID}");
@@ -19,28 +23,10 @@ public class PlayerBase : MonoBehaviour
         _myID = _staticClassID;
         ++_staticClassID;
         Debug.Log($"Player {_myID} spawned");
-        PlayerMessengerKey();
+
+        OnPlayerSpawn?.Invoke(this);
     }
 
-    void PlayerMessengerKey()
-    {
-        switch (_myID)
-        {
-            case 1:
-                DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player1, gameObject);
-                break;
-            case 2:
-                DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player2, gameObject);
-                break;
-            case 3:
-                DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player3, gameObject);
-                break;
-            case 4:
-                DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player4, gameObject);
-                break;
-            default:
-                Debug.LogError($"Invalid Player Amount: {_myID}");
-                break;
-        }
-    }
+
+    public int ID() { return _myID; }
 }
