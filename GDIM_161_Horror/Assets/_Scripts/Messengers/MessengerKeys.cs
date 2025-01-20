@@ -44,7 +44,10 @@ namespace MessengerSystem
 
         public enum GameObjectKey
         {
-            Player,
+            Player1,
+            Player2,
+            Player3,
+            Player4,
             MouseUI
         }
 
@@ -56,6 +59,7 @@ namespace MessengerSystem
         public enum EventKey{
 
         }
+
     }
 }
 

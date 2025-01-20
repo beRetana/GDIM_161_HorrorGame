@@ -17,20 +17,20 @@ public class PickableItem : MonoBehaviour, IInteractable
 
     void Start()
     {
-        _player = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.Player);
+        //_player = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.Player);
     }
 
-    public void Interact()
+    public void Interact(int playerID)
     {
         _player.GetComponent<HandInventory>().PickUpObject(gameObject);
     }
 
-    public void Detected()
+    public void Detected(int playerID)
     {
         textAnimation.SetBool(_fadeIn, true);
     }
 
-    public void StoppedDetecting()
+    public void StoppedDetecting(int playerID)
     {
         textAnimation.SetBool(_fadeIn, false);
     }

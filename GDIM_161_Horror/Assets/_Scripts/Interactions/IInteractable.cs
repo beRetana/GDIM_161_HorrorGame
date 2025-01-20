@@ -2,9 +2,9 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public void Interact();
+    public void Interact(int playerID);
 
-    public void Detected();
+    public void Detected(int playerID);
 
-    public void StoppedDetecting();
+    public void StoppedDetecting(int playerID);
 }

@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HandInventory : MonoBehaviour
 {
+
     [SerializeField] private LayerMask interactableLayer;
 
     private struct InventorySlot{
@@ -20,6 +21,7 @@ public class HandInventory : MonoBehaviour
     private InventorySlot leftHand;
     private InventorySlot rightHand;
     private GameObject mouse;
+    private int playerID;
     private IInteractable interactableComponent;
     private float initialLinearDamping;
 
@@ -32,14 +34,16 @@ public class HandInventory : MonoBehaviour
 
     void Awake() 
     {
-        DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player, gameObject);
         playerControls = new();
         OnEnable();
     }
 
+    
+
     void Start()
     {
         mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI);
+        //playerID = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.)
     }
 
     void OnEnable()
@@ -80,22 +84,22 @@ public class HandInventory : MonoBehaviour
             {
                 // Report it as detected
                 interactableComponent = hitInfo.transform.gameObject.GetComponent<IInteractable>();
-                interactableComponent.Detected();
+                interactableComponent.Detected(playerID);
                 mouse.GetComponent<MouseUI>().InteractionEffect();
             } 
             // If we are hitting a different object than before.
             else if (hitInfo.transform.gameObject.GetComponent<IInteractable>() != interactableComponent)
             {
                 // Stop animation and start the new one
-                interactableComponent.StoppedDetecting();
+                interactableComponent.StoppedDetecting(playerID);
                 interactableComponent = hitInfo.transform?.gameObject.GetComponent<IInteractable>();
-                interactableComponent?.Detected();
+                interactableComponent?.Detected(playerID);
             }
         }
         // If we didn't hit anything did we hit something before?
         else if (interactableComponent != null)
         {
-            interactableComponent.StoppedDetecting();
+            interactableComponent.StoppedDetecting(playerID);
             mouse.GetComponent<MouseUI>()?.DefaultEffect();
             interactableComponent = null;
         }
@@ -104,7 +108,7 @@ public class HandInventory : MonoBehaviour
  
     private void OnInteract(InputAction.CallbackContext context)
     {
-        interactableComponent?.Interact();
+        interactableComponent?.Interact(playerID);
     }
 
     private void OnDrop(InputAction.CallbackContext context)
