@@ -9,32 +9,36 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HandInventory : MonoBehaviour
 {
-
-    [SerializeField] private LayerMask interactableLayer;
+    [SerializeField] private LayerMask _interactableLayer;
+    [SerializeField] private Transform _rightHandTransform;
+    [SerializeField] private Transform _leftHandTransform;
 
     private struct InventorySlot{
-        private Transform location;
-        private GameObject pickedObject;
+        public GameObject pickedObject;
+        public Rigidbody rigidbody;
+        public Transform transform;
+        public float initialLinearDamping;
     }
 
-    private PlayerControls playerControls;
-    private InventorySlot leftHand;
-    private InventorySlot rightHand;
-    private GameObject mouse;
+    private PlayerControls _playerControls;
+    private InventorySlot _leftHand;
+    private InventorySlot _rightHand;
+    private GameObject _mouse;
     private int playerID;
-    private IInteractable interactableComponent;
-    private float initialLinearDamping;
+    private GameObject _player;
+    private IInteractable _interactableComponent;
 
     [Header("Interaction Physics Settings")]
 
-    [SerializeField] private float pickUpRange;
-    [SerializeField] private float pickUpForce;
-    [SerializeField] private float drag;
-    [SerializeField] private float throwForce;
+    [SerializeField] private float _pickUpRange;
+    [SerializeField] private float _pickUpForce;
+    [SerializeField] private float _linearDrag;
+    [SerializeField] private float _throwForce;
 
     void Awake() 
     {
-        playerControls = new();
+        DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.Player, gameObject);
+        _playerControls = new();
         OnEnable();
     }
 
@@ -42,33 +46,34 @@ public class HandInventory : MonoBehaviour
 
     void Start()
     {
-        mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI);
+        _mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI);
+        _leftHand.transform = _leftHandTransform;
+        _rightHand.transform = _rightHandTransform;
         playerID = gameObject.GetComponent<PlayerBase>().ID();
         Debug.Log($"{this.name} is attatched to PlayerID:{playerID}");
     }
 
     void OnEnable()
     {
-        playerControls.Player.Interact.Disable();
-        playerControls.Player.Drop.Enable();
-        playerControls.Player.Throw.Enable();
+        _playerControls.Player.Interact.Enable();
+        _playerControls.Player.Drop.Enable();
+        _playerControls.Player.Throw.Enable();
 
-        playerControls.Player.Interact.performed += OnInteract;
-        playerControls.Player.Drop.performed += OnDrop;
+        _playerControls.Player.Interact.performed += OnInteract;
+        _playerControls.Player.Drop.performed += OnDrop;
+        _playerControls.Player.Throw.performed += OnThrow;
     }
 
     void OnDisable(){
-        playerControls.Player.Interact.Disable();
-        playerControls.Player.Drop.Disable();
+        _playerControls.Player.Interact.Disable();
+        _playerControls.Player.Drop.Disable();
+        _playerControls.Player.Throw.Disable();
     }
 
     void Update()
     {
         CheckForInteractables();
-
-        /*if(pickedObj != null){
-            MovePickedObj();
-        }*/
+        MovePickedObjects();
     }
 
     /// <summary>
@@ -78,98 +83,147 @@ public class HandInventory : MonoBehaviour
         Ray rayToInteract = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
 
         // If we hit something in the layer.
-        if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, pickUpRange, interactableLayer))
+        if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
         {
+            IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
+
             // If we didn't hit something before.
-            if (interactableComponent == null)
+            if (_interactableComponent == null)
             {
                 // Report it as detected
-                interactableComponent = hitInfo.transform.gameObject.GetComponent<IInteractable>();
+                _interactableComponent = childCanvas;
                 Debug.Log(interactableComponent);
                 Debug.Log(playerID);
-                interactableComponent.Detected(playerID);
-                mouse.GetComponent<MouseUI>().InteractionEffect();
+                _interactableComponent.Detected(playerID);
+                _mouse.GetComponent<MouseUI>().InteractionEffect();
             } 
             // If we are hitting a different object than before.
-            else if (hitInfo.transform.gameObject.GetComponent<IInteractable>() != interactableComponent)
+            else if (childCanvas != _interactableComponent)
             {
                 // Stop animation and start the new one
-                interactableComponent.StoppedDetecting(playerID);
-                interactableComponent = hitInfo.transform?.gameObject.GetComponent<IInteractable>();
-                interactableComponent?.Detected(playerID);
+                _interactableComponent.StoppedDetecting(playerID);
+                _interactableComponent = childCanvas;
+                _interactableComponent?.Detected(playerID);
             }
         }
         // If we didn't hit anything did we hit something before?
-        else if (interactableComponent != null)
+        else if (_interactableComponent != null)
         {
-            interactableComponent.StoppedDetecting(playerID);
-            mouse.GetComponent<MouseUI>()?.DefaultEffect();
-            interactableComponent = null;
+            _interactableComponent.StoppedDetecting(playerID);
+            _mouse.GetComponent<MouseUI>()?.DefaultEffect();
+            _interactableComponent = null;
         }
 
     }
  
-    private void OnInteract(InputAction.CallbackContext context)
+    void OnInteract(InputAction.CallbackContext context)
     {
-        interactableComponent?.Interact(playerID);
+        Debug.Log("Interacted with: "+ _interactableComponent);
+        _interactableComponent?.Interact(playerID);
     }
 
-    private void OnDrop(InputAction.CallbackContext context)
+    void OnDrop(InputAction.CallbackContext context)
     {
         throw new NotImplementedException();
     }
 
-    private void ThrowObject(InputAction.CallbackContext context)
+    void OnThrow(InputAction.CallbackContext context)
     {
-        /*pickedObjRB.useGravity = true;
+        /*
+        pickedObjRB.useGravity = true;
         pickedObjRB.linearDamping = initialLinearDamping;
         pickedObjRB.freezeRotation = false;
         pickedObj.transform.parent = null;
         Physics.IgnoreCollision(pickedObj.GetComponent<Collider>(), player.GetComponent<CapsuleCollider>(), false);
         pickedObjRB.AddForce(transform.forward * throwForce, ForceMode.Impulse);
         pickedObj = null;
-        pickedObjRB = null;*/
+        pickedObjRB = null;
+        */
+    }
+
+    bool CheckFreeHands()
+    {
+        if(_rightHand.pickedObject == null)
+        {
+            return true;
+        }
+
+        if(_leftHand.pickedObject == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    InventorySlot GetFreeHand()
+    {
+        if(_rightHand.pickedObject == null)
+        {
+            return _rightHand;
+        }
+        
+        return _leftHand;
     }
 
     public void PickUpObject(GameObject pickableItem)
     {
-        /*RaycastHit hit;
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange)){
-            PickUpObject(hit.transform.gameObject);
+        if(CheckFreeHands()){
+
+            InventorySlot inventorySlot = GetFreeHand();
+
+            if(pickableItem.GetComponent<Rigidbody>())
+            {
+                inventorySlot.pickedObject = pickableItem;
+                inventorySlot.rigidbody = pickableItem.GetComponent<Rigidbody>();
+                inventorySlot.rigidbody.useGravity = false;
+                inventorySlot.initialLinearDamping = inventorySlot.rigidbody.linearDamping;
+                inventorySlot.rigidbody.linearDamping = _linearDrag;
+                inventorySlot.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                inventorySlot.rigidbody.transform.parent = inventorySlot.transform;
+
+                Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), _player.GetComponent<CapsuleCollider>(), true);
+            }
         }
         else
         {
             OnDrop();
-        }*/
+        }
     }
 
-    private void MovePickedObj(){
-        /*if(Vector3.Distance(pickedObj.transform.position, leftHand.position) > .1f){
-            Vector3 direction =  leftHand.position - pickedObj.transform.position;
-            pickedObjRB.AddForce(direction * pickUpForce);
-        }*/
-    }
+    private void MovePickedObjects()
+    {
 
-    //private void PickUpObject(GameObject obj){
-        /*if(obj.GetComponent<Rigidbody>()){
-            pickedObjRB = obj.GetComponent<Rigidbody>();
-            pickedObjRB.useGravity = false;
-            initialLinearDamping = pickedObjRB.drag;
-            pickedObjRB.drag = drag;
-            pickedObjRB.constraints = RigidbodyConstraints.FreezeRotation;
-            pickedObj = obj;
-            pickedObjRB.transform.parent = leftHand;
-            Physics.IgnoreCollision(pickedObj.GetComponent<Collider>(), player.GetComponent<CapsuleCollider>(), true);
-        }*/
-    //}
+        void MoveObject(InventorySlot inventorySlot)
+        {
+            if(Vector3.Distance(inventorySlot.pickedObject.transform.position, inventorySlot.transform.position) > .1f){
+                Vector3 direction =  inventorySlot.transform.position - inventorySlot.pickedObject.transform.position;
+                inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
+            }
+        }
+
+        if(_rightHand.pickedObject != null)
+        {
+            MoveObject(_rightHand);
+        }     
+        if(_leftHand.pickedObject != null)
+        {
+            MoveObject(_leftHand);
+        } 
+    }
 
     private void OnDrop(){
-        /*pickedObjRB.useGravity = true;
-        pickedObjRB.drag = initialLinearDamping;
-        pickedObjRB.freezeRotation = false;
-        Physics.IgnoreCollision(pickedObj.GetComponent<Collider>(), player.GetComponent<CapsuleCollider>(), false);
-        pickedObj.transform.parent = null;
-        pickedObj = null;
-        pickedObjRB = null;*/
+
+        if(!CheckFreeHands())
+        {
+            InventorySlot inventorySlot = GetFreeHand();
+            inventorySlot.rigidbody.useGravity = true;
+            inventorySlot.rigidbody.linearDamping = inventorySlot.initialLinearDamping;
+            inventorySlot.rigidbody.freezeRotation = false;
+            Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), _player.GetComponent<CapsuleCollider>(), false);
+            inventorySlot.rigidbody.transform.parent = null;
+            inventorySlot.pickedObject = null;
+            inventorySlot.rigidbody = null;
+        }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class rotates the object based on the mode chosen.
+/// </summary>
 public class LookAtCamera : MonoBehaviour {
 
     [SerializeField] private Mode mode;
