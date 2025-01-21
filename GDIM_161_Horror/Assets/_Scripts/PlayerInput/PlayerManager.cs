@@ -36,6 +36,7 @@ public class PlayerManager : MonoBehaviour
                 Debug.LogError($"Invalid Player Amount: {player.ID()}");
                 break;
         }
+        Debug.Log($"Player {player.ID()} added to PlayerManager");
         playerMessengerKeys[player.ID()] = DataMessenger.SetGameObject((MessengerKeys.GameObjectKey)keyToAdd, player.gameObject);
     }
 
