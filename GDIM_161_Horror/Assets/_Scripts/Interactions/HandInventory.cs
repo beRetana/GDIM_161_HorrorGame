@@ -92,7 +92,7 @@ public class HandInventory : MonoBehaviour
             {
                 // Report it as detected
                 _interactableComponent = childCanvas;
-                Debug.Log(interactableComponent);
+                Debug.Log(_interactableComponent);
                 Debug.Log(playerID);
                 _interactableComponent.Detected(playerID);
                 _mouse.GetComponent<MouseUI>().InteractionEffect();
