@@ -1,12 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
 
 public class SteamLobby : MonoBehaviour
 {
-
-    public GameObject hostButton = null;
-    
+    //GameObject
+    public GameObject HostButton;
+    public GameObject LobbyText;
 private NetworkManager networkManager;
 
 protected Callback<LobbyCreated_t> lobbyCreated;
@@ -32,8 +34,8 @@ private void Start()
 public void HostLobby()
 {
 
-    hostButton.SetActive(false);
-
+    HostButton.SetActive(false);
+    LobbyText.SetActive(true);
     SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
 
 }
@@ -45,7 +47,8 @@ private void OnLobbyCreated(LobbyCreated_t callback)
 {
     if (callback.m_eResult != EResult.k_EResultOK)
     {
-        hostButton.SetActive(true);
+        HostButton.SetActive(true);
+        LobbyText.SetActive(false);
         return;
     }
 
@@ -71,7 +74,8 @@ private void OnLobbyEntered(LobbyEnter_t callback)
     networkManager.networkAddress = hostAddress;
     networkManager.StartClient();
 
-    hostButton.SetActive(false);
+   HostButton.SetActive(false);
+   LobbyText.SetActive(true);
 
 }
 
