@@ -2,8 +2,10 @@ using MessengerSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class PlayerBase : NetworkBehavior
+
+public class PlayerBase : MonoBehaviour
 {
     private static int _staticClassID = 1;
     private int _myID;
