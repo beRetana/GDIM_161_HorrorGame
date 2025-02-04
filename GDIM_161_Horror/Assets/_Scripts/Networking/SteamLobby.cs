@@ -3,81 +3,90 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
-
+using UnityEngine.UI;
+using TMPro;
 public class SteamLobby : MonoBehaviour
 {
+    //callbacks
+    protected Callback<LobbyCreated_t> LobbyCreated;
+    protected Callback<GameLobbyJoinRequested_t> JoinRequest;
+    protected Callback<LobbyEnter_t> LobbyEntered;
+
+    //Variables
+    public ulong CurrentLobbyID;
+    private const string HostAddressKey = "HostAddress";
+    private NewNetworkManager manager;
+
     //GameObject
     public GameObject HostButton;
-    public GameObject LobbyText;
-private NetworkManager networkManager;
+    public Text LobbyNameText;
 
-protected Callback<LobbyCreated_t> lobbyCreated;
-protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
-protected Callback<LobbyEnter_t> lobbyEntered;
-
-private const string HostAddressKey = "HostAddress";
-
-private void Start()
-{
-    networkManager = GetComponent<NetworkManager>();
-
-    if(!SteamManager.Initialized) {return;}
-
-
-    lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-    gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
-    lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-
-}
-
-
-public void HostLobby()
-{
-
-    HostButton.SetActive(false);
-    LobbyText.SetActive(true);
-    SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
-
-}
-
-
-
-
-private void OnLobbyCreated(LobbyCreated_t callback)
-{
-    if (callback.m_eResult != EResult.k_EResultOK)
+    private void Start()
     {
-        HostButton.SetActive(true);
-        LobbyText.SetActive(false);
-        return;
+        if(!SteamManager.Initialized){return;}
+
+        manager = GetComponent<NewNetworkManager>();
+
+        LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+        JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
+        LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
 
-    networkManager.StartHost();
+    public void HostLobby()
+{
 
-    SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
+    SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, manager.maxConnections);
+
 }
 
-private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
-{
-    SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
-}
- 
-private void OnLobbyEntered(LobbyEnter_t callback)
-{
-    if(NetworkServer.active)
+    private void OnLobbyCreated(LobbyCreated_t callback)
     {
-        return;
+        if (callback.m_eResult != EResult.k_EResultOK) {return;}
+        Debug.Log("Lobby created successfully");
+
+        manager.StartHost();
+
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName().ToString()+ "'s Lobby");
+       
+   
+
+    
     }
 
-    string hostAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
 
-    networkManager.networkAddress = hostAddress;
-    networkManager.StartClient();
+    private void OnJoinRequest(GameLobbyJoinRequested_t callback)
+    {
+        Debug.Log("Request To Join Lobby");
+        SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
+    }
 
-   HostButton.SetActive(false);
-   LobbyText.SetActive(true);
+    private void OnLobbyEntered(LobbyEnter_t callback)
+    {
+
+            //Everyone
+            HostButton.SetActive(false);
+            CurrentLobbyID = callback.m_ulSteamIDLobby;
+            LobbyNameText.gameObject.SetActive(true);
+            LobbyNameText.text = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name");
+
+
+            //Clients
+
+            if(NetworkServer.active) {return;}
+
+
+            manager.networkAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
+
+            manager.StartClient();
+            
+           
+
+    }
 
 }
 
- 
-}
+
+
+
+
