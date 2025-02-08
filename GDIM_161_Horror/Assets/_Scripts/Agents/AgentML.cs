@@ -7,6 +7,7 @@ public class AgentML : Agent
 {
     [SerializeField] private string wallTag = "Wall";
     [SerializeField] private string playerTag = "Player";
+    [SerializeField] private GameObject playerDummy;
     [SerializeField] private TrainningVisuals trainningVisuals;
 
     private AgentController agentController;
@@ -19,6 +20,11 @@ public class AgentML : Agent
     public override void OnEpisodeBegin()
     {
         agentController.ResetAgent();
+        float xDelimeter = 6.5f;
+        float zDelimeter = 6.5f;
+        float randomX = Random.Range(-xDelimeter, xDelimeter);
+        float randomZ = Random.Range(-zDelimeter, zDelimeter);
+        playerDummy.transform.localPosition = new Vector3(randomX, 0, randomZ);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

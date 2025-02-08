@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using System;
 
 public class AgentController : MonoBehaviour
 {
@@ -20,7 +21,11 @@ public class AgentController : MonoBehaviour
     public void ResetAgent()
     {
         // Reset the agent's position
-        transform.localPosition = Vector3.zero;
+        float xDelimeter = 6.5f;
+        float zDelimeter = 6.5f;
+        float randomX = UnityEngine.Random.Range(-xDelimeter, xDelimeter);
+        float randomZ = UnityEngine.Random.Range(-zDelimeter, zDelimeter);
+        transform.localPosition = new Vector3(randomX,0, randomZ);
         // Reset the agent's velocity
         rb.linearVelocity = Vector3.zero;
         // Reset the agent's rotation
