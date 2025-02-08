@@ -2,77 +2,133 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class EventMessenger : MonoBehaviour
+namespace MessengerSystem
 {
-    private Dictionary<string, UnityEvent> _eventDictionary;
-
-    private static EventMessenger _instance;
-
-    public static EventMessenger Instance
+    /// <summary>
+    /// Allows for communication of Events; aids decoupling.
+    /// </summary>
+    public class EventMessenger : MonoBehaviour
     {
-        get
-        {
-            if (!_instance)
-            {
-                _instance = FindAnyObjectByType(typeof(EventMessenger)) as EventMessenger;
+        private Dictionary<string, UnityEvent> _eventDictionary;
 
+        private static EventMessenger _instance;
+
+        public static EventMessenger Instance
+        {
+            get
+            {
                 if (!_instance)
                 {
-                    Debug.LogError("There should be one EventMessenger on a GameObject in your scene.");
+                    _instance = FindAnyObjectByType(typeof(EventMessenger)) as EventMessenger;
+
+                    if (!_instance)
+                    {
+                        Debug.LogError("There should be one EventMessenger on a GameObject in your scene.");
+                    }
+                    else
+                    {
+                        _instance.Init();
+                    }
                 }
-                else
-                {
-                    _instance.Init();
-                }
+
+                return _instance;
             }
+        }
 
-            return _instance;
+        void Init()
+        {
+            if (_eventDictionary == null)
+            {
+                _eventDictionary = new Dictionary<string, UnityEvent>();
+            }
         }
-    }
 
-    void Init()
-    {
-        if (_eventDictionary == null)
-        {
-            _eventDictionary = new Dictionary<string, UnityEvent>();
-        }
-    }
+        #region String Keys
 
-    public static void StartListeningTo(string eventName, UnityAction listener)
-    {
-        UnityEvent thisEvent;
-        if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
+        /// <summary>
+        /// Make listener subscribe to the event binded to the eventKey. If not event is binded to this key
+        /// it creates a new UnityEvent, binds it to the eventKey and makes listener subscribe to it.
+        /// </summary>
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets subscribed to the UnityEvent.</param>
+        public static void StartListeningTo(string eventKey, UnityAction listener)
         {
-            thisEvent.AddListener(listener);
+            UnityEvent thisEvent;
+            if (Instance._eventDictionary.TryGetValue(eventKey, out thisEvent))
+            {
+                thisEvent.AddListener(listener);
+            }
+            else
+            {
+                thisEvent = new UnityEvent();
+                thisEvent.AddListener(listener);
+                Instance._eventDictionary.Add(eventKey, thisEvent);
+            }
         }
-        else
-        {
-            thisEvent = new UnityEvent();
-            thisEvent.AddListener(listener);
-            Instance._eventDictionary.Add(eventName, thisEvent);
-        }
-    }
 
-    public static void StopListeningTo(string eventName, UnityAction listener)
-    {
-        if (_instance == null) return;
-        UnityEvent thisEvent;
-        if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
+        /// <summary>
+        /// Make listener unsubscribe to the event binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets unsubscribed to the UnityEvent.</param>
+        public static void StopListeningTo(string eventKey, UnityAction listener)
         {
-            thisEvent.RemoveListener(listener);
+            if (_instance == null) return;
+            UnityEvent thisEvent;
+            if (Instance._eventDictionary.TryGetValue(eventKey, out thisEvent))
+            {
+                thisEvent.RemoveListener(listener);
+            }
         }
-    }
 
-    public static void TriggerEvent(string eventName)
-    {
-        UnityEvent thisEvent;
-        if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
+        /// <summary>
+        /// Invokes the UnityEvent binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
+        public static void TriggerEvent(string eventKey)
         {
-            thisEvent.Invoke();
+            UnityEvent thisEvent;
+            if (Instance._eventDictionary.TryGetValue(eventKey, out thisEvent))
+            {
+                thisEvent.Invoke();
+            }
+            else
+            {
+                Debug.Log("EventMessenger doesn't contain the event: " + eventKey);
+            }
         }
-        else
+        #endregion String Keys
+
+        #region Enum Keys
+        /// <summary>
+        /// Make listener subscribe to the event binded to the eventKey. If not event is binded to this key
+        /// it creates a new UnityEvent, binds it to the eventKey and makes listener subscribe to it.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets subscribed to the UnityEvent.</param>
+        public static void StartListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
         {
-            Debug.Log("EventMessenger doesn't contain the event: " + eventName);
+            StartListeningTo(eventKey.ToString(), listener);
         }
+
+        /// <summary>
+        /// Make listener unsubscribe to the event binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets unsubscribed to the UnityEvent.</param>
+        public static void StopListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
+        {
+            StopListeningTo(eventKey.ToString(), listener);
+        }
+
+        /// <summary>
+        /// Invokes the UnityEvent binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        public static void TriggerEvent(MessengerKeys.EventKey eventKey)
+        {
+            TriggerEvent(eventKey.ToString());
+        }
+        #endregion Enum Keys
     }
 }
