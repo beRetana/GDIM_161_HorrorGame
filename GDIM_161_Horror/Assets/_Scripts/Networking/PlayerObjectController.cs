@@ -12,6 +12,7 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar] public int PlayerIdNumber;
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
+    [SyncVar(hook = nameof(PlayerReadyUpdate))]public bool Ready;
 
     private NewNetworkManager manager;
 
@@ -26,6 +27,33 @@ public class PlayerObjectController : NetworkBehaviour
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
 
+    }
+
+    private void PlayerReadyUpdate(bool oldValue, bool newValue)
+    {
+        if(isServer)
+        {
+            this.Ready = newValue;
+        }
+        if(isClient)
+        {
+            LobbyController.Instance.UpdatePlayerList();
+        }
+        
+    }
+
+    [Command]
+    private void CMdSetPlayerReady()
+    {
+        this.PlayerReadyUpdate(this.Ready, !this.Ready);
+    }
+
+    public void ChangeReady()
+    {
+        if(isOwned)
+        {
+            CMdSetPlayerReady();
+        }
     }
 
     public override void OnStartAuthority()
