@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace AI
+namespace AI_FSM
 {
+    // I finish this one up later
     public class Patrolling : TaskBase{
 
         [Header("Patrol Settings")]
@@ -23,7 +22,7 @@ namespace AI
             _aiController.onTaskCompleted -= OnPatrolPointReached;
         }
 
-        private void OnPatrolPointReached(object sender, EventArgs e)
+        private void OnPatrolPointReached()
         {
             _aiController.onTaskCompleted -= OnPatrolPointReached;
             StartCoroutine(WaitAtPatrolPoint());

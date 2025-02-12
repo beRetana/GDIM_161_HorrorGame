@@ -2,11 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AI{
+namespace AI_FSM{
 
     [RequireComponent(typeof(NavMeshAgent))]
     public class AIController : MonoBehaviour{
 
+        /// <summary>
+        /// The state of the AI.
+        /// </summary>
         private enum State
         {
             Idle,
@@ -84,12 +87,20 @@ namespace AI{
             }
         }
 
+        /// <summary>
+        /// Move the AI to the target location.
+        /// </summary>
+        /// <param name="targetLocation">Location to move to.</param>
         public void MoveTo(Vector3 targetLocation){
             _agent.SetDestination(targetLocation);
             _stateTriggered = false;
             _state = State.Started;
         }
 
+        /// <summary>
+        /// Move the AI to a random location within the radius.
+        /// </summary>
+        /// <param name="radius">The radius the AI will move within.</param>
         public void MoveToRandomLocation(float radius){
             float xPos = UnityEngine.Random.Range(-radius,radius);
             float zPos = UnityEngine.Random.Range(-radius,radius);
@@ -97,19 +108,33 @@ namespace AI{
             MoveTo(new Vector3(xPos, 0, zPos));
         }
 
+        /// <summary>
+        /// Move the AI away from the location.
+        /// </summary>
+        /// <param name="awayLocation"></param>
         public void MoveAway(Vector3 awayLocation){
 
             MoveTo(-(awayLocation - transform.position));
         }
 
+        /// <summary>
+        /// Replace the speed of the AI.
+        /// </summary>
+        /// <param name="newSpeed">The new speed of the AI</param>
         public void ChangeSpeed(float newSpeed){
             _agent.speed = newSpeed;
         }
 
+        /// <summary>
+        /// Reset the speed of the AI to the default speed.
+        /// </summary>
         public void DefaultSpeed(){
             _agent.speed = _agentDefaultSpeed;
         }
 
+        /// <summary>
+        /// Abort the current task and reset the AI to idle.
+        /// </summary>
         public void AbortTask(){
             _state = State.Idle;
             _agent.ResetPath();

@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-namespace AI{
+namespace AI_FSM{
 
+    // I need to fix this one too it is dependent on messagin system.
+
+    /*
     public class AISoundSensor : MonoBehaviour{
         [Header("AI Sound Sensor Basic Settings")]
         [SerializeField] private bool _enabledDefaultSoundDetection = true;
@@ -31,7 +34,7 @@ namespace AI{
         /* 
            Default method for trigering sound reports but dev might want to modify how 
            and when these events should get called in which case they might want to manually call ReportSound.
-        */
+        
         private void OnCollisionEnter(Collision collision){
 
             if(_enabledDefaultSoundDetection){
@@ -40,4 +43,5 @@ namespace AI{
             }
         }
     }
+    */
 }

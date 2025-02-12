@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI{
+namespace AI_FSM{
 
-    [ExecuteInEditMode]
+    // This one also depends on the messaging system and needs to work on delegates.
+
+    //[ExecuteInEditMode]
+
+    /*
     public class AISightSensor : MonoBehaviour{
 
         [Header("Detection Settings")]
@@ -244,5 +248,6 @@ namespace AI{
             }
         }
     }
+    */
 }
 
