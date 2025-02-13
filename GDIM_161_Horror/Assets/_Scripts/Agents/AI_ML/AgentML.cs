@@ -10,11 +10,24 @@ public class AgentML : Agent
     [SerializeField] private GameObject _playerDummy;
     [SerializeField] private TrainningVisuals _trainingVisuals;
 
+    private float _maxSteps;
+    private float _commulativeReward;
+    private float _reward;
+    private float _episodeCount;
+
     private AgentController _agentController;
 
     void Start()
     {
         _agentController = GetComponent<AgentController>();
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _maxSteps = MaxStep;
+
     }
 
     /// <summary>
@@ -28,6 +41,8 @@ public class AgentML : Agent
         float randomX = Random.Range(-xDelimeter, xDelimeter);
         float randomZ = Random.Range(-zDelimeter, zDelimeter);
         _playerDummy.transform.localPosition = new Vector3(randomX, 0, randomZ);
+        _commulativeReward = 0;
+        _episodeCount += 1;
     }
 
     /// <summary>
@@ -59,6 +74,9 @@ public class AgentML : Agent
     {
         _agentController.Move(actions.ContinuousActions[0]);
         _agentController.Rotate(actions.ContinuousActions[1]);
+
+        AddReward(-2 / _maxSteps);
+        Debug.Log($"Reward:{GetCumulativeReward()}");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -78,7 +96,7 @@ public class AgentML : Agent
             _trainingVisuals.SetFloorColor(Color.green);
 
             // Logic reinforce behavior
-            AddReward(1f);
+            AddReward(1.5f);
             EndEpisode();
         }
     }
