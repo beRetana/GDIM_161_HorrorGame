@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 3357279813586616635}
   - component: {fileID: 1358938928838865877}
   - component: {fileID: 6077115929759465113}
+  - component: {fileID: 8807785256445919126}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -269,9 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2a1232b9f4e7f43848784521cf8175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  leapForce: 10
-  rotationSpeed: 5
+  _moveSpeed: 5
+  _leapForce: 10
+  _rotationSpeed: 5
+  _delimeter: 6.5
 --- !u!114 &6077115929759465113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,3 +290,38 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  _wallTag: Wall
+  _playerTag: Player
+  _playerDummy: {fileID: 0}
+  _trainingVisuals: {fileID: 0}
+--- !u!114 &8807785256445919126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401424355691722423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 5022602860645237092, guid: b7da3a5bad4358e49a6fa84bdde0726a, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 2
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0

@@ -96,7 +96,7 @@ public class AgentML : Agent
             _trainingVisuals.SetFloorColor(Color.green);
 
             // Logic reinforce behavior
-            AddReward(1.5f);
+            AddReward(5f);
             EndEpisode();
         }
     }
