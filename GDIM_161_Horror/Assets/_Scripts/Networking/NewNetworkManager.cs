@@ -27,4 +27,11 @@ public class NewNetworkManager : NetworkManager
     }
 
    }
+
+
+    public void StartGame(string SceneName)
+    {
+        ServerChangeScene(SceneName);
+    }
+
 }
