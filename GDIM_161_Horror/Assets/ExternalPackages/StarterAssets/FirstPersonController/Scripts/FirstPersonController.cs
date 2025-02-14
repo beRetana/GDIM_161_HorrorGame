@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using Mirror;
@@ -85,6 +87,8 @@ namespace StarterAssets
 			}
 		}
 
+		
+
 		private void Awake()
 		{
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
@@ -140,20 +144,7 @@ namespace StarterAssets
 			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
 
-		private void CameraRotation()
-		{
-			if (_input.look.sqrMagnitude < _threshold) return; // check if there is an input
-            
-			float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;	//Don't multiply mouse input by Time.deltaTime
-
-            _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
-
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp); // clamp pitch rotation
-            CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f); // update Cinemachine target pitch
-
-            transform.Rotate(Vector3.up * _rotationVelocity); // rotate player left and right
-        }
+		
 
 		private void Move()
 		{
@@ -168,25 +159,24 @@ namespace StarterAssets
 			float speedOffset = 0.1f;
 			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-			// accelerate or decelerate to target speed
-			if (currentHorizontalSpeed < (targetSpeed - speedOffset)) // accelerate
+            #region acceleration
+            if (currentHorizontalSpeed < (targetSpeed - speedOffset)) // accelerate
 			{
 				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * AccelerationRate); // curved result (not linear) for organic speed change
 				_speed = Mathf.Round(_speed * 1000f) / 1000f; // round speed to 3 decimal places
 			}
-
 			else if (currentHorizontalSpeed > (targetSpeed + speedOffset)) // decelerate
 			{
 				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * DecelerationRate); // curved result (not linear) for organic speed change
 				_speed = Mathf.Round(_speed * 1000f) / 1000f; // round speed to 3 decimal places
 			}
-
 			else
 			{
 				_speed = targetSpeed;
 			}
+            #endregion
 
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;	// normalise input direction
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;	// normalise input direction
 
 
             // if there is a move input rotate player when the player is moving
@@ -228,17 +218,35 @@ namespace StarterAssets
 			if (_verticalVelocity < _terminalVelocity)
 			{
 				_verticalVelocity += Gravity * Time.deltaTime;
+				//if (_verticalVelocity < -10.0f)
 			}
 		}
 
-		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+        #region camera
+        private void CameraRotation()
+        {
+            if (_input.look.sqrMagnitude < _threshold) return; // check if there is an input
+
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;	//Don't multiply mouse input by Time.deltaTime
+
+            _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+            _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp); // clamp pitch rotation
+            CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f); // update Cinemachine target pitch
+
+            transform.Rotate(Vector3.up * _rotationVelocity); // rotate player left and right
+        }
+        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 		{
 			if (lfAngle < -360f) lfAngle += 360f;
 			if (lfAngle > 360f) lfAngle -= 360f;
 			return Mathf.Clamp(lfAngle, lfMin, lfMax);
 		}
 
-		private void OnDrawGizmosSelected()
+        #endregion
+
+        private void OnDrawGizmosSelected()
 		{
 			Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
 			Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
