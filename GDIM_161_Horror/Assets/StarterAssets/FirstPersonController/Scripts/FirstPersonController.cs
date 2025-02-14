@@ -66,7 +66,6 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
-			base.TickCycleTimer();
 			CameraRotation();
 		}
 

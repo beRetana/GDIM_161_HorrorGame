@@ -105,18 +105,6 @@ public class PlayerBase : MonoBehaviour
         EnterState(PlayerStateEnum.Unlocked);
     }
 
-    protected void TickCycleTimer()
-    {
-        deltaCycleTimer -= Time.deltaTime;
-        if (deltaCycleTimer< 0f)
-        {
-            deltaCycleTimer = cycleTimer;
-            int nextState = ((int)playerStateEnum + 1)%4;
-            EnterState((PlayerStateEnum)nextState);
-
-        }
-    }
-
     private void EnterState(PlayerStateEnum enterState)
     {
         Debug.Log($"{name} entering {enterState}");
