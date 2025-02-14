@@ -92,9 +92,6 @@ namespace StarterAssets
 		private void Awake()
 		{
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
-			//testing
-				//SetPosition();
-			//
         }
 
         private void Start()
@@ -118,19 +115,6 @@ namespace StarterAssets
 			GroundedCheck();
 			Move();
 		}
-
-		//Testing
-
-
-	//	public void SetPosition()
-		//{
-		//	transform.position = new Vector3(Random.Range(-5,5), 0.8f, Random.Range(-15,7));
-	//	}
-
-
-
-
-		//
 
 		private void LateUpdate()
 		{
