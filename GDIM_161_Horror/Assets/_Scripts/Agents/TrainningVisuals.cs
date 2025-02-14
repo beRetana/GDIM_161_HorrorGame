@@ -1,3 +1,4 @@
+using MessengerSystem;
 using UnityEngine;
 
 public class TrainningVisuals : MonoBehaviour
