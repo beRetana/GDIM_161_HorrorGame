@@ -25,7 +25,7 @@ public class PickableItem : MonoBehaviour, IInteractable
     public void Interact(int playerID)
     {
         Debug.Log($"Pickable Item {gameObject.name} recieved an Interact order from Player {playerID}");
-        _playerManager.GetPlayer(playerID).gameObject.GetComponent<HandInventory>().PickUpObject(transform.parent.gameObject);
+        _playerManager.GetPlayer(playerID).gameObject.GetComponent<HandInventory>().PickUpItem(transform.parent.gameObject);
     }
 
     public void Detected(int playerID)

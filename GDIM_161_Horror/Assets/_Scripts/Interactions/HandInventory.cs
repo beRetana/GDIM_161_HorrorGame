@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using MessengerSystem;
-using Mono.CSharp;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +13,8 @@ public class HandInventory : MonoBehaviour
     [SerializeField] private Transform _rightHandTransform;
     [SerializeField] private Transform _leftHandTransform;
 
-    private class InventorySlot{
+    private class InventorySlot
+    {
         public GameObject pickedObject;
         public Rigidbody rigidbody;
         public Transform transform;
@@ -28,6 +26,9 @@ public class HandInventory : MonoBehaviour
     private GameObject _mouse;
     private int _playerID;
     private IInteractable _interactableComponent;
+
+    private const int _RIGHT_HAND_ID = 0;
+    private const int _LEFT_HAND_ID = 1;
 
     [Header("Interaction Physics Settings")]
 
@@ -56,29 +57,37 @@ public class HandInventory : MonoBehaviour
         _playerControls.Player.Interact.Enable();
         _playerControls.Player.Drop.Enable();
         _playerControls.Player.Throw.Enable();
+        _playerControls.Player.Swap.Enable();
 
         _playerControls.Player.Interact.performed += OnInteract;
         _playerControls.Player.Drop.performed += OnDrop;
         _playerControls.Player.Throw.performed += OnThrow;
+        _playerControls.Player.Swap.performed += OnSwap;
     }
 
     void OnDisable(){
+        _playerControls.Player.Interact.performed -= OnInteract;
+        _playerControls.Player.Drop.performed -= OnDrop;
+        _playerControls.Player.Throw.performed -= OnThrow;
+        _playerControls.Player.Swap.performed -= OnSwap;
+
         _playerControls.Player.Interact.Disable();
         _playerControls.Player.Drop.Disable();
         _playerControls.Player.Throw.Disable();
+        _playerControls.Player.Swap.Disable();
     }
 
     void PrepareList()
     {
         _inventorySlots = new List<InventorySlot> { new InventorySlot(), new InventorySlot()};
-        _inventorySlots[0].transform = _rightHandTransform;
-        _inventorySlots[1].transform = _leftHandTransform;
+        _inventorySlots[_RIGHT_HAND_ID].transform = _rightHandTransform;
+        _inventorySlots[_LEFT_HAND_ID].transform = _leftHandTransform;
     }
 
     void Update()
     {
         CheckForInteractables();
-        MovePickedObjects();
+        MoveItemsToHands();
     }
 
     /// <summary>
@@ -120,6 +129,15 @@ public class HandInventory : MonoBehaviour
         }
 
     }
+
+    void OnSwap(InputAction.CallbackContext context)
+    {
+        InventorySlot rightItem = _inventorySlots[_RIGHT_HAND_ID];
+        InventorySlot leftItem = _inventorySlots[_LEFT_HAND_ID];
+
+        _inventorySlots[_RIGHT_HAND_ID] = leftItem;
+        _inventorySlots[_LEFT_HAND_ID] = rightItem;
+    }
  
     void OnInteract(InputAction.CallbackContext context)
     {
@@ -129,12 +147,12 @@ public class HandInventory : MonoBehaviour
 
     void OnDrop(InputAction.CallbackContext context)
     {
-        OnDrop();
+        DropItem();
     }
 
     void OnThrow(InputAction.CallbackContext context)
     {
-        OnDrop(_throwForce);
+        DropItem(_throwForce);
     }
 
     int GetFreeHands()
@@ -142,10 +160,8 @@ public class HandInventory : MonoBehaviour
         int index = 0;
         foreach(InventorySlot slot in _inventorySlots)
         {
-            if(slot.pickedObject == null)
-            {
-                return index;
-            }
+            Debug.Log(slot.pickedObject);
+            if(slot.pickedObject == null) return index;
 
             index++;
         }   
@@ -153,72 +169,50 @@ public class HandInventory : MonoBehaviour
         return -1;
     }
 
-    public void PickUpObject(GameObject pickableItem)
+    public void PickUpItem(GameObject pickableItem)
     {
         Debug.Log($"Trying to picking up {pickableItem.name}");
 
-        if(GetFreeHands() != -1){
+        int freeHandIndex = GetFreeHands();
 
-            Debug.Log($"There is at least one free hand");
+        if (freeHandIndex != -1 && pickableItem.GetComponent<Rigidbody>())
+        {
 
-            int freeHandIndex = GetFreeHands();
+            Debug.Log($"There is at least one free hand {freeHandIndex}");
 
             InventorySlot inventorySlot = _inventorySlots[freeHandIndex];
+            inventorySlot.pickedObject = pickableItem;
+            inventorySlot.rigidbody = pickableItem.GetComponent<Rigidbody>();
+            inventorySlot.rigidbody.useGravity = false;
+            inventorySlot.initialLinearDamping = inventorySlot.rigidbody.linearDamping;
+            inventorySlot.rigidbody.linearDamping = _linearDrag;
+            inventorySlot.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            inventorySlot.rigidbody.transform.parent = inventorySlot.transform;
 
-            if(pickableItem.GetComponent<Rigidbody>())
-            {
-                Debug.Log($"Pickable Item {pickableItem.name} contains a Rigid Body");
+            Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(),
+                                    gameObject.GetComponentInChildren<CapsuleCollider>(), true);
+            //Switch this magic number later
+            StartCoroutine(AnimateRotationTowards(inventorySlot.pickedObject.transform, inventorySlot.transform.rotation, 1f));
 
-                inventorySlot.pickedObject = pickableItem;
-                inventorySlot.rigidbody = pickableItem.GetComponent<Rigidbody>();
-                inventorySlot.rigidbody.useGravity = false;
-                inventorySlot.initialLinearDamping = inventorySlot.rigidbody.linearDamping;
-                inventorySlot.rigidbody.linearDamping = _linearDrag;
-                inventorySlot.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-                inventorySlot.rigidbody.transform.parent = inventorySlot.transform;
-
-                Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), gameObject.GetComponentInChildren<CapsuleCollider>(), true);
-                //Switch this magic number later
-                StartCoroutine(AnimateRotationTowards(inventorySlot.pickedObject.transform, inventorySlot.transform.rotation, 1f));
-                Debug.Log($"The item has been saved as {_inventorySlots[freeHandIndex].pickedObject.name}");
-            }
+            Debug.Log($"The item has been saved as {_inventorySlots[freeHandIndex].pickedObject.name}");
         }
         else
         {
             Debug.Log($"Trying to drop {pickableItem.name}: No free hands");
-            OnDrop();
+            DropItem();
         }
     }
 
-    bool AllHandsFree()
+    private void MoveItemsToHands()
     {
         foreach(InventorySlot inventorySlot in _inventorySlots)
         {
-            if(inventorySlot.pickedObject != null)
-            {
-                return false;
-            }
-        }
+            if (inventorySlot.pickedObject == null) continue;
 
-        return true;
-    }
-
-    private void MovePickedObjects()
-    {
-        if (AllHandsFree())
-        {
-            return;
-        }
-
-        foreach(InventorySlot inventorySlot in _inventorySlots)
-        {
-            if(inventorySlot.pickedObject != null)
-            {
-                if(Vector3.Distance(inventorySlot.pickedObject.transform.position, inventorySlot.transform.position) > .1f){
-                    Vector3 direction =  inventorySlot.transform.position - inventorySlot.pickedObject.transform.position;
-                    inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
-                }
-            }
+            if (Vector3.Distance(inventorySlot.pickedObject.transform.position, inventorySlot.transform.position) <= .1f) continue;
+            
+            Vector3 direction = inventorySlot.transform.position - inventorySlot.pickedObject.transform.position;
+            inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
         } 
     }
 
@@ -235,25 +229,24 @@ public class HandInventory : MonoBehaviour
         target.rotation = rotation;
     }
 
-    private void OnDrop(float throwForce = 0){
+    private void DropItem(float throwForce = 0){
 
         foreach(InventorySlot inventorySlot in _inventorySlots)
         {
-            if(inventorySlot.pickedObject != null)
-            {
-                inventorySlot.rigidbody.useGravity = true;
-                inventorySlot.rigidbody.linearDamping = inventorySlot.initialLinearDamping;
-                inventorySlot.rigidbody.freezeRotation = false;
+            if (inventorySlot.pickedObject == null) continue;
 
-                Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), gameObject.GetComponentInChildren<CapsuleCollider>(), false);
-                
-                inventorySlot.rigidbody.transform.parent = null;
-                inventorySlot.pickedObject = null;
-                inventorySlot.rigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-                inventorySlot.rigidbody = null;
-                return;
-            }
-            
+            inventorySlot.rigidbody.useGravity = true;
+            inventorySlot.rigidbody.linearDamping = inventorySlot.initialLinearDamping;
+            inventorySlot.rigidbody.freezeRotation = false;
+
+            Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), 
+                                    gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+
+            inventorySlot.rigidbody.transform.parent = null;
+            inventorySlot.pickedObject = null;
+            inventorySlot.rigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            inventorySlot.rigidbody = null;
+            return;
         }
     }
 }
