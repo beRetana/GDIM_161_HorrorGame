@@ -35,14 +35,19 @@ public class AgentML : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        _agentController.ResetAgent();
+        _agentController.ResetAgentToOriginalPosition();
+        //ResetPlayerDummy();
+        _commulativeReward = 0;
+        _episodeCount += 1;
+    }
+
+    private void ResetPlayerDummy()
+    {
         float xDelimeter = 6.5f;
         float zDelimeter = 6.5f;
         float randomX = Random.Range(-xDelimeter, xDelimeter);
         float randomZ = Random.Range(-zDelimeter, zDelimeter);
         _playerDummy.transform.localPosition = new Vector3(randomX, 0, randomZ);
-        _commulativeReward = 0;
-        _episodeCount += 1;
     }
 
     /// <summary>

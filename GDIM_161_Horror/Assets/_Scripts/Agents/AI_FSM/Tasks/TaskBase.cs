@@ -9,12 +9,13 @@ namespace AI_FSM{
 
         protected AIController _aiController;
 
+        public delegate void TaskNotify(bool successful);
+
         /// <summary>
         /// Event that will be triggered when the task is completed.
         /// </summary>
         /// <returns>Returns True if the task was successful and False if it failed.</returns>
-        public delegate void TaskCompleted(bool succeful);
-        public TaskCompleted _taskCompleted;
+        public event TaskNotify OnTaskCompleted;
 
         private void Start()
         {
@@ -29,5 +30,10 @@ namespace AI_FSM{
         public virtual void Enable(){}
 
         public virtual void Disable(){}
+
+        protected void SendNotification(bool successful)
+        {
+            OnTaskCompleted.Invoke(successful);
+        }
     }
 }

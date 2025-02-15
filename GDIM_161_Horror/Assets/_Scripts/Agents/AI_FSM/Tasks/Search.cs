@@ -52,7 +52,7 @@ namespace AI_FSM{
                 _hasReachedLocation = false;
             }
 
-            _taskCompleted.Invoke(succeful:true);
+            SendNotification(successful:true);
         }
     }
 }
