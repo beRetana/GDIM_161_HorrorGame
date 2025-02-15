@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 126214538651071025}
   - component: {fileID: 8576914719996806996}
-  - component: {fileID: 8235767283802033394}
   - component: {fileID: 846105969996028747}
+  - component: {fileID: 1065061671174951103}
   m_Layer: 3
-  m_Name: Pickable
+  m_Name: Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,21 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
---- !u!114 &8235767283802033394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41419630895823404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c6570a3a33c1947a5374b504ab11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _textAnimation: {fileID: 846105969996028747}
-  _textName: Name
-  _fadeIn: FadeIn
 --- !u!95 &846105969996028747
 Animator:
   serializedVersion: 7
@@ -85,6 +70,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1065061671174951103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41419630895823404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a607149b4cc9ebd4ab705daa7b5142ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textAnimation: {fileID: 846105969996028747}
+  _textName: Name
+  _fadeIn: FadeIn
 --- !u!1 &7558964004206734932
 GameObject:
   m_ObjectHideFlags: 0
