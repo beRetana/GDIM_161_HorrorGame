@@ -105,7 +105,7 @@ public class PlayerBase : MonoBehaviour
         EnterState(PlayerStateEnum.Unlocked);
     }
 
-    private void EnterState(PlayerStateEnum enterState)
+    public void EnterState(PlayerStateEnum enterState)
     {
         Debug.Log($"{name} entering {enterState}");
         playerStateEnum = enterState;
