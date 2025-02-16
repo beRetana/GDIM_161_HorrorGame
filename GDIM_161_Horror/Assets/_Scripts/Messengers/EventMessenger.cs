@@ -9,7 +9,7 @@ namespace MessengerSystem
     /// </summary>
     public class EventMessenger : MonoBehaviour
     {
-        private Dictionary<MessengerKeys.EventKey, UnityEvent> _eventDictionary;
+        private Dictionary<string, UnityEvent> _eventDictionary;
 
         private static EventMessenger _instance;
 
@@ -39,17 +39,19 @@ namespace MessengerSystem
         {
             if (_eventDictionary == null)
             {
-                _eventDictionary = new Dictionary<MessengerKeys.EventKey, UnityEvent>();
+                _eventDictionary = new Dictionary<string, UnityEvent>();
             }
         }
+
+        #region String Keys
 
         /// <summary>
         /// Make listener subscribe to the event binded to the eventKey. If not event is binded to this key
         /// it creates a new UnityEvent, binds it to the eventKey and makes listener subscribe to it.
         /// </summary>
-        /// <param name="eventKey">A Messenger.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
         /// <param name="listener">A UnityAction type (event) that gets subscribed to the UnityEvent.</param>
-        public static void StartListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
+        public static void StartListeningTo(string eventKey, UnityAction listener)
         {
             UnityEvent thisEvent;
             if (Instance._eventDictionary.TryGetValue(eventKey, out thisEvent))
@@ -67,9 +69,9 @@ namespace MessengerSystem
         /// <summary>
         /// Make listener unsubscribe to the event binded to the eventKey.
         /// </summary>
-        /// <param name="eventKey">A Messenger.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
         /// <param name="listener">A UnityAction type (event) that gets unsubscribed to the UnityEvent.</param>
-        public static void StopListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
+        public static void StopListeningTo(string eventKey, UnityAction listener)
         {
             if (_instance == null) return;
             UnityEvent thisEvent;
@@ -82,8 +84,8 @@ namespace MessengerSystem
         /// <summary>
         /// Invokes the UnityEvent binded to the eventKey.
         /// </summary>
-        /// <param name="eventKey">A Messenger.EventKey type that is binded to the UnityEvent.</param>
-        public static void TriggerEvent(MessengerKeys.EventKey eventKey)
+        /// <param name="eventKey">A string type that is binded to the UnityEvent.</param>
+        public static void TriggerEvent(string eventKey)
         {
             UnityEvent thisEvent;
             if (Instance._eventDictionary.TryGetValue(eventKey, out thisEvent))
@@ -95,5 +97,38 @@ namespace MessengerSystem
                 Debug.Log("EventMessenger doesn't contain the event: " + eventKey);
             }
         }
+        #endregion String Keys
+
+        #region Enum Keys
+        /// <summary>
+        /// Make listener subscribe to the event binded to the eventKey. If not event is binded to this key
+        /// it creates a new UnityEvent, binds it to the eventKey and makes listener subscribe to it.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets subscribed to the UnityEvent.</param>
+        public static void StartListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
+        {
+            StartListeningTo(eventKey.ToString(), listener);
+        }
+
+        /// <summary>
+        /// Make listener unsubscribe to the event binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        /// <param name="listener">A UnityAction type (event) that gets unsubscribed to the UnityEvent.</param>
+        public static void StopListeningTo(MessengerKeys.EventKey eventKey, UnityAction listener)
+        {
+            StopListeningTo(eventKey.ToString(), listener);
+        }
+
+        /// <summary>
+        /// Invokes the UnityEvent binded to the eventKey.
+        /// </summary>
+        /// <param name="eventKey">A MessengerKey.EventKey type that is binded to the UnityEvent.</param>
+        public static void TriggerEvent(MessengerKeys.EventKey eventKey)
+        {
+            TriggerEvent(eventKey.ToString());
+        }
+        #endregion Enum Keys
     }
 }
