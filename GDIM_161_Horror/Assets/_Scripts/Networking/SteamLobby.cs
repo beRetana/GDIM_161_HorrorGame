@@ -22,7 +22,7 @@ public class SteamLobby : MonoBehaviour
     //GameObject
     public GameObject HostButton;
 
-    private void Start()
+    /*private void Start()
     {
         if (!SteamManager.Initialized) { return; }
         if (Instance == null) { Instance = this; }
@@ -32,7 +32,7 @@ public class SteamLobby : MonoBehaviour
         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-    }
+    }*/
 
     public void HostLobby()
     {
