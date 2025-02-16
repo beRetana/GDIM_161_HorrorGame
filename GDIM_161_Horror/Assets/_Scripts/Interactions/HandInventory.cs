@@ -139,7 +139,6 @@ public class HandInventory : MonoBehaviour
  
     void OnInteract(InputAction.CallbackContext context)
     {
-        Debug.Log("Interacted with: "+ _interactableComponent);
         _interactableComponent?.Interact(_playerID);
     }
 
@@ -158,7 +157,6 @@ public class HandInventory : MonoBehaviour
         int index = 0;
         foreach(InventorySlot slot in _inventorySlots)
         {
-            Debug.Log(slot.pickedObject);
             if(slot.pickedObject == null) return index;
 
             index++;
@@ -169,15 +167,10 @@ public class HandInventory : MonoBehaviour
 
     public void PickUpItem(GameObject pickableItem)
     {
-        Debug.Log($"Trying to picking up {pickableItem.name}");
-
         int freeHandIndex = GetFreeHands();
 
         if (freeHandIndex != -1 && pickableItem.GetComponent<Rigidbody>())
         {
-
-            Debug.Log($"There is at least one free hand {freeHandIndex}");
-
             InventorySlot inventorySlot = _inventorySlots[freeHandIndex];
             inventorySlot.pickedObject = pickableItem;
             inventorySlot.rigidbody = pickableItem.GetComponent<Rigidbody>();
@@ -191,12 +184,9 @@ public class HandInventory : MonoBehaviour
                                     gameObject.GetComponentInChildren<CapsuleCollider>(), true);
             //Switch this magic number later
             StartCoroutine(AnimateRotationTowards(inventorySlot.pickedObject.transform, inventorySlot.transform.rotation, 1f));
-
-            Debug.Log($"The item has been saved as {_inventorySlots[freeHandIndex].pickedObject.name}");
         }
         else
         {
-            Debug.Log($"Trying to drop {pickableItem.name}: No free hands");
             DropItem();
         }
     }
