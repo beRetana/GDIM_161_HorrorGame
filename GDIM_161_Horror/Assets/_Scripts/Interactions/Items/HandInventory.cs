@@ -71,7 +71,7 @@ public class HandInventory : MonoBehaviour
 
     private InventorySlots _inventorySlots = new();
     private PlayerControls _playerControls;
-    private GameObject _mouse;
+    private MouseUI _mouse;
     private int _playerID;
     private IInteractable _interactableComponent;
 
@@ -93,7 +93,7 @@ public class HandInventory : MonoBehaviour
 
     void Start()
     {
-        _mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI);
+        _mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI).GetComponent<MouseUI>();
         _playerID = gameObject.GetComponent<PlayerBase>().ID();
         PrepareList();
         DataMessenger.SetGameObject($"Player{_playerID}", gameObject);
@@ -160,7 +160,7 @@ public class HandInventory : MonoBehaviour
                 // Report it as detected
                 _interactableComponent = childCanvas;
                 _interactableComponent.Detected(_playerID);
-                _mouse.GetComponent<MouseUI>().InteractionEffect();
+                _mouse?.InteractionEffect();
             } 
             // If we are hitting a different object than before.
             else if (childCanvas != _interactableComponent)
@@ -175,16 +175,12 @@ public class HandInventory : MonoBehaviour
         else if (_interactableComponent != null)
         {
             _interactableComponent.StoppedDetecting(_playerID);
-            _mouse.GetComponent<MouseUI>()?.DefaultEffect();
+            _mouse?.DefaultEffect();
             _interactableComponent = null;
         }
     }
 
-    void OnHandSwap(InputAction.CallbackContext context)
-    {
-        _inventorySlots.SwapItems();
-    }
- 
+    void OnHandSwap(InputAction.CallbackContext context) { _inventorySlots.SwapItems(); }
     void OnRaycastInteract(InputAction.CallbackContext context) { _interactableComponent?.Interact(_playerID);}
     void OnItemDrop(InputAction.CallbackContext context) { DropItem(); }
     void OnItemThrow(InputAction.CallbackContext context) { DropItem(_throwForce); }
@@ -219,7 +215,7 @@ public class HandInventory : MonoBehaviour
         Physics.IgnoreCollision(inventorySlotOfNewItem.interactableObject.GetComponent<Collider>(),
                                 gameObject.GetComponentInChildren<CapsuleCollider>(), true);
         //Switch this magic number later
-        StartCoroutine(AnimateRotationTowards(inventorySlotOfNewItem.interactableObject.transform, inventorySlotOfNewItem.transform.rotation, 1f));
+        StartCoroutine(AnimateRotationTowards(inventorySlotOfNewItem.interactableObject.transform, inventorySlotOfNewItem.transform.rotation));
         
     }
 
@@ -239,7 +235,7 @@ public class HandInventory : MonoBehaviour
         inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
     }
 
-    private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration)
+    private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration = 1f)
     {
         float timer = 0f;
         Quaternion start = target.rotation;

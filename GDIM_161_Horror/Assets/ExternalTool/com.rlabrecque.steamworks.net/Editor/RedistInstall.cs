@@ -6,14 +6,17 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 // This copies various files into their required locations when Unity is launched to make installation a breeze.
 [InitializeOnLoad]
 public class RedistInstall {
 	static RedistInstall() {
 		WriteSteamAppIdTxtFile();
-		AddDefineSymbols();
-		CheckForOldDlls();
+#pragma warning disable CS0612 // Obsolete member/type
+        AddDefineSymbols();
+#pragma warning restore CS0612 
+        CheckForOldDlls();
 	}
 
 	static void WriteSteamAppIdTxtFile() {
@@ -56,6 +59,7 @@ public class RedistInstall {
 		}
 	}
 
+	[Obsolete]
 	static void AddDefineSymbols() {
 		string currentDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		HashSet<string> defines = new HashSet<string>(currentDefines.Split(';')) {
