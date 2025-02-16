@@ -1,6 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using UnityEngine.UI;
+using TMPro;
+
 public class SteamLobby : MonoBehaviour
 {
     public static SteamLobby Instance;
@@ -18,18 +23,40 @@ public class SteamLobby : MonoBehaviour
     //GameObject
     public GameObject HostButton;
 
+    /* private void Start()
+     {
+         if (!SteamManager.Initialized) { return; }
+         if (Instance == null) { Instance = this; }
+
+         manager = GetComponent<NewNetworkManager>();
+
+         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
+         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+     }*/
+
     private void Start()
     {
-        if (!SteamManager.Initialized) { return; }
+        if (!SteamAPI.IsSteamRunning())
+        {
+            Debug.LogError("Steam is not running!");
+            return;
+        }
 
         if (Instance == null) { Instance = this; }
 
         manager = GetComponent<NewNetworkManager>();
+        if (manager == null)
+        {
+            Debug.LogError("NewNetworkManager component not found!");
+            return;
+        }
 
         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
+
 
     public void HostLobby()
     {
