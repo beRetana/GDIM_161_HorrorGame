@@ -6,7 +6,7 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
     public virtual void Interact(int playerID)
     {
-        Debug.Log($"Player {playerID} interactedWith Object {this.name}");
+        Debug.Log($"Player {playerID} interacted With Object {this.name}");
         return;
     }
     public void Detected(int playerID)
