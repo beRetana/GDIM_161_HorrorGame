@@ -35,6 +35,7 @@ public class PlayerBase : MonoBehaviour
 
     public delegate void PlayerSpawn(PlayerBase player);
     public static event PlayerSpawn OnPlayerSpawn;
+    
 
     #endregion
 
@@ -105,7 +106,7 @@ public class PlayerBase : MonoBehaviour
         EnterState(PlayerStateEnum.Unlocked);
     }
 
-    public void EnterState(PlayerStateEnum enterState)
+    private void EnterState(PlayerStateEnum enterState)
     {
         Debug.Log($"{name} entering {enterState}");
         playerStateEnum = enterState;
@@ -126,6 +127,16 @@ public class PlayerBase : MonoBehaviour
                 break;
         }
         SetPlayerStats();
+    }
+
+    public void LockPlayer()
+    {
+        EnterState(PlayerStateEnum.Locked);
+    }
+
+    public void UnlockPlayer()
+    {
+        EnterState(PlayerStateEnum.Unlocked);
     }
 
     private bool AssignID()

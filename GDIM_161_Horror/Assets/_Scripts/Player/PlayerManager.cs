@@ -40,6 +40,16 @@ public class PlayerManager : MonoBehaviour
         playerMessengerKeys[player.ID()] = DataMessenger.SetGameObject((MessengerKeys.GameObjectKey)keyToAdd, player.gameObject);
     }
 
+    public void LockPlayerInput(int playerId)
+    {
+        GetPlayer(playerId).LockPlayer();
+    }
+
+    public void UnlockPlayerInput(int playerId)
+    {
+        GetPlayer(playerId).UnlockPlayer();
+    }
+
     public PlayerBase GetPlayer(int ID)
     {
         return DataMessenger.GetGameObject(playerMessengerKeys[ID])?.GetComponent<PlayerBase>();

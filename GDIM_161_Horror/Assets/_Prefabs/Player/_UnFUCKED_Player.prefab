@@ -370,10 +370,10 @@ GameObject:
   - component: {fileID: 2571488355673585886}
   - component: {fileID: 2946501653002084974}
   - component: {fileID: 9019987585197839040}
-  - component: {fileID: 2946501653002084963}
   - component: {fileID: 4901179720268351636}
   - component: {fileID: 1462065178972306968}
   - component: {fileID: 2946501653002084968}
+  - component: {fileID: 4848861366070383520}
   m_Layer: 8
   m_Name: _UnFUCKED_Player
   m_TagString: Player
@@ -446,23 +446,6 @@ MonoBehaviour:
   _pickUpForce: 4
   _linearDrag: 3
   _throwForce: 5
---- !u!114 &2946501653002084963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2946501653002084964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockedStats: {fileID: 11400000, guid: b71a63d45e071b94987d230893a2f2de, type: 2}
-  unlockedStats: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
-  limpStats: {fileID: 11400000, guid: a019c12b47b3e7f4f9ee6d873e8868d4, type: 2}
-  downedStats: {fileID: 11400000, guid: 1c6503a4201293a49b72759163af0364, type: 2}
-  cinemachineCameraTarget: {fileID: 7354950563374537535}
 --- !u!114 &4901179720268351636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,6 +580,23 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &4848861366070383520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2480039c7f763d8449f7aa4d7293ad58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockedStats: {fileID: 11400000, guid: b71a63d45e071b94987d230893a2f2de, type: 2}
+  unlockedStats: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
+  limpStats: {fileID: 11400000, guid: a019c12b47b3e7f4f9ee6d873e8868d4, type: 2}
+  downedStats: {fileID: 11400000, guid: 1c6503a4201293a49b72759163af0364, type: 2}
+  cinemachineCameraTarget: {fileID: 7354950563374537535}
 --- !u!1 &2962234600057808103
 GameObject:
   m_ObjectHideFlags: 0
