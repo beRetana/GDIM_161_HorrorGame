@@ -4,6 +4,11 @@ namespace OtherUtils
 {
     public static class ListUtils
     {
+        /// <summary>
+        /// Shuffles the given list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
         public static void Shuffle<T>(List<T> list)
         {
             int count = list.Count;

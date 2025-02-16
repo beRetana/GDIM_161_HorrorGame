@@ -1,7 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using Codice.Client.Common.GameUI;
+using Interactions;
 using MessengerSystem;
+using Mono.CSharp;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,16 +11,51 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HandInventory : MonoBehaviour
 {
+    [Header("General Settings")]
     [SerializeField] private LayerMask _interactableLayer;
     [SerializeField] private Transform _rightHandTransform;
     [SerializeField] private Transform _leftHandTransform;
 
+    [Header("Interaction Physics Settings")]
+    [SerializeField] private float _pickUpRange;
+    [SerializeField] private float _pickUpForce;
+    [SerializeField] private float _linearDrag;
+    [SerializeField] private float _throwForce;
+
     private class InventorySlot
     {
-        public InteractableObject interactableObject;
-        public Rigidbody rigidbody;
-        public Transform transform;
-        public float initialLinearDamping;
+        private PickableItem _pickableItem;
+        private Rigidbody _itemRigidBody;
+        private Transform _itemTransform;
+        private float _initialLinearDamping;
+
+        public PickableItem Item { get { return _pickableItem; } set { _pickableItem = value; } }
+
+        public Rigidbody ItemRigidBody { get { return _itemRigidBody; } set { _itemRigidBody = value; } }
+
+        public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
+
+        public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
+        {
+            _itemRigidBody = rigidBody;
+            ItemRigidBody.useGravity = false;
+            _initialLinearDamping = rigidBody.linearDamping;
+            ItemRigidBody.linearDamping = linearDrag;
+            ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+            ItemRigidBody.transform.parent = ItemTransform;
+        }
+
+        public Rigidbody RemoveRigidBody()
+        {
+            Rigidbody rigidBodyToDrop = ItemRigidBody;
+            ItemRigidBody.useGravity = true;
+            ItemRigidBody.linearDamping = _initialLinearDamping;
+            ItemRigidBody.freezeRotation = false;
+            ItemRigidBody.transform.parent = null;
+            _itemRigidBody = null;
+
+            return rigidBodyToDrop;
+        }
     }
 
     private class InventorySlots
@@ -41,31 +77,31 @@ public class HandInventory : MonoBehaviour
             }
         }
 
-        public InventorySlot GainItem(InteractableObject inventorySlotToGain)
+        public InventorySlot GainItem(PickableItem inventorySlotToGain)
         {
-            if (mainHand.interactableObject == null) { mainHand.interactableObject = inventorySlotToGain; return mainHand; }
-            if (offHand.interactableObject == null) { offHand.interactableObject = inventorySlotToGain; return offHand; }
+            if (mainHand.Item == null) { mainHand.Item = inventorySlotToGain; return mainHand; }
+            if (offHand.Item == null) { offHand.Item = inventorySlotToGain; return offHand; }
             return null;
         }
 
         public InventorySlot RemoveItem()
         {
-            if (mainHand.interactableObject == null) return null;
+            if (mainHand.Item == null) return null;
             InventorySlot inventorySlotToRemove = mainHand;
 
-            mainHand.interactableObject = offHand.interactableObject;
-            offHand.interactableObject = null;
+            mainHand.Item = null;
+            mainHand.RemoveRigidBody();
 
             return inventorySlotToRemove;
         }
 
         public void SwapItems()
         {
-            if (mainHand.interactableObject == null || offHand.interactableObject == null) return;
-            
-            InteractableObject temp = mainHand.interactableObject;
-            mainHand.interactableObject = offHand.interactableObject;
-            offHand.interactableObject = temp;
+            if (mainHand.Item == null && offHand.Item == null) return;
+
+            InventorySlot tempSlot = mainHand;
+            mainHand = offHand;
+            offHand = tempSlot;
         }
     }
 
@@ -77,13 +113,6 @@ public class HandInventory : MonoBehaviour
 
     private const int _MAIN_HAND_ID = 0;
     private const int _OFF_HAND_ID = 1;
-
-    [Header("Interaction Physics Settings")]
-
-    [SerializeField] private float _pickUpRange;
-    [SerializeField] private float _pickUpForce;
-    [SerializeField] private float _linearDrag;
-    [SerializeField] private float _throwForce;
 
     void Awake() 
     {
@@ -131,8 +160,8 @@ public class HandInventory : MonoBehaviour
 
     void PrepareList()
     {
-        _inventorySlots[_MAIN_HAND_ID].transform = _rightHandTransform;
-        _inventorySlots[_OFF_HAND_ID].transform = _leftHandTransform;
+        _inventorySlots[_MAIN_HAND_ID].ItemTransform = _rightHandTransform;
+        _inventorySlots[_OFF_HAND_ID].ItemTransform = _leftHandTransform;
     }
 
     void Update()
@@ -181,7 +210,11 @@ public class HandInventory : MonoBehaviour
     }
 
     void OnHandSwap(InputAction.CallbackContext context) { _inventorySlots.SwapItems(); }
-    void OnRaycastInteract(InputAction.CallbackContext context) { _interactableComponent?.Interact(_playerID);}
+    void OnRaycastInteract(InputAction.CallbackContext context) 
+    { 
+        if (_inventorySlots[_MAIN_HAND_ID].Item == null || _inventorySlots[_OFF_HAND_ID].Item == null) 
+            _interactableComponent?.Interact(_playerID);
+    }
     void OnItemDrop(InputAction.CallbackContext context) { DropItem(); }
     void OnItemThrow(InputAction.CallbackContext context) { DropItem(_throwForce); }
     void OnUseItem(InputAction.CallbackContext context) { UseItem(); }
@@ -189,34 +222,28 @@ public class HandInventory : MonoBehaviour
     private void UseItem()
     {
         InventorySlot inventorySlotToUse = _inventorySlots[0];
-        InteractableObject itemToUse = inventorySlotToUse?.interactableObject;
+        PickableItem itemToUse = inventorySlotToUse?.Item;
         if (itemToUse == null) return;
 
-        itemToUse.Interact(_playerID);
+        itemToUse.UseItem(_playerID);
         // TK interact functionality
     }
 
-    public void PickUpItem(InteractableObject pickableItem)
+    public void PickUpItem(PickableItem pickableItem)
     {
-        //int freeHandIndex = GetFreeHands();
+        Transform pickableParent = pickableItem.transform.parent;
 
-        if (pickableItem.GetComponent<Rigidbody>() == null) return; // DropItem(); <-??
+        if (pickableParent.GetComponent<Rigidbody>() == null) return; // DropItem(); <-??
 
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
         if (inventorySlotOfNewItem == null) return;
 
-        inventorySlotOfNewItem.rigidbody = pickableItem.GetComponent<Rigidbody>();
-        inventorySlotOfNewItem.rigidbody.useGravity = false;
-        inventorySlotOfNewItem.initialLinearDamping = inventorySlotOfNewItem.rigidbody.linearDamping;
-        inventorySlotOfNewItem.rigidbody.linearDamping = _linearDrag;
-        inventorySlotOfNewItem.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        inventorySlotOfNewItem.rigidbody.transform.parent = inventorySlotOfNewItem.transform;
+        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
 
-        Physics.IgnoreCollision(inventorySlotOfNewItem.interactableObject.GetComponent<Collider>(),
+        Physics.IgnoreCollision(pickableParent.GetComponent<Collider>(),
                                 gameObject.GetComponentInChildren<CapsuleCollider>(), true);
-        //Switch this magic number later
-        StartCoroutine(AnimateRotationTowards(inventorySlotOfNewItem.interactableObject.transform, inventorySlotOfNewItem.transform.rotation));
-        
+
+        StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
     }
 
     private void MoveItemsPositionsToHands()
@@ -227,12 +254,12 @@ public class HandInventory : MonoBehaviour
 
     private void MoveItemPositionToHand(InventorySlot inventorySlot)
     {
-        if (inventorySlot.interactableObject == null) return;
+        if (inventorySlot.Item == null) return;
 
-        Vector3 direction = inventorySlot.transform.position - inventorySlot.interactableObject.transform.position;
+        Vector3 direction = inventorySlot.ItemRigidBody.transform.parent.position - inventorySlot.ItemRigidBody.position;
         if (Vector3.Magnitude(direction) <= .1f) return;
 
-        inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
+        inventorySlot.ItemRigidBody.AddForce(direction * _pickUpForce);
     }
 
     private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration = 1f)
@@ -249,20 +276,16 @@ public class HandInventory : MonoBehaviour
     }
 
     private void DropItem(float throwForce = 0){
+
+        if (_inventorySlots[_MAIN_HAND_ID].Item == null) return;
+
+        Rigidbody itemRigidBodyToDrop = _inventorySlots[_MAIN_HAND_ID].ItemRigidBody;
+        Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
+                                gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+        
         InventorySlot itemSlotToDrop = _inventorySlots.RemoveItem();
         if(itemSlotToDrop == null) return;
 
-        Rigidbody itemRigidBodyToDrop = itemSlotToDrop.rigidbody;
-
-        itemRigidBodyToDrop.useGravity = true;
-        itemRigidBodyToDrop.linearDamping = itemSlotToDrop.initialLinearDamping;
-        itemRigidBodyToDrop.freezeRotation = false;
-
-        Physics.IgnoreCollision(itemSlotToDrop.interactableObject.GetComponent<Collider>(), 
-                                gameObject.GetComponentInChildren<CapsuleCollider>(), false);
-
-        itemRigidBodyToDrop.transform.parent = null;
         itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-        //itemRigidBodyToDrop = null;
     }
 }

@@ -1,10 +1,9 @@
 using UnityEngine;
 using System;
-using MessengerSystem;
 using TMPro;
 
 /// <summary>
-/// This class allows items to be picked up by the player.
+/// This class allows items to be interacted with a player.
 /// </summary>
 public class InteractableItem : MonoBehaviour, IInteractable
 {
@@ -13,7 +12,6 @@ public class InteractableItem : MonoBehaviour, IInteractable
     [SerializeField] protected string _fadeIn;
 
     protected TextMeshProUGUI _textMesh;
-    protected PlayerManager _playerManager;
 
     protected Action<int> OnInteractAction;
 
@@ -24,8 +22,6 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     void Start()
     {
-        _playerManager = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.PlayerManager).GetComponent<PlayerManager>();
-        //Debug.Log($"{this.gameObject.name} found playerManager: {_playerManager}");
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
         _textMesh.text = _textName;
     }

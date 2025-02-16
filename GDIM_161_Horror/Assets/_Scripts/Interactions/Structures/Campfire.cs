@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Campfire : InteractableObject, IInteractable
+public class Campfire : InteractableItem
 {
     #region Variables
     [Header("Timer")]
@@ -24,11 +24,5 @@ public class Campfire : InteractableObject, IInteractable
     {
         BurnoutTimer -= Time.deltaTime;
         if (BurnoutTimer < 0) OnBurnedOut?.Invoke();
-    }
-
-    public override void Interact(int playerID)
-    {
-        base.Interact(playerID);
-
     }
 }

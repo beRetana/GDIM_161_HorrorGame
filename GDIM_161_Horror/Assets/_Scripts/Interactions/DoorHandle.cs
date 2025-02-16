@@ -45,14 +45,10 @@ namespace Interactions
             Vector3 playerOriginalPosition = player.transform.position;
             Vector3 targetPosition = new Vector3(_targetTransform.position.x, player.transform.position.y, _targetTransform.position.z); 
 
-            playerCameraRoot.LookAt(transform.position);
-            playerTransform.LookAt(transform.position);
-
             while (time <= _animTime)
             {
                 player.transform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, time /_animTime);
                 
-
                 yield return null;
                 time += Time.deltaTime;
             }
