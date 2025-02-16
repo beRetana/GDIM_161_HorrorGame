@@ -59,17 +59,17 @@ public class HandInventory : MonoBehaviour
         _playerControls.Player.Throw.Enable();
         _playerControls.Player.Swap.Enable();
 
-        _playerControls.Player.Interact.performed += OnInteract;
-        _playerControls.Player.Drop.performed += OnDrop;
-        _playerControls.Player.Throw.performed += OnThrow;
-        _playerControls.Player.Swap.performed += OnSwap;
+        _playerControls.Player.Interact.performed += OnRaycastInteract;
+        _playerControls.Player.Drop.performed += OnItemDrop;
+        _playerControls.Player.Throw.performed += OnItemThrow;
+        _playerControls.Player.Swap.performed += OnHandSwap;
     }
 
     void OnDisable(){
-        _playerControls.Player.Interact.performed -= OnInteract;
-        _playerControls.Player.Drop.performed -= OnDrop;
-        _playerControls.Player.Throw.performed -= OnThrow;
-        _playerControls.Player.Swap.performed -= OnSwap;
+        _playerControls.Player.Interact.performed -= OnRaycastInteract;
+        _playerControls.Player.Drop.performed -= OnItemDrop;
+        _playerControls.Player.Throw.performed -= OnItemThrow;
+        _playerControls.Player.Swap.performed -= OnHandSwap;
 
         _playerControls.Player.Interact.Disable();
         _playerControls.Player.Drop.Disable();
@@ -86,14 +86,15 @@ public class HandInventory : MonoBehaviour
 
     void Update()
     {
-        CheckForInteractables();
+        CheckForRaycastInteractables();
+    }
+
+    private void FixedUpdate()
+    {
         MoveItemsToHands();
     }
 
-    /// <summary>
-    /// Traces a ray from the center of the screen of a lenght then checks certain conditions.
-    /// </summary>
-    void CheckForInteractables(){
+    void CheckForRaycastInteractables(){
         Ray rayToInteract = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
 
         // If we hit something in the layer.
@@ -128,29 +129,17 @@ public class HandInventory : MonoBehaviour
 
     }
 
-    void OnSwap(InputAction.CallbackContext context)
+    void OnHandSwap(InputAction.CallbackContext context)
     {
-        InventorySlot rightItem = _inventorySlots[_RIGHT_HAND_ID];
-        InventorySlot leftItem = _inventorySlots[_LEFT_HAND_ID];
+        InventorySlot tempItem = _inventorySlots[_RIGHT_HAND_ID];
 
-        _inventorySlots[_RIGHT_HAND_ID] = leftItem;
-        _inventorySlots[_LEFT_HAND_ID] = rightItem;
+        _inventorySlots[_RIGHT_HAND_ID] = _inventorySlots[_LEFT_HAND_ID];
+        _inventorySlots[_LEFT_HAND_ID] = tempItem;
     }
  
-    void OnInteract(InputAction.CallbackContext context)
-    {
-        _interactableComponent?.Interact(_playerID);
-    }
-
-    void OnDrop(InputAction.CallbackContext context)
-    {
-        DropItem();
-    }
-
-    void OnThrow(InputAction.CallbackContext context)
-    {
-        DropItem(_throwForce);
-    }
+    void OnRaycastInteract(InputAction.CallbackContext context) { _interactableComponent?.Interact(_playerID);}
+    void OnItemDrop(InputAction.CallbackContext context) { DropItem(); }
+    void OnItemThrow(InputAction.CallbackContext context) { DropItem(_throwForce); }
 
     int GetFreeHands()
     {
