@@ -17,14 +17,17 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     protected Action<int> OnInteractAction;
 
+    void Awake()
+    {
+        OnInteractAction = (int playerId) => Debug.Log($"Player: {playerId} Interacted");
+    }
+
     void Start()
     {
         _playerManager = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.PlayerManager).GetComponent<PlayerManager>();
         //Debug.Log($"{this.gameObject.name} found playerManager: {_playerManager}");
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
         _textMesh.text = _textName;
-
-        OnInteractAction = (playerID) => { Debug.Log($"Player {playerID} interacted With Object {this.name}"); };
     }
 
     public virtual void Interact(int playerID)
