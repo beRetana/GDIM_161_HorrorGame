@@ -32,14 +32,14 @@ public class InteractableItem : MonoBehaviour, IInteractable
         OnInteractAction(playerID);
     }
 
-    protected virtual void SetInteractAction(Action<int> action)
+    public virtual void SetInteractAction(Action<int> action)
     {
         OnInteractAction = action;
     }
 
     public virtual void Detected(int playerID)
     {
-        Debug.Log($"Detected by player {playerID}, {_playerManager.GetPlayer(playerID).gameObject.ToString()}");
+        //Debug.Log($"Detected by player {playerID}, {_playerManager.GetPlayer(playerID).gameObject.ToString()}");
         _textAnimation.SetBool(_fadeIn, true);
     }
 
