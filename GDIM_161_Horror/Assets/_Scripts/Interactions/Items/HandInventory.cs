@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Codice.Client.Common.GameUI;
 using MessengerSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,20 +16,67 @@ public class HandInventory : MonoBehaviour
 
     private class InventorySlot
     {
-        public GameObject pickedObject;
+        public InteractableObject interactableObject;
         public Rigidbody rigidbody;
         public Transform transform;
         public float initialLinearDamping;
     }
 
-    private List<InventorySlot> _inventorySlots;
+    private class InventorySlots
+    {
+        private InventorySlot mainHand = new();
+        private InventorySlot offHand = new();
+
+        public InventorySlot this[int index]
+        {
+            get{
+                if (index == 0) return mainHand;
+                else if (index == 1) return offHand;
+                else throw new System.Exception("Invalid item slot index");
+            }
+            private set{
+                if (index == 0) mainHand = value;
+                else if (index == 1) offHand = value;
+                else throw new System.Exception("Invalid item slot index");
+            }
+        }
+
+        public InventorySlot GainItem(InteractableObject inventorySlotToGain)
+        {
+            if (mainHand.interactableObject == null) { mainHand.interactableObject = inventorySlotToGain; return mainHand; }
+            if (offHand.interactableObject == null) { offHand.interactableObject = inventorySlotToGain; return offHand; }
+            return null;
+        }
+
+        public InventorySlot RemoveItem()
+        {
+            if (mainHand.interactableObject == null) return null;
+            InventorySlot inventorySlotToRemove = mainHand;
+
+            mainHand.interactableObject = offHand.interactableObject;
+            offHand.interactableObject = null;
+
+            return inventorySlotToRemove;
+        }
+
+        public void SwapItems()
+        {
+            if (mainHand.interactableObject == null || offHand.interactableObject == null) return;
+            
+            InteractableObject temp = mainHand.interactableObject;
+            mainHand.interactableObject = offHand.interactableObject;
+            offHand.interactableObject = temp;
+        }
+    }
+
+    private InventorySlots _inventorySlots = new();
     private PlayerControls _playerControls;
     private GameObject _mouse;
     private int _playerID;
     private IInteractable _interactableComponent;
 
-    private const int _RIGHT_HAND_ID = 0;
-    private const int _LEFT_HAND_ID = 1;
+    private const int _MAIN_HAND_ID = 0;
+    private const int _OFF_HAND_ID = 1;
 
     [Header("Interaction Physics Settings")]
 
@@ -58,42 +106,47 @@ public class HandInventory : MonoBehaviour
         _playerControls.Player.Drop.Enable();
         _playerControls.Player.Throw.Enable();
         _playerControls.Player.Swap.Enable();
+        _playerControls.Player.UseItem.Enable();
 
-        _playerControls.Player.Interact.performed += OnInteract;
-        _playerControls.Player.Drop.performed += OnDrop;
-        _playerControls.Player.Throw.performed += OnThrow;
-        _playerControls.Player.Swap.performed += OnSwap;
+        _playerControls.Player.Interact.performed += OnRaycastInteract;
+        _playerControls.Player.Drop.performed += OnItemDrop;
+        _playerControls.Player.Throw.performed += OnItemThrow;
+        _playerControls.Player.Swap.performed += OnHandSwap;
+        _playerControls.Player.UseItem.performed += OnUseItem;
     }
 
     void OnDisable(){
-        _playerControls.Player.Interact.performed -= OnInteract;
-        _playerControls.Player.Drop.performed -= OnDrop;
-        _playerControls.Player.Throw.performed -= OnThrow;
-        _playerControls.Player.Swap.performed -= OnSwap;
+        _playerControls.Player.Interact.performed -= OnRaycastInteract;
+        _playerControls.Player.Drop.performed -= OnItemDrop;
+        _playerControls.Player.Throw.performed -= OnItemThrow;
+        _playerControls.Player.Swap.performed -= OnHandSwap;
+        _playerControls.Player.UseItem.performed -= OnUseItem;
 
         _playerControls.Player.Interact.Disable();
         _playerControls.Player.Drop.Disable();
         _playerControls.Player.Throw.Disable();
         _playerControls.Player.Swap.Disable();
+        _playerControls.Player.UseItem.Disable();
     }
 
     void PrepareList()
     {
-        _inventorySlots = new List<InventorySlot> { new InventorySlot(), new InventorySlot()};
-        _inventorySlots[_RIGHT_HAND_ID].transform = _rightHandTransform;
-        _inventorySlots[_LEFT_HAND_ID].transform = _leftHandTransform;
+        _inventorySlots[_MAIN_HAND_ID].transform = _rightHandTransform;
+        _inventorySlots[_OFF_HAND_ID].transform = _leftHandTransform;
     }
 
     void Update()
     {
-        CheckForInteractables();
-        MoveItemsToHands();
+        CheckForRaycastInteractables();
     }
 
-    /// <summary>
-    /// Traces a ray from the center of the screen of a lenght then checks certain conditions.
-    /// </summary>
-    void CheckForInteractables(){
+    private void FixedUpdate()
+    {
+        MoveItemsPositionsToHands();
+    }
+
+    private void CheckForRaycastInteractables()
+    {
         Ray rayToInteract = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
 
         // If we hit something in the layer.
@@ -125,83 +178,65 @@ public class HandInventory : MonoBehaviour
             _mouse.GetComponent<MouseUI>()?.DefaultEffect();
             _interactableComponent = null;
         }
-
     }
 
-    void OnSwap(InputAction.CallbackContext context)
+    void OnHandSwap(InputAction.CallbackContext context)
     {
-        InventorySlot rightItem = _inventorySlots[_RIGHT_HAND_ID];
-        InventorySlot leftItem = _inventorySlots[_LEFT_HAND_ID];
-
-        _inventorySlots[_RIGHT_HAND_ID] = leftItem;
-        _inventorySlots[_LEFT_HAND_ID] = rightItem;
+        _inventorySlots.SwapItems();
     }
  
-    void OnInteract(InputAction.CallbackContext context)
+    void OnRaycastInteract(InputAction.CallbackContext context) { _interactableComponent?.Interact(_playerID);}
+    void OnItemDrop(InputAction.CallbackContext context) { DropItem(); }
+    void OnItemThrow(InputAction.CallbackContext context) { DropItem(_throwForce); }
+    void OnUseItem(InputAction.CallbackContext context) { UseItem(); }
+
+    private void UseItem()
     {
-        _interactableComponent?.Interact(_playerID);
+        InventorySlot inventorySlotToUse = _inventorySlots[0];
+        InteractableObject itemToUse = inventorySlotToUse?.interactableObject;
+        if (itemToUse == null) return;
+
+        itemToUse.Interact(_playerID);
+        // TK interact functionality
     }
 
-    void OnDrop(InputAction.CallbackContext context)
+    public void PickUpItem(InteractableObject pickableItem)
     {
-        DropItem();
+        //int freeHandIndex = GetFreeHands();
+
+        if (pickableItem.GetComponent<Rigidbody>() == null) return; // DropItem(); <-??
+
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+        if (inventorySlotOfNewItem == null) return;
+
+        inventorySlotOfNewItem.rigidbody = pickableItem.GetComponent<Rigidbody>();
+        inventorySlotOfNewItem.rigidbody.useGravity = false;
+        inventorySlotOfNewItem.initialLinearDamping = inventorySlotOfNewItem.rigidbody.linearDamping;
+        inventorySlotOfNewItem.rigidbody.linearDamping = _linearDrag;
+        inventorySlotOfNewItem.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        inventorySlotOfNewItem.rigidbody.transform.parent = inventorySlotOfNewItem.transform;
+
+        Physics.IgnoreCollision(inventorySlotOfNewItem.interactableObject.GetComponent<Collider>(),
+                                gameObject.GetComponentInChildren<CapsuleCollider>(), true);
+        //Switch this magic number later
+        StartCoroutine(AnimateRotationTowards(inventorySlotOfNewItem.interactableObject.transform, inventorySlotOfNewItem.transform.rotation, 1f));
+        
     }
 
-    void OnThrow(InputAction.CallbackContext context)
+    private void MoveItemsPositionsToHands()
     {
-        DropItem(_throwForce);
+        MoveItemPositionToHand(_inventorySlots[_MAIN_HAND_ID]);
+        MoveItemPositionToHand(_inventorySlots[_OFF_HAND_ID]);
     }
 
-    int GetFreeHands()
+    private void MoveItemPositionToHand(InventorySlot inventorySlot)
     {
-        int index = 0;
-        foreach(InventorySlot slot in _inventorySlots)
-        {
-            if(slot.pickedObject == null) return index;
+        if (inventorySlot.interactableObject == null) return;
 
-            index++;
-        }   
+        Vector3 direction = inventorySlot.transform.position - inventorySlot.interactableObject.transform.position;
+        if (Vector3.Magnitude(direction) <= .1f) return;
 
-        return -1;
-    }
-
-    public void PickUpItem(GameObject pickableItem)
-    {
-        int freeHandIndex = GetFreeHands();
-
-        if (freeHandIndex != -1 && pickableItem.GetComponent<Rigidbody>())
-        {
-            InventorySlot inventorySlot = _inventorySlots[freeHandIndex];
-            inventorySlot.pickedObject = pickableItem;
-            inventorySlot.rigidbody = pickableItem.GetComponent<Rigidbody>();
-            inventorySlot.rigidbody.useGravity = false;
-            inventorySlot.initialLinearDamping = inventorySlot.rigidbody.linearDamping;
-            inventorySlot.rigidbody.linearDamping = _linearDrag;
-            inventorySlot.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            inventorySlot.rigidbody.transform.parent = inventorySlot.transform;
-
-            Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(),
-                                    gameObject.GetComponentInChildren<CapsuleCollider>(), true);
-            //Switch this magic number later
-            StartCoroutine(AnimateRotationTowards(inventorySlot.pickedObject.transform, inventorySlot.transform.rotation, 1f));
-        }
-        else
-        {
-            DropItem();
-        }
-    }
-
-    private void MoveItemsToHands()
-    { 
-        foreach(InventorySlot inventorySlot in _inventorySlots)
-        {
-            if (inventorySlot.pickedObject == null) continue;
-
-            if (Vector3.Distance(inventorySlot.pickedObject.transform.position, inventorySlot.transform.position) <= .1f) continue;
-            
-            Vector3 direction = inventorySlot.transform.position - inventorySlot.pickedObject.transform.position;
-            inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
-        } 
+        inventorySlot.rigidbody.AddForce(direction * _pickUpForce);
     }
 
     private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration)
@@ -218,23 +253,20 @@ public class HandInventory : MonoBehaviour
     }
 
     private void DropItem(float throwForce = 0){
+        InventorySlot itemSlotToDrop = _inventorySlots.RemoveItem();
+        if(itemSlotToDrop == null) return;
 
-        foreach(InventorySlot inventorySlot in _inventorySlots)
-        {
-            if (inventorySlot.pickedObject == null) continue;
+        Rigidbody itemRigidBodyToDrop = itemSlotToDrop.rigidbody;
 
-            inventorySlot.rigidbody.useGravity = true;
-            inventorySlot.rigidbody.linearDamping = inventorySlot.initialLinearDamping;
-            inventorySlot.rigidbody.freezeRotation = false;
+        itemRigidBodyToDrop.useGravity = true;
+        itemRigidBodyToDrop.linearDamping = itemSlotToDrop.initialLinearDamping;
+        itemRigidBodyToDrop.freezeRotation = false;
 
-            Physics.IgnoreCollision(inventorySlot.pickedObject.GetComponent<Collider>(), 
-                                    gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+        Physics.IgnoreCollision(itemSlotToDrop.interactableObject.GetComponent<Collider>(), 
+                                gameObject.GetComponentInChildren<CapsuleCollider>(), false);
 
-            inventorySlot.rigidbody.transform.parent = null;
-            inventorySlot.pickedObject = null;
-            inventorySlot.rigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-            inventorySlot.rigidbody = null;
-            return;
-        }
+        itemRigidBodyToDrop.transform.parent = null;
+        itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+        //itemRigidBodyToDrop = null;
     }
 }

@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
+using Mirror;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using Mirror;
 #endif
 
 namespace StarterAssets
 {
 	[RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM
-	[RequireComponent(typeof(PlayerInput))]
-#endif
+	#if ENABLE_INPUT_SYSTEM
+		[RequireComponent(typeof(PlayerInput))]
+	#endif
 	public class FirstPersonController : PlayerBase
 	{
 		public bool grounded { get; private set; }
 
 
-#if ENABLE_INPUT_SYSTEM
-        private PlayerInput _playerInput;
-#endif
+		#if ENABLE_INPUT_SYSTEM
+				private PlayerInput _playerInput;
+		#endif
+
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
@@ -29,9 +31,9 @@ namespace StarterAssets
 		{
 			get{
 				#if ENABLE_INPUT_SYSTEM
-				return _playerInput.currentControlScheme == "KeyboardMouse";
+					return _playerInput.currentControlScheme == "KeyboardMouse";
 				#else
-				return false;
+					return false;
 				#endif
 			}
 		}
@@ -46,11 +48,12 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM
-			_playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
+
+			#if ENABLE_INPUT_SYSTEM
+				_playerInput = GetComponent<PlayerInput>();
+			#else
+						Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+			#endif
 
 			// reset our timeouts on start
 			_jumpTimeoutDelta = jumpTimeout;
@@ -176,11 +179,7 @@ namespace StarterAssets
 
 		private void OnDrawGizmosSelected()
 		{
-			Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-			Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-			if (grounded) Gizmos.color = transparentGreen;
-			else Gizmos.color = transparentRed;
+			Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f); // green : red
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
