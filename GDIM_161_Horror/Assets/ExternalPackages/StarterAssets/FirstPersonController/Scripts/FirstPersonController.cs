@@ -10,10 +10,59 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : PlayerBase
+	public class FirstPersonController : NetworkBehaviour
 	{
-		public bool grounded { get; private set; }
+		#region VARIABLES
 
+		[Header("Player, in m/s")]
+		[SerializeField] float MoveSpeed = 4.0f;
+        [SerializeField] float SprintSpeed = 6.0f;
+		[SerializeField] float RotationSpeed = 1.0f;
+		[SerializeField] float AccelerationRate = 10.0f;
+        [SerializeField] float DecelerationRate = 10.0f;
+
+		[Space(10)]
+        [SerializeField] float JumpHeight = 1.2f;
+		[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
+        [SerializeField] float Gravity = -15.0f;
+
+		[Space(10)]
+		[Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+        [SerializeField] float JumpTimeout = 0.1f;
+		[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+        [SerializeField] float FallTimeout = 0.15f;
+
+		[Header("Player Grounded")]
+		public bool Grounded { get; private set; } = true;
+		[Tooltip("Useful for rough ground")]
+        [SerializeField] float GroundedOffset = -0.14f;
+		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+        [SerializeField] float GroundedRadius = 0.5f;
+		[Tooltip("What layers the character uses as ground")]
+		[SerializeField] LayerMask GroundLayers;
+
+		[Header("Cinemachine")]
+		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+        [SerializeField] GameObject CinemachineCameraTarget;
+		[Tooltip("How far in degrees can you move the camera up")]
+        [SerializeField] float TopClamp = 90.0f;
+		[Tooltip("How far in degrees can you move the camera down")]
+        [SerializeField] float BottomClamp = -90.0f;
+
+		// cinemachine
+		private float _cinemachineTargetPitch;
+
+		// player
+		private float _speed;
+		private float _rotationVelocity;
+		private float _verticalVelocity;
+		private float _terminalVelocity = 53.0f;
+
+		// timeout deltatime
+		private float _jumpTimeoutDelta;
+		private float _fallTimeoutDelta;
+
+        #endregion
 
 #if ENABLE_INPUT_SYSTEM
         private PlayerInput _playerInput;
@@ -36,11 +85,13 @@ namespace StarterAssets
 			}
 		}
 
-		protected override void Awake()
+		private void Awake()
 		{
-			base.Awake();
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
-		}
+			//testing
+				//SetPosition();
+			//
+        }
 
         private void Start()
 		{
@@ -53,8 +104,8 @@ namespace StarterAssets
 #endif
 
 			// reset our timeouts on start
-			_jumpTimeoutDelta = jumpTimeout;
-			_fallTimeoutDelta = fallTimeout;
+			_jumpTimeoutDelta = JumpTimeout;
+			_fallTimeoutDelta = FallTimeout;
 		}
 
 		private void Update()
@@ -64,6 +115,19 @@ namespace StarterAssets
 			Move();
 		}
 
+		//Testing
+
+
+	//	public void SetPosition()
+		//{
+		//	transform.position = new Vector3(Random.Range(-5,5), 0.8f, Random.Range(-15,7));
+	//	}
+
+
+
+
+		//
+
 		private void LateUpdate()
 		{
 			CameraRotation();
@@ -72,8 +136,8 @@ namespace StarterAssets
 		private void GroundedCheck()
 		{
 			// set sphere position, with offset
-			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
-			grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
+			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
 
 		private void CameraRotation()
@@ -82,18 +146,18 @@ namespace StarterAssets
             
 			float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;	//Don't multiply mouse input by Time.deltaTime
 
-            _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
+            _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+            _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp); // clamp pitch rotation
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f); // update Cinemachine target pitch
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp); // clamp pitch rotation
+            CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f); // update Cinemachine target pitch
 
             transform.Rotate(Vector3.up * _rotationVelocity); // rotate player left and right
         }
 
 		private void Move()
 		{
-			float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
+			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -107,13 +171,13 @@ namespace StarterAssets
 			// accelerate or decelerate to target speed
 			if (currentHorizontalSpeed < (targetSpeed - speedOffset)) // accelerate
 			{
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate); // curved result (not linear) for organic speed change
+				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * AccelerationRate); // curved result (not linear) for organic speed change
 				_speed = Mathf.Round(_speed * 1000f) / 1000f; // round speed to 3 decimal places
 			}
 
 			else if (currentHorizontalSpeed > (targetSpeed + speedOffset)) // decelerate
 			{
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate); // curved result (not linear) for organic speed change
+				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * DecelerationRate); // curved result (not linear) for organic speed change
 				_speed = Mathf.Round(_speed * 1000f) / 1000f; // round speed to 3 decimal places
 			}
 
@@ -135,9 +199,9 @@ namespace StarterAssets
 
 		private void JumpAndGravity()
 		{
-			if (grounded)
+			if (Grounded)
 			{
-				_fallTimeoutDelta = fallTimeout; // reset the fall timeout timer
+				_fallTimeoutDelta = FallTimeout; // reset the fall timeout timer
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -145,14 +209,14 @@ namespace StarterAssets
 
 				// Jump
 				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-					_verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity); // the square root of H * -2 * G = how much velocity needed to reach desired height
+					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity); // the square root of H * -2 * G = how much velocity needed to reach desired height
 
 				if (_jumpTimeoutDelta >= 0.0f)
 					_jumpTimeoutDelta -= Time.deltaTime;
 			}
 			else
 			{
-				_jumpTimeoutDelta = jumpTimeout;
+				_jumpTimeoutDelta = JumpTimeout;
 
 				if (_fallTimeoutDelta >= 0.0f)
 					_fallTimeoutDelta -= Time.deltaTime;
@@ -163,7 +227,7 @@ namespace StarterAssets
 			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
 			if (_verticalVelocity < _terminalVelocity)
 			{
-				_verticalVelocity += gravity * Time.deltaTime;
+				_verticalVelocity += Gravity * Time.deltaTime;
 			}
 		}
 
@@ -179,11 +243,11 @@ namespace StarterAssets
 			Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
 			Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-			if (grounded) Gizmos.color = transparentGreen;
+			if (Grounded) Gizmos.color = transparentGreen;
 			else Gizmos.color = transparentRed;
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
+			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
 	}
 }
