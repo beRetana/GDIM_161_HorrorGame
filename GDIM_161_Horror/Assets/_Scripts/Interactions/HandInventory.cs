@@ -192,7 +192,7 @@ public class HandInventory : MonoBehaviour
     }
 
     private void MoveItemsToHands()
-    {
+    { 
         foreach(InventorySlot inventorySlot in _inventorySlots)
         {
             if (inventorySlot.pickedObject == null) continue;

@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
-using UnityEngine.UI;
-using TMPro;
 public class SteamLobby : MonoBehaviour
 {
     public static SteamLobby Instance;
@@ -24,7 +20,7 @@ public class SteamLobby : MonoBehaviour
 
     private void Start()
     {
-        if (!SteamManager.Initialized) { return; }
+        //if (!SteamManager.Initialized) { return; }
         if (Instance == null) { Instance = this; }
 
         manager = GetComponent<NewNetworkManager>();
