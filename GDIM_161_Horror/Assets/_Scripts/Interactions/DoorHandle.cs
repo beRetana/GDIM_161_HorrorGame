@@ -50,7 +50,6 @@ namespace Interactions
         private void PlayerGettingOnHandle(int playerId)
         {
             _isPlayerOnHandle = true;
-            _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
             PlayerManager.Instance.LockPlayerInput(playerId);
             StartCoroutine(MovePlayerAnimation(playerId));
         }
@@ -113,6 +112,7 @@ namespace Interactions
             }
 
             AttachingToPlayer(playerId);
+            _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
             _doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler: true);
         }
     }
