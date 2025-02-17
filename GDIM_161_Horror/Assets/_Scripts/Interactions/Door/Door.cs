@@ -29,17 +29,22 @@ namespace Interactions
             _doorState = DoorState.Locked;
         }
 
+        private void Update()
+        {
+            if (_doorState == DoorState.Unlocking) CheckFullyOpened();
+        }
+
         public void UpdateDoorState()
         {
             switch (_doorState)
             {
                 case DoorState.Locked:
                     break;
-                case DoorState.Locking:
-                    LockingDoors();
-                    break;
                 case DoorState.Unlocking:
                     UnlockingDoors();
+                    break;
+                case DoorState.Locking:
+                    LockingDoors();
                     break;
                 case DoorState.Unlocked:
                     UnlockedDoors();
@@ -51,27 +56,35 @@ namespace Interactions
 
         private void LockingDoors()
         {
-            FreezeDoors();
-
             _rightDoorHandle.CloseDoor();
             _leftDoorHandle.CloseDoor();
-
             _doorState = DoorState.Locked;
         }
 
         private void UnlockingDoors()
         {
-           
+            _rightDoorHandle.DoorCanMove();
+            _leftDoorHandle.DoorCanMove();
         }
 
         private void UnlockedDoors()
         {
-            FreezeDoors();
+            _rightDoorHandle.DetachingFromPlayer();
+            _leftDoorHandle.DetachingFromPlayer();
+            _rightDoorHandle.SetInteractive(false);
+            _leftDoorHandle.SetInteractive(false);
         }
 
-        private void FreezeDoors()
+        private void CheckFullyOpened()
         {
-            
+            if (DistancedEnough(_leftDoorHandle.transform.position) || DistancedEnough(_rightDoorHandle.transform.position)) return;
+            _doorState = DoorState.Unlocked;
+            UpdateDoorState();
+        }
+
+        private bool DistancedEnough(Vector3 position)
+        {
+            return Vector3.Distance(_rightDoorHandle.transform.position, transform.position) > _openDistance;
         }
 
         public void OnPlayerHandleInteraction(bool isPlayerOnHandler)

@@ -8,64 +8,78 @@ namespace Interactions
     {
         [SerializeField] private Door _doorsManager;
         [SerializeField] private Transform _targetTransform;
-        [SerializeField] private ArticulationBody _handleArticulation;
+        [SerializeField] private Rigidbody _doorRigidbody;
+        [SerializeField] private FixedJoint _handleJoint;
         [SerializeField] private float _animTime;
+        [SerializeField] private string _grabDisplayMessage;
+        [SerializeField] private string _releaseDisplayMessage;
+
+        private delegate void UnlockPlayer();
+        private UnlockPlayer OnUnlockPlayer;
 
         private InteractableItem _interactableItem;
-        private PlayerManager _playerManager;
         private Vector3 _targetPosition, _initialPosition;
         private Quaternion _targetRotation;
         private bool _isPlayerOnHandle;
-        private int _playerHolding;
 
         private void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(OnInteracted);
-            _playerManager = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.PlayerManager).GetComponent<PlayerManager>();
             _targetRotation = _targetTransform.rotation;
             _initialPosition = transform.position;
         }
 
-        public void CloseDoor() { StartCoroutine(CloseDoorAnimation());}
-
         public void OnInteracted(int playerId)
         {
-            if ( _isPlayerOnHandle ) PlayerGettingOnHandle(playerId);
+            if (!_isPlayerOnHandle ) PlayerGettingOnHandle(playerId);
             else PlayerGettingOffHandle(playerId);
         }
 
         private void PlayerGettingOffHandle(int playerId)
         {
             _isPlayerOnHandle = false;
-            _playerManager.LockPlayerInput(playerId);
-            Deattaching(playerId);
+            _interactableItem.SetDisplayMessage(_grabDisplayMessage);
+            PlayerManager.Instance.UnlockPlayerInput(playerId);
+            DetachingFromPlayer();
+            OnUnlockPlayer = null;
             _doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler:false);
+            StartCoroutine(CloseDoorAnimation());
+        }
+        
+        private void PlayerGettingOnHandle(int playerId)
+        {
+            _isPlayerOnHandle = true;
+            PlayerManager.Instance.LockPlayerInput(playerId);
+            StartCoroutine(MovePlayerAnimation(playerId));
         }
 
-        public void Deattaching(int playerId)
+        public void DetachingFromPlayer()
         {
-            PlayerBase player = _playerManager.GetPlayer(playerId);
-            PlayerArticulations playerArticulations = player.GetComponent<PlayerArticulations>();
-            _handleArticulation.transform.parent = null;
+            _handleJoint.connectedBody = null;
+            _doorRigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         private void AttachingToPlayer(int playerId)
         {
-            PlayerArticulations playerArticulations = _playerManager.GetPlayer(playerId).GetComponent<PlayerArticulations>();
-            _handleArticulation.immovable = false;
-            _handleArticulation.transform.parent = playerArticulations.PlayerArticulation.transform;
-            _handleArticulation.SnapAnchorToClosestContact();
-            _handleArticulation.jointType = ArticulationJointType.PrismaticJoint;
+            PlayerArticulations playerArticulations = PlayerManager.Instance.GetPlayer(playerId).GetComponent<PlayerArticulations>();
+            _handleJoint.connectedBody = playerArticulations.PlayerHandRigidbody;
+            _doorRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ;
+            OnUnlockPlayer = () => { PlayerManager.Instance.UnlockPlayerInput(playerId); };
         }
 
-        private void PlayerGettingOnHandle(int playerId)
+        public void DoorCanMove()
         {
-            _isPlayerOnHandle = true;
-            _playerManager.LockPlayerInput(playerId);
-            StartCoroutine(MovePlayerAnimation(playerId));
+            OnUnlockPlayer?.Invoke();
         }
 
+        public void CloseDoor() { StartCoroutine(CloseDoorAnimation()); }
+
+        public void SetInteractive(bool isInteractive)
+        {
+            _interactableItem.SetIntactive(isInteractive);
+        }
+        
         IEnumerator CloseDoorAnimation()
         {
             float time = 0;
@@ -79,11 +93,13 @@ namespace Interactions
                 yield return null;
                 time += Time.deltaTime;
             }
+
+            _doorsManager.UpdateDoorState();
         }
 
         IEnumerator MovePlayerAnimation(int playerId)
         {
-            PlayerBase player = _playerManager.GetPlayer(playerId);
+            PlayerBase player = PlayerManager.Instance.GetPlayer(playerId);
             int cameraRootChildIndex = 1;
             float time = 0;
 
@@ -104,7 +120,8 @@ namespace Interactions
                 time += Time.deltaTime;
             }
 
-            //AttachingToPlayer(playerId);
+            AttachingToPlayer(playerId);
+            _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
             _doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler: true);
         }
     }
