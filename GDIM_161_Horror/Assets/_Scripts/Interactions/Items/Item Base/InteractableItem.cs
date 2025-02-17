@@ -15,15 +15,23 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     protected Action<int> OnInteractAction;
 
+    protected bool _isInteractable;
+
     void Awake()
     {
         OnInteractAction = (int playerId) => Debug.Log($"Player: {playerId} Interacted");
+        _isInteractable = true;
     }
 
     void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
         _textMesh.text = _textName;
+    }
+
+    public virtual void SetIntactive(bool intactive)
+    {
+        _isInteractable |= intactive;
     }
 
     public virtual void Interact(int playerID)
@@ -38,7 +46,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public virtual void Detected(int playerID)
     {
-        //Debug.Log($"Detected by player {playerID}, {_playerManager.GetPlayer(playerID).gameObject.ToString()}");
+        if (!_isInteractable) return;
         _textAnimation.SetBool(_fadeIn, true);
     }
 
