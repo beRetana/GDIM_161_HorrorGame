@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using Mirror;
 #endif
 
 namespace StarterAssets
@@ -10,7 +9,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : NetworkBehaviour
+	public class FirstPersonController : MonoBehaviour
 	{
 		#region VARIABLES
 
@@ -88,9 +87,6 @@ namespace StarterAssets
 		private void Awake()
 		{
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
-			//testing
-				//SetPosition();
-			//
         }
 
         private void Start()
@@ -114,19 +110,6 @@ namespace StarterAssets
 			GroundedCheck();
 			Move();
 		}
-
-		//Testing
-
-
-	//	public void SetPosition()
-		//{
-		//	transform.position = new Vector3(Random.Range(-5,5), 0.8f, Random.Range(-15,7));
-	//	}
-
-
-
-
-		//
 
 		private void LateUpdate()
 		{
