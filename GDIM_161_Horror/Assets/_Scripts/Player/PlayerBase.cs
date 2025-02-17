@@ -7,8 +7,7 @@ using Mirror;
 
 public class PlayerBase : MonoBehaviour
 {
-    private static int _staticClassID = 1;
-    private int _myID;
+    private int _myID = -1; // 0, 1, 2, 3
 
     #region enums
     public enum PlayerStateEnum
@@ -28,19 +27,10 @@ public class PlayerBase : MonoBehaviour
     }
 
     #endregion
-
-
-
     #region delegates
-
-    public delegate void PlayerSpawn(PlayerBase player);
-    public static event PlayerSpawn OnPlayerSpawn;
     
 
     #endregion
-
-
-
     #region Scriptable Object References
 
     [SerializeField] private SO_PlayerStats lockedStats;
@@ -49,14 +39,12 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private SO_PlayerStats downedStats;
 
     #endregion
-
     #region Useful Stats
     private SO_PlayerStats currentStats;
     private PlayerStateEnum playerStateEnum;
     private PlayerActionEnum playerActionEnum;
 
     #endregion
-
     #region Player Stats
 
     [SerializeField] protected GameObject cinemachineCameraTarget;
@@ -95,17 +83,36 @@ public class PlayerBase : MonoBehaviour
 
     #endregion
 
-    float deltaCycleTimer = 5f;
-    float cycleTimer = 5f;
-
     //Animator anim;
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         AssignID();
         SetPlayerStats();
         EnterState(PlayerStateEnum.Unlocked);
     }
+    public override string ToString() { return $"Player ID: {_myID}"; }
 
+    #region PlayerStateMachine
+    public void LockPlayer()
+    {
+        Debug.Log($"Unlocking Player{_myID}");
+        EnterState(PlayerStateEnum.Locked);
+    }
+    public void UnlockPlayer()
+    {
+        Debug.Log($"Locking Player{_myID}");
+        EnterState(PlayerStateEnum.Unlocked);
+    }
+    public void LimpPlayer()
+    {
+        Debug.Log($"Limping Player{_myID}");
+        EnterState(PlayerStateEnum.Limp);
+    }
+    public void DownPlayer()
+    {
+        Debug.Log($"Locking Player{_myID}");
+        EnterState(PlayerStateEnum.Downed);
+    }
     private void EnterState(PlayerStateEnum enterState)
     {
         Debug.Log($"{name} entering {enterState}");
@@ -128,38 +135,6 @@ public class PlayerBase : MonoBehaviour
         }
         SetPlayerStats();
     }
-
-    public void LockPlayer()
-    {
-        EnterState(PlayerStateEnum.Locked);
-    }
-
-    public void UnlockPlayer()
-    {
-        EnterState(PlayerStateEnum.Unlocked);
-    }
-
-    private bool AssignID()
-    {
-        if (_staticClassID > 4)
-        {
-            Debug.LogError($"Invalid Player Amount: {_staticClassID}");
-            Destroy(this.gameObject);
-            return false;
-        }
-        _myID = _staticClassID;
-        ++_staticClassID;
-        Debug.Log($"Player {_myID} spawned");
-
-        OnPlayerSpawn?.Invoke(this);
-
-        return true;
-    }
-
-
-    public int ID() { return _myID; }
-
-
     private bool SetPlayerStats()
     {
         if (currentStats == null) return false;
@@ -192,8 +167,25 @@ public class PlayerBase : MonoBehaviour
         return true;
     }
 
-    public override string ToString()
+
+    #endregion PlayerState
+
+    public int ID() { return _myID; }
+    private bool AssignID()
     {
-        return $"Player ID: {_myID}";
+        int newID = FindFirstObjectByType<PlayerManager>().AttemptAddPlayer(this);
+
+        if (newID != -1)
+        {
+            _myID = newID;
+            Debug.Log($"Player {_myID} spawned");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"ERROR: Could not add self {this} to PlayerList. Destoring self.");
+            Destroy(this);
+            return false;
+        }
     }
 }
