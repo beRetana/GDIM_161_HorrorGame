@@ -12,15 +12,14 @@ namespace Interactions
         private InteractableItem _interactableItem;
         private PlayerManager _playerManager;
         private Vector3 _targetPosition;
-        private Vector3 _targetRotation;
+        private Quaternion _targetRotation;
 
         private void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(OnInteracted);
             _playerManager = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.PlayerManager).GetComponent<PlayerManager>();
-            _targetPosition = _targetTransform.position;
-            _targetRotation = _targetTransform.rotation.eulerAngles;
+            _targetRotation = _targetTransform.rotation;
         }
 
         public void OnInteracted(int playerId)
@@ -43,11 +42,15 @@ namespace Interactions
             Transform playerCameraRoot = player.transform.GetChild(cameraRootChildIndex);
 
             Vector3 playerOriginalPosition = player.transform.position;
-            Vector3 targetPosition = new Vector3(_targetTransform.position.x, player.transform.position.y, _targetTransform.position.z); 
+            _targetPosition = new Vector3(_targetTransform.position.x, player.transform.position.y, _targetTransform.position.z);
+
+            Quaternion playerOriginalRotation = player.transform.rotation;
 
             while (time <= _animTime)
             {
                 player.transform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, time /_animTime);
+                player.transform.rotation = Quaternion.Slerp(playerOriginalRotation, _targetRotation, time / _animTime);
+
                 
                 yield return null;
                 time += Time.deltaTime;
