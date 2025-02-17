@@ -97,8 +97,7 @@ namespace StarterAssets
 
             Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
             float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f); // Interpolate arm rotation for smoothness
-            _arms.transform.localRotation = Quaternion.Euler(armPitch, 0f, 0f);
-            _arms.transform.Rotate(Vector3.up * _rotationVelocity);
+            _arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
 
             //_arms.ArmsRotation(_input.look.y, IsCurrentDeviceMouse);
             //_arms.ArmsRotation(_rotationVelocity, _cinemachineTargetPitch);
