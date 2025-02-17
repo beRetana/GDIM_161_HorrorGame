@@ -38,14 +38,15 @@ namespace StarterAssets
 			}
 		}
 
-		protected override void Awake()
+        private void Awake()
 		{
-			base.Awake();
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
 		}
 
-        private void Start()
+        protected override void Start()
 		{
+			base.Start();
+
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 

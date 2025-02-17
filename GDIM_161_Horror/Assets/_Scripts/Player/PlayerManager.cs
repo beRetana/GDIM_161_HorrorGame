@@ -1,57 +1,104 @@
 using MessengerSystem;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditorInternal;
+using Mono.CSharp;
+using Codice.CM.Common.Tree.Partial;
+using NUnit.Framework.Constraints;
 
 public class PlayerManager : MonoBehaviour
 {
-    private Dictionary<int, string> playerMessengerKeys = new Dictionary<int, string>();
-    private int totalPlayers = 0;
+    public static PlayerManager Instance {  get; private set; }
+    private PlayerHolder _playerHolder;
+
     private void Awake()
     {
-        PlayerBase.OnPlayerSpawn += AddPlayer;
-        DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.PlayerManager, gameObject);
+        DeclareSingletonInsatnce();
+        _playerHolder = new();
     }
-    public void AddPlayer(PlayerBase player)
-    {
-        ++totalPlayers;
-        MessengerKeys.GameObjectKey? keyToAdd = null;
 
-        switch(totalPlayers)
+    private void DeclareSingletonInsatnce()
+    {
+        if (Instance == null)
         {
-            case 1:
-                keyToAdd = MessengerKeys.GameObjectKey.Player1;
-                break;
-            case 2:
-                keyToAdd = MessengerKeys.GameObjectKey.Player2;
-                break;
-            case 3:
-                keyToAdd = MessengerKeys.GameObjectKey.Player3;
-                break;
-            case 4:
-                keyToAdd = MessengerKeys.GameObjectKey.Player4;
-                Debug.Log("Full Lobby");
-                break;
-             
-            default:
-                Debug.LogError($"Invalid Player Amount: {player.ID()}");
-                break;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        Debug.Log($"Player {player.ID()} added to PlayerManager");
-        playerMessengerKeys[player.ID()] = DataMessenger.SetGameObject((MessengerKeys.GameObjectKey)keyToAdd, player.gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void LockPlayerInput(int playerId)
+    public int AttemptAddPlayer(PlayerBase player) // returns -1 if error
     {
-        GetPlayer(playerId).LockPlayer();
+        Debug.Log(_playerHolder);
+        int newID = _playerHolder.AddPlayer(player);
+
+        if (newID != -1)    Debug.Log($"Player{newID} added to {_playerHolder}. Finishing PlayerBase set up.");
+        else                Debug.Log($"ERROR: Player not added to {_playerHolder}");
+
+        return newID; // returns -1 if error
     }
 
-    public void UnlockPlayerInput(int playerId)
+    public void LockPlayerInput(int playerID)
     {
-        GetPlayer(playerId).UnlockPlayer();
+        _playerHolder[playerID].LockPlayer();
     }
-
-    public PlayerBase GetPlayer(int ID)
+    public void UnlockPlayerInput(int playerID)
     {
-        return DataMessenger.GetGameObject(playerMessengerKeys[ID])?.GetComponent<PlayerBase>();
+        _playerHolder[playerID].UnlockPlayer();
+    }
+    public PlayerBase GetPlayer(int playerID) // ID: 0, 1, 2, 3
+    {
+        return _playerHolder[playerID];
+    }
+}
+
+public class PlayerHolder
+{
+    static readonly int _MAX_PLAYER_COUNT = 4;
+    private int totalPlayers = 0;
+    private PlayerBase[] playerList = new PlayerBase[4];
+
+    public int AddPlayer(PlayerBase player)
+    {
+        if (totalPlayers >= _MAX_PLAYER_COUNT)
+        {
+            Debug.LogError("ERROR: Max player count reached");
+            return -1;
+        }
+        if (PlayerExistsInList(player)) // player < totalPlayers
+        {
+            Debug.LogError("ERROR: Player already exists");
+            return -1;
+        }
+
+        playerList[totalPlayers] = player;
+        return totalPlayers++;
+    }
+    public PlayerBase this[int index] // index: get and set
+    {
+        get{
+            if (!IndexPlayerExists(index)) throw new System.Exception($"ERROR: Player{index} does not exist");
+            if (IndexInRange(index)) return playerList[index];
+            else throw new System.Exception("ERROR: Invalid player slot index");
+        }
+        private set{
+            if (IndexInRange(index)) playerList[index] = value;
+            else throw new System.Exception("ERROR: Invalid item slot index");
+        }
+    } 
+    private bool IndexInRange(int index) { return (index >= 0 && index < _MAX_PLAYER_COUNT); }
+    private bool IndexPlayerExists(int index) { return (index >= 0 && index < totalPlayers); }
+
+    private bool PlayerExistsInList(PlayerBase player)
+    {
+        foreach (PlayerBase existingPlayer in playerList)
+        {
+            if (existingPlayer == player)
+                return true;
+        }
+        return false;
     }
 }
