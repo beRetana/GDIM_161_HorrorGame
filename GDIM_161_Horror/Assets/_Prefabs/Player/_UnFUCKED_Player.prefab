@@ -541,6 +541,7 @@ MonoBehaviour:
     m_Bits: 8
   _rightHandTransform: {fileID: 1458154177004918455}
   _leftHandTransform: {fileID: 38960982650156893}
+  _arms: {fileID: 5645661420556895446}
   _pickUpRange: 5
   _pickUpForce: 4
   _linearDrag: 3
@@ -708,8 +709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ad8c3139f9cf847a283162766d4e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rightHandArticulation: {fileID: 0}
-  _leftHandArticulation: {fileID: 0}
+  _playerArticulation: {fileID: 0}
 --- !u!1 &2962234600057808103
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +858,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1683841439467628426}
+  - component: {fileID: 5645661420556895446}
   m_Layer: 8
   m_Name: Arm Axis
   m_TagString: Untagged
@@ -883,6 +884,20 @@ Transform:
   - {fileID: 5161785678068823854}
   m_Father: {fileID: 2571488355673585886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5645661420556895446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3859778825119738745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 829b0106c99430a4989e65f02b19e4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LArm: {fileID: 2561500799723017867}
+  RArm: {fileID: 7616592147760098052}
 --- !u!1 &5010426985986500038
 GameObject:
   m_ObjectHideFlags: 0
