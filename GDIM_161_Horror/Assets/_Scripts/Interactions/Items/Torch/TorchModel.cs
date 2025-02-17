@@ -15,5 +15,10 @@ namespace Interactions
         {
             
         }
+
+        public void TurnOnFlame(bool setOn)
+        {
+            
+        }
     }
 }
