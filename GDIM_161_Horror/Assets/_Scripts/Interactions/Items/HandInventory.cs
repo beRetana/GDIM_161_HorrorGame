@@ -160,6 +160,7 @@ public class HandInventory : MonoBehaviour
             Debug.Log($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
             return this[IsLHandDom ? 1 : 0];
         }
+        public int GetDominantIndex() { return IsLHandDom ? 0 : 1; }
     }
 
     private InventorySlots _inventorySlots = new();
@@ -306,8 +307,8 @@ public class HandInventory : MonoBehaviour
 
         StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
 
-/*        _arms.OutStretchHand();
-*/
+        _arms.OutStretchHand(_inventorySlots.IsLHandDom);
+
         return true;
     }
 
@@ -354,5 +355,6 @@ public class HandInventory : MonoBehaviour
 
         itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
         itemToDrop.UnPossessItem();
+        _arms.OutStretchHand(_inventorySlots.IsLHandDom);
     }
 }

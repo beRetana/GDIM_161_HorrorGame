@@ -93,9 +93,18 @@ namespace StarterAssets
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f); // update Cinemachine target pitch
 
             transform.Rotate(Vector3.up * _rotationVelocity); // rotate player left and right
+
+
+            Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
+            float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f); // Interpolate arm rotation for smoothness
+            _arms.transform.localRotation = Quaternion.Euler(armPitch, 0f, 0f);
+            _arms.transform.Rotate(Vector3.up * _rotationVelocity);
+
+            //_arms.ArmsRotation(_input.look.y, IsCurrentDeviceMouse);
+            //_arms.ArmsRotation(_rotationVelocity, _cinemachineTargetPitch);
         }
 
-		private void Move()
+        private void Move()
 		{
 			float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
 

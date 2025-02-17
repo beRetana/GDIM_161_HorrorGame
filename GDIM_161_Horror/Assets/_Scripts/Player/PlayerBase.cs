@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Player;
 
 
 public class PlayerBase : MonoBehaviour
@@ -17,7 +18,7 @@ public class PlayerBase : MonoBehaviour
         Limp,
         Downed
     }
-    public enum PlayerActionEnum
+    public enum PlayerActionEnum // NOT IN USE... yet
     {
         None = 0,               // 00000
         Idling = 1 << 0,        // 00001
@@ -28,15 +29,19 @@ public class PlayerBase : MonoBehaviour
 
     #endregion
     #region delegates
-    
+
 
     #endregion
-    #region Scriptable Object References
+    #region SerializeFields
 
+    [Header("State Stats Scritable Objects")]
     [SerializeField] private SO_PlayerStats lockedStats;
     [SerializeField] private SO_PlayerStats unlockedStats;
     [SerializeField] private SO_PlayerStats limpStats;
     [SerializeField] private SO_PlayerStats downedStats;
+
+    [Space(5)]
+    [SerializeField] protected Arms _arms;
 
     #endregion
     #region Useful Stats
