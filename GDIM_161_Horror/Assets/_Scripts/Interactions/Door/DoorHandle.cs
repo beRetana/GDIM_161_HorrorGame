@@ -74,6 +74,11 @@ namespace Interactions
         }
 
         public void CloseDoor() { StartCoroutine(CloseDoorAnimation()); }
+
+        public void SetInteractive(bool isInteractive)
+        {
+            _interactableItem.SetIntactive(isInteractive);
+        }
         
         IEnumerator CloseDoorAnimation()
         {

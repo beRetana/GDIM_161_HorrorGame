@@ -71,6 +71,8 @@ namespace Interactions
         {
             _rightDoorHandle.DetachingFromPlayer();
             _leftDoorHandle.DetachingFromPlayer();
+            _rightDoorHandle.SetInteractive(false);
+            _leftDoorHandle.SetInteractive(false);
         }
 
         private void CheckFullyOpened()
