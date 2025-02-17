@@ -10,18 +10,16 @@ namespace Interactions
     public class PickableItem : MonoBehaviour
     {
         private InteractableItem _interactableItem;
-        private PlayerManager _playerManager;
 
         void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
-            _playerManager = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.PlayerManager).GetComponent<PlayerManager>();
             _interactableItem.SetInteractAction(PickItem);
         }
 
         protected virtual void PickItem(int playerId)
         {
-            _playerManager.GetPlayer(playerId).GetComponent<HandInventory>().PickUpItem(this);
+            PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().PickUpItem(this);
         }
 
         public virtual void UseItem(int playerId) { }
