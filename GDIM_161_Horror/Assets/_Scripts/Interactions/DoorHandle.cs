@@ -54,7 +54,7 @@ namespace Interactions
             StartCoroutine(MovePlayerAnimation(playerId));
         }
 
-        private void DetachingFromPlayer()
+        public void DetachingFromPlayer()
         {
             _handleJoint.connectedBody = null;
             _doorRigidbody.constraints = RigidbodyConstraints.FreezeAll;
@@ -72,7 +72,9 @@ namespace Interactions
         {
             OnUnlockPlayer?.Invoke();
         }
-    
+
+        public void CloseDoor() { StartCoroutine(CloseDoorAnimation()); }
+        
         IEnumerator CloseDoorAnimation()
         {
             float time = 0;
@@ -86,6 +88,8 @@ namespace Interactions
                 yield return null;
                 time += Time.deltaTime;
             }
+
+            _doorsManager.UpdateDoorState();
         }
 
         IEnumerator MovePlayerAnimation(int playerId)
