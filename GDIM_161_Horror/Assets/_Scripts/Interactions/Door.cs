@@ -53,9 +53,6 @@ namespace Interactions
         {
             FreezeDoors();
 
-            _rightDoorHandle.CloseDoor();
-            _leftDoorHandle.CloseDoor();
-
             _doorState = DoorState.Locked;
         }
 

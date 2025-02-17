@@ -26,7 +26,12 @@ public class InteractableItem : MonoBehaviour, IInteractable
     void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
-        _textMesh.text = _textName;
+        SetDisplayMessage(_textName);
+    }
+
+    public virtual void SetDisplayMessage(string message)
+    {
+        _textMesh.text = message;
     }
 
     public virtual void SetIntactive(bool intactive)
