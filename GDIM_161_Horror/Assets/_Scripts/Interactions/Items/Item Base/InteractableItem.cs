@@ -23,7 +23,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
         _isInteractable = true;
     }
 
-    void Start()
+    public void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
         SetDisplayMessage(_textName);

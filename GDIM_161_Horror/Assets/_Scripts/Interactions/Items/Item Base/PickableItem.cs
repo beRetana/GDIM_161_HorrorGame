@@ -1,7 +1,3 @@
-using MessengerSystem;
-using Mirror.BouncyCastle.Asn1.Mozilla;
-using PlasticPipe.PlasticProtocol.Messages;
-using System;
 using UnityEngine;
 
 namespace Interactions
@@ -12,14 +8,12 @@ namespace Interactions
     [RequireComponent(typeof(InteractableItem))]
     public class PickableItem : MonoBehaviour
     {
-        private InteractableItem _interactableItem;
-        private PlayerManager _playerManager;
+        protected InteractableItem _interactableItem;
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
 
-        void Start()
+        protected virtual void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
-            _playerManager = FindFirstObjectByType<PlayerManager>();
             _interactableItem.SetInteractAction(PickItem);
         }
 
@@ -35,7 +29,7 @@ namespace Interactions
                 Debug.Log($"tried PICK UP on {this}, but is already possessed");
                 return;
             }
-            bool success = _playerManager.GetPlayer(playerId).GetComponent<HandInventory>().PickUpItem(this);
+            bool success = PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().PickUpItem(this);
             if (!success) return;
 
             SetPossessed(true);
@@ -46,11 +40,10 @@ namespace Interactions
             SetPossessed(false);
         }
 
-        private void SetPossessed(bool toPossess)
+        protected void SetPossessed(bool toPossess)
         {
             IsPossessed = toPossess;
         }
-        
 
         public virtual void UseItem(int playerId) { }
 

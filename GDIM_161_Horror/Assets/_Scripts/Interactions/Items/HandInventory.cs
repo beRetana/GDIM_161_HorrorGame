@@ -182,8 +182,6 @@ public class HandInventory : MonoBehaviour
         _mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI).GetComponent<MouseUI>();
         _playerID = gameObject.GetComponent<PlayerBase>().ID();
         PrepareList();
-        //DataMessenger.SetGameObject($"Player{_playerID}", gameObject);
-        //Debug.Log($"{this.name} is attatched to PlayerID:{_playerID}");
     }
 
     void OnEnable()
@@ -282,7 +280,7 @@ public class HandInventory : MonoBehaviour
 
     private void UseItem()
     {
-        InventorySlot inventorySlotToUse = _inventorySlots[0];
+        InventorySlot inventorySlotToUse = _inventorySlots[_RIGHT_HAND_ID];
         PickableItem itemToUse = inventorySlotToUse?.Item;
         if (itemToUse == null) return;
 
