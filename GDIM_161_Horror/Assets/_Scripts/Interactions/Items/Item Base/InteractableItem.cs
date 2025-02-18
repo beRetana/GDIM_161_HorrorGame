@@ -34,9 +34,9 @@ public class InteractableItem : MonoBehaviour, IInteractable
         _textMesh.text = message;
     }
 
-    public virtual void SetIntactive(bool intactive)
+    public virtual void SetInteractive(bool intactive)
     {
-        _isInteractable |= intactive;
+        _isInteractable = intactive;
     }
 
     public virtual void Interact(int playerID)

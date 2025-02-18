@@ -77,7 +77,7 @@ namespace Interactions
 
         public void SetInteractive(bool isInteractive)
         {
-            _interactableItem.SetIntactive(isInteractive);
+            _interactableItem.SetInteractive(isInteractive);
         }
         
         IEnumerator CloseDoorAnimation()
