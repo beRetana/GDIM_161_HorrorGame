@@ -42,7 +42,7 @@ namespace AI_FSM{
         private void CatchPlayer()
         {
             _aiController.AbortTask();
-            _taskCompleted.Invoke(succeful: true);
+            SendNotification(successful:true);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace AI_FSM{
         /// </summary>
         private void OnCheckedLastLocation()
         {
-            _taskCompleted.Invoke(succeful: false);
+            SendNotification(successful:false);
             Disable();
         }
     }

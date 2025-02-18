@@ -55,7 +55,7 @@ namespace AI_FSM{
                 _reachedLocation = false;
             }
 
-            _taskCompleted.Invoke(succeful: true);
+            SendNotification(successful: true);
         }
     }
 }

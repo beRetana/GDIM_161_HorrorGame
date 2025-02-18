@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections.Generic;
 
 namespace OtherUtils
@@ -6,16 +5,19 @@ namespace OtherUtils
     public static class ListUtils
     {
         /// <summary>
-        /// Shuffles the list in place.
+        /// Shuffles the given list.
         /// </summary>
-        /// <typeparam name="T">The object type in the list</typeparam>
-        /// <param name="list">The list you want to shuffle.</param>
-        public static void Shuffle<T>(this List<T> list)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        public static void Shuffle<T>(List<T> list)
         {
-            for (int i = 0; i < list.Count; i++)
+            int count = list.Count;
+
+            for (int i = 0; i < count-1; i++)
             {
-                int randomIndex = Random.Range(i, list.Count);
-                T temp = list[i];
+                int randomIndex = UnityEngine.Random.Range(0, list.Count);
+
+                var temp = list[i];
                 list[i] = list[randomIndex];
                 list[randomIndex] = temp;
             }

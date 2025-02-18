@@ -11,12 +11,14 @@ public class AgentController : MonoBehaviour
     [SerializeField] float _delimeter = 6.5f;
 
     private Rigidbody _rb;
+    private Vector3 _originalPosition;
 
     public Rigidbody Rb { get => _rb; }
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _originalPosition = transform.position;
     }
 
     /// <summary>
@@ -31,6 +33,13 @@ public class AgentController : MonoBehaviour
         // Reset the agent's velocity
         _rb.linearVelocity = Vector3.zero;
         // Reset the agent's rotation
+        transform.rotation = Quaternion.identity;
+    }
+
+    public void ResetAgentToOriginalPosition()
+    {
+        transform.position = _originalPosition;
+        _rb.linearVelocity = Vector3.zero;
         transform.rotation = Quaternion.identity;
     }
 
