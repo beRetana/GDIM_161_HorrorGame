@@ -657,6 +657,7 @@ MonoBehaviour:
   unlockedStats: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
   limpStats: {fileID: 11400000, guid: a019c12b47b3e7f4f9ee6d873e8868d4, type: 2}
   downedStats: {fileID: 11400000, guid: 1c6503a4201293a49b72759163af0364, type: 2}
+  _arms: {fileID: 5645661420556895446}
   cinemachineCameraTarget: {fileID: 7354950563374537535}
 --- !u!114 &3567417533735339568
 MonoBehaviour:
@@ -857,8 +858,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 829b0106c99430a4989e65f02b19e4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shoulderRotationSpeed: 0
+  shoulderTopClamp: 0
+  shoulderBottomClamp: 0
+  shoulderRotateScalar: 0
+  shoulderRotateSpeed: 0
   LArm: {fileID: 2561500799723017867}
   RArm: {fileID: 7616592147760098052}
+  amplitude: 0.4
+  frequency: 2
+  duration: 1
 --- !u!1 &5010426985986500038
 GameObject:
   m_ObjectHideFlags: 0
