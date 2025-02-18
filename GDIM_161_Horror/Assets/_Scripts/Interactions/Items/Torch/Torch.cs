@@ -6,17 +6,22 @@ namespace Interactions
     public class Torch : PickableItem
     {
         [Header("Gameplay Stuff")]
-        [SerializeField] [Range(1f, 20f)] float approxWoodLife_Minutes;
-        [SerializeField] [Range(0f, 1f)] float maxTickVariance_WoodBurn;
-        [SerializeField] [Range(1f, 1.2f)] float tickSpeedMultiplier_ByFloor;
+        [SerializeField, Range(1f, 20f)] float approxWoodLife_Minutes;
+        [SerializeField, Range(0f, 1f)] float maxTickVariance_WoodBurn;
+        [SerializeField, Range(1f, 1.2f)] float tickSpeedMultiplier_ByFloor;
 
         [Header("Model Stuff")]
         [SerializeField] TorchModel model;
         [SerializeField] Transform flameBase;
+        [SerializeField] Vector3 torchAnchor;
+        [SerializeField] Transform torchWood;
+
 
         public float BurnTimer { get; private set; }
         private float burnVelocity = 1f;
         private float burnAcelleration = 0f;
+        private float torchWoodScale;
+        private float minTorchWoodScale;
         public bool Lit { get; private set; }
 
         protected override void Start()

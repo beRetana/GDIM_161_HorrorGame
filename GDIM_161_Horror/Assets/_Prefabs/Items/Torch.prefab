@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6588639178972943521}
   - component: {fileID: 1002657602815086181}
   m_Layer: 0
-  m_Name: Model
+  m_Name: BasePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,6 +114,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 946537261154911203}
+  - {fileID: 3241753861720095343}
   m_Father: {fileID: 3116399982643216359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1002657602815086181
@@ -140,7 +141,7 @@ GameObject:
   - component: {fileID: 8452115088665186743}
   - component: {fileID: 5698939764250321375}
   m_Layer: 0
-  m_Name: Wood
+  m_Name: Model_Wood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,8 +159,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 0.1, y: 0.25, z: 0.1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3241753861720095343}
+  m_Children: []
   m_Father: {fileID: 6588639178972943521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8452115088665186743
@@ -224,9 +224,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3241753861720095343}
-  - component: {fileID: 83546130332230982}
   m_Layer: 0
-  m_Name: FlamBase
+  m_Name: FlameBasePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -240,27 +239,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6814854870198980137}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.25, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6805937245224611885}
-  m_Father: {fileID: 946537261154911203}
+  m_Father: {fileID: 6588639178972943521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &83546130332230982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6814854870198980137}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5be9d00f0a6daa949baba0e0b0cd1787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 3390137401255878559}
 --- !u!1001 &4863954998821337139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -341,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 126214538651071025, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.486
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 126214538651071025, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -383,6 +369,18 @@ PrefabInstance:
       propertyPath: flameBase
       value: 
       objectReference: {fileID: 3241753861720095343}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: approxWoodLife_Minutes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: tickSpeedMultiplier_ByFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5258911268952068565, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: _textName
+      value: Torch
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
