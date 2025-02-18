@@ -35,14 +35,15 @@ namespace Interactions
             SetPossessed(true);
         }
 
-        public void UnPossessItem()
+        public virtual void UnPossessItem()
         {
             SetPossessed(false);
         }
 
-        protected void SetPossessed(bool toPossess)
+        protected virtual void SetPossessed(bool toPossess)
         {
             IsPossessed = toPossess;
+            _interactableItem.SetIntactive(!toPossess);
         }
 
         public virtual void UseItem(int playerId) { }

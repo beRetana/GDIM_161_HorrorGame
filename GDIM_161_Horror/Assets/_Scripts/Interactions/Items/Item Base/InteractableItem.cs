@@ -36,7 +36,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public virtual void SetIntactive(bool intactive)
     {
-        _isInteractable |= intactive;
+        _isInteractable = intactive;
     }
 
     public virtual void Interact(int playerID)
