@@ -299,11 +299,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: CARTOONFIRE
       objectReference: {fileID: 0}
+    - target: {fileID: 5539023297123503581, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+--- !u!198 &1615046851582046390 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6190744973626968197, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+  m_PrefabInstance: {fileID: 4863954998821337139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6805937245224611885 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
@@ -366,9 +375,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1002657602815086181}
     - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: flameVFX
+      value: 
+      objectReference: {fileID: 1615046851582046390}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: flameBase
       value: 
       objectReference: {fileID: 3241753861720095343}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: torchWood
+      value: 
+      objectReference: {fileID: 946537261154911203}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: torchAnchor
+      value: 
+      objectReference: {fileID: 6588639178972943521}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: pyrolysisIncrements
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: approxWoodLife_Minutes
       value: 1
