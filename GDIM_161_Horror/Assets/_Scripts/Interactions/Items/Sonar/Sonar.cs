@@ -6,59 +6,64 @@ namespace Interactions
     public class Sonar : PickableItem
     {
         [Tooltip("Detection Radious for the Sonar")]
-        [SerializeField, Range(1f, 50f)] private float _detectionRadius = 20f;
+        [SerializeField, Range(1f, 100f)] private float _detectionRadius = 20f;
         [SerializeField] private LayerMask _sonarDetectable;
         [SerializeField] private SonarDisplay _sonarDisplay;
 
-        private List<Vector2> _objectsLocation;
+        private List<Vector2> _objectsRelativeLocation;
+        private List<Vector3> _objectsWorldLocation;
 
         protected override void Start()
         {
             base.Start();
-            _objectsLocation = new List<Vector2>();
+            _objectsRelativeLocation = new List<Vector2>();
+            _objectsWorldLocation = new List<Vector3>();
         }
 
-        private void CollectDetectablesLocation()
+        private void CollectDetectablesLocation(int playerId)
         {
             Collider[] listOfObjects = Physics.OverlapSphere(transform.position, _detectionRadius, _sonarDetectable);
+            _objectsRelativeLocation.Clear();
+            
+            Transform player = PlayerManager.Instance.GetPlayer(playerId).transform;
+            Vector3 playerToObject = Vector3.one;
 
-            _objectsLocation.Clear();
             foreach (Collider obj in listOfObjects)
             {
-                _objectsLocation.Add(new Vector2(obj.transform.position.x, obj.transform.position.z) / _detectionRadius);
+                _objectsWorldLocation.Add(obj.transform.position);
+                playerToObject = obj.transform.position - player.position;
+                playerToObject = Quaternion.AngleAxis(player.transform.rotation.eulerAngles.y, -Vector3.up) * playerToObject;
+                _objectsRelativeLocation.Add(new Vector2(playerToObject.x, playerToObject.z) / _detectionRadius);
             }
         }
 
-        private float GetClosestLocationDistance()
+        private float GetClosestLocationDistance(int playerId)
         {
-            int firstElement = 0;
+            float closestDistance = _detectionRadius;
+            Vector3 player = PlayerManager.Instance.GetPlayer(playerId).transform.position;
 
-            Vector2 closestPosition = _objectsLocation[firstElement];
-            Vector2 sonarPosition = new Vector2(transform.position.x, transform.position.z);
-
-            foreach (Vector2 position in _objectsLocation)
+            for( int i = 0; i < _objectsWorldLocation.Count-1; i++)
             {
-                float closestToSonnar = Vector2.Distance(sonarPosition, closestPosition);
-                float objToSonnar = Vector2.Distance(sonarPosition, position);
+                float closestToSonnar = (_objectsWorldLocation[i] - player).magnitude;
+                float nextObject = (_objectsWorldLocation[i + 1] - player).magnitude;
 
-                if ((objToSonnar - closestToSonnar) < 0.1f) closestPosition = position;
+                closestDistance = Mathf.Min(closestDistance, nextObject);
             }
 
-            return Vector3.Distance(transform.position, closestPosition);
+            return Mathf.Round(closestDistance * 100) / 100;
         }
 
-        private void ScanArea()
+        private void ScanArea(int playerId)
         {
-            CollectDetectablesLocation();
-            Debug.Log($"Sonar Scanning: {_objectsLocation.Count}");
-            if (_objectsLocation.Count == 0) return;
-            _sonarDisplay.LoadInformation(_objectsLocation, GetClosestLocationDistance());
+            CollectDetectablesLocation(playerId);
+            if (_objectsRelativeLocation.Count == 0) return;
+            _sonarDisplay.LoadInformation(_objectsRelativeLocation, GetClosestLocationDistance(playerId));
         }
 
         public override void UseItem(int playerId)
         {
             base.UseItem(playerId);
-            ScanArea();
+            ScanArea(playerId);
         }
     }
 }
