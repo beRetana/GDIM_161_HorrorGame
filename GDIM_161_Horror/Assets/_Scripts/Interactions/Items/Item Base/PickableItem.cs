@@ -43,7 +43,7 @@ namespace Interactions
         protected virtual void SetPossessed(bool toPossess)
         {
             IsPossessed = toPossess;
-            _interactableItem.SetIntactive(!toPossess);
+            _interactableItem.SetInteractive(!toPossess);
         }
 
         public virtual void UseItem(int playerId) { }
