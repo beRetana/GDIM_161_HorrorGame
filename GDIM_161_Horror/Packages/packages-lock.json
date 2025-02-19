@@ -7,26 +7,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.2d.tilemap": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.tilemap": "1.0.0",
-        "com.unity.modules.uielements": "1.0.0"
-      }
-    },
-    "com.unity.2d.tilemap.extras": {
-      "version": "4.1.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.2d.tilemap": "1.0.0",
-        "com.unity.modules.tilemap": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.ai.navigation": {
       "version": "2.0.5",
       "depth": 0,
@@ -92,7 +72,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.31",
+      "version": "3.0.34",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -125,6 +105,18 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.ml-agents": {
+      "version": "3.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sentis": "2.1.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.multiplayer.center": {
       "version": "1.0.0",
       "depth": 0,
@@ -135,6 +127,13 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -197,6 +196,17 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sentis": {
+      "version": "2.1.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.8.17",
+        "com.unity.collections": "2.4.3",
+        "com.unity.modules.imageconversion": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
@@ -265,6 +275,15 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
+      }
+    },
+    "com.unity.visualeffectgraph": {
+      "version": "17.0.3",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.shadergraph": "17.0.3",
+        "com.unity.render-pipelines.core": "17.0.3"
       }
     },
     "com.unity.visualscripting": {
