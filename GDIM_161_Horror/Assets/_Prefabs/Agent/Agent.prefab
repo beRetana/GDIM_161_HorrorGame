@@ -207,6 +207,10 @@ GameObject:
   - component: {fileID: 3357279813586616635}
   - component: {fileID: 1358938928838865877}
   - component: {fileID: 6077115929759465113}
+  - component: {fileID: 8807785256445919126}
+  - component: {fileID: 8451520004141534712}
+  - component: {fileID: 4704156594230223033}
+  - component: {fileID: 4390861183204046270}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -255,7 +259,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &1358938928838865877
 MonoBehaviour:
@@ -269,9 +273,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2a1232b9f4e7f43848784521cf8175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  leapForce: 10
-  rotationSpeed: 5
+  _moveSpeed: 5
+  _leapForce: 10
+  _rotationSpeed: 5
+  _delimeter: 6.5
 --- !u!114 &6077115929759465113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,4 +292,100 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 10000
+  _wallTag: Wall
+  _playerTag: Player
+  _playerDummy: {fileID: 0}
+  _trainingVisuals: {fileID: 0}
+--- !u!114 &8807785256445919126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401424355691722423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 5022602860645237092, guid: 46e70aded28a1c94bb128e01d4a3a664, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: ChasePlayer
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
+--- !u!114 &8451520004141534712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401424355691722423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &4704156594230223033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401424355691722423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: RayPerceptionSensor
+  m_DetectableTags:
+  - Wall
+  - Player
+  m_RaysPerDirection: 4
+  m_MaxRayDegrees: 70
+  m_SphereCastRadius: 0.76
+  m_RayLength: 20
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  m_ObservationStacks: 2
+  m_AlternatingRayOrder: 1
+  m_UseBatchedRaycasts: 0
+  rayHitColor: {r: 0.10588236, g: 0.4039216, b: 0.098039225, a: 1}
+  rayMissColor: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
+  m_StartVerticalOffset: 0.6
+  m_EndVerticalOffset: 0
+--- !u!114 &4390861183204046270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401424355691722423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2902496c0120472b90269f94a0aec7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Record: 1
+  NumStepsToRecord: 0
+  DemonstrationName: SimplePuzzle
+  DemonstrationDirectory: '"C:\Users\breta\Downloads\GitRepos\GDIM_161_HorrorGame\GDIM_161_Horror\MLAgent_venv\Scripts\Demos"'

@@ -22,9 +22,10 @@ namespace QFSW.QC.Suggestors
             return new RawSuggestion(name, true);
         }
 
+        
         protected override IEnumerable<string> GetItems(SuggestionContext context, SuggestorOptions options)
         {
-            return Object.FindObjectsOfType(context.TargetType)
+            return Object.FindObjectsByType(context.TargetType, FindObjectsSortMode.None)
                 .Select(cmp => (Component) cmp)
                 .Select(cmp => cmp.gameObject.name);
         }
