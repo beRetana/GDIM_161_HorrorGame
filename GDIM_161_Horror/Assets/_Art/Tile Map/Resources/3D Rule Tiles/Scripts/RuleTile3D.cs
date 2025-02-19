@@ -11,11 +11,6 @@ public class RuleTile3D : MonoBehaviour
     public bool[] neighborTilePositions = new bool[8];
     private bool IsHidden = false;
 
-    private void Awake()
-    {
-        Destroy(placeholder);
-    }
-
     public void AddToRuleTileList()
     {
         SetRuleTileList();
