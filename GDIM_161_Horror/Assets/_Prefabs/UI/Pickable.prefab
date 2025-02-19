@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 126214538651071025}
   - component: {fileID: 8576914719996806996}
   - component: {fileID: 5258911268952068565}
-  - component: {fileID: 1362495609740496005}
   - component: {fileID: 846105969996028747}
+  - component: {fileID: 449262622416046513}
   m_Layer: 3
   m_Name: Pickable
   m_TagString: Untagged
@@ -62,20 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _textAnimation: {fileID: 846105969996028747}
-  _textName: Torch
+  _textName: Generic Pickup
   _fadeIn: FadeIn
---- !u!114 &1362495609740496005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41419630895823404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c6570a3a33c1947a5374b504ab11c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &846105969996028747
 Animator:
   serializedVersion: 7
@@ -98,6 +86,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &449262622416046513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41419630895823404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3fc7831b2d8a24ea7adfeb0c948291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textAnimation: {fileID: 0}
+  _textName: 
+  _fadeIn: 
+  model: {fileID: 0}
 --- !u!1 &7558964004206734932
 GameObject:
   m_ObjectHideFlags: 0
