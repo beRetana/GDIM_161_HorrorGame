@@ -8,7 +8,7 @@ using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    public static PlayerObjectController LocalInstance { get; private set; }
+    //public static PlayerObjectController LocalInstance { get; private set; }
 
     // Player Data
     [SyncVar] public int ConnectionID;
@@ -18,9 +18,9 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
     private NewNetworkManager manager;
-    public GameObject PlayerModel;
+    
 
-    private bool positionInvoked = false;
+    
 
     private NewNetworkManager Manager
     {
@@ -31,32 +31,10 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
 
-    private void Start()
-    {
-        PlayerModel.SetActive(false);
-    }
+   
 
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "Game")
-        {
-            if (!PlayerModel.activeSelf)
-            {
-                Invoke(nameof(ActivatePlayer), 0.5f);
-            }
-        }
-    }
+    
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
@@ -70,25 +48,10 @@ public class PlayerObjectController : NetworkBehaviour
             LobbyController.Instance.UpdatePlayerList();
         }
 
-        if (SceneManager.GetActiveScene().name == "Game" && !positionInvoked)
-        {
-            positionInvoked = true;
-            Invoke(nameof(ActivatePlayer), 0.5f);
-        }
+        
     }
 
-    public void ActivatePlayer()
-    {
-        if (PlayerModel.activeSelf) return;
-
-        SetPosition();
-        PlayerModel.SetActive(true);
-    }
-
-    private void SetPosition()
-    {
-        transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
-    }
+   
 
     [Command]
     private void CmdSetPlayerReady()
@@ -106,7 +69,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-        LocalInstance = this;
+      //  LocalInstance = this;
         CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();

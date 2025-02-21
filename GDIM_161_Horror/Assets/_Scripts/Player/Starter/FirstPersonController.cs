@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
-
+using UnityEngine.SceneManagement;
+using System.Linq; 
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -29,8 +30,11 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
-		
-		
+
+		public GameObject PlayerModel;
+
+		private bool positionInvoked = false;
+
 		private const float _threshold = 0.01f;
 		
 		/// EDITOR ONLY!!!!
@@ -50,14 +54,17 @@ namespace StarterAssets
         private void Awake()
 		{
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
-
+			DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
 		
 		}
 
         protected override void Start()
-		{	
+		{	PlayerModel.SetActive(false);
 			base.Start();
+
+			 
 
 			
 
@@ -75,6 +82,22 @@ namespace StarterAssets
 			_fallTimeoutDelta = fallTimeout;
 		}
 
+		 private void OnDestroy()
+			{
+				SceneManager.sceneLoaded -= OnSceneLoaded;
+			}
+
+			private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+				{
+					if (scene.name == "Game")
+					{
+						if (!PlayerModel.activeSelf)
+						{
+							Invoke(nameof(ActivatePlayer), 0.5f);
+						}
+					}
+				}
+
 		private void Update()
 		{
 			
@@ -82,6 +105,12 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			
+			// if (SceneManager.GetActiveScene().name == "Game" && !positionInvoked)
+			// 	{
+			// 		positionInvoked = true;
+			// 		Invoke(nameof(ActivatePlayer), 0.5f);
+			// 	}
 		}
 
 		private void LateUpdate()
@@ -90,7 +119,7 @@ namespace StarterAssets
 		}
 
 		
-
+ 
 
 
 		private void GroundedCheck()
@@ -213,5 +242,18 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
 		}
+		
+		public void ActivatePlayer()
+			{
+				if (PlayerModel.activeSelf) return;
+
+				SetPosition();
+				PlayerModel.SetActive(true);
+			}
+
+    private void SetPosition()
+    {
+        transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
+    }
 	}
 }
