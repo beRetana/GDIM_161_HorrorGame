@@ -3,71 +3,114 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    
-    //Player Data
+    public static PlayerObjectController LocalInstance { get; private set; }
+
+    // Player Data
     [SyncVar] public int ConnectionID;
     [SyncVar] public int PlayerIdNumber;
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
-    [SyncVar(hook = nameof(PlayerReadyUpdate))]public bool Ready;
+    [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
     private NewNetworkManager manager;
+    public GameObject PlayerModel;
+
+    private bool positionInvoked = false;
 
     private NewNetworkManager Manager
     {
         get
         {
-            if(manager != null)
-            {
-                return manager;
-            }
+            if (manager != null) return manager;
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
+    }
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+        PlayerModel.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Game")
+        {
+            if (!PlayerModel.activeSelf)
+            {
+                Invoke(nameof(ActivatePlayer), 0.5f);
+            }
+        }
     }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
-        if(isServer)
+        if (isServer)
         {
-            this.Ready = newValue;
+            Ready = newValue;
         }
-        if(isClient)
+
+        if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-        
+
+        if (SceneManager.GetActiveScene().name == "Game" && !positionInvoked)
+        {
+            positionInvoked = true;
+            Invoke(nameof(ActivatePlayer), 0.5f);
+        }
+    }
+
+    public void ActivatePlayer()
+    {
+        if (PlayerModel.activeSelf) return;
+
+        SetPosition();
+        PlayerModel.SetActive(true);
+    }
+
+    private void SetPosition()
+    {
+        transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
     }
 
     [Command]
-    private void CMdSetPlayerReady()
+    private void CmdSetPlayerReady()
     {
-        this.PlayerReadyUpdate(this.Ready, !this.Ready);
+        PlayerReadyUpdate(Ready, !Ready);
     }
 
     public void ChangeReady()
     {
-        if(isOwned)
+        if (isOwned)
         {
-            CMdSetPlayerReady();
+            CmdSetPlayerReady();
         }
     }
 
     public override void OnStartAuthority()
     {
-        CmdSetPlayerName(SteamFriends.GetPersonaName().ToString());
+        LocalInstance = this;
+        CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
-
     }
 
     public override void OnStartClient()
@@ -81,23 +124,22 @@ public class PlayerObjectController : NetworkBehaviour
     {
         Manager.GamePlayers.Remove(this);
         LobbyController.Instance.UpdatePlayerList();
-
     }
 
     [Command]
-
-    private void CmdSetPlayerName(string PlayeName)
+    private void CmdSetPlayerName(string playerName)
     {
-        this.PlayerNameUpdate(this.PlayerName, PlayeName);
+        PlayerNameUpdate(PlayerName, playerName);
     }
 
-    public void PlayerNameUpdate(string OldValue, string NewValue)
+    public void PlayerNameUpdate(string oldValue, string newValue)
     {
-        if(isServer)// Host
+        if (isServer)
         {
-            this.PlayerName = NewValue;
+            PlayerName = newValue;
         }
-        if(isClient) //Client
+
+        if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
         }
@@ -105,16 +147,15 @@ public class PlayerObjectController : NetworkBehaviour
 
     public void CanStartGame(string SceneName)
     {
-        if(isOwned)
+        if (isOwned)
         {
             CmdCanStartGame(SceneName);
         }
     }
 
     [Command]
-     public void CmdCanStartGame(string SceneName)
+    public void CmdCanStartGame(string SceneName)
     {
         manager.StartGame(SceneName);
     }
-
 }

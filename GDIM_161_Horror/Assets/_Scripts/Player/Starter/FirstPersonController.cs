@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using Mirror;
 
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+
+	
+
 
 namespace StarterAssets
 {
@@ -13,8 +17,10 @@ namespace StarterAssets
 	#endif
 	public class FirstPersonController : PlayerBase
 	{
-		public bool grounded { get; private set; }
+		
 
+		public bool grounded { get; private set; }
+		
 
 		#if ENABLE_INPUT_SYSTEM
 				private PlayerInput _playerInput;
@@ -23,7 +29,8 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
-
+		
+		
 		private const float _threshold = 0.01f;
 		
 		/// EDITOR ONLY!!!!
@@ -38,14 +45,21 @@ namespace StarterAssets
 			}
 		}
 
+		
+
         private void Awake()
 		{
 			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
+
+
+		
 		}
 
         protected override void Start()
-		{
+		{	
 			base.Start();
+
+			
 
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -63,6 +77,8 @@ namespace StarterAssets
 
 		private void Update()
 		{
+			
+
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -72,6 +88,10 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+
+		
+
+
 
 		private void GroundedCheck()
 		{
