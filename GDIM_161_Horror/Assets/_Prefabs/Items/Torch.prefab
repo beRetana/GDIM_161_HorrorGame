@@ -54,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.6233047, z: 0.1}
-  m_Center: {x: 0, y: 0.3144247, z: 0}
+  m_Size: {x: 0.1, y: 0.5285387, z: 0.1}
+  m_Center: {x: 0, y: 0.2576819, z: 0}
 --- !u!54 &3390137401255878559
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -125,9 +125,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3241753861720095343}
+  - component: {fileID: 4746269070312977930}
   m_Layer: 0
   m_Name: FlameBasePos
-  m_TagString: Untagged
+  m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,6 +149,27 @@ Transform:
   - {fileID: 6805937245224611885}
   m_Father: {fileID: 6588639178972943521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4746269070312977930
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814854870198980137}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!1001 &3500864740308416971
 PrefabInstance:
   m_ObjectHideFlags: 0
