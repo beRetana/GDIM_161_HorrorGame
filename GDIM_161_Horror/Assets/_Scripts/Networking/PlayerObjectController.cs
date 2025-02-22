@@ -4,7 +4,7 @@ using UnityEngine;
 using Mirror;
 using Steamworks;
 using UnityEngine.SceneManagement;
-using System.Linq;
+using StarterAssets;  // Add this to reference the FirstPersonController
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -19,6 +19,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     private NewNetworkManager manager;
     public GameObject PlayerModel;
+    private FirstPersonController firstPersonController; // Reference to FirstPersonController
 
     private bool positionInvoked = false;
 
@@ -39,7 +40,8 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void Start()
     {
-        PlayerModel.SetActive(false);
+        firstPersonController = GetComponent<FirstPersonController>(); // Get reference to the FirstPersonController
+        firstPersonController.enabled = false; // Disable it initially
     }
 
     private void OnDestroy()
@@ -51,9 +53,9 @@ public class PlayerObjectController : NetworkBehaviour
     {
         if (scene.name == "Game")
         {
-            if (!PlayerModel.activeSelf)
+            if (!firstPersonController.enabled) // Check if not already enabled
             {
-                Invoke(nameof(ActivatePlayer), 0.5f);
+                Invoke(nameof(ActivatePlayer), 0.5f); // Activate player after delay
             }
         }
     }
@@ -79,10 +81,10 @@ public class PlayerObjectController : NetworkBehaviour
 
     public void ActivatePlayer()
     {
-        if (PlayerModel.activeSelf) return;
+        if (firstPersonController.enabled) return;
 
         SetPosition();
-        PlayerModel.SetActive(true);
+        firstPersonController.enabled = true; // Enable the FirstPersonController
     }
 
     private void SetPosition()
