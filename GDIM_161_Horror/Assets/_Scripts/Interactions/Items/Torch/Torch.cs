@@ -202,8 +202,7 @@ namespace Interactions
         public void LightFlame()
         {
             if (Lit) return;
-            flameSize = 0f;
-            ScaleFlameScale(0f);
+            FlameFullExtinguish();
             StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
         }
 
@@ -213,14 +212,26 @@ namespace Interactions
         private IEnumerator IgniteFire(float flameGrowthRate, float flameGrowthB)
         {
             ToggleFlame(true);
+
+            // to ensure full light intensity before the for loop ends
+            float lightIntensityM = (-1f) * flameGrowthRate / (Mathf.Log(.1f / flameGrowthB));
+
             for(float delta = 0f; flameSize < 1f && delta < 5f; delta += Time.deltaTime)
             {
                 flameSize = 1.05f / (1f + flameGrowthB * Mathf.Exp(-1f * flameGrowthRate * delta));
                 ScaleFlameScale(flameSize);
+                SetVisualLightIntensity(delta * lightIntensityM);
+
                 yield return null;
             }
             flameSize = 1f;
             FlameFullSize();
+        }
+
+        private void SetVisualLightIntensity(float intensePercent)
+        {
+            lightIntensity = maxLightIntensity * intensePercent * intensePercent;
+            torchLight.intensity = lightIntensity;
         }
 
         //public void BurnOutFlame() // via end of wood
