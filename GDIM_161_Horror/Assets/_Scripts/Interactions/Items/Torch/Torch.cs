@@ -15,9 +15,8 @@ namespace Interactions
         [SerializeField, Range(1f, 1.2f)] float tickSpeedMultiplier_ByFloor;
         [Tooltip("Pyrolysis is the process of thermal decomposition of materials at elevated temperatures, often in an inert atmosphere without access to oxygen.")]
         [SerializeField, Range(1, 100)] int pyrolysisIncrements;
-
+         
         [Header("Model Stuff")]
-        [SerializeField] TorchModel model;
         [SerializeField] Transform torchAnchor;
         [SerializeField] Transform torchWood;
 
@@ -27,9 +26,16 @@ namespace Interactions
         [SerializeField] Transform flameRed;
         [SerializeField] Transform flameOrange;
         [SerializeField] Transform flameYellow;
-        [SerializeField, Tooltip("Exponential Decay, for when the fire burns out")] float flameDecayRate = 1.5f;
-        [SerializeField, Tooltip("Exponential Decay, for when the fire burns out")] float lightDecayRate = .5f;
+        [Space(5)]
+        [SerializeField, Tooltip("Exponential Decay, for when the fire burns out")] float flameDecayRate = -1.5f;
+        [SerializeField, Tooltip("Exponential Decay, for when the fire burns out")] float lightDecayRate = -.5f;
         [SerializeField] float flameBurnOutTime;
+        [Space(5)]
+        [SerializeField, Tooltip("Exponential Growth, for when the fire is lit")] float flameGrowRate = 1.5f;
+        [SerializeField, Tooltip("(1)/(1+n) is starting size for flame when lit. larger n = smaller start")
+            , Range(1.1f, 10f)] float flameGrowCurveB = 5f;
+
+
         [SerializeField] Light torchLight;
 
         public float BurnTimer { get; private set; }
@@ -56,13 +62,14 @@ namespace Interactions
             base.Start();
             BurnTimer = SECONDS_PER_MINUTE * approxWoodLife_Minutes;
             pyrolysisTimer = BurnTimer / pyrolysisIncrements;
-            Lit = true;
+            Lit = false;
             maxTorchWoodScale = torchWood.localScale.y;
-            torchWoodScale = maxTorchWoodScale;
             maxFireLocalYPos = flameBase.localPosition.y;
             maxFlameSize = flameRed.localScale.y;
-            flameSize = maxFlameSize;
             maxLightIntensity = torchLight.intensity;
+
+            ToggleFlame(false);
+            LightFlame();
         }
 
         private void Update()
@@ -79,6 +86,7 @@ namespace Interactions
             UpdateTimers();
             Burn();
             UpdatePyrolysis();
+            LightFlame();
         }
 
         private void UpdatePyrolysis()
@@ -141,37 +149,78 @@ namespace Interactions
             flameVFX.gameObject.SetActive(setOn);
         }
 
+        private void FlameFullSize()
+        {
+            Lit = true;
+            torchWoodScale = maxTorchWoodScale;
+            flameSize = maxFlameSize;
+            torchLight.intensity = maxLightIntensity;
+            ScaleFlameScale(1f);
+        }
+
+        private void FlameFullExtinguish()
+        {
+            Lit = false;
+            torchWoodScale = 0f;
+            flameSize = 0f;
+            torchLight.intensity = 0f;
+            ScaleFlameScale(0f);
+        }
+
         public void BlowOutFlame() // via wind
         {
             if (!Lit) return;
-            StartCoroutine(BurnOutFire(flameBurnOutTime));
+            StartCoroutine(BurnOutFire(flameBurnOutTime, flameDecayRate, lightDecayRate));
         }
 
-        private IEnumerator BurnOutFire(float burnOutTime)
+        private IEnumerator BurnOutFire(float burnOutTime, float flameExpDecayRate, float lightExpDecayRate)
         {
             //exponential decay
             for (float delta = 0f;  delta < burnOutTime; delta += Time.deltaTime)
             {
-                flameSize = maxFlameSize * Mathf.Exp(-1 * flameDecayRate * delta);
-                lightIntensity = maxLightIntensity * Mathf.Exp(-1 * lightDecayRate * delta);
+                flameSize = maxFlameSize * Mathf.Exp(flameExpDecayRate * delta);
+                lightIntensity = maxLightIntensity * Mathf.Exp(lightExpDecayRate * delta);
 
-                Vector3 newFlameScale = Vector3.one * (flameSize / maxFlameSize);
-
-                flameRed.localScale = newFlameScale;
-                flameOrange.localScale = newFlameScale;
-                flameYellow.localScale = newFlameScale;
+                ScaleFlameScale(flameSize / maxFlameSize);
 
                 torchLight.intensity = lightIntensity;
 
                 yield return null;
             }
-            ToggleFlame(false);
+            FlameFullExtinguish();
+        }
+
+        private void ScaleFlameScale(float scalar)
+        {
+            Vector3 newFlameScale = Vector3.one * scalar;
+
+            flameRed.localScale = newFlameScale;
+            flameOrange.localScale = newFlameScale;
+            flameYellow.localScale = newFlameScale;
         }
 
         public void LightFlame()
         {
             if (Lit) return;
+            flameSize = 0f;
+            ScaleFlameScale(0f);
+            StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
+        }
+
+        /// <summary>
+        /// 1 / (1 + b * e^(-kx))
+        /// </summary>
+        private IEnumerator IgniteFire(float flameGrowthRate, float flameGrowthB)
+        {
             ToggleFlame(true);
+            for(float delta = 0f; flameSize < 1f && delta < 5f; delta += Time.deltaTime)
+            {
+                flameSize = 1.05f / (1f + flameGrowthB * Mathf.Exp(-1f * flameGrowthRate * delta));
+                ScaleFlameScale(flameSize);
+                yield return null;
+            }
+            flameSize = 1f;
+            FlameFullSize();
         }
 
         //public void BurnOutFlame() // via end of wood
@@ -179,6 +228,5 @@ namespace Interactions
 
         //watch velocity (and air pressure) or burn out
 
-        //slowly burn down
     }
 }
