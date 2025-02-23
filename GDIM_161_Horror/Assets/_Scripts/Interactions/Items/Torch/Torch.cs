@@ -183,7 +183,7 @@ namespace Interactions
 
                 ScaleFlameScale(flameSize / maxFlameSize);
 
-                torchLight.intensity = lightIntensity;
+                SetVisualLightIntensity(lightIntensity);
 
                 yield return null;
             }
@@ -230,7 +230,7 @@ namespace Interactions
 
         private void SetVisualLightIntensity(float intensePercent)
         {
-            lightIntensity = maxLightIntensity * intensePercent * intensePercent;
+            lightIntensity = Mathf.Min(maxLightIntensity * intensePercent * intensePercent, maxLightIntensity);
             torchLight.intensity = lightIntensity;
         }
 
