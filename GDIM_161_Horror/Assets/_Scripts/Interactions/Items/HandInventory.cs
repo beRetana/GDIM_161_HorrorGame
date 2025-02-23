@@ -305,7 +305,7 @@ public class HandInventory : MonoBehaviour
 
         StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
 
-        _arms.OutStretchHand(_inventorySlots.IsLHandDom);
+        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
 
         return true;
     }
@@ -353,6 +353,8 @@ public class HandInventory : MonoBehaviour
 
         itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
         itemToDrop.UnPossessItem();
-        _arms.OutStretchHand(_inventorySlots.IsLHandDom);
+        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
     }
+
+    public Arms GetArms() { return _arms; }
 }

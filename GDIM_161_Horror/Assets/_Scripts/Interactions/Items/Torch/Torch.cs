@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Codice.Client.Common.GameUI;
 using System;
+using Player;
 
 namespace Interactions
 {
@@ -19,6 +20,7 @@ namespace Interactions
         [Header("Model Stuff")]
         [SerializeField] Transform torchAnchor;
         [SerializeField] Transform torchWood;
+        [SerializeField] SphereCollider torchFireCollider;
 
         [Header("Fire Stuff")]
         [SerializeField] ParticleSystem flameVFX;
@@ -67,6 +69,7 @@ namespace Interactions
             maxFireLocalYPos = flameBase.localPosition.y;
             maxFlameSize = flameRed.localScale.y;
             maxLightIntensity = torchLight.intensity;
+            torchFireCollider.enabled = false;
 
             ToggleFlame(false);
             LightFlame();
@@ -80,13 +83,25 @@ namespace Interactions
 
         private void FixedUpdate()
         {
-            Debug.Log(BurnTimer);
-            Debug.Log(pyrolysisTimer);
+            //Debug.Log(BurnTimer);
+            //Debug.Log(pyrolysisTimer);
             if (!Lit) return;
             UpdateTimers();
             Burn();
             UpdatePyrolysis();
             LightFlame();
+        }
+        public override void UseItem(int playerId)
+        {
+            // extend torch in arm
+            // enable torch collider
+            // check if torch colliding with fire
+            // OR
+            // check if handinventory raycast hitting campfire or player
+
+            // ?light torch
+            Debug.Log("Using torch");
+            PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
         }
 
         private void UpdatePyrolysis()
@@ -133,14 +148,6 @@ namespace Interactions
         private void UpdateFlameOrientation()
         {
             flameBase.eulerAngles = Vector3.up;
-        }
-
-        public override void UseItem(int playerId)
-        {
-            //if used on campfire || player
-            //  light torch
-            //else
-            //  point torch
         }
 
         private void ToggleFlame(bool setOn)
