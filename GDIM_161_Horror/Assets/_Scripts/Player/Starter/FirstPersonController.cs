@@ -1,44 +1,34 @@
 ﻿using UnityEngine;
-using Mirror;
 using UnityEngine.SceneManagement;
-using System.Linq; 
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
-	
-
-
 namespace StarterAssets
 {
-	[RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CharacterController))]
 	#if ENABLE_INPUT_SYSTEM
 		[RequireComponent(typeof(PlayerInput))]
 	#endif
 	public class FirstPersonController : PlayerBase
 	{
-		
-
-		public bool grounded { get; private set; }
-		
-
 		#if ENABLE_INPUT_SYSTEM
 				private PlayerInput _playerInput;
 		#endif
 
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
-		private GameObject _mainCamera;
+		private bool positionInvoked;
+		private const float _THRESHOLD = 0.01f;
 
-		public GameObject PlayerModel;
+		[SerializeField] GameObject _camera;
+		[SerializeField] private bool _editMode;
 
-		private bool positionInvoked = false;
+        public bool grounded { get; private set; }
 
-		private const float _threshold = 0.01f;
-		
-		/// EDITOR ONLY!!!!
-		private bool IsCurrentDeviceMouse
+        /// EDITOR ONLY!!!!
+        private bool IsCurrentDeviceMouse
 		{
 			get{
 				#if ENABLE_INPUT_SYSTEM
@@ -49,30 +39,20 @@ namespace StarterAssets
 			}
 		}
 
-		
-
         private void Awake()
 		{
-			if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera"); // get a reference to our main camera
-			DontDestroyOnLoad(this.gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
-		
+			SceneManager.sceneLoaded += OnSceneLoaded;
 		}
 
         protected override void Start()
-		{	PlayerModel.SetActive(false);
+		{	
 			base.Start();
-
-			 
-
-			
 
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 
 			#if ENABLE_INPUT_SYSTEM
-				_playerInput = GetComponent<PlayerInput>();
+			_playerInput = GetComponent<PlayerInput>();
 			#else
 						Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 			#endif
@@ -80,28 +60,24 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = jumpTimeout;
 			_fallTimeoutDelta = fallTimeout;
+
+            if (_editMode) return;
+            //gameObject.SetActive(false);
+        }
+
+		private void OnDestroy()
+		{
+			SceneManager.sceneLoaded -= OnSceneLoaded;
 		}
 
-		 private void OnDestroy()
-			{
-				SceneManager.sceneLoaded -= OnSceneLoaded;
-			}
-
-			private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-				{
-					if (scene.name == "Game")
-					{
-						if (!PlayerModel.activeSelf)
-						{
-							Invoke(nameof(ActivatePlayer), 0.5f);
-						}
-					}
-				}
+		private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			if (scene.name != "Game" || gameObject.activeSelf) return;
+            Invoke(nameof(ActivatePlayer), 0.5f);
+        }
 
 		private void Update()
 		{
-			
-
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -118,10 +94,6 @@ namespace StarterAssets
 			CameraRotation();
 		}
 
-		
- 
-
-
 		private void GroundedCheck()
 		{
 			// set sphere position, with offset
@@ -131,7 +103,7 @@ namespace StarterAssets
 
 		private void CameraRotation()
 		{
-			if (_input.look.sqrMagnitude < _threshold) return; // check if there is an input
+			if (_input.look.sqrMagnitude < _THRESHOLD) return; // check if there is an input
             
 			float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;	//Don't multiply mouse input by Time.deltaTime
 
@@ -244,16 +216,16 @@ namespace StarterAssets
 		}
 		
 		public void ActivatePlayer()
-			{
-				if (PlayerModel.activeSelf) return;
+		{
+			if (gameObject.activeSelf) return;
 
-				SetPosition();
-				PlayerModel.SetActive(true);
-			}
+			SetPosition();
+			gameObject.SetActive(true);
+		}
 
-    private void SetPosition()
-    {
-        transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
-    }
+		private void SetPosition()
+		{
+			transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
+		}
 	}
 }

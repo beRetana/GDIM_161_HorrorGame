@@ -25,6 +25,8 @@ public class HandInventory : MonoBehaviour
     [SerializeField] private float _pickUpForce;
     [SerializeField] private float _linearDrag;
     [SerializeField] private float _throwForce;
+    [SerializeField] private MouseUI _mouse;
+    [SerializeField] private Camera _playerCamera;
 
     private class InventorySlot
     {
@@ -97,7 +99,6 @@ public class HandInventory : MonoBehaviour
             Debug.Log(this);
         }
 
-
         public InventorySlot this[int index]
         {
             get
@@ -165,7 +166,6 @@ public class HandInventory : MonoBehaviour
 
     private InventorySlots _inventorySlots = new();
     private PlayerControls _playerControls;
-    private MouseUI _mouse;
     private int _playerID;
     private IInteractable _interactableComponent;
 
@@ -180,7 +180,6 @@ public class HandInventory : MonoBehaviour
 
     void Start()
     {
-        _mouse = DataMessenger.GetGameObject(MessengerKeys.GameObjectKey.MouseUI).GetComponent<MouseUI>();
         _playerID = gameObject.GetComponent<PlayerBase>().ID();
         PrepareList();
     }
@@ -232,7 +231,7 @@ public class HandInventory : MonoBehaviour
 
     private void CheckForRaycastInteractables()
     {
-        Ray rayToInteract = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
+        Ray rayToInteract = _playerCamera.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
 
         // If we hit something in the layer.
         if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
