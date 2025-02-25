@@ -40,7 +40,7 @@ public class PlayerObjectController : NetworkBehaviour
     {
         if (isServer)
         {
-            Ready = newValue;
+            this.Ready = newValue;
         }
 
         if (isClient)
@@ -56,7 +56,7 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     private void CmdSetPlayerReady()
     {
-        PlayerReadyUpdate(Ready, !Ready);
+        this.PlayerReadyUpdate(this.Ready, !this.Ready);
     }
 
     public void ChangeReady()
