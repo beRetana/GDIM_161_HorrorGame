@@ -8,7 +8,7 @@ using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    //public static PlayerObjectController LocalInstance { get; private set; }
+    public static PlayerObjectController LocalInstance { get; private set; }
 
     // Player Data
     [SyncVar] public int ConnectionID;
@@ -69,7 +69,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-      //  LocalInstance = this;
+        LocalInstance = this;
         CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();

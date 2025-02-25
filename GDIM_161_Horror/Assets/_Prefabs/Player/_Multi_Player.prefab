@@ -52,7 +52,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: _Multi_Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4848861366070383520, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: PlayerModel
+      value: 
+      objectReference: {fileID: 3373982209266735019}
+    m_RemovedComponents:
+    - {fileID: 1560498897346033264, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -65,6 +70,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6141512509936404535}
+    - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2716043811166012591}
   m_SourcePrefab: {fileID: 100100000, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
 --- !u!4 &2709225641590689041 stripped
 Transform:
@@ -140,9 +148,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.01
   ConnectionID: 0
   PlayerIdNumber: 0
   PlayerSteamID: 0
   PlayerName: 
   Ready: 0
+--- !u!136 &2716043811166012591
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373982209266735019}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
