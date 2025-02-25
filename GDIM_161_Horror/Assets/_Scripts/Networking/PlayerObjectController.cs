@@ -26,7 +26,10 @@ public class PlayerObjectController : NetworkBehaviour
     {
         get
         {
-            if (manager != null) return manager;
+            if (manager != null) 
+            {
+                return manager;
+            }
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
     }
@@ -92,14 +95,14 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     private void CmdSetPlayerName(string playerName)
     {
-        PlayerNameUpdate(PlayerName, playerName);
+        this.PlayerNameUpdate(this.PlayerName, playerName);
     }
 
     public void PlayerNameUpdate(string oldValue, string newValue)
     {
         if (isServer)
         {
-            PlayerName = newValue;
+            this.PlayerName = newValue;
         }
 
         if (isClient)
