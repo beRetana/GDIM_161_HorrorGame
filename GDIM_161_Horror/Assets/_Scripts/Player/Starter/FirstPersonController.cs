@@ -43,6 +43,7 @@ namespace StarterAssets
 
         private void Awake()
         {
+			DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
