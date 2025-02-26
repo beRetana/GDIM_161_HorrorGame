@@ -149,7 +149,7 @@ public class LobbyController : MonoBehaviour
     {
          foreach(PlayerObjectController player in Manager.GamePlayers)
          {
-            if(!PlayerListItems.Any(b=> b.ConnectionID == player.ConnectionID))
+            if(!PlayerListItems.Any(b => b.ConnectionID == player.ConnectionID))
             {
                GameObject NewPlayerItem = Instantiate (PlayerListItemPrefab) as GameObject;
             PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerListItem>();
@@ -177,6 +177,7 @@ public class LobbyController : MonoBehaviour
         foreach(PlayerObjectController player in Manager.GamePlayers)
         {
             foreach(PlayerListItem PlayerListItemScript in PlayerListItems)
+            {
                 if(PlayerListItemScript.ConnectionID == player.ConnectionID)
                 {
                     PlayerListItemScript.PlayerName = player.PlayerName;
@@ -187,8 +188,11 @@ public class LobbyController : MonoBehaviour
                         UpdateButton();
                     }
                     
+                    
+                    
 
                 }
+            }
 
         }
         CheckIfAllReady();
