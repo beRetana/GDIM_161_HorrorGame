@@ -13,12 +13,12 @@ public class CameraController : NetworkBehaviour
         if (isLocalPlayer)
         {
             // Only enable the local player's camera
-           Camera.SetActive(true);
+            
         }
         else
         {
             // Disable camera for other players
-           Camera.SetActive(false);
+            Destroy(Camera);
         }
     }
 }
