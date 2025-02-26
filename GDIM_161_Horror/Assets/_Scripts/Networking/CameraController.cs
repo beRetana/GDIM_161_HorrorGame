@@ -6,27 +6,19 @@ using Mirror;
 
 public class CameraController : NetworkBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public GameObject Cameraholder;
-    public Vector3 offset;
+    public Camera playerCamera;  // The camera attached to the player.
 
-    
-
-    public override void OnStartAuthority()
+    void Start()
     {
-        Cameraholder.SetActive(true);
-    }
-
-
-    public void Update()
-    {
-
-        if(SceneManager.GetActiveScene().name == "Game")
+        if (isLocalPlayer)
         {
-
-            Cameraholder.transform.position = transform.position + offset;
-        
-         }
+            // Only enable the local player's camera
+            playerCamera.enabled = true;
+        }
+        else
+        {
+            // Disable camera for other players
+            playerCamera.enabled = false;
+        }
     }
-
 }

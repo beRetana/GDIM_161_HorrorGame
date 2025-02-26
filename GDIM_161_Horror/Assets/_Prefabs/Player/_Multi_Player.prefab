@@ -194,7 +194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9070468886778292106, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1560498897346033264, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
@@ -339,8 +339,12 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  Cameraholder: {fileID: 2584219610364350201}
-  offset: {x: 0, y: 1.375, z: 0}
+  playerCamera: {fileID: 5486559936167901281}
+--- !u!20 &5486559936167901281 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5337597220645752238, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 447784172344227279}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6927892769346236144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7354950563374537535, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
