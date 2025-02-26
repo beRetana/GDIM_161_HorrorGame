@@ -1,12 +1,8 @@
-using MessengerSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Player;
 
-
-public class PlayerBase : MonoBehaviour
+public class PlayerBase : NetworkBehaviour
 {
     private int _myID = -1; // 0, 1, 2, 3
 
