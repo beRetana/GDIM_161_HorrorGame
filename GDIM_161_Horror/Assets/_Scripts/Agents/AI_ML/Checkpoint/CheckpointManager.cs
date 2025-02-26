@@ -24,5 +24,13 @@ namespace AI
         }
 
         // Finializar el sistema de checkpoints para que se desactiven todos los checkpoints y se vuelvana a activar por ciclo.
+
+        public void ResetCheckpoints()
+        {
+            foreach (var checkpoint in _checkpoints)
+            {
+                checkpoint.SetActive(true);
+            }
+        }
     }
 }
