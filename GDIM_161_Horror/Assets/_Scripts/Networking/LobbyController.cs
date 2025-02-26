@@ -49,6 +49,11 @@ public class LobbyController : MonoBehaviour
         if(Instance == null) {Instance = this;}
     }
 
+    private void Start()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     public void ReadyPlayer()
     {
         LocalplayerController.ChangeReady();
