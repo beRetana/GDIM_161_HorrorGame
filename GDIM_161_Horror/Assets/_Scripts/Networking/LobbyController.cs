@@ -159,6 +159,8 @@ public class LobbyController : MonoBehaviour
             NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
             NewPlayerItemScript.Ready = player.Ready;
             NewPlayerItemScript.SetPlayerValues();
+            
+
 
             NewPlayerItem.transform.SetParent(PlayerListViewContent.transform);
             NewPlayerItem.transform.localScale = Vector3.one;
