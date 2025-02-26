@@ -9,12 +9,13 @@ public class CameraController : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public GameObject Cameraholder;
     public Vector3 offset;
-
+    public GameObject Cinebrain;
     
 
     public override void OnStartAuthority()
     {
         Cameraholder.SetActive(true);
+        Cinebrain.SetActive(true);
     }
 
 
