@@ -8,7 +8,7 @@ using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    //public static PlayerObjectController LocalInstance { get; private set; }
+    public static PlayerObjectController LocalInstance { get; private set; }
 
     // Player Data
     [SyncVar] public int ConnectionID;
@@ -26,7 +26,10 @@ public class PlayerObjectController : NetworkBehaviour
     {
         get
         {
-            if (manager != null) return manager;
+            if (manager != null) 
+            {
+                return manager;
+            }
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
     }
@@ -40,7 +43,7 @@ public class PlayerObjectController : NetworkBehaviour
     {
         if (isServer)
         {
-            Ready = newValue;
+            this.Ready = newValue;
         }
 
         if (isClient)
@@ -56,7 +59,7 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     private void CmdSetPlayerReady()
     {
-        PlayerReadyUpdate(Ready, !Ready);
+        this.PlayerReadyUpdate(this.Ready, !this.Ready);
     }
 
     public void ChangeReady()
@@ -69,7 +72,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-      //  LocalInstance = this;
+        LocalInstance = this;
         CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
@@ -92,14 +95,14 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     private void CmdSetPlayerName(string playerName)
     {
-        PlayerNameUpdate(PlayerName, playerName);
+        this.PlayerNameUpdate(this.PlayerName, playerName);
     }
 
     public void PlayerNameUpdate(string oldValue, string newValue)
     {
         if (isServer)
         {
-            PlayerName = newValue;
+            this.PlayerName = newValue;
         }
 
         if (isClient)
