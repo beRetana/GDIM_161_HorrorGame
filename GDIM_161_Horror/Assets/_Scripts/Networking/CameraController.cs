@@ -6,19 +6,19 @@ using Mirror;
 
 public class CameraController : NetworkBehaviour
 {
-    public Camera playerCamera;  // The camera attached to the player.
-
+  
+    [SerializeField] private GameObject Camera
     void Start()
     {
         if (isLocalPlayer)
         {
             // Only enable the local player's camera
-            playerCamera.enabled = true;
+           Camera.enabled = true;
         }
         else
         {
             // Disable camera for other players
-            playerCamera.enabled = false;
+           Camera.enabled = false;
         }
     }
 }
