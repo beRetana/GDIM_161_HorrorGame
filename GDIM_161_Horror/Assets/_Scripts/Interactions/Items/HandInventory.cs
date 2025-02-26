@@ -3,11 +3,12 @@ using Interactions;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
 /// </summary>
-public class HandInventory : MonoBehaviour
+public class HandInventory : NetworkBehaviour
 {
     [Header("General Settings")]
     [SerializeField] private LayerMask _interactableLayer;
