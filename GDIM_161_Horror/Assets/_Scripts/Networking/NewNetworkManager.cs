@@ -14,6 +14,7 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
+        
 
         if (SceneManager.GetActiveScene().name == "Lobby")
         {
@@ -27,7 +28,7 @@ public class NewNetworkManager : NetworkManager
            
             LobbyController.Instance.UpdatePlayerList();
         }
-
+            Debug.Log($"Player {conn.connectionId} joined. Total players: {GamePlayers.Count}");
     }
 
 

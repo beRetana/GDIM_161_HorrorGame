@@ -80,11 +80,38 @@ public class PlayerObjectController : NetworkBehaviour
     }
 
     public override void OnStartClient()
+{
+    Manager.GamePlayers.Add(this);
+    if (LobbyController.Instance != null)
     {
-        Manager.GamePlayers.Add(this);
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
+
+        Debug.Log($"Client started: {PlayerName} (ID {PlayerIdNumber})");
+
     }
+
+    // 🔴 Request full player list from the host
+    if (isOwned)
+    {
+        CmdRequestPlayerList();
+    }
+}
+
+[Command]
+private void CmdRequestPlayerList()
+{
+    RpcSyncPlayerList(Manager.GamePlayers.ToArray());
+}
+
+[ClientRpc]
+private void RpcSyncPlayerList(PlayerObjectController[] players)
+{
+    Manager.GamePlayers.Clear();
+    Manager.GamePlayers.AddRange(players);
+    LobbyController.Instance.UpdatePlayerList();
+}
+
 
     public override void OnStopClient()
     {

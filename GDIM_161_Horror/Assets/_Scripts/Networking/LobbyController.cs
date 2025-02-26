@@ -112,10 +112,13 @@ public class LobbyController : MonoBehaviour
 
     public void UpdatePlayerList()
     {
+
         if(!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
         if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
         if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
+        Debug.Log($"Updating player list: {PlayerListItems.Count} items for {Manager.GamePlayers.Count} players");
+
     }
 
     public void FindLocalPlayer()
