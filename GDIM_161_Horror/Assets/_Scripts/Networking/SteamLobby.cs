@@ -22,7 +22,6 @@ public class SteamLobby : MonoBehaviour
 
     //GameObject
     public GameObject HostButton;
-    public Text LobbyNameText;
 
     /* private void Start()
      {
@@ -38,22 +37,33 @@ public class SteamLobby : MonoBehaviour
 
     private void Start()
     {
-        if (!SteamManager.Initialized)
+        if (!SteamAPI.IsSteamRunning())
         {
             Debug.LogError("Steam is not running!");
             return;
         }
 
+        if (Instance == null) { Instance = this; }
+
         manager = GetComponent<NewNetworkManager>();
+        if (manager == null)
+        {
+            Debug.LogError("NewNetworkManager component not found!");
+            return;
+        }
 
         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
 
+
     public void HostLobby()
     {
+
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, manager.maxConnections);
+
+
     }
 
     private void OnLobbyCreated(LobbyCreated_t callback)
@@ -65,7 +75,12 @@ public class SteamLobby : MonoBehaviour
 
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName().ToString() + "'s Lobby");
+
+
+
+
     }
+
 
     private void OnJoinRequest(GameLobbyJoinRequested_t callback)
     {
@@ -78,15 +93,19 @@ public class SteamLobby : MonoBehaviour
         HostButton.SetActive(false);
         //Everyone
         CurrentLobbyID = callback.m_ulSteamIDLobby;
-        LobbyNameText.gameObject.SetActive(true);
-        LobbyNameText.text = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name");
-        
+
+
         //Clients
+
         if (NetworkServer.active) { return; }
+
 
         manager.networkAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
 
         manager.StartClient();
+        Debug.LogError("called Start Client thing");
+
+
     }
 
 }

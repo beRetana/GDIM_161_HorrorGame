@@ -19,6 +19,9 @@ public class PlayerObjectController : NetworkBehaviour
 
     private NewNetworkManager manager;
     
+
+    
+
     private NewNetworkManager Manager
     {
         get
@@ -31,10 +34,13 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
-    private void Start()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
+
+   private void Start()
+   {
+    DontDestroyOnLoad(this.gameObject);
+   }
+
+    
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
@@ -46,8 +52,12 @@ public class PlayerObjectController : NetworkBehaviour
         if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
-        } 
+        }
+
+        
     }
+
+   
 
     [Command]
     private void CmdSetPlayerReady()
@@ -65,19 +75,17 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-        // SHE DIDN'T INCLUDE THIS IN THE VIDEO
         LocalInstance = this;
-        //
-        CmdSetPlayerName(SteamFriends.GetPersonaName().ToString());
+        CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
         
-        // NEITHER THIS TK_
         if (LobbyController.Instance != null)
-        {
-            LobbyController.Instance.UpdatePlayerList();
-        }
+            {
+                LobbyController.Instance.UpdatePlayerList();
+            }
+
     }
 
     public override void OnStartClient()
@@ -85,12 +93,15 @@ public class PlayerObjectController : NetworkBehaviour
         Manager.GamePlayers.Add(this);
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
+      
+
     }
 
     public override void OnStopClient()
     {
         Manager.GamePlayers.Remove(this);
         LobbyController.Instance.UpdatePlayerList();
+        
     }
 
     [Command]
