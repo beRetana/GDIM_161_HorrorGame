@@ -166,7 +166,7 @@ public class LobbyController : MonoBehaviour
             PlayerListItems.Add(NewPlayerItemScript); 
             }
 
-
+           
          }
     }
 
@@ -184,6 +184,8 @@ public class LobbyController : MonoBehaviour
                     {
                         UpdateButton();
                     }
+                    
+
                 }
 
         }
