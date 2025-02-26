@@ -10,11 +10,8 @@ public class NewNetworkManager : NetworkManager
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
-
-
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-
         if (SceneManager.GetActiveScene().name == "Lobby")
         {
             PlayerObjectController GamePlayerInstance = Instantiate(GamePlayerPrefab);
@@ -24,14 +21,12 @@ public class NewNetworkManager : NetworkManager
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
-           NetworkIdentity networkIdentity = GamePlayerInstance.GetComponent<NetworkIdentity>();
+            NetworkIdentity networkIdentity = GamePlayerInstance.GetComponent<NetworkIdentity>();
             networkIdentity.AssignClientAuthority(conn);
 
             LobbyController.Instance.UpdatePlayerList();
         }
-
     }
-
 
     public void StartGame(string SceneName)
     {

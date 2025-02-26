@@ -97,17 +97,13 @@ public class LobbyController : MonoBehaviour
         else
         {
             StartGameButton.interactable = false;
-
         }
-
-
     }
 
     public void UpdateLobbyName()
     {
         CurrentLobbyID = Manager.GetComponent<SteamLobby>().CurrentLobbyID;
         LobbyNameText.text = SteamMatchmaking.GetLobbyData(new CSteamID(CurrentLobbyID), "name");
-
     }
 
     public void UpdatePlayerList()
@@ -147,29 +143,25 @@ public class LobbyController : MonoBehaviour
 
     public void CreateClientPlayerItem()
     {
-         foreach(PlayerObjectController player in Manager.GamePlayers)
-         {
+        foreach(PlayerObjectController player in Manager.GamePlayers)
+        {
             if(!PlayerListItems.Any(b => b.ConnectionID == player.ConnectionID))
             {
-               GameObject NewPlayerItem = Instantiate (PlayerListItemPrefab) as GameObject;
-            PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerListItem>();
+                GameObject NewPlayerItem = Instantiate (PlayerListItemPrefab) as GameObject;
+                PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerListItem>();
 
-            NewPlayerItemScript.PlayerName = player.PlayerName;
-            NewPlayerItemScript.ConnectionID = player.ConnectionID;
-            NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
-            NewPlayerItemScript.Ready = player.Ready;
-            NewPlayerItemScript.SetPlayerValues();
+                NewPlayerItemScript.PlayerName = player.PlayerName;
+                NewPlayerItemScript.ConnectionID = player.ConnectionID;
+                NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
+                NewPlayerItemScript.Ready = player.Ready;
+                NewPlayerItemScript.SetPlayerValues();
             
+                NewPlayerItem.transform.SetParent(PlayerListViewContent.transform);
+                NewPlayerItem.transform.localScale = Vector3.one;
 
-
-            NewPlayerItem.transform.SetParent(PlayerListViewContent.transform);
-            NewPlayerItem.transform.localScale = Vector3.one;
-
-            PlayerListItems.Add(NewPlayerItemScript); 
+                PlayerListItems.Add(NewPlayerItemScript); 
             }
-
-           
-         }
+        }
     }
 
     public void UpdatePlayerItem()
@@ -183,17 +175,13 @@ public class LobbyController : MonoBehaviour
                     PlayerListItemScript.PlayerName = player.PlayerName;
                     PlayerListItemScript.Ready = player.Ready;
                     PlayerListItemScript.SetPlayerValues();
+                    // She didn't include this part TK_18:55
                     if(player == LocalplayerController)
                     {
                         UpdateButton();
                     }
-                    
-                    
-                    
-
                 }
             }
-
         }
         CheckIfAllReady();
     }
@@ -217,15 +205,13 @@ public class LobbyController : MonoBehaviour
                 GameObject ObjectToRemove = playerlistItemToRemove.gameObject;
                 PlayerListItems.Remove(playerlistItemToRemove);
                 Destroy(ObjectToRemove);
-                ObjectToRemove= null;
+                ObjectToRemove = null;
             }
         }
     }
  
-
     public void StartGame(string SceneName)
     {
         LocalplayerController.CanStartGame(SceneName);
     }
-
 }
