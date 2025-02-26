@@ -35,7 +35,10 @@ public class PlayerObjectController : NetworkBehaviour
     }
 
 
-   
+   private void Start()
+   {
+    DontDestroyOnLoad(this.gameObject);
+   }
 
     
 
@@ -77,6 +80,12 @@ public class PlayerObjectController : NetworkBehaviour
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
+        
+        if (LobbyController.Instance != null)
+            {
+                LobbyController.Instance.UpdatePlayerList();
+            }
+
     }
 
     public override void OnStartClient()
@@ -84,12 +93,15 @@ public class PlayerObjectController : NetworkBehaviour
         Manager.GamePlayers.Add(this);
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
+      
+
     }
 
     public override void OnStopClient()
     {
         Manager.GamePlayers.Remove(this);
         LobbyController.Instance.UpdatePlayerList();
+        
     }
 
     [Command]
