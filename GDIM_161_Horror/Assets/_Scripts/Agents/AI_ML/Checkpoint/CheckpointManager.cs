@@ -5,7 +5,7 @@ namespace AI
 {
     public class CheckpointManager : MonoBehaviour
     {
-        private List<GameObject> _checkpoints;
+        private List<Checkpoint> _checkpoints;
         public static CheckpointManager Instance { get; private set; }
         private void Awake()
         {
@@ -15,10 +15,10 @@ namespace AI
 
         private void Start()
         {
-            _checkpoints = new List<GameObject>();
+            _checkpoints = new List<Checkpoint>();
         }
 
-        public void AddCheckpoint(GameObject checkpoint)
+        public void AddCheckpoint(Checkpoint checkpoint)
         {
             _checkpoints.Add(checkpoint);
         }
@@ -27,9 +27,9 @@ namespace AI
 
         public void ResetCheckpoints()
         {
-            foreach (var checkpoint in _checkpoints)
+            foreach (Checkpoint checkpoint in _checkpoints)
             {
-                checkpoint.SetActive(true);
+                checkpoint.RandomSpawn();
             }
         }
     }

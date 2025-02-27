@@ -24,7 +24,7 @@ namespace AI
         {
             if (Random.value > (float)_checkpointType / 100f) return;
             gameObject.SetActive(true);
-            CheckpointManager.Instance.AddCheckpoint(gameObject);
+            CheckpointManager.Instance.AddCheckpoint(this);
         }
 
         private void OnTriggerEnter(Collider other)

@@ -434,6 +434,8 @@ GameObject:
   - component: {fileID: 2946501653002084968}
   - component: {fileID: 4848861366070383520}
   - component: {fileID: 3567417533735339568}
+  - component: {fileID: 5456932072175116454}
+  - component: {fileID: 7477993141517989938}
   m_Layer: 8
   m_Name: _Single_Player
   m_TagString: Player
@@ -499,6 +501,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85b0f0716daf814387cddab730bbd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   _interactableLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -681,12 +686,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2480039c7f763d8449f7aa4d7293ad58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   lockedStats: {fileID: 11400000, guid: b71a63d45e071b94987d230893a2f2de, type: 2}
   unlockedStats: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
   limpStats: {fileID: 11400000, guid: a019c12b47b3e7f4f9ee6d873e8868d4, type: 2}
   downedStats: {fileID: 11400000, guid: 1c6503a4201293a49b72759163af0364, type: 2}
   _arms: {fileID: 5645661420556895446}
   cinemachineCameraTarget: {fileID: 7354950563374537535}
+  PlayerModel: {fileID: 0}
   _camera: {fileID: 9070468886778292106}
   _editMode: 1
 --- !u!114 &3567417533735339568
@@ -702,6 +711,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerRidgidbody: {fileID: 2060078952163873609}
+--- !u!114 &5456932072175116454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 407748864
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
+--- !u!114 &7477993141517989938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2571488355673585886}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
 --- !u!1 &2962234600057808103
 GameObject:
   m_ObjectHideFlags: 0
