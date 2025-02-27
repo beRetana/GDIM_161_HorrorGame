@@ -27,6 +27,7 @@ public class NewNetworkManager : NetworkManager
             LobbyController.Instance.UpdatePlayerList();
         }
     }
+    
 
     public void StartGame(string SceneName)
     {
