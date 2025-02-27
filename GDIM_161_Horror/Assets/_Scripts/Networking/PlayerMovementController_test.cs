@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 public class PlayerMovementController_test : NetworkBehaviour
 {
     public float Speed = 0.1f;
-    public GameObject PlayerModel; 
+    public GameObject PlayerModel;  
 
     
-   
+    
+    private bool positionInvoked = false;
 
     private void Start()
     {
@@ -19,10 +20,11 @@ public class PlayerMovementController_test : NetworkBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Game")
         {
-            if (!PlayerModel.activeSelf == false)
+            if (!PlayerModel.activeSelf && !positionInvoked)
             {
-                SetPosition();
-                PlayerModel.SetActive(true);
+                positionInvoked = true;
+                // Invoke the ActivatePlayer method after .5 seconds
+                Invoke("ActivatePlayer", .5f);
             }
 
             if (isOwned)
@@ -32,7 +34,11 @@ public class PlayerMovementController_test : NetworkBehaviour
         }
     }
 
-   
+    private void ActivatePlayer()
+    {
+        SetPosition();
+        PlayerModel.SetActive(true);
+    }
 
     private void SetPosition()
     {
