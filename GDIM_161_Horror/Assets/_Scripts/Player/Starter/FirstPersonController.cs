@@ -48,9 +48,8 @@ namespace StarterAssets
         }
 
         protected override void Start()
-        {   
+        {
             base.Start();
-            PlayerModel.SetActive(false);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 
@@ -65,6 +64,7 @@ namespace StarterAssets
             _fallTimeoutDelta = fallTimeout;
 
             if (_editMode) return;
+            PlayerModel.SetActive(false);
         }
 
         private void OnDestroy()

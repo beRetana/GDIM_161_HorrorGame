@@ -203,8 +203,9 @@ public class LobbyController : MonoBehaviour
         {
             foreach(PlayerListItem playerlistItemToRemove in playerListItemToRemove)
             {
-                GameObject ObjectToRemove = playerlistItemToRemove.gameObject;
-                PlayerListItems.Remove(playerlistItemToRemove);
+                if (playerlistItemToRemove == null) { continue; }
+                GameObject ObjectToRemove = playerlistItemToRemove?.gameObject;
+                PlayerListItems?.Remove(playerlistItemToRemove);
                 Destroy(ObjectToRemove);
                 ObjectToRemove = null;
             }

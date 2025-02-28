@@ -1,18 +1,16 @@
-using MessengerSystem;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditorInternal;
-using Mono.CSharp;
-using Codice.CM.Common.Tree.Partial;
-using NUnit.Framework.Constraints;
+using Mirror;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
 
+    [SerializeField] private bool isSingleDev;
+
     private void Awake()
     {
+        if (!isSingleDev && !NetworkServer.active) return;
         DeclareSingletonInsatnce();
         _playerHolder = new();
     }
@@ -58,8 +56,8 @@ public class PlayerManager : MonoBehaviour
 public class PlayerHolder
 {
     static readonly int _MAX_PLAYER_COUNT = 4;
-    private int totalPlayers = 0;
-    private PlayerBase[] playerList = new PlayerBase[4];
+    [SyncVar] private int totalPlayers = 0;
+    [SyncVar] private PlayerBase[] playerList = new PlayerBase[4];
 
     public int AddPlayer(PlayerBase player)
     {
