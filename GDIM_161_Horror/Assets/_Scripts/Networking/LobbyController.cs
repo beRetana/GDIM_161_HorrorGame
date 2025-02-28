@@ -160,7 +160,7 @@ public class LobbyController : MonoBehaviour
                 NewPlayerItem.transform.localScale = Vector3.one;
 
                 PlayerListItems.Add(NewPlayerItemScript); 
-                NetworkServer.Spawn(NewPlayerItem);
+                //NetworkServer.Spawn(NewPlayerItem);
             }
         }
     }
