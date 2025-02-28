@@ -8,10 +8,10 @@ public class PlayerManager : NetworkBehaviour
 
     [SerializeField] private bool isSingleDev;
 
+    [Server]
     private void Awake()
     {
-        Debug.Log($"Caller {gameObject.name}: {NetworkServer.active}");
-        if (!NetworkServer.active) return;
+        Debug.Log($"Player Manager Initialized");
         DeclareSingletonInsatnce();
         _playerHolder = new();
     }
