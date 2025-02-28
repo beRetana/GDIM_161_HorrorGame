@@ -10,6 +10,7 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
+        Debug.Log($"Caller {gameObject.name}");
         if (!isSingleDev && !NetworkServer.active) return;
         DeclareSingletonInsatnce();
         _playerHolder = new();
@@ -55,7 +56,7 @@ public class PlayerManager : NetworkBehaviour
 
 public class PlayerHolder
 {
-    static readonly int _MAX_PLAYER_COUNT = 4;
+    readonly int _MAX_PLAYER_COUNT = 4;
     [SyncVar] private int totalPlayers = 0;
     [SyncVar] private PlayerBase[] playerList = new PlayerBase[4];
 

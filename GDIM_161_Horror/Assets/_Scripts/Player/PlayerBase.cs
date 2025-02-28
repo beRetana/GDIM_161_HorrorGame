@@ -1,12 +1,10 @@
 using UnityEngine;
 using Mirror;
 using Player;
-using Steamworks;
-using UnityEngine.SceneManagement;
 
 public class PlayerBase : NetworkBehaviour
 {
-    private int _myID = -1; // 0, 1, 2, 3
+    [SyncVar] private int _myID = -1; // 0, 1, 2, 3
 
     #region enums
     public enum PlayerStateEnum
