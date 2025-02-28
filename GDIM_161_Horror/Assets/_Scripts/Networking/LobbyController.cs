@@ -35,13 +35,9 @@ public class LobbyController : MonoBehaviour
     {
         get
         {
-            if(manager != null)
-            {
-                return manager;
-            }
+            if(manager != null) return manager;
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
-
     }
 
     private void Awake()
@@ -160,7 +156,6 @@ public class LobbyController : MonoBehaviour
                 NewPlayerItem.transform.localScale = Vector3.one;
 
                 PlayerListItems.Add(NewPlayerItemScript); 
-                //NetworkServer.Spawn(NewPlayerItem);
             }
         }
     }
@@ -176,7 +171,6 @@ public class LobbyController : MonoBehaviour
                     PlayerListItemScript.PlayerName = player.PlayerName;
                     PlayerListItemScript.Ready = player.Ready;
                     PlayerListItemScript.SetPlayerValues();
-                    // She didn't include this part TK_18:55
                     if(player == LocalplayerController)
                     {
                         UpdateButton();

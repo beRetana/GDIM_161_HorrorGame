@@ -4,8 +4,7 @@ using Player;
 
 public class PlayerBase : NetworkBehaviour
 {
-    [SyncVar] private int _myID = -1; // 0, 1, 2, 3
-
+    [SyncVar] protected int _myID = -1;
     #region enums
     public enum PlayerStateEnum
     {
@@ -87,7 +86,6 @@ public class PlayerBase : NetworkBehaviour
     //Animator anim;
     protected virtual void Start()
     {
-        AssignID();
         SetPlayerStats();
         EnterState(PlayerStateEnum.Unlocked);
     }
@@ -172,21 +170,10 @@ public class PlayerBase : NetworkBehaviour
     #endregion PlayerState
 
     public int ID() { return _myID; }
-    private bool AssignID()
-    {
-        int newID = FindFirstObjectByType<PlayerManager>().AttemptAddPlayer(this);
 
-        if (newID != -1)
-        {
-            _myID = newID;
-            Debug.Log($"Player {_myID} spawned");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"ERROR: Could not add self {this} to PlayerList. Destoring self.");
-            Destroy(this);
-            return false;
-        }
+    public void AssignID()
+    {
+        _myID = PlayerObjectController.LocalInstance.ConnectionID;
     }
+
 }

@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Mirror;
 using Steamworks;
-using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -19,9 +14,6 @@ public class PlayerObjectController : NetworkBehaviour
 
     private NewNetworkManager manager;
     
-
-    
-
     private NewNetworkManager Manager
     {
         get
@@ -35,12 +27,10 @@ public class PlayerObjectController : NetworkBehaviour
     }
 
 
-   private void Start()
-   {
-    DontDestroyOnLoad(this.gameObject);
-   }
-
-    
+    private void Start()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
@@ -53,11 +43,7 @@ public class PlayerObjectController : NetworkBehaviour
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-
-        
     }
-
-   
 
     [Command]
     private void CmdSetPlayerReady()
@@ -77,7 +63,7 @@ public class PlayerObjectController : NetworkBehaviour
     {
         LocalInstance = this;
         CmdSetPlayerName(SteamFriends.GetPersonaName());
-        gameObject.name = "LocalGamePlayer";
+        gameObject.name = $"LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
         
@@ -93,8 +79,6 @@ public class PlayerObjectController : NetworkBehaviour
         Manager.GamePlayers.Add(this);
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
-      
-
     }
 
     public override void OnStopClient()
