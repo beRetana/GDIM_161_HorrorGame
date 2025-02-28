@@ -13,6 +13,7 @@ namespace StarterAssets
     #endif
     public class FirstPersonController : PlayerBase
     {
+        /*
         #if ENABLE_INPUT_SYSTEM
             private PlayerInput _playerInput;
         #endif
@@ -212,5 +213,6 @@ namespace StarterAssets
             transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
             Debug.Log($"Player spawned at: {transform.position}");
         }
+        */
     }
 }
