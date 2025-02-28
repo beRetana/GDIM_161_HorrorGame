@@ -10,8 +10,8 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
-        Debug.Log($"Caller {gameObject.name}");
-        if (!isSingleDev && !NetworkServer.active) return;
+        Debug.Log($"Caller {gameObject.name}: {NetworkServer.active}");
+        if (!NetworkServer.active) return;
         DeclareSingletonInsatnce();
         _playerHolder = new();
     }
