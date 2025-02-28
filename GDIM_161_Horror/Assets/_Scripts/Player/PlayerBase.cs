@@ -49,37 +49,37 @@ public class PlayerBase : NetworkBehaviour
 
     [SerializeField] protected GameObject cinemachineCameraTarget;
 
-    protected float moveSpeed;
-    protected float sprintSpeed;
-    protected float rotationSpeed;
-    protected float accelerationRate;
-    protected float decelerationRate;
+    [SyncVar] protected float moveSpeed;
+    [SyncVar] protected float sprintSpeed;
+    [SyncVar] protected float rotationSpeed;
+    [SyncVar] protected float accelerationRate;
+    [SyncVar] protected float decelerationRate;
 
-    protected float jumpHeight;
-    protected float gravity;
+    [SyncVar] protected float jumpHeight;
+    [SyncVar] protected float gravity;
 
-    protected float jumpTimeout;
-    protected float fallTimeout;
+    [SyncVar] protected float jumpTimeout;
+    [SyncVar] protected float fallTimeout;
 
-    protected float groundedOffset;
-    protected float groundedRadius;
+    [SyncVar] protected float groundedOffset;
+    [SyncVar] protected float groundedRadius;
     protected LayerMask groundLayers;
 
-    protected float topClamp;
-    protected float bottomClamp;
+    [SyncVar] protected float topClamp;
+    [SyncVar] protected float bottomClamp;
 
     // cinemachine
-    protected float _cinemachineTargetPitch;
+    [SyncVar] protected float _cinemachineTargetPitch;
 
     // player
-    protected float _speed;
-    protected float _rotationVelocity;
-    protected float _verticalVelocity;
-    protected float _terminalVelocity = 53.0f;
+    [SyncVar] protected float _speed;
+    [SyncVar] protected float _rotationVelocity;
+    [SyncVar] protected float _verticalVelocity;
+    [SyncVar] protected float _terminalVelocity = 53.0f;
 
     // timeout deltatime
-    protected float _jumpTimeoutDelta;
-    protected float _fallTimeoutDelta;
+    [SyncVar] protected float _jumpTimeoutDelta;
+    [SyncVar] protected float _fallTimeoutDelta;
 
     #endregion
 
