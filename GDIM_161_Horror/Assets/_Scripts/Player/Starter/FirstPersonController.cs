@@ -47,6 +47,33 @@ namespace StarterAssets
 			DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name != "Game") return;
+
+            if (!PlayerModel.activeSelf)
+            {
+                Debug.Log("Activating PlayerModel...");
+                Invoke(nameof(ActivatePlayer), 0.5f);
+            }
+        }
+
+        public void ActivatePlayer()
+        {
+            if (PlayerModel.activeSelf) return;
+
+            SetPosition();
+            PlayerModel.SetActive(true);
+            Debug.Log("PlayerModel activated!");
+        }
+
+        private void SetPosition()
+        {
+            transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
+            Debug.Log($"Player spawned at: {transform.position}");
+        }
+
         /*
         protected override void Start()
         {
@@ -72,19 +99,7 @@ namespace StarterAssets
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-        */
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.name != "Game") return;
-            
-            if (!PlayerModel.activeSelf) 
-            {
-                Debug.Log("Activating PlayerModel...");
-                //Invoke(nameof(ActivatePlayer), 0.5f);
-            }
-        }
 
-        /*
         private void Update()
         {
             JumpAndGravity();
@@ -199,21 +214,8 @@ namespace StarterAssets
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
         }
-        x
-        public void ActivatePlayer()
-        {
-            if (PlayerModel.activeSelf) return;
-
-            SetPosition();
-            PlayerModel.SetActive(true);
-            Debug.Log("PlayerModel activated!");
-        }
-
-        private void SetPosition()
-        {
-            transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
-            Debug.Log($"Player spawned at: {transform.position}");
-        }
+        
+        
         */
     }
 }
