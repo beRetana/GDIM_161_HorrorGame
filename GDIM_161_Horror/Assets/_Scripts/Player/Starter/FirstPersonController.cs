@@ -74,7 +74,7 @@ namespace StarterAssets
             Debug.Log($"Player spawned at: {transform.position}");
         }
 
-        /*
+        
         protected override void Start()
         {
             base.Start();
@@ -94,7 +94,7 @@ namespace StarterAssets
             if (_editMode) return;
             PlayerModel.SetActive(false);
         }
-
+        /*
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
