@@ -45,7 +45,7 @@ namespace StarterAssets
         private void Awake()
         {
 			DontDestroyOnLoad(this.gameObject);
-            //SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         /*
         protected override void Start()
@@ -72,7 +72,7 @@ namespace StarterAssets
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-        
+        */
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != "Game") return;
@@ -80,11 +80,11 @@ namespace StarterAssets
             if (!PlayerModel.activeSelf) 
             {
                 Debug.Log("Activating PlayerModel...");
-                Invoke(nameof(ActivatePlayer), 0.5f);
+                //Invoke(nameof(ActivatePlayer), 0.5f);
             }
         }
 
-        
+        /*
         private void Update()
         {
             JumpAndGravity();
