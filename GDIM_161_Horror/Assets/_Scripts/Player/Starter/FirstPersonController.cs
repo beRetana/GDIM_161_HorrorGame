@@ -84,6 +84,7 @@ namespace StarterAssets
             }
         }
 
+        /*
         private void Update()
         {
             JumpAndGravity();
@@ -198,7 +199,7 @@ namespace StarterAssets
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
         }
-        
+        */
         public void ActivatePlayer()
         {
             if (PlayerModel.activeSelf) return;
