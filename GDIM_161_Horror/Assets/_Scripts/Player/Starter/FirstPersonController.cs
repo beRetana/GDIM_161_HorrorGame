@@ -41,13 +41,13 @@ namespace StarterAssets
                 #endif
             }
         }
-        /*
+        
         private void Awake()
         {
 			DontDestroyOnLoad(this.gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            //SceneManager.sceneLoaded += OnSceneLoaded;
         }
-
+        /*
         protected override void Start()
         {
             base.Start();
