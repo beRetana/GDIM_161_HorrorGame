@@ -78,7 +78,7 @@ namespace StarterAssets
         protected override void Start()
         {
             base.Start();
-            //_controller = GetComponent<CharacterController>();
+            _controller = GetComponent<CharacterController>();
             //_input = GetComponent<StarterAssetsInputs>();
 
             #if ENABLE_INPUT_SYSTEM
@@ -91,8 +91,8 @@ namespace StarterAssets
             //_jumpTimeoutDelta = jumpTimeout;
             //_fallTimeoutDelta = fallTimeout;
 
-            if (_editMode) return;
-            PlayerModel.SetActive(false);
+            //if (_editMode) return;
+            //PlayerModel.SetActive(false);
         }
         /*
         private void OnDestroy()
