@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Mirror;
+
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -92,7 +94,13 @@ namespace StarterAssets
             _fallTimeoutDelta = fallTimeout;
 
             if (_editMode) return;
-            //PlayerModel.SetActive(false);
+            SetActiveModel(false);
+        }
+
+        [Command]
+        void SetActiveModel(bool state)
+        {
+            PlayerModel.SetActive(state);
         }
         /*
         private void OnDestroy()
