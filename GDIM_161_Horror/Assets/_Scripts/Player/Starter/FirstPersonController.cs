@@ -91,7 +91,7 @@ namespace StarterAssets
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
 
-            //if (_editMode) return;
+            if (_editMode) return;
             //PlayerModel.SetActive(false);
         }
         /*
