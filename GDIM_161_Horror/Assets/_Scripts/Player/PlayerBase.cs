@@ -86,8 +86,8 @@ public class PlayerBase : NetworkBehaviour
     //Animator anim;
     protected virtual void Start()
     {
-        SetPlayerStats();
-        EnterState(PlayerStateEnum.Unlocked);
+        //SetPlayerStats();
+        //EnterState(PlayerStateEnum.Unlocked);
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
