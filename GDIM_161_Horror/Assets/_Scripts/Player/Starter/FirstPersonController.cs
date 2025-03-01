@@ -28,7 +28,7 @@ namespace StarterAssets
         [SerializeField] private bool _editMode;
 
         public bool grounded { get; private set; }
-        /*
+        
         /// EDITOR ONLY!!!!
         private bool IsCurrentDeviceMouse
         {
@@ -41,7 +41,7 @@ namespace StarterAssets
                 #endif
             }
         }
-
+        /*
         private void Awake()
         {
 			DontDestroyOnLoad(this.gameObject);
