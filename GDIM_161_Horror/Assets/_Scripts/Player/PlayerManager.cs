@@ -9,7 +9,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private bool isSingleDev;
 
     [Server]
-    private void Start()
+    private void Awake()
     {
         Debug.Log($"Player Manager Initialized");
         DeclareSingletonInsatnce();
