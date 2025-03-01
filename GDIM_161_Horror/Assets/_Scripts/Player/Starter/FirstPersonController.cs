@@ -78,21 +78,21 @@ namespace StarterAssets
         protected override void Start()
         {
             base.Start();
-            //_controller = GetComponent<CharacterController>();
-            //_input = GetComponent<StarterAssetsInputs>();
+            _controller = GetComponent<CharacterController>();
+            _input = GetComponent<StarterAssetsInputs>();
 
             #if ENABLE_INPUT_SYSTEM
-                //_playerInput = GetComponent<PlayerInput>();
+                _playerInput = GetComponent<PlayerInput>();
             #else
                 Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
             #endif
 
             // Reset timeouts on start
-            //_jumpTimeoutDelta = jumpTimeout;
-            //_fallTimeoutDelta = fallTimeout;
+            _jumpTimeoutDelta = jumpTimeout;
+            _fallTimeoutDelta = fallTimeout;
 
             if (_editMode) return;
-            PlayerModel.SetActive(false);
+            //PlayerModel.SetActive(false);
         }
         /*
         private void OnDestroy()
