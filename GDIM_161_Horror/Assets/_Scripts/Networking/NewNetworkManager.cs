@@ -6,32 +6,26 @@ using UnityEngine.SceneManagement;
 using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
-    [SerializeField] private PlayerObjectController GamePlayerPrefab;
+    [SerializeField] private PlayerNetworkController _playerNetworkController;
+    [SerializeField] private string _lobbyScene = "Lobby";
 
-    public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
+    public List<PlayerNetworkController> PlayersInGame { get; } = new List<PlayerNetworkController>();
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == "Lobby")
-        {
-            PlayerObjectController GamePlayerInstance = Instantiate(GamePlayerPrefab);
+        if (SceneManager.GetActiveScene().name != _lobbyScene) return;
 
-            GamePlayerInstance.ConnectionID = conn.connectionId;
-            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
-            GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
+        PlayerNetworkController playerInstance = Instantiate(_playerNetworkController);
 
-            NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
-            NetworkIdentity networkIdentity = GamePlayerInstance.GetComponent<NetworkIdentity>();
-            networkIdentity.AssignClientAuthority(conn);
+        playerInstance.ConnectionID = conn.connectionId;
+        playerInstance.PlayerIdNumber = PlayersInGame.Count + 1;
+        playerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, PlayersInGame.Count);
 
-            LobbyController.Instance.UpdatePlayerList();
-        }
-    }
-    
+        NetworkServer.AddPlayerForConnection(conn, playerInstance.gameObject);
+        playerInstance.GetComponent<NetworkIdentity>()?.AssignClientAuthority(conn);
 
-    public void StartGame(string SceneName)
-    {
-        ServerChangeScene(SceneName);
+        LobbyController.Instance.UpdatePlayerList();
     }
 
+    public void StartGame(string SceneName) { ServerChangeScene(SceneName); }
 }

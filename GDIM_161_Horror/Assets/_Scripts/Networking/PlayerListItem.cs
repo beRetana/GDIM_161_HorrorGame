@@ -1,38 +1,44 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Steamworks;
+using TMPro;
+using Mirror;
 
 
-public class PlayerListItem : MonoBehaviour
+public class PlayerInfoLobby: NetworkBehaviour
 {
-    public string PlayerName;
-    public int ConnectionID;
-    public ulong PlayerSteamID;
-    private bool AvatarReceived;
+    [SerializeField] private const string _READY_DISPLAY_TEXT = "SIGNED";
+    [SerializeField] private const string _NOT_READY_DISPLAY_TEXT = "YET TO SIGN";
+    [SerializeField] private Color _READY_COLOR = Color.green;
+    [SerializeField] private Color _NOT_READY_COLOR = Color.red;
 
-    public Text PlayerNameText;
-    public RawImage PlayerIcon;
-    public Text PlayerReadyText;
-    public bool Ready;
+    [SerializeField] private TextMeshProUGUI _playerNameText;
+    [SerializeField] private RawImage _playerIcon;
+    [SerializeField] private TextMeshProUGUI _playerReadyText;
+
+    private string _playerName;
+    private int _connectionID;
+    private ulong _playerSteamID;
+    private bool _avatarReceived;
+    [SyncVar] private bool _isReady;
+
+    public string PlayerName { get => _playerName; set { _playerName = value; } }
+    public int ConnectionID { get => _connectionID; private set { } }
+    public ulong PlayerSteamID { get => _playerSteamID; private set { } }
 
     protected Callback<AvatarImageLoaded_t> ImageLoaded;
 
     public void ChangeReadyStatus()
     {
-        if (Ready) //ready
+        if (_isReady)
         {
-            PlayerReadyText.text = "Ready";
-            PlayerReadyText.color = Color.green;
-
+            _playerReadyText.text = _READY_DISPLAY_TEXT;
+            _playerReadyText.color = _READY_COLOR;
+            return;
         }
-        else //not ready
-        {
-            PlayerReadyText.text = "Unready";
-            PlayerReadyText.color = Color.red;
-        }
-
+        _playerReadyText.text = _NOT_READY_DISPLAY_TEXT;
+        _playerReadyText.color = _NOT_READY_COLOR;
     }
 
     private void Start() 
@@ -40,52 +46,47 @@ public class PlayerListItem : MonoBehaviour
         ImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnImageLoaded);
     }
 
+    public void GetPlayerNetworkController(PlayerNetworkController player)
+    {
+        _playerName = player.PlayerName;
+        _connectionID = player.ConnectionID;
+        _playerSteamID = player.PlayerSteamID;
+        _isReady = player.Ready;
+    }
+
     public void SetPlayerValues()
     {
-        PlayerNameText.text = PlayerName;
+        _playerNameText.text = _playerName;
         ChangeReadyStatus();
-        if(!AvatarReceived) { GetPlayerIcon();}
+        if(!_avatarReceived) GetPlayerIcon();
     }
 
     void GetPlayerIcon()
     {
-        int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)PlayerSteamID);
-        if(ImageID == -1) {return;}
-        PlayerIcon.texture = GetSteamImageAsTexture(ImageID);
+        int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)_playerSteamID);
+        if (ImageID == -1) return;
+        _playerIcon.texture = GetSteamImageAsTexture(ImageID);
     }
 
     private Texture2D GetSteamImageAsTexture(int iImage)
     {
-        Texture2D texture = null;
+        if (!SteamUtils.GetImageSize(iImage, out uint width, out uint height)) return null;
 
-        bool isValid = SteamUtils.GetImageSize(iImage, out uint width, out uint height);
-        if (isValid)
-        {
-            byte[] image = new byte[width * height * 4];
+        byte[] image = new byte[width * height * 4];
 
-            isValid = SteamUtils.GetImageRGBA(iImage, image, (int)(width * height * 4));
+        if (!SteamUtils.GetImageRGBA(iImage, image, (int)(width * height * 4))) return null;
 
-            if (isValid)
-            {
-                texture = new Texture2D((int)width, (int)height, TextureFormat.RGBA32, false, true);
-                texture.LoadRawTextureData(image);
-                texture.Apply();
-            }
-        }
-        AvatarReceived = true;
+        Texture2D texture = new Texture2D((int)width, (int)height, TextureFormat.RGBA32, false, true);
+        texture.LoadRawTextureData(image);
+        texture.Apply();
+
+        _avatarReceived = true;
         return texture;
     }
 
     private void OnImageLoaded(AvatarImageLoaded_t callback)
     {
-        if(callback.m_steamID.m_SteamID == PlayerSteamID) //us
-        {
-            PlayerIcon.texture = GetSteamImageAsTexture(callback.m_iImage);
-        }
-        else //another player
-        {
-            return;
-        }
+        if (callback.m_steamID.m_SteamID != PlayerSteamID) return;
+        _playerIcon.texture = GetSteamImageAsTexture(callback.m_iImage);
     }
-
 }

@@ -173,7 +173,7 @@ public class PlayerBase : NetworkBehaviour
 
     public void AssignID()
     {
-        _myID = PlayerObjectController.LocalInstance.ConnectionID;
+        _myID = PlayerNetworkController.LocalInstance.ConnectionID;
     }
 
 }

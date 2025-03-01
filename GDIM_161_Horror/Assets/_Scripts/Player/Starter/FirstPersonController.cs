@@ -28,6 +28,7 @@ namespace StarterAssets
 
         [SerializeField] GameObject _camera;
         [SerializeField] private bool _editMode;
+        [SerializeField] private const string _STARTING_SCENE = "Game";
 
         public bool grounded { get; private set; }
         
@@ -52,13 +53,9 @@ namespace StarterAssets
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name != "Game") return;
+            if (scene.name != _STARTING_SCENE) return;
 
-            if (!PlayerModel.activeSelf)
-            {
-                Debug.Log("Activating PlayerModel...");
-                Invoke(nameof(ActivatePlayer), 0.5f);
-            }
+            UnlockPlayer();
         }
 
         public void ActivatePlayer()
@@ -66,7 +63,6 @@ namespace StarterAssets
             if (PlayerModel.activeSelf) return;
 
             SetPosition();
-            PlayerModel.SetActive(true);
             Debug.Log("PlayerModel activated!");
         }
 
@@ -76,7 +72,6 @@ namespace StarterAssets
             Debug.Log($"Player spawned at: {transform.position}");
         }
 
-        
         protected override void Start()
         {
             base.Start();
@@ -92,17 +87,9 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-
-            if (_editMode) return;
-            SetActiveModel(false);
+            UnlockPlayer();
         }
 
-        [Command]
-        void SetActiveModel(bool state)
-        {
-            PlayerModel.SetActive(state);
-        }
-        /*
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -216,14 +203,5 @@ namespace StarterAssets
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
-            Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
-        }
-        
-        
-        */
     }
 }
