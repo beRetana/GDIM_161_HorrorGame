@@ -5,6 +5,7 @@ using StarterAssets;
 using System.Collections.Generic;
 //using static System.IO.Enumeration.FileSystemEnumerable<TResult>;
 
+
 namespace Player
 {
     public class Arms : MonoBehaviour
@@ -26,7 +27,7 @@ namespace Player
         [SerializeField, Tooltip("Distance to Move")] float amplitude = .4f;
         [SerializeField, Tooltip("Animation Speed")] float frequency = 2f;
         [SerializeField, Tooltip("Sinosudal from In to Out")] float duration = 1f;
-
+       
         //private bool leftHandDom;
 
         //private bool inOutStretchHandAnimation;

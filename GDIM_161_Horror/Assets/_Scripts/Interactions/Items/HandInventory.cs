@@ -281,7 +281,7 @@ public class HandInventory : MonoBehaviour
 
     private void UseItem()
     {
-        InventorySlot inventorySlotToUse = _inventorySlots[_RIGHT_HAND_ID];
+        InventorySlot inventorySlotToUse = _inventorySlots.GetDominantHand();
         PickableItem itemToUse = inventorySlotToUse?.Item;
         if (itemToUse == null) return;
 
