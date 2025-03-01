@@ -227,7 +227,7 @@ public class HandInventory : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MoveItemsPositionsToHands();
+        //MoveItemsPositionsToHands();
     }
 
     private void CheckForRaycastInteractables()
@@ -298,12 +298,20 @@ public class HandInventory : MonoBehaviour
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
         if (inventorySlotOfNewItem == null) return false;
 
-        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
 
-        Physics.IgnoreCollision(pickableParent.GetComponent<Collider>(),
-                                gameObject.GetComponentInChildren<CapsuleCollider>(), true);
 
-        StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
+        //inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
+
+        //Physics.IgnoreCollision(pickableParent.GetComponent<Collider>(),
+        //gameObject.GetComponentInChildren<CapsuleCollider>(), true);
+
+        //StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
+
+        pickableParent.GetComponent<Rigidbody>().isKinematic = true;//useGravity = false;
+        //pickableParent.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        pickableParent.transform.SetParent(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID ? _leftHandTransform : _rightHandTransform);
+        pickableParent.transform.localPosition = Vector3.zero;
+
 
         _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
 
@@ -312,8 +320,9 @@ public class HandInventory : MonoBehaviour
 
     private void MoveItemsPositionsToHands()
     {
-        MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
-        MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
+        //MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
+        //MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
+        return;
     }
 
     private void MoveItemPositionToHand(InventorySlot inventorySlot)
