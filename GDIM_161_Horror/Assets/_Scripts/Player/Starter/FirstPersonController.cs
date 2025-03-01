@@ -28,7 +28,7 @@ namespace StarterAssets
         [SerializeField] private bool _editMode;
 
         public bool grounded { get; private set; }
-
+        /*
         /// EDITOR ONLY!!!!
         private bool IsCurrentDeviceMouse
         {
@@ -72,7 +72,7 @@ namespace StarterAssets
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-
+        
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != "Game") return;
@@ -84,7 +84,7 @@ namespace StarterAssets
             }
         }
 
-        /*
+        
         private void Update()
         {
             JumpAndGravity();
@@ -199,7 +199,7 @@ namespace StarterAssets
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
         }
-        */
+        x
         public void ActivatePlayer()
         {
             if (PlayerModel.activeSelf) return;
@@ -214,5 +214,6 @@ namespace StarterAssets
             transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
             Debug.Log($"Player spawned at: {transform.position}");
         }
+        */
     }
 }
