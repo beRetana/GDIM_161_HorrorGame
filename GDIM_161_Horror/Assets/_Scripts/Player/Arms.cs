@@ -1,11 +1,16 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using StarterAssets;
+using System.Collections.Generic;
+//using static System.IO.Enumeration.FileSystemEnumerable<TResult>;
 
 namespace Player
 {
     public class Arms : MonoBehaviour
     {
+        public int assignedPlayerID { get; private set; }
+
         [Header("Shoulders")]
         [SerializeField] float shoulderRotationSpeed;
         [SerializeField] float shoulderTopClamp;
@@ -37,14 +42,25 @@ namespace Player
 
         private class Hand
         {
-            private HandStateEnum handState = 000;
-            public Vector3 RecentStartPos { get; private set; }
+            private HandStateEnum handState;
+            public int assignedPlayerID { get; private set; }
+
+            public Vector3 StartPos { get; private set; }
+            public Vector3 AnimStartPos { get; private set; }
             
-            public void SetStartPos(Vector3 position)
+            public Hand(int playerID, Vector3 startPos)
             {
-                RecentStartPos = position;
+                assignedPlayerID = playerID;
+                StartPos = startPos;
+                AnimStartPos = startPos;
+
+                handState = 000;
             }
 
+            public void SetAnimStartPosition(Vector3 position)
+            {
+                AnimStartPos = position;
+            }
             public bool IsDom() { return (handState & HandStateEnum.IsDom) != 0; }
             public bool IsOutStretched() { return (handState & HandStateEnum.IsOutStretched) != 0; }
             public bool IsInAnimation() { return (handState & HandStateEnum.IsInAnimation) != 0; }
@@ -60,17 +76,18 @@ namespace Player
 
         private void Start()
         {
-            SetHandDominancePosition(false, true);
+            assignedPlayerID = GetComponentInParent<FirstPersonController>().ID();
+            SetUpHands();
         }
 
-        /*private void SetHandStartPos(bool isLeftDom, Vector3 position)
+        private void SetUpHands()
         {
-            if (isLeftDom)
-                recentLHandStartPos = position;
-            else
-                recentRHandStartPos = position;
-        }*/
+            leftHand = new Hand(assignedPlayerID, LArm.localPosition);
+            rightHand = new Hand(assignedPlayerID, RArm.localPosition);
+            SetInitHandPositions();
+        }
 
+        #region hand_helpers
         private bool IsLDom()
         {
             return leftHand.IsDom();
@@ -84,11 +101,22 @@ namespace Player
             return IsLDom() ? LArm : RArm;
         }
 
+        #endregion hand_helpers
+
+        #region hand_modifiers
+        private void SetInitHandPositions()
+        {
+            leftHand.SetDom(false);
+            rightHand.SetDom(true);
+            LArm.localRotation = Quaternion.Euler(10f, 0f, 0f); 
+            RArm.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+
         public void SetHandDominancePosition(bool isLeft, bool isRight)
         {
             if (IsLDom() == isLeft) return;
             
-            HandMoveIn(IsLDom());
+            HandMoveIn();
             leftHand.SetDom(isLeft);
             rightHand.SetDom(isRight);
 
@@ -96,97 +124,113 @@ namespace Player
             RArm.localRotation = Quaternion.Euler(isRight ? 0f : 10f, 0f, 0f);
         }
 
+        #endregion hand_modifiers
+
+        #region animation_calls
+
         public void HandMoveOutAndIn(bool isLHandDom)
         {
             if (GetDominantHand().IsInAnimation() || GetDominantHand().IsOutStretched()) return;
-            GetDominantHand().SetInAnimation(true);
-            StartCoroutine(AnimationHandOutAndIn(isLHandDom ? LArm : RArm));
+            StartCoroutine(AnimationHandOutAndIn());
         }
 
         public void ToggleHandMoveOutOrIn(bool? isLHandDom)
         {
-            if (isLHandDom == null) isLHandDom = IsLDom();
+            isLHandDom ??= IsLDom();
             if (GetDominantHand().IsOutStretched())
-                HandMoveIn((bool)isLHandDom);
+                HandMoveIn();
             else
-                HandMoveOut((bool)isLHandDom);
+                HandMoveOut();
         }
-
-        private void HandMoveOut(bool isLHandDom)
+        private void HandMoveOut()
         {
             if (GetDominantHand().IsInAnimation() || GetDominantHand().IsOutStretched()) return;
-            GetDominantHand().SetInAnimation(true);
-            StartCoroutine(AnimationMoveHandOut(isLHandDom ? LArm : RArm));
+            StartCoroutine(AnimationMoveHandOut());
         }
-        private void HandMoveIn(bool isLHandDom)
+        private void HandMoveIn()
         {
             if (GetDominantHand().IsInAnimation() || !GetDominantHand().IsOutStretched()) return;
-            GetDominantHand().SetInAnimation(true);
-            StartCoroutine(AnimationMoveHandIn(isLHandDom ? LArm : RArm));
+            StartCoroutine(AnimationMoveHandIn());
         }
 
-        private IEnumerator AnimationMoveHandOut(Transform handTransform)
-        {
-            handOutStretched = true;
-            recentHandStartPos = handTransform.localPosition;
-            float time = 0f;
-            float elapsedTime = 0f;
+        #endregion animation_calls
 
-            while (elapsedTime < duration/2)
+        #region animation_animation
+        private IEnumerator AnimationHandOutAndIn()
+        {
+            Transform handTransform = GetDominantHandTransform();
+            Hand thisHand = PrepareDominantHandForAnimation(handTransform.localPosition);
+
+            for (float elapsedTime = 0f; elapsedTime < duration; elapsedTime += Time.deltaTime)
             {
-                time += Time.deltaTime * frequency;
-                float offset = Mathf.Sin(time) * amplitude;
-                handTransform.localPosition = recentHandStartPos + new Vector3(0f, 0f, offset);
-                elapsedTime += Time.deltaTime;
+                float offset = Mathf.Sin(elapsedTime * frequency) * amplitude;
+                handTransform.localPosition = thisHand.AnimStartPos + new Vector3(0f, 0f, offset);
                 yield return null;
             }
 
-            inOutStretchHandAnimation = false;
-            handOutStretched = true;
+            GoToAnimStartPos(thisHand, handTransform);
         }
 
-        private IEnumerator AnimationMoveHandIn(Transform handTransform)
+        private IEnumerator AnimationMoveHandOut()
         {
-            handOutStretched = true;
-            float time = 0f;
-            float elapsedTime = 0f;
+            Transform handTransform = GetDominantHandTransform();
+            Hand thisHand = PrepareDominantHandForAnimation(handTransform.localPosition);
 
-            while (elapsedTime < duration / 2)
+            for (float elapsedTime = 0f; elapsedTime < duration/2; elapsedTime += Time.deltaTime)
             {
-                time += Time.deltaTime * frequency;
-                float offset = -(1 - Mathf.Cos(time)) * amplitude;
-                handTransform.localPosition = recentHandStartPos + new Vector3(0f, 0f, offset);
-                elapsedTime += Time.deltaTime;
+                float offset = Mathf.Sin(elapsedTime * frequency) * amplitude;
+                handTransform.localPosition = thisHand.AnimStartPos + new Vector3(0f, 0f, offset);
                 yield return null;
             }
 
-            handTransform.localPosition = recentHandStartPos;
-            inOutStretchHandAnimation = false;
-            handOutStretched = false;
+            thisHand.SetInAnimation(false);
+            thisHand.SetOutStretched(true);
         }
 
-        private IEnumerator AnimationHandOutAndIn(Transform handTransform)
+        private IEnumerator AnimationMoveHandIn()
         {
-            handOutStretched = true;
-            Vector3 recentHandStartPos = handTransform.localPosition;
-            float time = 0f;
-            float elapsedTime = 0f;
+            Transform handTransform = GetDominantHandTransform();
+            Hand thisHand = PrepareDominantHandForAnimation(handTransform.localPosition);
 
-            while(elapsedTime < duration)
+
+            for (float elapsedTime = 0f; elapsedTime < duration / 2; elapsedTime += Time.deltaTime)
             {
-                time += Time.deltaTime * frequency;
-                float offset = Mathf.Sin(time) * amplitude;
-                handTransform.localPosition = recentHandStartPos + new Vector3(0f, 0f, offset);
-                elapsedTime += Time.deltaTime;
+                float offset = -(1 - Mathf.Cos(elapsedTime * frequency)) * amplitude;
+                handTransform.localPosition = thisHand.AnimStartPos + new Vector3(0f, 0f, offset);
                 yield return null;
             }
-            
-            handTransform.localPosition = recentHandStartPos;
-            inOutStretchHandAnimation = false;
-            handOutStretched = true;
+
+            GoToStartPos(thisHand, handTransform);
         }
 
-        
+        #endregion animation_animation
+
+        #region animation_helpers
+
+        Hand PrepareDominantHandForAnimation(Vector3 recentLocalPos)
+        {
+            Hand thisHand = GetDominantHand();
+            thisHand.SetOutStretched(true);
+            thisHand.SetInAnimation(true);
+            thisHand.SetAnimStartPosition(recentLocalPos);
+
+            return thisHand;
+        }
+
+        void GoToAnimStartPos(Hand hand, Transform handTransform)
+        {
+            handTransform.localPosition = hand.AnimStartPos;
+            hand.SetInAnimation(false);
+            hand.SetOutStretched(false);
+        }
+        void GoToStartPos(Hand hand, Transform handTransform)
+        {
+            handTransform.localPosition = hand.StartPos;
+            hand.SetInAnimation(false);
+            hand.SetOutStretched(false);
+        }
+
+        #endregion animation_helpers
 
         /*public void ArmsRotation(float lookAmount, bool isCurrentDeviceMouse)
         {
