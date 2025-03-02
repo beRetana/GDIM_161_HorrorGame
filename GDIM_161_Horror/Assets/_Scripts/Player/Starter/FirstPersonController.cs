@@ -25,6 +25,11 @@ namespace StarterAssets
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
+		// climbing variables
+		public bool IsClimbing = false;
+		public bool Headbop = false;
+        
+
 		
 		/// EDITOR ONLY!!!!
 		private bool IsCurrentDeviceMouse
@@ -66,6 +71,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			climbing();
 		}
 
 		private void LateUpdate()
@@ -102,9 +108,23 @@ namespace StarterAssets
             //_arms.ArmsRotation(_input.look.y, IsCurrentDeviceMouse);
             //_arms.ArmsRotation(_rotationVelocity, _cinemachineTargetPitch);
         }
+		// Ghassan function
+        private void climbing()
+		{
+			if(IsClimbing)
+			{
+				if (!IsClimbing) return; // Ensure this function only runs when climbing
 
+                float climbSpeed = 3f; // Adjust this value to control climbing speed
+                Vector3 climbMovement = new Vector3(0, _input.move.y * climbSpeed, 0); // Move only in the Y-axis
+
+                _controller.Move(climbMovement * Time.deltaTime);
+			}
+
+		}
         private void Move()
 		{
+			if (IsClimbing) return;
 			float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
@@ -147,6 +167,7 @@ namespace StarterAssets
 
 		private void JumpAndGravity()
 		{
+			if (IsClimbing) return;
 			if (grounded)
 			{
 				_fallTimeoutDelta = fallTimeout; // reset the fall timeout timer
