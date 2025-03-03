@@ -47,16 +47,16 @@ public class PlayerNetworkController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
+
         LocalInstance = this;
-        
+        gameObject.name = _LOCAL_NAME_DEFAULT;
+        LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdatePlayerList();
         CmdSetPlayerName(SteamFriends.GetPersonaName());
     }
 
     public override void OnStartClient()
     {
-        gameObject.name = _LOCAL_NAME_DEFAULT;
-        LobbyController.Instance.FindLocalPlayer();
         Manager.PlayersInGame.Add(this);
         LobbyController.Instance.UpdatePlayerList();
     }

@@ -24,7 +24,6 @@ public class NewNetworkManager : NetworkManager
         playerInstance.PlayerName = SteamFriends.GetFriendPersonaName((CSteamID)playerInstance.PlayerSteamID);
 
         NetworkServer.AddPlayerForConnection(conn, playerInstance.gameObject);
-        playerInstance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
     }
 
     public void StartGame(string SceneName) { ServerChangeScene(SceneName); }
