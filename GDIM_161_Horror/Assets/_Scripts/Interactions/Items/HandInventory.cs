@@ -302,37 +302,58 @@ public class HandInventory : MonoBehaviour
     public bool PickUpItem(PickableItem pickableItem)
     {
         Transform pickableParent = pickableItem.transform.parent;
-        //Debug.Log($" hey its me pickubale parent the {pickableParent.gameObject.name}");
-        //Debug.Log($"heyo and heres me the fucking gabagoo rb {pickableParent.GetComponent<Rigidbody>().gameObject.name}");
-
+        
         if (pickableParent.GetComponent<Rigidbody>() == null) return false; // DropItem(); <-??
 
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
         if (inventorySlotOfNewItem == null) return false;
 
+        _PutItemInHand(inventorySlotOfNewItem, pickableParent, pickableItem);
 
-
-        //inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
-
-        //Physics.IgnoreCollision(pickableParent.GetComponent<Collider>(),
-        //gameObject.GetComponentInChildren<CapsuleCollider>(), true);
-
-        //StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
-        Debug.Log($"!!!!!!!!!!!!!!! parent{pickableParent} | self {pickableItem}");
-        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
-        inventorySlotOfNewItem.ItemTransform = pickableParent;
-        
-        //pickableParent.GetComponent<Rigidbody>().isKinematic = true;//useGravity = false;
-        //pickableParent.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-        pickableParent.transform.SetParent(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID ? _leftHandSocket : _rightHandSocket);
-        pickableParent.transform.localPosition = Vector3.zero;
-
-
-        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
+        _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
+        Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
+        Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
+        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
 
         return true;
     }
 
+    private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
+    {
+        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
+        inventorySlotOfNewItem.ItemTransform = pickableParent;
+
+        pickableParent.transform.SetParent((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant) ? _leftHandSocket : _rightHandSocket);
+        //pickableParent.transform.localPosition = Vector3.zero;
+        //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
+
+        pickableItem.OrientItemInHand(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID);
+    }
+
+
+    private void DropItem(float throwForce = 0)
+    {
+        InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
+        if (dominantSlot.Item == null) return;
+
+        PickableItem itemToDrop = dominantSlot.Item;
+        Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
+
+        //Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
+        //                        gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+
+        _inventorySlots.RemoveItem();
+
+        itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+        itemToDrop.UnPossessItem();
+        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
+    }
+
+
+    public Arms GetArms() { return _arms; }
+
+
+    #region graveyard
     private void MoveItemsPositionsToHands()
     {
         //MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
@@ -354,7 +375,7 @@ public class HandInventory : MonoBehaviour
     {
         float timer = 0f;
         Quaternion start = target.rotation;
-        while(timer < duration)
+        while (timer < duration)
         {
             target.rotation = Quaternion.Slerp(start, rotation, timer / duration);
             yield return null;
@@ -363,22 +384,5 @@ public class HandInventory : MonoBehaviour
         target.rotation = rotation;
     }
 
-    private void DropItem(float throwForce = 0){
-        InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
-        if (dominantSlot.Item == null) return;
-
-        PickableItem itemToDrop = dominantSlot.Item;
-        Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
-
-        //Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
-        //                        gameObject.GetComponentInChildren<CapsuleCollider>(), false);
-
-        _inventorySlots.RemoveItem();
-
-        itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-        itemToDrop.UnPossessItem();
-        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
-    }
-
-    public Arms GetArms() { return _arms; }
+    #endregion graveyard
 }
