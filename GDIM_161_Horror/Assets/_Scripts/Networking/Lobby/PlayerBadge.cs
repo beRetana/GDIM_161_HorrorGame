@@ -50,7 +50,7 @@ public class PlayerBadge: PlayerIconGetter
 
         if (isLocalPlayer)
         {
-            Debug.Log("Setting status Local");
+            Debug.Log("SETTING ACTIVE STATUS LOCAL");
             CmdSetStatus(active);
         }
     }
@@ -81,7 +81,7 @@ public class PlayerBadge: PlayerIconGetter
     public void ClearBadge()
     {
         _playerName = string.Empty;
-        _connectionID = 0;
+        _connectionID = -1;
         _isReady = false;
         _playerSteamID = 0;
         _avatarReceived = false;

@@ -63,13 +63,13 @@ namespace StarterAssets
             if (PlayerModel.activeSelf) return;
 
             SetPosition();
-            Debug.Log("PlayerModel activated!");
+            //Debug.Log("PlayerModel activated!");
         }
 
         private void SetPosition()
         {
             transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
-            Debug.Log($"Player spawned at: {transform.position}");
+            //Debug.Log($"Player spawned at: {transform.position}");
         }
 
         protected override void Start()
