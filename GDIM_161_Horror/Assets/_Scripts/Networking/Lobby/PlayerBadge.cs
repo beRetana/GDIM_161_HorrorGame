@@ -46,13 +46,19 @@ public class PlayerBadge: PlayerIconGetter
     public void SetStatus(bool active) 
     {
         _isActive = active;
-        gameObject.SetActive(active); 
+        gameObject.SetActive(active);
 
-        if (isLocalPlayer)
-        {
-            Debug.Log("SETTING ACTIVE STATUS LOCAL");
-            CmdSetStatus(active);
-        }
+        Debug.Log("SETTING ACTIVE STATUS LOCAL");
+        CmdSetStatus(active);
+    }
+
+    public void UpdatePlayerValues()
+    {
+        Debug.Log("Updating Player Values IN SCRIPT");
+        _playerNameText.text = _playerName;
+        ChangeReadyStatus();
+        if (!_avatarReceived) GetPlayerIcon();
+        SetStatus(true);
     }
 
     [Command(requiresAuthority = false)]
@@ -88,14 +94,5 @@ public class PlayerBadge: PlayerIconGetter
         _playerNameText.text = string.Empty;
         _playerReadyText.text = string.Empty;
         gameObject.SetActive(false);
-    }
-
-    public void UpdatePlayerValues()
-    {
-        Debug.Log("Updating Player Values IN SCRIPT");
-        _playerNameText.text = _playerName;
-        ChangeReadyStatus();
-        if(!_avatarReceived) GetPlayerIcon();
-        SetStatus(true);
     }
 }
