@@ -47,7 +47,7 @@ public class PlayerNetworkController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-
+        Debug.Log("Local Player Set");
         LocalInstance = this;
         gameObject.name = _LOCAL_NAME_DEFAULT;
         LobbyController.Instance.FindLocalPlayer();

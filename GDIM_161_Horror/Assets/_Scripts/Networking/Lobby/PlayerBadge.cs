@@ -17,7 +17,7 @@ public class PlayerBadge: PlayerIconGetter
     [SerializeField] private TextMeshProUGUI _playerReadyText;
 
     private string _playerName;
-    private int _connectionID;
+    private int _connectionID = -1;
     [SyncVar] private bool _isReady;
 
     public string PlayerName { get => _playerName; set { _playerName = value; } }
@@ -69,5 +69,6 @@ public class PlayerBadge: PlayerIconGetter
         _playerNameText.text = _playerName;
         ChangeReadyStatus();
         if(!_avatarReceived) GetPlayerIcon();
+        SetStatus(true);
     }
 }
