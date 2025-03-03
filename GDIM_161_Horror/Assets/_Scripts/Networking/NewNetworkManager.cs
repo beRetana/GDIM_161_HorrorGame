@@ -9,7 +9,8 @@ public class NewNetworkManager : NetworkManager
     [SerializeField] private PlayerNetworkController _playerNetworkController;
     [SerializeField] private string _lobbyScene = "Lobby";
 
-    public List<PlayerNetworkController> PlayersInGame { get; } = new List<PlayerNetworkController>();
+    private List<PlayerNetworkController> _playersInGame = new List<PlayerNetworkController>();
+    public List<PlayerNetworkController> PlayersInGame { get { return _playersInGame; } }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -18,14 +19,13 @@ public class NewNetworkManager : NetworkManager
         PlayerNetworkController playerInstance = Instantiate(_playerNetworkController);
 
         playerInstance.ConnectionID = conn.connectionId;
-        playerInstance.PlayerIdNumber = PlayersInGame.Count + 1;
-        playerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, PlayersInGame.Count);
+        playerInstance.PlayerIdNumber = _playersInGame.Count + 1;
+        playerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, _playersInGame.Count);
+        playerInstance.PlayerName = SteamFriends.GetFriendPersonaName((CSteamID)playerInstance.PlayerSteamID);
 
         NetworkServer.AddPlayerForConnection(conn, playerInstance.gameObject);
         playerInstance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
-        PlayersInGame.Add(playerInstance);
-
-        LobbyController.Instance.UpdatePlayerList();
+        Debug.Log("Player Instantiated " + _playersInGame.Count);
     }
 
     public void StartGame(string SceneName) { ServerChangeScene(SceneName); }

@@ -4,10 +4,9 @@ using UnityEngine.UI;
 using Steamworks;
 using TMPro;
 using Mirror;
-using Mono.CompilerServices.SymbolWriter;
+using Networking;
 
-
-public class PlayerBadge: NetworkBehaviour
+public class PlayerBadge: PlayerIconGetter
 {
     [SerializeField] private const string _READY_DISPLAY_TEXT = "SIGNED";
     [SerializeField] private const string _NOT_READY_DISPLAY_TEXT = "YET TO SIGN";
@@ -15,20 +14,15 @@ public class PlayerBadge: NetworkBehaviour
     [SerializeField] private Color _NOT_READY_COLOR = Color.red;
 
     [SerializeField] private TextMeshProUGUI _playerNameText;
-    [SerializeField] private RawImage _playerIcon;
     [SerializeField] private TextMeshProUGUI _playerReadyText;
 
     private string _playerName;
     private int _connectionID;
-    private ulong _playerSteamID;
-    private bool _avatarReceived;
     [SyncVar] private bool _isReady;
 
     public string PlayerName { get => _playerName; set { _playerName = value; } }
     public int ConnectionID { get => _connectionID; private set { } }
-    public ulong PlayerSteamID { get => _playerSteamID; private set { } }
-
-    protected Callback<AvatarImageLoaded_t> ImageLoaded;
+    public bool IsReady { get => _isReady;  set { _isReady = value; } }
 
     public void ChangeReadyStatus()
     {
@@ -42,9 +36,9 @@ public class PlayerBadge: NetworkBehaviour
         _playerReadyText.color = _NOT_READY_COLOR;
     }
 
-    private void Start() 
+    protected override void Start() 
     {
-        ImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnImageLoaded);
+        base.Start();
         SetStatus(false);
     }
 
@@ -56,7 +50,18 @@ public class PlayerBadge: NetworkBehaviour
         _connectionID = player.ConnectionID;
         _playerSteamID = player.PlayerSteamID;
         _isReady = player.Ready;
-        UpdatePlayerValues();
+    }
+
+    public void ClearBadge()
+    {
+        _playerName = string.Empty;
+        _connectionID = 0;
+        _isReady = false;
+        _playerSteamID = 0;
+        _avatarReceived = false;
+        _playerNameText.text = string.Empty;
+        _playerReadyText.text = string.Empty;
+        gameObject.SetActive(false);
     }
 
     public void UpdatePlayerValues()
@@ -64,34 +69,5 @@ public class PlayerBadge: NetworkBehaviour
         _playerNameText.text = _playerName;
         ChangeReadyStatus();
         if(!_avatarReceived) GetPlayerIcon();
-    }
-
-    void GetPlayerIcon()
-    {
-        int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)_playerSteamID);
-        if (ImageID == -1) return;
-        _playerIcon.texture = GetSteamImageAsTexture(ImageID);
-    }
-
-    private Texture2D GetSteamImageAsTexture(int iImage)
-    {
-        if (!SteamUtils.GetImageSize(iImage, out uint width, out uint height)) return null;
-
-        byte[] image = new byte[width * height * 4];
-
-        if (!SteamUtils.GetImageRGBA(iImage, image, (int)(width * height * 4))) return null;
-
-        Texture2D texture = new Texture2D((int)width, (int)height, TextureFormat.RGBA32, false, true);
-        texture.LoadRawTextureData(image);
-        texture.Apply();
-
-        _avatarReceived = true;
-        return texture;
-    }
-
-    private void OnImageLoaded(AvatarImageLoaded_t callback)
-    {
-        if (callback.m_steamID.m_SteamID != PlayerSteamID) return;
-        _playerIcon.texture = GetSteamImageAsTexture(callback.m_iImage);
     }
 }

@@ -1,16 +1,15 @@
+using Mirror;
+using Networking;
+using Steamworks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LocalPlayerBadge : MonoBehaviour
+public class LocalPlayerBadge : PlayerIconGetter
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void SetPlayerController(PlayerNetworkController player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _playerSteamID = player.PlayerSteamID;
+        if (!_avatarReceived) GetPlayerIcon();
     }
 }

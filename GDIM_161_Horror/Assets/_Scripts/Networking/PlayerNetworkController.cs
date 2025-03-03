@@ -1,5 +1,6 @@
 using Mirror;
 using Steamworks;
+using UnityEngine;
 
 public class PlayerNetworkController : NetworkBehaviour
 {
@@ -47,14 +48,15 @@ public class PlayerNetworkController : NetworkBehaviour
     public override void OnStartAuthority()
     {
         LocalInstance = this;
+        
+        LobbyController.Instance.UpdatePlayerList();
         CmdSetPlayerName(SteamFriends.GetPersonaName());
-        gameObject.name = _LOCAL_NAME_DEFAULT;
-        LobbyController.Instance.FindLocalPlayer();
-        if (LobbyController.Instance != null) LobbyController.Instance.UpdatePlayerList();
     }
 
     public override void OnStartClient()
     {
+        gameObject.name = _LOCAL_NAME_DEFAULT;
+        LobbyController.Instance.FindLocalPlayer();
         Manager.PlayersInGame.Add(this);
         LobbyController.Instance.UpdatePlayerList();
     }
@@ -66,7 +68,7 @@ public class PlayerNetworkController : NetworkBehaviour
     }
 
     [Command]
-    private void CmdSetPlayerName(string playerName) { this.PlayerNameUpdate(_playerName, playerName); }
+    private void CmdSetPlayerName(string playerName) { this.PlayerNameUpdate(this._playerName, playerName); }
 
     // This must have the same signature as the hook
     public void PlayerNameUpdate(string oldValue, string newValue)
@@ -78,5 +80,5 @@ public class PlayerNetworkController : NetworkBehaviour
     public void CanStartGame(string SceneName) { if (isOwned) CmdCanStartGame(SceneName); }
 
     [Command]
-    public void CmdCanStartGame(string SceneName) { manager.StartGame(SceneName); }
+    public void CmdCanStartGame(string SceneName) { Manager.StartGame(SceneName); }
 }

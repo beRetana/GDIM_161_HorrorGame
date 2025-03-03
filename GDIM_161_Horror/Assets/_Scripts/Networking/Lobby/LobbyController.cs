@@ -13,7 +13,7 @@ public class LobbyController : MonoBehaviour
 
     //UI Elements
     [SerializeField] private Button _startGameButton;
-    [SerializeField] private RawImage _localPlayerAvatar;
+    [SerializeField] private LocalPlayerBadge _localPlayerBadge;
 
     //Player Data
     [SerializeField] private List<PlayerBadge> _playerBadges = new List<PlayerBadge>();
@@ -90,6 +90,7 @@ public class LobbyController : MonoBehaviour
 
     public void UpdatePlayerList()
     {
+        //Debug.Log("Updating Player List: " + Manager.PlayersInGame.Count);
         if (!_hostBadgeCreated) CreateHostPlayerItem(); //Host
         if(_playerBadges.Count < Manager.PlayersInGame.Count) CreateClientPlayerItem();
         if(_playerBadges.Count > Manager.PlayersInGame.Count) RemovePlayerItem();
@@ -98,44 +99,42 @@ public class LobbyController : MonoBehaviour
 
     public void CreateHostPlayerItem()
     {
-        Debug.Log("Creating Host Player Item: " + Manager.PlayersInGame.Count);
         foreach (PlayerNetworkController player in Manager.PlayersInGame)
         {
+            _hostBadgeCreated = true;
             CreateBadge(player);
         }
-        _hostBadgeCreated = true;
     }
 
     public void CreateClientPlayerItem()
     {
         foreach(PlayerNetworkController player in Manager.PlayersInGame)
         {
-            if(!_playerBadges.Any(b => b.ConnectionID == player.ConnectionID))
-            {
-                CreateBadge(player);
-            }
+            if(!_playerBadges.Any(b => b.ConnectionID == player.ConnectionID))  CreateBadge(player);
         }
     }
 
     private void CreateBadge(PlayerNetworkController player)
     {
+        //Debug.Log($"Creating Badge for {player.PlayerName}, {player.ConnectionID}");
+        if (player.ConnectionID == _localPlayerController?.ConnectionID) _localPlayerBadge.SetPlayerController(player);
         _playerBadges[_playerCount].SetStatus(true);
         _playerBadges[_playerCount].SetPlayerNetworkController(player);
+        _playerBadges[_playerCount].UpdatePlayerValues();
         _playerCount++;
     }
 
     public void UpdatePlayerItem()
-    {
-        /*
-        foreach(PlayerNetworkController player in Manager.GamePlayers)
+    { 
+        foreach(PlayerNetworkController player in Manager.PlayersInGame)
         {
-            foreach(PlayerListItem PlayerListItemScript in _playerListItems)
+            foreach(PlayerBadge playerBadge in _playerBadges)
             {
-                if(PlayerListItemScript.ConnectionID == player.ConnectionID)
+                if(playerBadge.ConnectionID == player.ConnectionID)
                 {
-                    PlayerListItemScript.PlayerName = player._playerName;
-                    PlayerListItemScript._isReady = player._ready;
-                    PlayerListItemScript.SetPlayerValues();
+                    playerBadge.PlayerName = player.PlayerName;
+                    playerBadge.IsReady = player.Ready;
+                    playerBadge.UpdatePlayerValues();
                     if(player == _localPlayerController)
                     {
                         UpdateButton();
@@ -144,33 +143,16 @@ public class LobbyController : MonoBehaviour
             }
         }
         CheckIfAllReady();
-        */
     }
 
     public void RemovePlayerItem()
     {
-        /*
-        List<PlayerListItem> playerListItemToRemove = new List<PlayerListItem>();
-
-        foreach (PlayerListItem playerlistItem in _playerListItems)
+        foreach (PlayerBadge playerBadge in _playerBadges)
         {
-            if(!Manager.GamePlayers.Any(b=> b.ConnectionID == playerlistItem._connectionID))
+            if(!Manager.PlayersInGame.Any(b=> b.ConnectionID == playerBadge.ConnectionID))
             {
-                playerListItemToRemove.Add(playerlistItem);
+                playerBadge.ClearBadge();
             }
         }
-
-        if(playerListItemToRemove.Count > 0)
-        {
-            foreach(PlayerListItem playerlistItemToRemove in playerListItemToRemove)
-            {
-                if (playerlistItemToRemove == null) { continue; }
-                GameObject ObjectToRemove = playerlistItemToRemove?.gameObject;
-                _playerListItems?.Remove(playerlistItemToRemove);
-                Destroy(ObjectToRemove);
-                ObjectToRemove = null;
-            }
-        }
-        */
     }
 }
