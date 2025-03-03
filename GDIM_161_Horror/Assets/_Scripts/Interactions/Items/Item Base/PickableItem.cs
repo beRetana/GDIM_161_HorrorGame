@@ -48,6 +48,13 @@ namespace Interactions
 
         public virtual void UseItem(int playerId) { }
 
+
+        public virtual void OrientItemInHand(bool isLeftHand) 
+        {
+            Transform parentTransform = transform.parent.transform;
+            parentTransform.localPosition = Vector3.zero;
+            parentTransform.localEulerAngles = new Vector3(0f, -270f, 0f);
+        }
     }
 }
 
