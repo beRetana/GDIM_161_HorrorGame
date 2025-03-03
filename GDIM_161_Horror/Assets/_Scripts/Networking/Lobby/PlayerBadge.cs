@@ -55,7 +55,7 @@ public class PlayerBadge: PlayerIconGetter
         }
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdSetStatus(bool active)
     {
         Debug.Log("Setting status Command");
