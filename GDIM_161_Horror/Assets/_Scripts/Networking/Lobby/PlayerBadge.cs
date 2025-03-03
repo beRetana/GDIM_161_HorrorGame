@@ -50,6 +50,7 @@ public class PlayerBadge: PlayerIconGetter
 
         if (isLocalPlayer)
         {
+            Debug.Log("Setting status Local");
             CmdSetStatus(active);
         }
     }
@@ -57,6 +58,7 @@ public class PlayerBadge: PlayerIconGetter
     [Command]
     private void CmdSetStatus(bool active)
     {
+        Debug.Log("Setting status Command");
         _isActive = active;
         RpcSetStatus(_isActive);
     }
@@ -64,6 +66,7 @@ public class PlayerBadge: PlayerIconGetter
     [ClientRpc]
     private void RpcSetStatus(bool active)
     {
+        Debug.Log("Setting status Propagation");
         gameObject.SetActive(active);
     }
 
