@@ -155,7 +155,6 @@ public class LobbyController : MonoBehaviour
             if(!Manager.PlayersInGame.Any(b=> b.ConnectionID == playerBadge.ConnectionID))
             {
                 playerBadge.ClearBadge();
-                _playerCount--;
             }
         }
     }
