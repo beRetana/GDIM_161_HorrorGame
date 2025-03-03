@@ -18,6 +18,7 @@ public class PlayerBadge: PlayerIconGetter
 
     private string _playerName;
     private int _connectionID = -1;
+    [SyncVar] private bool _isActive;
     [SyncVar] private bool _isReady;
 
     public string PlayerName { get => _playerName; set { _playerName = value; } }
@@ -42,7 +43,29 @@ public class PlayerBadge: PlayerIconGetter
         SetStatus(false);
     }
 
-    public void SetStatus(bool active) { gameObject.SetActive(active); }
+    public void SetStatus(bool active) 
+    {
+        _isActive = active;
+        gameObject.SetActive(active); 
+
+        if (isLocalPlayer)
+        {
+            CmdSetStatus(active);
+        }
+    }
+
+    [Command]
+    private void CmdSetStatus(bool active)
+    {
+        _isActive = active;
+        RpcSetStatus(_isActive);
+    }
+
+    [ClientRpc]
+    private void RpcSetStatus(bool active)
+    {
+        gameObject.SetActive(active);
+    }
 
     public void SetPlayerNetworkController(PlayerNetworkController player)
     {
