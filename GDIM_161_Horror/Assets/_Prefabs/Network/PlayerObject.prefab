@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 406587723725117930}
   - component: {fileID: 4859096521726247722}
   - component: {fileID: 8211828569070252325}
-  - component: {fileID: 8749218786726360847}
-  - component: {fileID: 6749709030042763447}
+  - component: {fileID: 7860479749061422379}
+  - component: {fileID: 5227340818957696237}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -184,7 +184,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
---- !u!114 &8749218786726360847
+--- !u!114 &7860479749061422379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,52 +193,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 2187478208706028096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a066ddbf125f9546bcadc947418566b, type: 3}
+  m_Script: {fileID: 11500000, guid: ced1b68963272494b9b3d3bed1584a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _tokens:
     _tokens: []
-  _channelTypeExpanded: 1
-  _metadataExpanded: 1
-  _activationModeExpanded: 0
-  _tokensExpanded: 0
-  _ampExpanded: 0
-  _activationFaderSettings:
-    _volume: 1
-    _fadeInTicks: 0
-    _fadeOutTicks: 1500000
-  _triggerFaderSettings:
-    _volume: 1
-    _fadeInTicks: 7500000
-    _fadeOutTicks: 11500000
-  _broadcastPosition: 1
-  _channelType: 0
-  _inputName: 
-  _mode: 1
-  _muted: 0
-  _playerId: 
-  _useTrigger: 0
+  _range: 10
   _roomName: Global
-  _priority: -2
---- !u!114 &6749709030042763447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2187478208706028096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3737438748cf23f448d18cd2c6192e95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tokens:
-    _tokens: []
+  _useTrigger: 0
   _roomExpanded: 1
   _tokensExpanded: 0
   _colliderExpanded: 0
+--- !u!114 &5227340818957696237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187478208706028096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a76c0688e4bd80499ffa3b6a2aed3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tokens:
+    _tokens: []
+  _range: 10
   _roomName: Global
   _useTrigger: 0
+  _roomExpanded: 1
+  _metadataExpanded: 0
+  _activationModeExpanded: 0
+  _tokensExpanded: 0
+  _inputName: 
+  _mode: 1
+  _muted: 0
+  _prority: 0
 --- !u!1 &6032074966439526672
 GameObject:
   m_ObjectHideFlags: 0
