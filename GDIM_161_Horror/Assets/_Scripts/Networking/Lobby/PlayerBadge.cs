@@ -43,6 +43,11 @@ public class PlayerBadge: PlayerIconGetter
         gameObject.SetActive(false);
     }
 
+    void Update()
+    {
+        gameObject.SetActive(_isActive);
+    }
+
     public void SetStatus(bool active) 
     {
         _isActive = active;
