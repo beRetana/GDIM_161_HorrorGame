@@ -40,7 +40,7 @@ public class PlayerBadge: PlayerIconGetter
     protected override void Start() 
     {
         base.Start();
-        SetStatus(false);
+        gameObject.SetActive(false);
     }
 
     public void SetStatus(bool active) 
@@ -65,15 +65,15 @@ public class PlayerBadge: PlayerIconGetter
     private void CmdSetStatus(bool active)
     {
         Debug.Log("Setting status Command");
-        _isActive = active;
-        RpcSetStatus(_isActive);
+        this._isActive = active;
+        RpcSetStatus(this._isActive);
     }
 
     [ClientRpc]
     private void RpcSetStatus(bool active)
     {
         Debug.Log("Setting status Propagation");
-        gameObject.SetActive(active);
+        this.gameObject.SetActive(active);
     }
 
     public void SetPlayerNetworkController(PlayerNetworkController player)
