@@ -25,7 +25,6 @@ public class NewNetworkManager : NetworkManager
 
         NetworkServer.AddPlayerForConnection(conn, playerInstance.gameObject);
         playerInstance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
-        Debug.Log("Player Instantiated " + _playersInGame.Count);
     }
 
     public void StartGame(string SceneName) { ServerChangeScene(SceneName); }
