@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Steamworks;
 using TMPro;
 using Mirror;
+using Mono.CompilerServices.SymbolWriter;
 
 
 public class PlayerBadge: NetworkBehaviour
@@ -44,17 +45,21 @@ public class PlayerBadge: NetworkBehaviour
     private void Start() 
     {
         ImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnImageLoaded);
+        SetStatus(false);
     }
 
-    public void GetPlayerNetworkController(PlayerNetworkController player)
+    public void SetStatus(bool active) { gameObject.SetActive(active); }
+
+    public void SetPlayerNetworkController(PlayerNetworkController player)
     {
         _playerName = player.PlayerName;
         _connectionID = player.ConnectionID;
         _playerSteamID = player.PlayerSteamID;
         _isReady = player.Ready;
+        UpdatePlayerValues();
     }
 
-    public void SetPlayerValues()
+    public void UpdatePlayerValues()
     {
         _playerNameText.text = _playerName;
         ChangeReadyStatus();

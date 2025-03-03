@@ -22,10 +22,10 @@ public class NewNetworkManager : NetworkManager
         playerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, PlayersInGame.Count);
 
         NetworkServer.AddPlayerForConnection(conn, playerInstance.gameObject);
-        playerInstance.GetComponent<NetworkIdentity>()?.AssignClientAuthority(conn);
+        playerInstance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+        PlayersInGame.Add(playerInstance);
 
         LobbyController.Instance.UpdatePlayerList();
-        Debug.Log($"Player {playerInstance.gameObject.name} Added");
     }
 
     public void StartGame(string SceneName) { ServerChangeScene(SceneName); }

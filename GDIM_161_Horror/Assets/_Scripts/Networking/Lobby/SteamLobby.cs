@@ -60,7 +60,6 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName().ToString() + "'s Lobby");
     }
 
-
     private void OnJoinRequest(GameLobbyJoinRequested_t callback)
     {
         Debug.Log("Request To Join Lobby");
@@ -80,7 +79,6 @@ public class SteamLobby : MonoBehaviour
 
         manager.StartClient();
     }
-
 }
 
 

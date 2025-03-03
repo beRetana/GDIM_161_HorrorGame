@@ -12,18 +12,18 @@ public class LobbyController : MonoBehaviour
     public static LobbyController Instance;
 
     //UI Elements
-    [SerializeField] private TextMeshProUGUI _lobbyName;
-    [SerializeField] private TextMeshProUGUI _localPlayerReadyText;
     [SerializeField] private Button _startGameButton;
+    [SerializeField] private RawImage _localPlayerAvatar;
 
     //Player Data
-    [SerializeField] private GameObject _playerContent; // change this for a info displayer for local player
-    [SerializeField] private GameObject _playerInfoDisplay; // change this for a info displayer for other players
+    [SerializeField] private List<PlayerBadge> _playerBadges = new List<PlayerBadge>();
 
-    private List<PlayerNetworkController> _playerListItems = new List<PlayerNetworkController>();
     private PlayerNetworkController _localPlayerController;
 
     public PlayerNetworkController LocalPlayerController { get { return _localPlayerController; } private set { } }
+
+    private bool _hostBadgeCreated;
+    private int _playerCount;
 
     //Manager
     private NewNetworkManager manager;
@@ -52,12 +52,7 @@ public class LobbyController : MonoBehaviour
 
     public void UpdateButton()
     {
-        if(_localPlayerController.Ready)
-        {
-            _localPlayerReadyText.text = "Unready";
-            return;
-        }
-        _localPlayerReadyText.text = "Ready";
+        // Change for local display
     }
 
     public void CheckIfAllReady()
@@ -95,50 +90,38 @@ public class LobbyController : MonoBehaviour
 
     public void UpdatePlayerList()
     {
-        /*
-        if(!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
-        if(_playerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
-        if(_playerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
-        if(_playerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
-        */
+        if (!_hostBadgeCreated) CreateHostPlayerItem(); //Host
+        if(_playerBadges.Count < Manager.PlayersInGame.Count) CreateClientPlayerItem();
+        if(_playerBadges.Count > Manager.PlayersInGame.Count) RemovePlayerItem();
+        if(_playerBadges.Count == Manager.PlayersInGame.Count) UpdatePlayerItem();
     }
 
     public void CreateHostPlayerItem()
     {
-        /*
-        foreach(PlayerNetworkController player in Manager.GamePlayers)
+        Debug.Log("Creating Host Player Item: " + Manager.PlayersInGame.Count);
+        foreach (PlayerNetworkController player in Manager.PlayersInGame)
         {
-            GameObject NewPlayerItem = Instantiate(_playerInfoDisplay) as GameObject;
-
-            _playerListItems.Add(_localPlayerController);
+            CreateBadge(player);
         }
-        PlayerItemCreated = true;
-        */
+        _hostBadgeCreated = true;
     }
 
     public void CreateClientPlayerItem()
     {
-        /*
-        foreach(PlayerNetworkController player in Manager.GamePlayers)
+        foreach(PlayerNetworkController player in Manager.PlayersInGame)
         {
-            if(!_playerListItems.Any(b => b.ConnectionID == player.ConnectionID))
+            if(!_playerBadges.Any(b => b.ConnectionID == player.ConnectionID))
             {
-                GameObject NewPlayerItem = Instantiate (_playerInfoDisplay) as GameObject;
-                PlayerListItem NewPlayerItemScript = NewPlayerItem.GetComponent<PlayerInfoLobby>().GetPlayerNetworkController();
-
-                NewPlayerItemScript._playerName = player._playerName;
-                NewPlayerItemScript._connectionID = player.ConnectionID;
-                NewPlayerItemScript.PlayerSteamID = player.PlayerSteamID;
-                NewPlayerItemScript._isReady = player._ready;
-                NewPlayerItemScript.SetPlayerValues();
-            
-                NewPlayerItem.transform.SetParent(_playerContent.transform);
-                NewPlayerItem.transform.localScale = Vector3.one;
-
-                _playerListItems.Add(NewPlayerItemScript); 
+                CreateBadge(player);
             }
         }
-        */
+    }
+
+    private void CreateBadge(PlayerNetworkController player)
+    {
+        _playerBadges[_playerCount].SetStatus(true);
+        _playerBadges[_playerCount].SetPlayerNetworkController(player);
+        _playerCount++;
     }
 
     public void UpdatePlayerItem()
