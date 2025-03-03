@@ -43,11 +43,6 @@ public class PlayerBadge: PlayerIconGetter
         gameObject.SetActive(false);
     }
 
-    void Update()
-    {
-        gameObject.SetActive(_isActive);
-    }
-
     public void SetStatus(bool active) 
     {
         _isActive = active;
@@ -66,7 +61,7 @@ public class PlayerBadge: PlayerIconGetter
         SetStatus(true);
     }
 
-    [Command(requiresAuthority = false)]
+    [Command]
     private void CmdSetStatus(bool active)
     {
         Debug.Log("Setting status Command");
