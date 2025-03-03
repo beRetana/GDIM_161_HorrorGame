@@ -6,7 +6,7 @@ using TMPro;
 using Mirror;
 
 
-public class PlayerInfoLobby: NetworkBehaviour
+public class PlayerBadge: NetworkBehaviour
 {
     [SerializeField] private const string _READY_DISPLAY_TEXT = "SIGNED";
     [SerializeField] private const string _NOT_READY_DISPLAY_TEXT = "YET TO SIGN";

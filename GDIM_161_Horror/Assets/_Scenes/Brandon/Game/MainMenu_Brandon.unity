@@ -232,9 +232,9 @@ RectTransform:
   - {fileID: 1051203560}
   m_Father: {fileID: 529104129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -225.6, y: 136.1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 240.4, y: -125.899994}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &381798077
@@ -870,7 +870,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d02a1c95b8394347b64f8bec58f76eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentLobbyID: 480
   HostButton: {fileID: 381798075}
 --- !u!114 &1858924965
 MonoBehaviour:
@@ -917,8 +916,8 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: Assets/_Scenes/Joey/MainMenu.unity
-  onlineScene: Assets/_Scenes/Joey/Lobby.unity
+  offlineScene: Assets/_Scenes/Brandon/Game/MainMenu_Brandon.unity
+  onlineScene: Assets/_Scenes/Brandon/Game/Lobby_Brandon.unity
   offlineSceneLoadDelay: 0
   transport: {fileID: 1858924966}
   networkAddress: localhost
@@ -947,7 +946,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   _playerNetworkController: {fileID: 6141512509936404535, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
-  _lobbyScene: Lobby
+  _lobbyScene: Lobby_Brandon
 --- !u!4 &1858924968
 Transform:
   m_ObjectHideFlags: 0
@@ -956,7 +955,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858924963}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 11.704646, y: 3.5780475, z: 6.520576}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1089,8 +1088,8 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1858924968}
   - {fileID: 2106535549}
   - {fileID: 165348871}
   - {fileID: 1413135532}
+  - {fileID: 1858924968}
   - {fileID: 1452384886}

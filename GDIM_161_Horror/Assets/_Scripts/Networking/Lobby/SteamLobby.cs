@@ -16,24 +16,14 @@ public class SteamLobby : MonoBehaviour
     protected Callback<LobbyEnter_t> LobbyEntered;
 
     //Variables
-    public ulong CurrentLobbyID;
+    private ulong _currentLobbyID;
     private const string HostAddressKey = "HostAddress";
     private NewNetworkManager manager;
 
+    public ulong CurrentLobbyID { get {  return _currentLobbyID; } }
+
     //GameObject
     public GameObject HostButton;
-
-    /* private void Start()
-     {
-         if (!SteamManager.Initialized) { return; }
-         if (Instance == null) { Instance = this; }
-
-         manager = GetComponent<NewNetworkManager>();
-
-         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
-         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-     }*/
 
     private void Start()
     {
@@ -92,7 +82,7 @@ public class SteamLobby : MonoBehaviour
     {
         HostButton.SetActive(false);
         //Everyone
-        CurrentLobbyID = callback.m_ulSteamIDLobby;
+        _currentLobbyID = callback.m_ulSteamIDLobby;
 
 
         //Clients
