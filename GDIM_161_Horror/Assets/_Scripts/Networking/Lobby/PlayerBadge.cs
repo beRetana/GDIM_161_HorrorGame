@@ -58,10 +58,11 @@ public class PlayerBadge: PlayerIconGetter
         _playerNameText.text = _playerName;
         ChangeReadyStatus();
         if (!_avatarReceived) GetPlayerIcon();
+        gameObject.SetActive(true);
         SetStatus(true);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdSetStatus(bool active)
     {
         Debug.Log("Setting status Command");
