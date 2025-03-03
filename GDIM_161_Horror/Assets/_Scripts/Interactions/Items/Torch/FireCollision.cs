@@ -14,13 +14,14 @@ namespace Interactions
             if (fireableObject == null) Destroy(this);
         }
 
-        private void OnTriggerEnter2D(Collider2D col)
+        private void OnTriggerEnter(Collider col)
         {
             if (this.IsLit()) return; //check if this is already lit
 
             if (!col.CompareTag("Fire")) return; //check if other is fire
 
             FireCollision colFire = col.gameObject.GetComponent<FireCollision>();
+            Debug.Log($"COLLIDED FIRE {colFire.gameObject.name}, {this}");
 
             if (!colFire.IsLit()) return; //check if other fire is lit
 
