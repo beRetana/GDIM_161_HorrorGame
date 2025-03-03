@@ -46,7 +46,7 @@ public class LobbyController : MonoBehaviour
     public void FindLocalPlayer() 
     { 
         _localPlayerController = GameObject.Find("LocalGamePlayer")?.GetComponent<PlayerNetworkController>(); 
-        _localPlayerController.gameObject.SetActive(false);
+        //_localPlayerController.gameObject.SetActive(false);
     }
 
 
@@ -90,11 +90,12 @@ public class LobbyController : MonoBehaviour
 
     public void UpdatePlayerList()
     {
-        Debug.Log("Updating Player List: " + Manager.PlayersInGame.Count);
+        Debug.Log("Updating Player List Count: " + Manager.PlayersInGame.Count);
+        Debug.Log("Updating Player badge Count: " + _playerCount);
         if (!_hostBadgeCreated) CreateHostPlayerItem(); //Host
-        if(_playerBadges.Count < Manager.PlayersInGame.Count) CreateClientPlayerItem();
-        if(_playerBadges.Count > Manager.PlayersInGame.Count) RemovePlayerItem();
-        if(_playerBadges.Count == Manager.PlayersInGame.Count) UpdatePlayerItem();
+        if(_playerCount < Manager.PlayersInGame.Count) CreateClientPlayerItem();
+        if(_playerCount > Manager.PlayersInGame.Count) RemovePlayerItem();
+        if(_playerCount == Manager.PlayersInGame.Count) UpdatePlayerItem();
     }
 
     public void CreateHostPlayerItem()
@@ -120,12 +121,12 @@ public class LobbyController : MonoBehaviour
     private void CreateBadge(PlayerNetworkController player)
     {
         if (player.ConnectionID == _localPlayerController.ConnectionID) _localPlayerBadge.SetPlayerController(player);
-        Debug.Log(_playerCount);
         _playerBadges[_playerCount].SetStatus(true);
         _playerBadges[_playerCount].SetPlayerNetworkController(player);
         _playerBadges[_playerCount].UpdatePlayerValues();
         _playerCount++;
-        Debug.Log($"Creating Badge for {player.PlayerName}, {player.ConnectionID}");
+        Debug.Log($"Player Count {_playerCount}");
+        Debug.Log($"Created Badge for {player.PlayerName}, {player.ConnectionID}");
     }
 
     public void UpdatePlayerItem()
