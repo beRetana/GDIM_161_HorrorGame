@@ -25,6 +25,7 @@ public class NewNetworkManager : NetworkManager
         playerInstance.GetComponent<NetworkIdentity>()?.AssignClientAuthority(conn);
 
         LobbyController.Instance.UpdatePlayerList();
+        Debug.Log($"Player {playerInstance.gameObject.name} Added");
     }
 
     public void StartGame(string SceneName) { ServerChangeScene(SceneName); }

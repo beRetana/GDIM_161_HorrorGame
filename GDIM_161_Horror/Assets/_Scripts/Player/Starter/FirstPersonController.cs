@@ -87,7 +87,6 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-            UnlockPlayer();
         }
 
         private void OnDestroy()
