@@ -93,21 +93,18 @@ public class LobbyController : MonoBehaviour
         Debug.Log("Updating Player List Count: " + Manager.PlayersInGame.Count);
         Debug.Log("Updating Player badge Count: " + _playerCount);
         if (!_hostBadgeCreated) CreateHostPlayerItem(); //Host
-        else if(_playerCount < Manager.PlayersInGame.Count) CreateClientPlayerItem();
+        if(_playerCount < Manager.PlayersInGame.Count) CreateClientPlayerItem();
         else if(_playerCount > Manager.PlayersInGame.Count) RemovePlayerItem();
-        else if(_playerCount == Manager.PlayersInGame.Count) UpdatePlayerItem();
+        else UpdatePlayerItem();
     }
 
     public void CreateHostPlayerItem()
     {
         foreach (PlayerNetworkController player in Manager.PlayersInGame)
-        {
-            if (_localPlayerController != null)
-            {
-                CreateBadge(player);
-                _hostBadgeCreated = true;
-                return;
-            }
+        { 
+            CreateBadge(player);
+            _hostBadgeCreated = true;
+            return;
         }
     }
 
@@ -121,6 +118,7 @@ public class LobbyController : MonoBehaviour
 
     private void CreateBadge(PlayerNetworkController player)
     {
+        if (_localPlayerController == null) return;
         if (player.ConnectionID == _localPlayerController.ConnectionID) _localPlayerBadge.SetPlayerController(player);
         _playerBadges[_playerCount].SetPlayerNetworkController(player);
         _playerBadges[_playerCount].UpdatePlayerValues();
