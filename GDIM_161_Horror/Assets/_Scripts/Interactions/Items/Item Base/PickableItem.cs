@@ -10,6 +10,7 @@ namespace Interactions
     {
         protected InteractableItem _interactableItem;
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
+        public int OwnerPlayerID { get; private set; }
 
         protected virtual void Start()
         {
@@ -22,17 +23,18 @@ namespace Interactions
             return $"Item: {this.name}";
         }
 
-        protected virtual void PickItem(int playerId) // <= (InteractableItem)this.Interact()
+        protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
             if (IsPossessed)
             {
                 Debug.Log($"tried PICK UP on {this}, but is already possessed");
                 return;
             }
-            bool success = PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().PickUpItem(this);
+
+            bool success = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().PickUpItem(this);
             if (!success) return;
 
-            SetPossessed(true);
+            SetPossessed(true, playerID);
         }
 
         public virtual void UnPossessItem()
@@ -40,13 +42,15 @@ namespace Interactions
             SetPossessed(false);
         }
 
-        protected virtual void SetPossessed(bool toPossess)
+        protected virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
+            Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
             IsPossessed = toPossess;
+            OwnerPlayerID = playerID;
             _interactableItem.SetInteractive(!toPossess);
         }
 
-        public virtual void UseItem(int playerId) { }
+        public virtual void UseItem(int playerID) { }
 
 
         public virtual void OrientItemInHand(bool isLeftHand) 

@@ -20,7 +20,7 @@ namespace Interactions
         [Header("Model Stuff")]
         [SerializeField] Transform torchAnchor;
         [SerializeField] Transform torchWood;
-        [SerializeField] SphereCollider torchFireCollider;
+        [SerializeField] FireCollision torchFireCollider;
 
         [Header("Fire Stuff")]
         [SerializeField] ParticleSystem flameVFX;
@@ -72,7 +72,7 @@ namespace Interactions
             torchFireCollider.enabled = false;
 
             ToggleFlame(false);
-            LightFlame();
+            //LightFlame();
         }
 
         private void Update()
@@ -103,6 +103,8 @@ namespace Interactions
             Debug.Log("Using torch");
             PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
         }
+
+        #region pyrolysis
 
         private void UpdatePyrolysis()
         {
@@ -145,6 +147,9 @@ namespace Interactions
             return x;
         }
 
+        #endregion pyrolysis
+
+        #region flame_core
         private void UpdateFlameOrientation()
         {
             flameBase.eulerAngles = Vector3.up;
@@ -155,7 +160,35 @@ namespace Interactions
             Lit = setOn;
             flameVFX.gameObject.SetActive(setOn);
         }
+        public void BlowOutFlame() // via wind
+        {
+            if (!Lit) return;
+            StartCoroutine(BurnOutFire(flameBurnOutTime, flameDecayRate, lightDecayRate));
+        }
+        public void LightFlame()
+        {
+            if (Lit) return;
+            FlameFullExtinguish();
+            Lit = true;
+            StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
+        }
 
+        #endregion flame_core
+
+        #region flame_helpers
+        private void ScaleFlameScale(float scalar)
+        {
+            Vector3 newFlameScale = Vector3.one * scalar;
+
+            flameRed.localScale = newFlameScale;
+            flameOrange.localScale = newFlameScale;
+            flameYellow.localScale = newFlameScale;
+        }
+        private void SetVisualLightIntensity(float intensePercent)
+        {
+            lightIntensity = Mathf.Min(maxLightIntensity * intensePercent * intensePercent, maxLightIntensity);
+            torchLight.intensity = lightIntensity;
+        }
         private void FlameFullSize()
         {
             Lit = true;
@@ -164,7 +197,6 @@ namespace Interactions
             torchLight.intensity = maxLightIntensity;
             ScaleFlameScale(1f);
         }
-
         private void FlameFullExtinguish()
         {
             Lit = false;
@@ -174,12 +206,19 @@ namespace Interactions
             ScaleFlameScale(0f);
         }
 
-        public void BlowOutFlame() // via wind
+
+        #endregion flame_helpers
+
+
+        #region flame_spread
+        private void RecieveFlameContact(Collider other)
         {
-            if (!Lit) return;
-            StartCoroutine(BurnOutFire(flameBurnOutTime, flameDecayRate, lightDecayRate));
+            
         }
 
+        #endregion flame_spread
+
+        #region flame_animations
         private IEnumerator BurnOutFire(float burnOutTime, float flameExpDecayRate, float lightExpDecayRate)
         {
             //exponential decay
@@ -197,22 +236,7 @@ namespace Interactions
             FlameFullExtinguish();
         }
 
-        private void ScaleFlameScale(float scalar)
-        {
-            Vector3 newFlameScale = Vector3.one * scalar;
-
-            flameRed.localScale = newFlameScale;
-            flameOrange.localScale = newFlameScale;
-            flameYellow.localScale = newFlameScale;
-        }
-
-        public void LightFlame()
-        {
-            if (Lit) return;
-            FlameFullExtinguish();
-            StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
-        }
-
+      
         /// <summary>
         /// 1 / (1 + b * e^(-kx))
         /// </summary>
@@ -234,12 +258,8 @@ namespace Interactions
             flameSize = 1f;
             FlameFullSize();
         }
+        #endregion flame_animations
 
-        private void SetVisualLightIntensity(float intensePercent)
-        {
-            lightIntensity = Mathf.Min(maxLightIntensity * intensePercent * intensePercent, maxLightIntensity);
-            torchLight.intensity = lightIntensity;
-        }
 
         //public void BurnOutFlame() // via end of wood
         //public void SmotherFlame() // via dropping
