@@ -125,8 +125,8 @@ namespace Interactions
         private void UpdateTimers()
         {
             burnVelocity = CalcSmoothRandom(burnVelocity);
-            Debug.Log($"burnAcceleration = {burnAcelleration}");
-            Debug.Log($"burnVelocity = {burnVelocity}");
+            //Debug.Log($"burnAcceleration = {burnAcelleration}");
+            //Debug.Log($"burnVelocity = {burnVelocity}");
 
             pyrolysisTimer -= burnVelocity * Time.fixedDeltaTime;
             BurnTimer -= burnVelocity * Time.fixedDeltaTime; // * tickSpeedMultiplier_ByFloor

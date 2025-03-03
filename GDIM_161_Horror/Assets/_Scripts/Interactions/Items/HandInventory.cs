@@ -14,8 +14,10 @@ public class HandInventory : MonoBehaviour
 {
     [Header("General Settings")]
     [SerializeField] private LayerMask _interactableLayer;
-    [SerializeField] private Transform _rightHandTransform;
+    [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
+    [SerializeField] private Transform _rightHandSocket; // item slots
+    [SerializeField] private Transform _leftHandSocket;
 
     [Header("Arms")]
     [SerializeField] private Arms _arms;
@@ -39,25 +41,33 @@ public class HandInventory : MonoBehaviour
         public Rigidbody ItemRigidBody { get { return _itemRigidBody; } set { _itemRigidBody = value; } }
 
         public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
-        public bool IsDomninant { get { return _isDominant; } set { _isDominant = value; } }
+        public bool IsDominant { get { return _isDominant; } set { _isDominant = value; } }
 
-        public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
+        public void SetRigidBody(Rigidbody rigidBody/*, float linearDrag*/)
         {
             _itemRigidBody = rigidBody;
-            ItemRigidBody.useGravity = false;
+            ItemRigidBody.isKinematic = true; // no gravity
+            
+            
+           /* ItemRigidBody.useGravity = false;
             _initialLinearDamping = rigidBody.linearDamping;
             ItemRigidBody.linearDamping = linearDrag;
             ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-            ItemRigidBody.transform.parent = ItemTransform;
+            ItemRigidBody.transform.parent = ItemTransform;*/
         }
 
         public Rigidbody RemoveRigidBody()
         {
             Rigidbody rigidBodyToDrop = ItemRigidBody;
-            ItemRigidBody.useGravity = true;
+            /*Transform pickableParent = _itemTransform.parent;
+            Debug.Log(pickableParent);*/
+            ItemRigidBody.isKinematic = false;//useGravity = true;
+            ItemTransform.SetParent(null);
+
+            /*ItemRigidBody.useGravity = true;
             ItemRigidBody.linearDamping = _initialLinearDamping;
             ItemRigidBody.freezeRotation = false;
-            ItemRigidBody.transform.parent = null;
+            ItemRigidBody.transform.parent = null;*/
             _itemRigidBody = null;
 
             return rigidBodyToDrop;
@@ -292,6 +302,8 @@ public class HandInventory : MonoBehaviour
     public bool PickUpItem(PickableItem pickableItem)
     {
         Transform pickableParent = pickableItem.transform.parent;
+        //Debug.Log($" hey its me pickubale parent the {pickableParent.gameObject.name}");
+        //Debug.Log($"heyo and heres me the fucking gabagoo rb {pickableParent.GetComponent<Rigidbody>().gameObject.name}");
 
         if (pickableParent.GetComponent<Rigidbody>() == null) return false; // DropItem(); <-??
 
@@ -306,10 +318,13 @@ public class HandInventory : MonoBehaviour
         //gameObject.GetComponentInChildren<CapsuleCollider>(), true);
 
         //StartCoroutine(AnimateRotationTowards(pickableParent, inventorySlotOfNewItem.ItemTransform.rotation));
-
-        pickableParent.GetComponent<Rigidbody>().isKinematic = true;//useGravity = false;
+        Debug.Log($"!!!!!!!!!!!!!!! parent{pickableParent} | self {pickableItem}");
+        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
+        inventorySlotOfNewItem.ItemTransform = pickableParent;
+        
+        //pickableParent.GetComponent<Rigidbody>().isKinematic = true;//useGravity = false;
         //pickableParent.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-        pickableParent.transform.SetParent(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID ? _leftHandTransform : _rightHandTransform);
+        pickableParent.transform.SetParent(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID ? _leftHandSocket : _rightHandSocket);
         pickableParent.transform.localPosition = Vector3.zero;
 
 
@@ -355,8 +370,8 @@ public class HandInventory : MonoBehaviour
         PickableItem itemToDrop = dominantSlot.Item;
         Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
 
-        Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
-                                gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+        //Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
+        //                        gameObject.GetComponentInChildren<CapsuleCollider>(), false);
 
         _inventorySlots.RemoveItem();
 

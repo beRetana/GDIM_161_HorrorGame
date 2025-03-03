@@ -225,6 +225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CAMPFIRE_VFX
       objectReference: {fileID: 0}
+    - target: {fileID: 1401886914597690457, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2347329676077029387, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.46020174
@@ -407,6 +411,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.375
       objectReference: {fileID: 0}
+    - target: {fileID: 9019987585197839040, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: _leftHandSocket
+      value: 
+      objectReference: {fileID: 2023278810}
+    - target: {fileID: 9019987585197839040, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: _rightHandSocket
+      value: 
+      objectReference: {fileID: 663868600}
+    - target: {fileID: 9019987585197839040, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: _leftHandTransform
+      value: 
+      objectReference: {fileID: 1336497370}
+    - target: {fileID: 9019987585197839040, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: _rightHandTransform
+      value: 
+      objectReference: {fileID: 334806024}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -514,6 +534,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!4 &334806024 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4838572043574128935, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 151978754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &542508511
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +604,11 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!4 &663868600 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1458154177004918455, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 151978754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &746329221
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1019,10 +1049,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3390137401255878559, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1231,6 +1257,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!4 &1336497370 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4110103092854518916, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 151978754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1587600234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1243,9 +1274,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Torch
       objectReference: {fileID: 0}
+    - target: {fileID: 831233360205059484, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3116399982643216359, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.384
       objectReference: {fileID: 0}
     - target: {fileID: 3116399982643216359, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1253,7 +1288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3116399982643216359, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 14.199
       objectReference: {fileID: 0}
     - target: {fileID: 3116399982643216359, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1353,6 +1388,11 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!4 &2023278810 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 38960982650156893, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 151978754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2045921858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1533,6 +1573,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7130508888354467687, guid: dd76120e8461e6a468cb5dcb9c197846, type: 3}
       propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625617731775526482, guid: dd76120e8461e6a468cb5dcb9c197846, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
