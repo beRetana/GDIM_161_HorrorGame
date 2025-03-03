@@ -88,9 +88,8 @@ public class HandInventory : MonoBehaviour
         public bool IsLHandDom { get; private set; }
         public InventorySlots()
         {
-            L_HandSlot = new();
-            L_HandSlot.Item = null;
-            R_HandSlot = new();
+            L_HandSlot = new() { Item = null };
+            R_HandSlot = new() { Item = null };
             R_HandSlot.Item = null;
             SetLeftHandDominant(false);
         }
@@ -326,7 +325,7 @@ public class HandInventory : MonoBehaviour
         //pickableParent.transform.localPosition = Vector3.zero;
         //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
 
-        pickableItem.OrientItemInHand(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID);
+        pickableItem.OrientItemInHand((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
     }
 
 
