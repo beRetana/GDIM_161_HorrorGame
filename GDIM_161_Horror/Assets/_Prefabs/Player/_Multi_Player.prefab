@@ -215,11 +215,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.01
-  ConnectionID: 0
-  PlayerIdNumber: 0
-  PlayerSteamID: 0
-  PlayerName: 
-  Ready: 0
 --- !u!136 &2716043811166012591
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -286,6 +281,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7354950563374537535, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
   m_PrefabInstance: {fileID: 447784172344227279}
   m_PrefabAsset: {fileID: 0}
+--- !u!81 &7753001516817132320 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 7903510137634922223, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  m_PrefabInstance: {fileID: 447784172344227279}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8923352904098222661 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9070468886778292106, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
@@ -307,6 +307,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   playerCameraTransform: {fileID: 9116085853155801539}
+  audioListener: {fileID: 7753001516817132320}
 --- !u!4 &9116085853155801539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8697592851519638540, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}

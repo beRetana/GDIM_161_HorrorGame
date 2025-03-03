@@ -43,7 +43,12 @@ public class LobbyController : MonoBehaviour
 
     public void ReadyPlayer() { _localPlayerController.ChangeReady(); }
 
-    public void FindLocalPlayer() { _localPlayerController = GameObject.Find("LocalGamePlayer")?.GetComponent<PlayerNetworkController>(); }
+    public void FindLocalPlayer() 
+    { 
+        _localPlayerController = GameObject.Find("LocalGamePlayer")?.GetComponent<PlayerNetworkController>(); 
+        _localPlayerController.gameObject.SetActive(false);
+    }
+
 
     public void UpdateButton()
     {
