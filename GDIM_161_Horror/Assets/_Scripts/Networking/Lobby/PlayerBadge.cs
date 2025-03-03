@@ -92,6 +92,7 @@ public class PlayerBadge: PlayerIconGetter
 
     public void UpdatePlayerValues()
     {
+        Debug.Log("Updating Player Values IN SCRIPT");
         _playerNameText.text = _playerName;
         ChangeReadyStatus();
         if(!_avatarReceived) GetPlayerIcon();
