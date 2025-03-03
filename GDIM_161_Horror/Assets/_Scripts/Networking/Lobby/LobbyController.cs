@@ -119,12 +119,13 @@ public class LobbyController : MonoBehaviour
 
     private void CreateBadge(PlayerNetworkController player)
     {
-        if (player.ConnectionID == _localPlayerController?.ConnectionID) _localPlayerBadge.SetPlayerController(player);
-        Debug.Log($"Creating Badge for {player.PlayerName}, {player.ConnectionID}");
+        if (player.ConnectionID == _localPlayerController.ConnectionID) _localPlayerBadge.SetPlayerController(player);
+        Debug.Log(_playerCount);
         _playerBadges[_playerCount].SetStatus(true);
         _playerBadges[_playerCount].SetPlayerNetworkController(player);
         _playerBadges[_playerCount].UpdatePlayerValues();
         _playerCount++;
+        Debug.Log($"Creating Badge for {player.PlayerName}, {player.ConnectionID}");
     }
 
     public void UpdatePlayerItem()
