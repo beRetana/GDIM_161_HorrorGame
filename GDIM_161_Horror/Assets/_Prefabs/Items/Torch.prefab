@@ -126,8 +126,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3241753861720095343}
   - component: {fileID: 4746269070312977930}
-  - component: {fileID: 8064316778080412964}
   - component: {fileID: 3027559608405286185}
+  - component: {fileID: 4397109543003769924}
   m_Layer: 7
   m_Name: FlameBasePos
   m_TagString: Fire
@@ -172,7 +172,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &8064316778080412964
+--- !u!114 &3027559608405286185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814854870198980137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maybeFireable: {fileID: 6533591682246883934}
+--- !u!54 &4397109543003769924
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,19 +212,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3027559608405286185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6814854870198980137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  torch: {fileID: 6630640134703827395}
 --- !u!1001 &3500864740308416971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -535,19 +535,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+--- !u!1 &6533591682246883934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 41419630895823404, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+  m_PrefabInstance: {fileID: 6501190067480969330}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6627252046561620547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 126214538651071025, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
   m_PrefabInstance: {fileID: 6501190067480969330}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6630640134703827395 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
-  m_PrefabInstance: {fileID: 6501190067480969330}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e3fc7831b2d8a24ea7adfeb0c948291, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

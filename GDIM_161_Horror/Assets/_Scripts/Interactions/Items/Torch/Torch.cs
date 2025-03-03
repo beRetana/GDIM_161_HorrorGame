@@ -6,7 +6,7 @@ using Player;
 
 namespace Interactions
 {
-    public class Torch : PickableItem
+    public class Torch : PickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
@@ -55,9 +55,10 @@ namespace Interactions
         private float maxFlameSize;
         private float flameSize;
         private float maxLightIntensity;
-        private float lightIntensity = 1f;
+        private float lightIntensity = -1f;
 
         public bool Lit { get; private set; }
+        public bool IsLit() { return Lit; }
 
         protected override void Start()
         {
@@ -69,7 +70,7 @@ namespace Interactions
             maxFireLocalYPos = flameBase.localPosition.y;
             maxFlameSize = flameRed.localScale.y;
             maxLightIntensity = torchLight.intensity;
-            torchFireCollider.enabled = false;
+            //torchFireCollider.enabled = false;
 
             ToggleFlame(false);
             //LightFlame();
