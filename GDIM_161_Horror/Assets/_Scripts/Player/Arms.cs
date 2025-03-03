@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using StarterAssets;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 //using static System.IO.Enumeration.FileSystemEnumerable<TResult>;
 
 
@@ -102,6 +103,18 @@ namespace Player
             return IsLDom() ? LArm : RArm;
         }
 
+        private Transform GetHandTransform(Hand thisHand)
+        {
+            if (thisHand == leftHand) return LArm;
+            if (thisHand == rightHand) return RArm;
+            return null;
+        }
+
+        public bool IsDomOutStretched()
+        {
+            return GetDominantHand().IsOutStretched();
+        }
+
         #endregion hand_helpers
 
         #region hand_modifiers
@@ -129,10 +142,11 @@ namespace Player
 
         #region animation_calls
 
-        public void HandMoveOutAndIn(bool isLHandDom)
+        public void HandMoveOutAndIn(bool isOnLHand)
         {
-            if (GetDominantHand().IsInAnimation() || GetDominantHand().IsOutStretched()) return;
-            StartCoroutine(AnimationHandOutAndIn());
+            Hand thisHand = isOnLHand ? leftHand : rightHand;
+            if (thisHand.IsInAnimation() || thisHand.IsOutStretched()) return;
+            StartCoroutine(AnimationHandOutAndIn(thisHand));
         }
 
         public void ToggleHandMoveOutOrIn(bool? isLHandDom)
@@ -157,10 +171,10 @@ namespace Player
         #endregion animation_calls
 
         #region animation_animation
-        private IEnumerator AnimationHandOutAndIn()
+        private IEnumerator AnimationHandOutAndIn(Hand thisHand) // used ALSO for picking up items with auxilary hand
         {
-            Transform handTransform = GetDominantHandTransform();
-            Hand thisHand = PrepareDominantHandForAnimation(handTransform.localPosition);
+            Transform handTransform = GetHandTransform(thisHand);
+            PrepareHandForAnimation(thisHand, handTransform.localPosition);
 
             for (float elapsedTime = 0f; elapsedTime < duration; elapsedTime += Time.deltaTime)
             {
@@ -216,6 +230,13 @@ namespace Player
             thisHand.SetAnimStartPosition(recentLocalPos);
 
             return thisHand;
+        }
+
+        void PrepareHandForAnimation(Hand thisHand, Vector3 handLocalPos)
+        {
+            thisHand.SetOutStretched(true);
+            thisHand.SetInAnimation(true);
+            thisHand.SetAnimStartPosition(handLocalPos);
         }
 
         void GoToAnimStartPos(Hand hand, Transform handTransform)

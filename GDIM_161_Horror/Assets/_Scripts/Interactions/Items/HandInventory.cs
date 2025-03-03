@@ -319,33 +319,43 @@ public class HandInventory : MonoBehaviour
 
     private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
     {
+        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
+
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
         inventorySlotOfNewItem.ItemTransform = pickableParent;
 
-        pickableParent.transform.SetParent((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant) ? _leftHandSocket : _rightHandSocket);
+        pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
         //pickableParent.transform.localPosition = Vector3.zero;
         //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
 
-        pickableItem.OrientItemInHand(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID);
+        pickableItem.OrientItemInHand(isLeftHandAction);
     }
 
 
     private void DropItem(float throwForce = 0)
     {
+        bool isThrow = _arms.IsDomOutStretched();
+
         InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
         if (dominantSlot.Item == null) return;
 
         PickableItem itemToDrop = dominantSlot.Item;
         Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
 
-        //Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
-        //                        gameObject.GetComponentInChildren<CapsuleCollider>(), false);
-
         _inventorySlots.RemoveItem();
 
-        itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+        if(isThrow)
+        {
+            itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            _arms.ToggleHandMoveOutOrIn(_inventorySlots.IsLHandDom);
+        }
+        else
+        {
+            itemRigidBodyToDrop.AddForce(transform.forward, ForceMode.Impulse);
+            _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
+        }
+
         itemToDrop.UnPossessItem();
-        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
     }
 
 
