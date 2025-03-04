@@ -3,7 +3,7 @@ using UnityEngine;
 public class FogTriggerZone : MonoBehaviour
 {
     public float newFogDensity = 0.1f;
-    public float transitionSpeed = 1f;
+    public float transitionSpeed = 0.5f;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
