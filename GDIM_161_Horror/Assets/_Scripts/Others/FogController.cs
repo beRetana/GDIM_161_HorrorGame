@@ -49,12 +49,13 @@ public class FogController : MonoBehaviour
         }
     }
 
-    public void SetFogDensity(float newDensity)
+    public void SetFogDensity(float newDensity, float newSpeed)
     {
         if (Mathf.Abs(RenderSettings.fogDensity - newDensity) > 0.001f)
         {
-            fogDensity = newDensity;
-            isChanging = true; // Only run Update() if fog needs to change
+            fogDensity = newDensity;  // Set the new target density
+            changeSpeed = newSpeed;   // Update the speed dynamically
+            isChanging = true;        
         }
     }
 }
