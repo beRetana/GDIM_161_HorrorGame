@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
-using System;
-using Unity.Cinemachine;
 
 public class CameraController : NetworkBehaviour
 {
@@ -18,7 +14,7 @@ public class CameraController : NetworkBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        ToggleObjects(true);
+        if (isLocalPlayer) ToggleObjects(true);
     }
 
     void ToggleObjects(bool active)
