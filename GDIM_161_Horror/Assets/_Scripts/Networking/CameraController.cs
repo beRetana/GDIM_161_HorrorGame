@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 using System;
+using Unity.Cinemachine;
 
 public class CameraController : NetworkBehaviour
 {
-    [SerializeField] private Transform _cameraBrainTransform;
-    private void Start()
+    [SerializeField] private GameObject _cameraBrainTransform;
+
+    override public void OnStartAuthority()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         ToggleObjects(false);
@@ -16,12 +18,17 @@ public class CameraController : NetworkBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        if (isLocalPlayer) ToggleObjects(true);
+        ToggleObjects(true);
     }
 
     void ToggleObjects(bool active)
     {
-        _cameraBrainTransform.gameObject.SetActive(active);
+        _cameraBrainTransform.SetActive(active);
         gameObject.SetActive(active);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
