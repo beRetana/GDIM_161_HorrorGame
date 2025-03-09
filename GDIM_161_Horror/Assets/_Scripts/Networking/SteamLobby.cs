@@ -103,9 +103,6 @@ public class SteamLobby : MonoBehaviour
         manager.networkAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
 
         manager.StartClient();
-        Debug.LogError("called Start Client thing");
-
-
     }
 
 }
