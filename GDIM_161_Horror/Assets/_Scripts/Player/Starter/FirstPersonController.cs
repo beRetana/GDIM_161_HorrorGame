@@ -43,12 +43,12 @@ namespace StarterAssets
         private void Awake()
         {
 			DontDestroyOnLoad(this.gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         protected override void Start()
         {   
             base.Start();
-            if (!isLocalPlayer) this.enabled = false;
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 
@@ -61,8 +61,6 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDestroy()
