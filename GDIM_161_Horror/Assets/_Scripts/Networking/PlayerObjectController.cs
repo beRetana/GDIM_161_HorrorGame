@@ -37,7 +37,7 @@ public class PlayerObjectController : NetworkBehaviour
 
    private void Start()
    {
-    DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
    }
 
     
@@ -53,8 +53,6 @@ public class PlayerObjectController : NetworkBehaviour
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-
-        
     }
 
    
