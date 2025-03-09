@@ -3,31 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System;
 
 public class CameraController : NetworkBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public GameObject Cameraholder;
-    public Vector3 offset;
-    
-    
-
-    public override void OnStartAuthority()
+    private void Start()
     {
-        Cameraholder.SetActive(true);
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-
-    public void Update()
-    {
-
-        if(SceneManager.GetActiveScene().name == "Game")
-        {
-
-            Cameraholder.transform.position = transform.position + offset;
-        
-         }
-    }
-
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) => gameObject.SetActive(true);
 }
