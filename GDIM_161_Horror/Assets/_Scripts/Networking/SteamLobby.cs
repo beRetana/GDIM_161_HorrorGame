@@ -58,13 +58,7 @@ public class SteamLobby : MonoBehaviour
     }
 
 
-    public void HostLobby()
-    {
-
-        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, manager.maxConnections);
-
-
-    }
+    public void HostLobby() => SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, manager.maxConnections);
 
     private void OnLobbyCreated(LobbyCreated_t callback)
     {
@@ -75,10 +69,6 @@ public class SteamLobby : MonoBehaviour
 
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName().ToString() + "'s Lobby");
-
-
-
-
     }
 
 
@@ -94,11 +84,9 @@ public class SteamLobby : MonoBehaviour
         //Everyone
         CurrentLobbyID = callback.m_ulSteamIDLobby;
 
-
         //Clients
 
         if (NetworkServer.active) { return; }
-
 
         manager.networkAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
 
