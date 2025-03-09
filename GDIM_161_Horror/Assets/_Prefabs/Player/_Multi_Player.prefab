@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2584219610364350201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5975178394233190784}
+  m_Layer: 8
+  m_Name: CameraHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5975178394233190784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2584219610364350201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2709225641590689041}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &447784172344227279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74,7 +105,7 @@ PrefabInstance:
       objectReference: {fileID: 6927892769346236144}
     - target: {fileID: 4848861366070383520, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4848861366070383520, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: PlayerModel
@@ -100,7 +131,10 @@ PrefabInstance:
     - {fileID: 1560498897346033264, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
     - {fileID: 2645263417649444385, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2571488355673585886, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 5975178394233190784}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
@@ -116,7 +150,7 @@ PrefabInstance:
       addedObject: {fileID: 2716043811166012591}
     - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2545870201421200847}
+      addedObject: {fileID: 3211367576822366334}
     - targetCorrespondingSourceObject: {fileID: 9070468886778292106, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 285546488790262785}
@@ -224,7 +258,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2545870201421200847
+--- !u!114 &3211367576822366334
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,10 +273,10 @@ MonoBehaviour:
   syncDirection: 1
   syncMode: 0
   syncInterval: 0.01
-  target: {fileID: 4725544762908803809}
+  target: {fileID: 2709225641590689041}
   syncPosition: 1
   syncRotation: 1
-  syncScale: 1
+  syncScale: 0
   onlySyncOnChange: 1
   compressRotation: 1
   interpolatePosition: 1
@@ -257,11 +291,6 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
---- !u!4 &4725544762908803809 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5161785678068823854, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
-  m_PrefabInstance: {fileID: 447784172344227279}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6927892769346236144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7354950563374537535, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
