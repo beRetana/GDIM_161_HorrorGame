@@ -32,5 +32,4 @@ public class NewNetworkManager : NetworkManager
     {
         ServerChangeScene(SceneName);
     }
-
 }

@@ -48,7 +48,6 @@ namespace StarterAssets
 		}
 #endif
 
-
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
@@ -71,6 +70,7 @@ namespace StarterAssets
 		
 		private void OnApplicationFocus(bool hasFocus)
 		{
+			Debug.Log("APP FOCUES");
 			if (SceneManager.GetActiveScene().name != _lobbySceneName) SetCursorState(cursorLocked);
 		}
 
