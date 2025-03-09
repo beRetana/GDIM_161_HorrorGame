@@ -55,17 +55,17 @@ public class PlayerObjectController : NetworkBehaviour
 {
     if (scene.name == "Game") // Ensure the scene name matches exactly
     {
-        // // Instantiate DissonanceSetup immediately
-        // if (DissonanceSetup != null)
-        // {
-        //     Instantiate(DissonanceSetup, Vector3.zero, Quaternion.identity);
-        // }
-        // else
-        // {
-        //     Debug.LogError("Prefab is not assigned!");
-        // }
+        // Instantiate DissonanceSetup immediately
+        if (DissonanceSetup != null)
+        {
+            Instantiate(DissonanceSetup, Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("Prefab is not assigned!");
+        }
 
-        // Delay adding MirrorIgnorancePlayer by 1 second
+        
         StartCoroutine(AddMirrorIgnorancePlayer());
     }
 }

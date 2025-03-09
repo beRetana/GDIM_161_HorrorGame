@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 136478200267697056}
   - component: {fileID: 3779964226842856313}
   - component: {fileID: 5446335846433677345}
-  - component: {fileID: 3426846918387931713}
-  - component: {fileID: 4698700222867655414}
+  - component: {fileID: 923559221245786771}
+  - component: {fileID: 584882847360893913}
   m_Layer: 0
   m_Name: DissonanceSetup
   m_TagString: VoiceChatManager
@@ -101,32 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectsTag: VoiceChatManager
---- !u!114 &3426846918387931713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948977645079602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a76c0688e4bd80499ffa3b6a2aed3f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tokens:
-    _tokens: []
-  _range: 1
-  _roomName: Proximity
-  _useTrigger: 0
-  _roomExpanded: 1
-  _metadataExpanded: 0
-  _activationModeExpanded: 0
-  _tokensExpanded: 0
-  _inputName: 
-  _mode: 1
-  _muted: 0
-  _prority: 0
---- !u!114 &4698700222867655414
+--- !u!114 &923559221245786771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,9 +115,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tokens:
     _tokens: []
-  _range: 1
+  _range: 10
   _roomName: Proximity
   _useTrigger: 0
   _roomExpanded: 1
   _tokensExpanded: 0
   _colliderExpanded: 0
+--- !u!114 &584882847360893913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948977645079602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a76c0688e4bd80499ffa3b6a2aed3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tokens:
+    _tokens: []
+  _range: 10
+  _roomName: Proximity
+  _useTrigger: 0
+  _roomExpanded: 1
+  _metadataExpanded: 0
+  _activationModeExpanded: 0
+  _tokensExpanded: 0
+  _inputName: 
+  _mode: 1
+  _muted: 0
+  _prority: 0
