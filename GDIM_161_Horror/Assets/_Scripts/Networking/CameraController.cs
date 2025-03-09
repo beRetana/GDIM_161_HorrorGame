@@ -11,11 +11,17 @@ public class CameraController : NetworkBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        ToggleObjects(false);
     }
 
-    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        _cameraBrainTransform.gameObject.SetActive(true);
-        gameObject.SetActive(true);
+        ToggleObjects(true);
+    }
+
+    void ToggleObjects(bool active)
+    {
+        _cameraBrainTransform.gameObject.SetActive(active);
+        gameObject.SetActive(active);
     }
 }
