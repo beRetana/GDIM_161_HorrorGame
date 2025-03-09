@@ -12,7 +12,7 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == "Lobby")
+        if (SceneManager.GetActiveScene().name == "Lobby_Brandon")
         {
             PlayerObjectController GamePlayerInstance = Instantiate(GamePlayerPrefab);
 
