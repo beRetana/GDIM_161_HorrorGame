@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 using System;
+using Unity.Cinemachine;
 
 public class CameraController : NetworkBehaviour
 {
-    [SerializeField] private Transform _cameraBrainTransform;
+    [SerializeField] private CinemachineCamera _cameraBrainTransform;
+
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
