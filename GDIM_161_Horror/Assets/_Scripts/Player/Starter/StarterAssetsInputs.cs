@@ -70,7 +70,6 @@ namespace StarterAssets
 		
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			Debug.Log("APP FOCUES");
 			if (SceneManager.GetActiveScene().name != _lobbySceneName) SetCursorState(cursorLocked);
 		}
 
