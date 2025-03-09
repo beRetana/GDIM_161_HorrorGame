@@ -24,7 +24,6 @@ namespace StarterAssets
         public GameObject PlayerModel;
 
         [SerializeField] GameObject _camera;
-        [SerializeField] private bool _editMode;
 
         public bool grounded { get; private set; }
 

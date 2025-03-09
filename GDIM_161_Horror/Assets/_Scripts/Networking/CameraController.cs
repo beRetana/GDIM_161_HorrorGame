@@ -7,10 +7,15 @@ using System;
 
 public class CameraController : NetworkBehaviour
 {
+    [SerializeField] private Transform _cameraBrainTransform;
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) => gameObject.SetActive(true);
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        _cameraBrainTransform.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+    }
 }
