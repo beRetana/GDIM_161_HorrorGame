@@ -19,9 +19,6 @@ public class PlayerObjectController : NetworkBehaviour
 
     private NewNetworkManager manager;
     
-
-    
-
     private NewNetworkManager Manager
     {
         get
@@ -35,12 +32,10 @@ public class PlayerObjectController : NetworkBehaviour
     }
 
 
-   private void Start()
-   {
-    DontDestroyOnLoad(this.gameObject);
-   }
-
-    
+    private void Start()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
@@ -53,11 +48,7 @@ public class PlayerObjectController : NetworkBehaviour
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-
-        
     }
-
-   
 
     [Command]
     private void CmdSetPlayerReady()
@@ -82,10 +73,9 @@ public class PlayerObjectController : NetworkBehaviour
         LobbyController.Instance.UpdateLobbyName();
         
         if (LobbyController.Instance != null)
-            {
-                LobbyController.Instance.UpdatePlayerList();
-            }
-
+        {
+            LobbyController.Instance.UpdatePlayerList();
+        }
     }
 
     public override void OnStartClient()
@@ -93,15 +83,12 @@ public class PlayerObjectController : NetworkBehaviour
         Manager.GamePlayers.Add(this);
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
-      
-
     }
 
     public override void OnStopClient()
     {
         Manager.GamePlayers.Remove(this);
         LobbyController.Instance.UpdatePlayerList();
-        
     }
 
     [Command]
