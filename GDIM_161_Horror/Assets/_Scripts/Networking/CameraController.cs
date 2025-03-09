@@ -16,7 +16,7 @@ public class CameraController : NetworkBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        ToggleObjects(true);
+        if (isLocalPlayer) ToggleObjects(true);
     }
 
     void ToggleObjects(bool active)
