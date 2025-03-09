@@ -457,7 +457,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4706823857796436932}
-  - {fileID: 8305265566324423639}
   - {fileID: 8697592851519638540}
   - {fileID: 7354950563374537528}
   - {fileID: 1560498897346033265}
@@ -1366,7 +1365,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7111275684139024461, guid: 773b50c6509b37442aba52d642e34c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8305265566324423639}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 773b50c6509b37442aba52d642e34c5e, type: 3}
 --- !u!4 &4706823857796436932 stripped
@@ -1390,7 +1392,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2571488355673585886}
+    m_TransformParent: {fileID: 4706823857796436932}
     m_Modifications:
     - target: {fileID: 5118473442562737316, guid: 4497ee7dad55bbb489c7e31a37a7271e, type: 3}
       propertyPath: m_Pivot.x
