@@ -6,15 +6,16 @@ using UnityEngine.SceneManagement;
 using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
-    [SerializeField] private PlayerObjectController GamePlayerPrefab;
+    [SerializeField] private PlayerObjectController _playerPrefab;
+    [SerializeField] private string _lobby_scene_name = "Lobby_Brandon";
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == "Lobby_Brandon")
+        if (SceneManager.GetActiveScene().name == _lobby_scene_name)
         {
-            PlayerObjectController GamePlayerInstance = Instantiate(GamePlayerPrefab);
+            PlayerObjectController GamePlayerInstance = Instantiate(_playerPrefab);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
