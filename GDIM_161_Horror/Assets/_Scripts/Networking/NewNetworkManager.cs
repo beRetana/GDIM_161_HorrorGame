@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
-    [SerializeField] private PlayerObjectController _playerPrefab;
+    [SerializeField] private PlayerObjectController _playerController;
     [SerializeField] private string _lobby_scene_name = "Lobby_Brandon";
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -15,7 +15,7 @@ public class NewNetworkManager : NetworkManager
     {
         if (SceneManager.GetActiveScene().name == _lobby_scene_name)
         {
-            PlayerObjectController GamePlayerInstance = Instantiate(_playerPrefab);
+            PlayerObjectController GamePlayerInstance = Instantiate(_playerController);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
