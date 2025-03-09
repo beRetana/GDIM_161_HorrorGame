@@ -6,6 +6,7 @@ using Steamworks;
 using UnityEngine.UI;
 using TMPro;
 
+// DO NOT FUCKING TOUCH THIS SCRIPT UNLESS YOU KNOW WHAT YOU'RE DOING
 public class SteamLobby : MonoBehaviour
 {
     public static SteamLobby Instance;
@@ -80,10 +81,4 @@ public class SteamLobby : MonoBehaviour
 
         _manager.StartClient();
     }
-
 }
-
-
-
-
-
