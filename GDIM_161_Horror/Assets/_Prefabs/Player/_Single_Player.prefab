@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 3567417533735339568}
   - component: {fileID: 5456932072175116454}
   - component: {fileID: 7477993141517989938}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: _Single_Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -508,6 +508,8 @@ MonoBehaviour:
     m_Bits: 8
   _rightHandTransform: {fileID: 1458154177004918455}
   _leftHandTransform: {fileID: 38960982650156893}
+  _rightHandSocket: {fileID: 0}
+  _leftHandSocket: {fileID: 0}
   _arms: {fileID: 5645661420556895446}
   _pickUpRange: 5
   _pickUpForce: 4
@@ -549,6 +551,7 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   analogMovement: 0
+  _lobbySceneName: Lobby_Brandon
   cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &2946501653002084968
@@ -696,7 +699,7 @@ MonoBehaviour:
   cinemachineCameraTarget: {fileID: 7354950563374537535}
   PlayerModel: {fileID: 0}
   _camera: {fileID: 9070468886778292106}
-  _editMode: 1
+  _buildScene: BUILD_1
 --- !u!114 &3567417533735339568
 MonoBehaviour:
   m_ObjectHideFlags: 0
