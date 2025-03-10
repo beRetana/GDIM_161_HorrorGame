@@ -29,12 +29,14 @@ public class DissonanceReloader : MonoBehaviour
     }
 
     private System.Collections.IEnumerator RestartDissonance()
-    {
-        _dissonanceComms.enabled = false;
-        yield return null; // Wait a frame
-        _dissonanceComms.enabled = true;
-        Debug.Log("DissonanceComms restarted.");
-    }
+{
+    _dissonanceComms.enabled = false;
+    yield return new WaitForSeconds(1.0f); // wait a full second
+    _dissonanceComms.enabled = true;
+    
+    Debug.Log("DissonanceComms restarted ");
+}
+
 
     private void OnDestroy()
     {
