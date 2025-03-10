@@ -5,6 +5,7 @@ using Mirror;
 using Steamworks;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Dissonance.Integrations.MirrorIgnorance;
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
+
+    public GameObject PlayerObject;
 
     private NewNetworkManager manager;
     
@@ -34,7 +37,37 @@ public class PlayerObjectController : NetworkBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+      private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+            {
+                if (scene.name == "Game") // Ensure the scene name matches exactly
+                {
+                    
+                    StartCoroutine(AddMirrorIgnorancePlayer());
+                }
+            }
+
+            // Coroutine to delay adding the component
+            private IEnumerator AddMirrorIgnorancePlayer()
+            {
+                yield return new WaitForSeconds(1f);
+
+                if (!PlayerObject.GetComponent<MirrorIgnorancePlayer>())
+                {
+                    var playerScript = PlayerObject.AddComponent<MirrorIgnorancePlayer>();
+
+                    // Manually initialize it
+                    playerScript.OnStartLocalPlayer();
+                }
+            }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
