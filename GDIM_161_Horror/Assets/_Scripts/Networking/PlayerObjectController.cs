@@ -8,7 +8,7 @@ using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    //public static PlayerObjectController LocalInstance { get; private set; }
+    public static PlayerObjectController LocalInstance { get; private set; }
 
     // Player Data
     [SyncVar] public int ConnectionID;
@@ -19,44 +19,40 @@ public class PlayerObjectController : NetworkBehaviour
 
     private NewNetworkManager manager;
     
-
-    
-
     private NewNetworkManager Manager
     {
         get
         {
-            if (manager != null) return manager;
+            if (manager != null) 
+            {
+                return manager;
+            }
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
     }
 
-
-   
-
-    
+    private void Start()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
         if (isServer)
         {
-            Ready = newValue;
+            this.Ready = newValue;
         }
 
         if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-
-        
     }
-
-   
 
     [Command]
     private void CmdSetPlayerReady()
     {
-        PlayerReadyUpdate(Ready, !Ready);
+        this.PlayerReadyUpdate(this.Ready, !this.Ready);
     }
 
     public void ChangeReady()
@@ -69,11 +65,16 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-      //  LocalInstance = this;
+        LocalInstance = this;
         CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
+        
+        if (LobbyController.Instance != null)
+        {
+            LobbyController.Instance.UpdatePlayerList();
+        }
     }
 
     public override void OnStartClient()
@@ -92,14 +93,14 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     private void CmdSetPlayerName(string playerName)
     {
-        PlayerNameUpdate(PlayerName, playerName);
+        this.PlayerNameUpdate(this.PlayerName, playerName);
     }
 
     public void PlayerNameUpdate(string oldValue, string newValue)
     {
         if (isServer)
         {
-            PlayerName = newValue;
+            this.PlayerName = newValue;
         }
 
         if (isClient)
