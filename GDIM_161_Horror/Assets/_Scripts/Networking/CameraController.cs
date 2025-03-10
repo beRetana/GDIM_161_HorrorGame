@@ -6,6 +6,7 @@ using Mirror;
 using StarterAssets;
 using UnityEngine.InputSystem;
 using Dissonance.Integrations.MirrorIgnorance;
+using Dissonance;
 
 public class CameraController : NetworkBehaviour
 {
@@ -19,6 +20,7 @@ public class CameraController : NetworkBehaviour
     [SerializeField] private MirrorIgnorancePlayer _mirrorIgnorancePlayer;
 
     public GameObject PlayerObject;
+    private DissonanceComms _dissonanceComms;
 
     override public void OnStartAuthority()
     {
