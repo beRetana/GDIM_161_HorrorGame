@@ -7,7 +7,6 @@ using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private List<Transform> _startingPoints;
     [SerializeField] private string _lobby_scene_name = "Lobby_Brandon";
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -16,8 +15,7 @@ public class NewNetworkManager : NetworkManager
     {
         if (SceneManager.GetActiveScene().name == _lobby_scene_name)
         {
-            Transform randomLocation = _startingPoints[Random.Range(0, _startingPoints.Count)];
-            PlayerObjectController GamePlayerInstance = Instantiate(_playerController, randomLocation.position, randomLocation. rotation);
+            PlayerObjectController GamePlayerInstance = Instantiate(_playerController);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
