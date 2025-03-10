@@ -1,33 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using StarterAssets;
+using UnityEngine.InputSystem;
 
 public class CameraController : NetworkBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public GameObject Cameraholder;
-    public Vector3 offset;
-    
-    
+    [SerializeField] private GameObject _cameraBrainTransform;
+    [SerializeField] private FirstPersonController _playerController;
+    [SerializeField] private StarterAssetsInputs _playerStarterInput;
+    [SerializeField] private HandInventory _handInventory;
+    [SerializeField] private BasicRigidBodyPush _basicRigidBodyPush;
+    [SerializeField] private PlayerArticulations _playerArticulations;
+    [SerializeField] private PlayerInput _playerInput;
 
-    public override void OnStartAuthority()
+    override public void OnStartAuthority()
     {
-        Cameraholder.SetActive(true);
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        ToggleObjects(false);
     }
 
-
-    public void Update()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-
-        if(SceneManager.GetActiveScene().name == "Game")
-        {
-
-            Cameraholder.transform.position = transform.position + offset;
-        
-         }
+        if (isLocalPlayer) ToggleObjects(true);
     }
 
+    void ToggleObjects(bool active)
+    {
+        _cameraBrainTransform.SetActive(active);
+        gameObject.SetActive(active);
+        _playerController.enabled = active;
+        _playerStarterInput.enabled = active;
+        _playerInput.enabled = active;
+        _handInventory.enabled = active;
+        _basicRigidBodyPush.enabled = active;
+        gameObject.SetActive(active);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

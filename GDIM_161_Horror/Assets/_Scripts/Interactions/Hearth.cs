@@ -1,62 +1,87 @@
 using UnityEngine;
 using System.Collections;
+using Unity.IO.LowLevel.Unsafe;
 namespace Interactions
 {
-    public class Hearth : MonoBehaviour
+    public class Hearth : MonoBehaviour, IFireable
     {
-        public float totalBurnTime = 300f; // In seconds
-        private float remainingBurnTime;
+        [Header("Gameplay Stuff")]
+        [SerializeField, Range(600f, 2400f)] private float maxBurnTime = 1200f; // In seconds
 
-        public float woodRemovalPenalty = 30f; // Taking wood removes time
-        public bool isBurning = true;   
+        [Header("Model Stuff")]
+        [SerializeField] private ParticleSystem fireVFX; // Fire particle Effect
+        [SerializeField] private Light fireLight; // Light Source
+        [SerializeField] private Transform flameRed;
+        [SerializeField] private Transform flameOrange;
+        [SerializeField] private Transform flameYellow;
 
-        public GameObject fireEffect; // Fire particle Effect
-        public Light fireLight; // Light Source
+        public float BurnTimer { get; private set; }
+        public bool Lit { get; private set; }
 
-        void Start()
+        private float maxLightIntensity;
+        private float lightIntensity = -1f;
+
+        public void Start()
         {
-        remainingBurnTime = totalBurnTime;
-        StartCoroutine(BurnFire());
+            maxLightIntensity = fireLight.intensity;
+
+            StartFire();
+        }
+        public bool IsLit() { return Lit; }
+        public void LightFlame() { } //pass
+
+        private void StartFire()
+        {
+            Lit = true;
+            BurnTimer = maxBurnTime;
+            fireVFX.gameObject.SetActive(true);
         }
 
-         IEnumerator BurnFire()
-    {
-        while (remainingBurnTime > 0)
+        private void Update()
         {
-            yield return new WaitForSeconds(1f); // Reduces Time
-            remainingBurnTime--;
+            if (BurnTimer < 0)
+            {
+                if (Lit) BurnOut();
+                return;
+            }
 
-            // Decrease fire intensity over time
-            if (fireLight != null)
-                fireLight.intensity = Mathf.Lerp(0, 2, remainingBurnTime / totalBurnTime);
+            BurnTimer -= Time.deltaTime;
+
+            UpdateLighting();
+            UpdateSize();
         }
 
-        ExtinguishFire();
-    }
-
-    public void TakeWood()
-    {
-        if (isBurning && remainingBurnTime > woodRemovalPenalty)
+        /// <summary>
+        /// (2x+1)(x-1)(x-1)
+        /// </summary>
+        private void UpdateSize()
         {
-            remainingBurnTime -= woodRemovalPenalty;
-            Debug.Log("Wood taken! Fire will now burn for " + remainingBurnTime + " more seconds.");
-        }
-        else
-        {
-            Debug.Log("The fire is too weak to take more wood!");
-        }
-    }
+            float percent = (maxBurnTime - BurnTimer) / maxBurnTime;
+            float scalar = (2 * percent + 1) * Mathf.Pow((percent - 1), 2);
+            Vector3 newFlameScale = Vector3.one * scalar;
 
-    private void ExtinguishFire()
-    {
-        isBurning = false;
-        Debug.Log("The fire has gone out!");
-        
-        if (fireEffect != null)
-            fireEffect.SetActive(false); // Disable fire particles
-        
-        if (fireLight != null)
-            fireLight.enabled = false; // Turn off fire light
-    }
+            flameRed.localScale = newFlameScale;
+            flameOrange.localScale = newFlameScale;
+            flameYellow.localScale = newFlameScale;
+        }
+
+        private void UpdateLighting()
+        {
+            SetVisualLightIntensity(maxBurnTime / BurnTimer);
+        }
+
+        private void SetVisualLightIntensity(float intensePercent)
+        {
+            lightIntensity = Mathf.Min(maxLightIntensity * intensePercent * intensePercent, maxLightIntensity);
+            fireLight.intensity = lightIntensity;
+        }
+
+        private void BurnOut()
+        {
+            Debug.Log("Burnt Out...");
+            Lit = false;
+            fireVFX.gameObject.SetActive(false);
+            fireLight.enabled = false;
+        }
     }
 }

@@ -126,7 +126,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3241753861720095343}
   - component: {fileID: 4746269070312977930}
-  m_Layer: 0
+  - component: {fileID: 3027559608405286185}
+  - component: {fileID: 4397109543003769924}
+  m_Layer: 7
   m_Name: FlameBasePos
   m_TagString: Fire
   m_Icon: {fileID: 0}
@@ -159,17 +161,57 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 127
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1
-  m_Center: {x: 0, y: -0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3027559608405286185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814854870198980137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maybeFireable: {fileID: 6533591682246883934}
+--- !u!54 &4397109543003769924
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814854870198980137}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3500864740308416971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -256,6 +298,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3241753861720095343}
     m_Modifications:
+    - target: {fileID: 1874209195362438417, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -313,7 +359,27 @@ PrefabInstance:
       value: CARTOONFIRE
       objectReference: {fileID: 0}
     - target: {fileID: 5539023297123503581, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5539023297123503581, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749688610975212147, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8314990025205526422, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640300082861648025, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8786162210214408500, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -441,6 +507,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: torchFireCollider
+      value: 
+      objectReference: {fileID: 3027559608405286185}
+    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: pyrolysisIncrements
       value: 8
       objectReference: {fileID: 0}
@@ -465,6 +535,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+--- !u!1 &6533591682246883934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 41419630895823404, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+  m_PrefabInstance: {fileID: 6501190067480969330}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6627252046561620547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 126214538651071025, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
