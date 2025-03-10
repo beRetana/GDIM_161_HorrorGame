@@ -1042,6 +1042,10 @@ PrefabInstance:
       propertyPath: _playbackPrefab2
       value: 
       objectReference: {fileID: 1000010352696724, guid: 41bbbf1a8ee37a3479d8c133579965e3, type: 3}
+    - target: {fileID: 2320560176475391534, guid: 1264c01c7f8182e47ac9f784af03d895, type: 3}
+      propertyPath: sceneId
+      value: 2131304388
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1049,9 +1053,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1948977645079602, guid: 1264c01c7f8182e47ac9f784af03d895, type: 3}
       insertIndex: -1
       addedObject: {fileID: 719538368}
-    - targetCorrespondingSourceObject: {fileID: 1948977645079602, guid: 1264c01c7f8182e47ac9f784af03d895, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 719538369}
   m_SourcePrefab: {fileID: 100100000, guid: 1264c01c7f8182e47ac9f784af03d895, type: 3}
 --- !u!1 &719538367 stripped
 GameObject:
@@ -1070,27 +1071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60cd342eb95cc4343ae0c34add3259d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectsTag: VoiceChatManager
---- !u!114 &719538369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 719538367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ced1b68963272494b9b3d3bed1584a33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tokens:
-    _tokens: []
-  _range: 10
-  _roomName: Proximity
-  _useTrigger: 0
-  _roomExpanded: 1
-  _tokensExpanded: 0
-  _colliderExpanded: 0
 --- !u!1 &937746517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,7 +1684,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1972490991}
   m_HandleRect: {fileID: 1972490990}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
