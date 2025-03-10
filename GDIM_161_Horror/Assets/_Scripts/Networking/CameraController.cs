@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using Mirror;
 using StarterAssets;
 using UnityEngine.InputSystem;
+using Dissonance.Integrations.MirrorIgnorance;
 
 public class CameraController : NetworkBehaviour
 {
@@ -13,6 +14,7 @@ public class CameraController : NetworkBehaviour
     [SerializeField] private BasicRigidBodyPush _basicRigidBodyPush;
     [SerializeField] private PlayerArticulations _playerArticulations;
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private MirrorIgnorancePlayer _mirrorIgnorancePlayer;
 
     override public void OnStartAuthority()
     {
@@ -35,6 +37,7 @@ public class CameraController : NetworkBehaviour
         _handInventory.enabled = active;
         _basicRigidBodyPush.enabled = active;
         gameObject.SetActive(active);
+        _mirrorIgnorancePlayer.enabled = active;
     }
 
     private void OnDestroy()
