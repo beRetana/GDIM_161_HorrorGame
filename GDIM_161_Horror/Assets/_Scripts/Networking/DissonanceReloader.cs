@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Dissonance;
+using Mirror;
 
 public class DissonanceReloader : MonoBehaviour
 {
@@ -30,11 +31,15 @@ public class DissonanceReloader : MonoBehaviour
 
     private System.Collections.IEnumerator RestartDissonance()
 {
-    _dissonanceComms.enabled = false;
-    yield return new WaitForSeconds(1.0f); // wait a full second
-    _dissonanceComms.enabled = true;
+     _dissonanceComms.enabled = false;
     
-    Debug.Log("DissonanceComms restarted ");
+    // Wait for Mirror to fully reinitialize players
+    yield return new WaitUntil(() => NetworkClient.ready);
+
+    yield return new WaitForSeconds(0.5f); // Extra delay to ensure networking syncs
+
+    _dissonanceComms.enabled = true;
+    Debug.Log("DissonanceComms restarted after Mirror was ready.");
 }
 
 
