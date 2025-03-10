@@ -1,14 +1,16 @@
 using System.Collections;
 using Interactions;
+using MessengerSystem;
+using Mono.CSharp;
 using Player;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Mirror;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
 /// </summary>
-public class HandInventory : NetworkBehaviour
+public class HandInventory : MonoBehaviour
 {
     [Header("General Settings")]
     [SerializeField] private LayerMask _interactableLayer;
@@ -86,9 +88,8 @@ public class HandInventory : NetworkBehaviour
         public bool IsLHandDom { get; private set; }
         public InventorySlots()
         {
-            L_HandSlot = new();
-            L_HandSlot.Item = null;
-            R_HandSlot = new();
+            L_HandSlot = new() { Item = null };
+            R_HandSlot = new() { Item = null };
             R_HandSlot.Item = null;
             SetLeftHandDominant(false);
         }
@@ -173,16 +174,52 @@ public class HandInventory : NetworkBehaviour
     }
 
     private InventorySlots _inventorySlots = new();
+    private PlayerControls _playerControls;
     private int _playerID;
     private IInteractable _interactableComponent;
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
+    void Awake() 
+    {
+        _playerControls = new();
+        OnEnable();
+    }
+
     void Start()
     {
         _playerID = gameObject.GetComponent<PlayerBase>().ID();
         PrepareList();
+    }
+
+    void OnEnable()
+    {
+        _playerControls.Player.Interact.Enable();
+        _playerControls.Player.Drop.Enable();
+        _playerControls.Player.Throw.Enable();
+        _playerControls.Player.Swap.Enable();
+        _playerControls.Player.UseItem.Enable();
+
+        _playerControls.Player.Interact.performed += OnRaycastInteract;
+        _playerControls.Player.Drop.performed += OnItemDrop;
+        _playerControls.Player.Throw.performed += OnItemThrow;
+        _playerControls.Player.Swap.performed += OnHandSwap;
+        _playerControls.Player.UseItem.performed += OnUseItem;
+    }
+
+    void OnDisable(){
+        _playerControls.Player.Interact.performed -= OnRaycastInteract;
+        _playerControls.Player.Drop.performed -= OnItemDrop;
+        _playerControls.Player.Throw.performed -= OnItemThrow;
+        _playerControls.Player.Swap.performed -= OnHandSwap;
+        _playerControls.Player.UseItem.performed -= OnUseItem;
+
+        _playerControls.Player.Interact.Disable();
+        _playerControls.Player.Drop.Disable();
+        _playerControls.Player.Throw.Disable();
+        _playerControls.Player.Swap.Disable();
+        _playerControls.Player.UseItem.Disable();
     }
 
     void PrepareList()
@@ -236,21 +273,21 @@ public class HandInventory : NetworkBehaviour
         }
     }
 
-    public void OnSwap(InputValue value) 
+    void OnHandSwap(InputAction.CallbackContext context) 
     { 
         bool isLHandDom = _inventorySlots.SwapDominance();
         _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
-    public void OnInteract(InputValue value) 
+    void OnRaycastInteract(InputAction.CallbackContext context) 
     { 
         if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null) 
             _interactableComponent?.Interact(_playerID);
     }
-    public void OnDrop(InputValue value) { DropItem(); }
-    public void OnThrow(InputValue value) { DropItem(_throwForce); }
-    public void OnUseItem(InputValue value) { UseItem(); }
+    void OnItemDrop(InputAction.CallbackContext context) { DropItem(); }
+    void OnItemThrow(InputAction.CallbackContext context) { DropItem(_throwForce); }
+    void OnUseItem(InputAction.CallbackContext context) { UseItem(); }
 
-    public void UseItem()
+    private void UseItem()
     {
         InventorySlot inventorySlotToUse = _inventorySlots.GetDominantHand();
         PickableItem itemToUse = inventorySlotToUse?.Item;
@@ -281,43 +318,33 @@ public class HandInventory : NetworkBehaviour
 
     private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
     {
-        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
-
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
         inventorySlotOfNewItem.ItemTransform = pickableParent;
 
-        pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
+        pickableParent.transform.SetParent((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant) ? _leftHandSocket : _rightHandSocket);
         //pickableParent.transform.localPosition = Vector3.zero;
         //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
 
-        pickableItem.OrientItemInHand(isLeftHandAction);
+        pickableItem.OrientItemInHand((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
     }
 
 
     private void DropItem(float throwForce = 0)
     {
-        bool isThrow = _arms.IsDomOutStretched();
-
         InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
         if (dominantSlot.Item == null) return;
 
         PickableItem itemToDrop = dominantSlot.Item;
         Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
 
+        //Physics.IgnoreCollision(itemRigidBodyToDrop.transform.GetComponent<Collider>(),
+        //                        gameObject.GetComponentInChildren<CapsuleCollider>(), false);
+
         _inventorySlots.RemoveItem();
 
-        if(isThrow)
-        {
-            itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-            _arms.ToggleHandMoveOutOrIn(_inventorySlots.IsLHandDom);
-        }
-        else
-        {
-            itemRigidBodyToDrop.AddForce(transform.forward, ForceMode.Impulse);
-            _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
-        }
-
+        itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
         itemToDrop.UnPossessItem();
+        _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
     }
 
 
