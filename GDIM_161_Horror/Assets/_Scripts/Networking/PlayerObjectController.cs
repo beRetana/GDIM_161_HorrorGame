@@ -18,7 +18,7 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
-    public GameObject PlayerObject;
+   // public GameObject PlayerObject;
 
     private NewNetworkManager manager;
     
@@ -37,37 +37,37 @@ public class PlayerObjectController : NetworkBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-         SceneManager.sceneLoaded += OnSceneLoaded;
+         //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-      private void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
+    //   private void OnDestroy()
+    //     {
+    //         SceneManager.sceneLoaded -= OnSceneLoaded;
+    //     }
 
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-            {
-                if (scene.name == "Game") // Ensure the scene name matches exactly
-                {
+    // void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //         {
+    //             if (scene.name == "Game") // Ensure the scene name matches exactly
+    //             {
                     
-                    StartCoroutine(AddMirrorIgnorancePlayer());
-                }
-            }
+    //                 StartCoroutine(AddMirrorIgnorancePlayer());
+    //             }
+    //         }
 
-            // Coroutine to delay adding the component
-            private IEnumerator AddMirrorIgnorancePlayer()
-            {
-                yield return new WaitForSeconds(1f);
+    //         // Coroutine to delay adding the component
+    //         private IEnumerator AddMirrorIgnorancePlayer()
+    //         {
+    //             yield return new WaitForSeconds(1f);
 
-                if (!PlayerObject.GetComponent<MirrorIgnorancePlayer>())
-                {
-                    var playerScript = PlayerObject.AddComponent<MirrorIgnorancePlayer>();
+    //             if (!PlayerObject.GetComponent<MirrorIgnorancePlayer>())
+    //             {
+    //                 var playerScript = PlayerObject.AddComponent<MirrorIgnorancePlayer>();
 
-                    // Manually initialize it
-                    playerScript.OnStartLocalPlayer();
-                }
-            }
+    //                 // Manually initialize it
+    //                 playerScript.OnStartLocalPlayer();
+    //             }
+    //         }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
