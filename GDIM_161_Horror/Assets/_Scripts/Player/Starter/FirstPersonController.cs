@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -19,11 +20,11 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private StarterAssetsInputs _input;
-        private bool positionInvoked;
         private const float _THRESHOLD = 0.01f;
         public GameObject PlayerModel;
 
-        [SerializeField] GameObject _camera;
+        [SerializeField] private GameObject _camera;
+        [SerializeField] private string _buildScene = "BUILD_1";
 
         public bool grounded { get; private set; }
 
@@ -70,12 +71,22 @@ namespace StarterAssets
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name != "Game") return;
+            if (scene.name != _buildScene) return;
+
+            StartCoroutine(FindSpawnPoint());
+        }
+
+        private IEnumerator FindSpawnPoint()
+        {
+            yield return null;
+
+            PlayerSpawnPosition[] spawnPoints = FindObjectsByType<PlayerSpawnPosition>(FindObjectsSortMode.None);
             
-            if (!PlayerModel.activeSelf) 
+            foreach (PlayerSpawnPosition spawnPoint in spawnPoints)
             {
-                Debug.Log("Activating PlayerModel...");
-                Invoke(nameof(ActivatePlayer), 0.5f);
+                if (spawnPoint.IsOccupied) continue;
+                transform.position = spawnPoint.UseSpawner();
+                break;
             }
         }
 
@@ -192,21 +203,6 @@ namespace StarterAssets
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
-        }
-        
-        public void ActivatePlayer()
-        {
-            if (PlayerModel.activeSelf) return;
-
-            SetPosition();
-            PlayerModel.SetActive(true);
-            Debug.Log("PlayerModel activated!");
-        }
-
-        private void SetPosition()
-        {
-            transform.position = new Vector3(Random.Range(-5, 5), 0.8f, Random.Range(7, 15));
-            Debug.Log($"Player spawned at: {transform.position}");
         }
     }
 }

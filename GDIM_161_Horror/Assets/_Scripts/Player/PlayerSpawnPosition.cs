@@ -7,11 +7,19 @@ public class PlayerSpawnPosition : NetworkBehaviour
 
     public bool IsOccupied => _isOccupied;
 
-    public void UseSpawner()
+    private void Start()
     {
-        if (_isOccupied) return;
+        Debug.Log("PlayerSpawnPosition Start");
+    }
+
+    public Vector3 UseSpawner()
+    {
+        if (_isOccupied) return Vector3.zero;
         _isOccupied = true;
         CmdSetOccupied(true);
+        gameObject.SetActive(false);
+
+        return transform.position;
     }
 
     [Command(requiresAuthority = false)]
