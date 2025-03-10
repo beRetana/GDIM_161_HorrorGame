@@ -90,7 +90,7 @@ public class PlayerManager : NetworkBehaviour
 
             return player.GetComponent<PlayerBase>();
         }
-        throw new System.Exception($"ERROR: Player {playerID} does not exist");
+        throw new System.Exception($"NETWORK ERROR: Player {playerID} does not exist");
     }
 }
 
