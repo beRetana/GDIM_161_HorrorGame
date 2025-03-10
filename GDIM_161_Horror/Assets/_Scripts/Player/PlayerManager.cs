@@ -32,8 +32,8 @@ public class PlayerManager : MonoBehaviour
 
     public int AttemptAddPlayer(PlayerBase player) // returns -1 if error
     {
-        Debug.Log(_playerHolder);
         int newID = _playerHolder.AddPlayer(player);
+        Debug.Log($"Player {player.name} added to {_playerHolder}");
 
         if (newID != -1)    Debug.Log($"Player{newID} added to {_playerHolder}. Finishing PlayerBase set up.");
         else                Debug.Log($"ERROR: Player not added to {_playerHolder}");
@@ -75,8 +75,10 @@ public class PlayerHolder
         }
 
         playerList[totalPlayers] = player;
+        Debug.Log($"Player List {playerList}");
         return totalPlayers++;
     }
+
     public PlayerBase this[int index] // index: get and set
     {
         get{
