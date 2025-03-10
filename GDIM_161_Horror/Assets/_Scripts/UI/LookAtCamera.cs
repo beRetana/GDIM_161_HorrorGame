@@ -10,6 +10,8 @@ public class LookAtCamera : MonoBehaviour {
 
     [SerializeField] private Mode mode;
 
+    private Camera _camera;
+
     private enum Mode{
         LookAt,
         LookAtInverted,
@@ -17,20 +19,33 @@ public class LookAtCamera : MonoBehaviour {
         CameraForwardInverted,
     }
 
+    public void SetCamera(Camera newCamera)
+    {
+        _camera = newCamera;
+    }
+
+    public void SetCameraNull()
+    {
+        _camera = null;
+    }
+
     private void LateUpdate(){
+
+        if (_camera == null) return;
+
         switch (mode){
             case Mode.LookAtInverted: 
-                transform.LookAt(Camera.main.transform);
+                transform.LookAt(_camera.transform);
                 break;
             case Mode.LookAt:
-                Vector3 cameraDirection = transform.position - Camera.main.transform.position;
+                Vector3 cameraDirection = transform.position - _camera.transform.position;
                 transform.LookAt(transform.position + cameraDirection);
                 break;
             case Mode.CameraForward:
-                transform.forward = Camera.main.transform.forward;
+                transform.forward = _camera.transform.forward;
                 break;
             case Mode.CameraForwardInverted:
-                transform.forward = -Camera.main.transform.forward;
+                transform.forward = -_camera.transform.forward;
                 break;
         }
     }

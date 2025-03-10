@@ -49,9 +49,9 @@ public class PlayerListItem : MonoBehaviour
 
     void GetPlayerIcon()
     {
-      int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)PlayerSteamID);
-      if(ImageID == -1) {return;}
-      PlayerIcon.texture = GetSteamImageAsTexture(ImageID);
+        int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)PlayerSteamID);
+        if(ImageID == -1) {return;}
+        PlayerIcon.texture = GetSteamImageAsTexture(ImageID);
     }
 
     private Texture2D GetSteamImageAsTexture(int iImage)
@@ -76,9 +76,6 @@ public class PlayerListItem : MonoBehaviour
         return texture;
     }
 
-
-
-
     private void OnImageLoaded(AvatarImageLoaded_t callback)
     {
         if(callback.m_steamID.m_SteamID == PlayerSteamID) //us
@@ -90,6 +87,5 @@ public class PlayerListItem : MonoBehaviour
             return;
         }
     }
-
 
 }

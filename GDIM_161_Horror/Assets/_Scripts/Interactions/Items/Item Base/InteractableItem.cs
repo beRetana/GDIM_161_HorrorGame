@@ -8,6 +8,7 @@ using TMPro;
 public class InteractableItem : MonoBehaviour, IInteractable
 {
     [SerializeField] protected Animator _textAnimation;
+    [SerializeField] protected LookAtCamera _lookAtCamera;
     [SerializeField] protected string _textName;
     [SerializeField] protected string _fadeIn;
 
@@ -52,6 +53,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public virtual void Detected(int playerID)
     {
         if (!_isInteractable) return;
+        _lookAtCamera.SetCamera(PlayerManager.Instance.GetPlayer(playerID).GetComponentInChildren<Camera>());
         _textAnimation.SetBool(_fadeIn, true);
     }
 

@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
-    
-    //Player Data
+    public static PlayerObjectController LocalInstance { get; private set; }
+
+    // Player Data
     [SyncVar] public int ConnectionID;
     [SyncVar] public int PlayerIdNumber;
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
-    [SyncVar(hook = nameof(PlayerReadyUpdate))]public bool Ready;
+    [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
     private NewNetworkManager manager;
-
+    
     private NewNetworkManager Manager
     {
         get
         {
-            if(manager != null)
+            if (manager != null) 
             {
                 return manager;
             }
             return manager = NewNetworkManager.singleton as NewNetworkManager;
         }
-
     }
 
     private void Start()
@@ -36,38 +38,43 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
-        if(isServer)
+        if (isServer)
         {
             this.Ready = newValue;
         }
-        if(isClient)
+
+        if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-        
     }
 
     [Command]
-    private void CMdSetPlayerReady()
+    private void CmdSetPlayerReady()
     {
         this.PlayerReadyUpdate(this.Ready, !this.Ready);
     }
 
     public void ChangeReady()
     {
-        if(isOwned)
+        if (isOwned)
         {
-            CMdSetPlayerReady();
+            CmdSetPlayerReady();
         }
     }
 
     public override void OnStartAuthority()
     {
-        CmdSetPlayerName(SteamFriends.GetPersonaName().ToString());
+        LocalInstance = this;
+        CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
-
+        
+        if (LobbyController.Instance != null)
+        {
+            LobbyController.Instance.UpdatePlayerList();
+        }
     }
 
     public override void OnStartClient()
@@ -81,23 +88,22 @@ public class PlayerObjectController : NetworkBehaviour
     {
         Manager.GamePlayers.Remove(this);
         LobbyController.Instance.UpdatePlayerList();
-
     }
 
     [Command]
-
-    private void CmdSetPlayerName(string PlayeName)
+    private void CmdSetPlayerName(string playerName)
     {
-        this.PlayerNameUpdate(this.PlayerName, PlayeName);
+        this.PlayerNameUpdate(this.PlayerName, playerName);
     }
 
-    public void PlayerNameUpdate(string OldValue, string NewValue)
+    public void PlayerNameUpdate(string oldValue, string newValue)
     {
-        if(isServer)// Host
+        if (isServer)
         {
-            this.PlayerName = NewValue;
+            this.PlayerName = newValue;
         }
-        if(isClient) //Client
+
+        if (isClient)
         {
             LobbyController.Instance.UpdatePlayerList();
         }
@@ -105,16 +111,15 @@ public class PlayerObjectController : NetworkBehaviour
 
     public void CanStartGame(string SceneName)
     {
-        if(isOwned)
+        if (isOwned)
         {
             CmdCanStartGame(SceneName);
         }
     }
 
     [Command]
-     public void CmdCanStartGame(string SceneName)
+    public void CmdCanStartGame(string SceneName)
     {
         manager.StartGame(SceneName);
     }
-
 }
