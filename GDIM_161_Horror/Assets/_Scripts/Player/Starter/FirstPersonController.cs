@@ -86,6 +86,7 @@ namespace StarterAssets
             {
                 if (spawnPoint.IsOccupied) continue;
                 transform.position = spawnPoint.UseSpawner();
+                Debug.Log($"Player spawned at {transform.position}");
                 break;
             }
         }
