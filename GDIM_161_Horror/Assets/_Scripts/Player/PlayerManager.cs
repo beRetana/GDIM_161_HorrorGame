@@ -75,6 +75,7 @@ public class PlayerHolder
         }
 
         playerList[totalPlayers] = player;
+        Debug.Log(playerList[totalPlayers] = player);
         Debug.Log($"Player List {playerList}");
         return totalPlayers++;
     }
