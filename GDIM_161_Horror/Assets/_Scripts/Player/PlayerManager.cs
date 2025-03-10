@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using Mirror;
 using Steamworks;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
@@ -36,10 +36,11 @@ public class PlayerManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != _gameSceneName) return;
-        Debug.Log($"Player In Manager: {NetworkManager.GamePlayers}");
         foreach (PlayerObjectController player in NetworkManager.GamePlayers)
         {
-            Debug.Log($"Player ID: {player.PlayerIdNumber}");
+            PlayerBase playerBase;
+            player.TryGetComponent<PlayerBase>(out playerBase);
+            // if (playerBase != null) _playerHolder.AddPlayer(playerBase);
         }
     }
 
@@ -61,7 +62,7 @@ public class PlayerManager : MonoBehaviour
         int newID = _playerHolder.AddPlayer(player);
         Debug.Log($"Player {player.name} added to {_playerHolder}");
 
-        if (newID != -1)    Debug.Log($"Player{newID} added to {_playerHolder}. Finishing PlayerBase set up.");
+        if (newID != -1)    Debug.Log($"Player {newID} added to {_playerHolder}. Finishing PlayerBase set up.");
         else                Debug.Log($"ERROR: Player not added to {_playerHolder}");
 
         return newID; // returns -1 if error
@@ -77,14 +78,26 @@ public class PlayerManager : MonoBehaviour
     }
     public PlayerBase GetPlayer(int playerID) // ID: 0, 1, 2, 3
     {
+        if (NetworkServer.active) return GetPlayerFromNetworkManager(playerID);
         return _playerHolder[playerID];
+    }
+
+    private PlayerBase GetPlayerFromNetworkManager(int playerID)
+    {
+        foreach (PlayerObjectController player in NetworkManager.GamePlayers)
+        {
+            if (player.PlayerIdNumber != playerID) continue;
+
+            return player.GetComponent<PlayerBase>();
+        }
+        throw new System.Exception($"ERROR: Player {playerID} does not exist");
     }
 }
 
-public class PlayerHolder
+public class PlayerHolder : NetworkBehaviour
 {
     static readonly int _MAX_PLAYER_COUNT = 4;
-    private int totalPlayers = 0;
+    [SyncVar] private int totalPlayers = 0;
     private PlayerBase[] playerList = new PlayerBase[4];
 
     public int AddPlayer(PlayerBase player)
@@ -101,15 +114,14 @@ public class PlayerHolder
         }
 
         playerList[totalPlayers] = player;
-        Debug.Log(playerList[totalPlayers] = player);
-        Debug.Log($"Player List {playerList}");
+        Debug.Log($"List size: {totalPlayers}");
         return totalPlayers++;
     }
 
     public PlayerBase this[int index] // index: get and set
     {
         get{
-            if (!IndexPlayerExists(index)) throw new System.Exception($"ERROR: Player{index} does not exist");
+            if (!IndexPlayerExists(index)) throw new System.Exception($"ERROR: Player {index} does not exist");
             if (IndexInRange(index)) return playerList[index];
             else throw new System.Exception("ERROR: Invalid player slot index");
         }
@@ -119,7 +131,11 @@ public class PlayerHolder
         }
     } 
     private bool IndexInRange(int index) { return (index >= 0 && index < _MAX_PLAYER_COUNT); }
-    private bool IndexPlayerExists(int index) { return (index >= 0 && index < totalPlayers); }
+    private bool IndexPlayerExists(int index) 
+    { 
+        Debug.Log($"Checking if player {index} exists in {playerList} total players of {totalPlayers}");
+        return (index >= 0 && index < totalPlayers); 
+    }
 
     private bool PlayerExistsInList(PlayerBase player)
     {

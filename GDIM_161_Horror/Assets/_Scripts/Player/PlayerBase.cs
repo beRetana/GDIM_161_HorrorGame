@@ -4,7 +4,21 @@ using Player;
 
 public class PlayerBase : NetworkBehaviour
 {
-    private int _myID = -1; // 0, 1, 2, 3
+    static private int _myID = 0; // 0, 1, 2, 3
+
+    private NewNetworkManager _networkmanager;
+
+    public NewNetworkManager NetworkManager
+    {
+        get
+        {
+            if (_networkmanager != null)
+            {
+                return _networkmanager;
+            }
+            return _networkmanager = NewNetworkManager.singleton as NewNetworkManager;
+        }
+    }
 
     #region enums
     public enum PlayerStateEnum
@@ -174,7 +188,7 @@ public class PlayerBase : NetworkBehaviour
     public int ID() { return _myID; }
     private bool AssignID()
     {
-        int newID = FindFirstObjectByType<PlayerManager>().AttemptAddPlayer(this);
+        int newID = GetComponent<PlayerObjectController>().PlayerIdNumber;
 
         if (newID != -1)
         {

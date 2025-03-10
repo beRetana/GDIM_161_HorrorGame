@@ -19,7 +19,7 @@ public class NewNetworkManager : NetworkManager
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
-            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
+            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count;
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
