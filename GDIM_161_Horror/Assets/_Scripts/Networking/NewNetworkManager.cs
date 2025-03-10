@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 using Steamworks;
+
 public class NewNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController _playerController;
@@ -26,7 +27,6 @@ public class NewNetworkManager : NetworkManager
             LobbyController.Instance.UpdatePlayerList();
         }
     }
-    
 
     public void StartGame(string SceneName)
     {

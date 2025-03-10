@@ -1,8 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using Codice.CM.Common;
-using UnityEngine.Playables;
 
 public class PlayerState
 {

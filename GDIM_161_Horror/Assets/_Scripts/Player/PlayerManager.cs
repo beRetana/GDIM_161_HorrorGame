@@ -1,20 +1,46 @@
 using MessengerSystem;
+using System;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditorInternal;
-using Mono.CSharp;
-using Codice.CM.Common.Tree.Partial;
-using NUnit.Framework.Constraints;
+using UnityEngine.SceneManagement;
+using Mirror;
+using Steamworks;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
 
+    [SerializeField] private string _gameSceneName = "BUILD_1";
+
+    private NewNetworkManager _networkmanager;
+
+    public NewNetworkManager NetworkManager
+    {
+        get
+        {
+            if (_networkmanager != null)
+            {
+                return _networkmanager;
+            }
+            return _networkmanager = NewNetworkManager.singleton as NewNetworkManager;
+        }
+    }
+
     private void Awake()
     {
         DeclareSingletonInsatnce();
         _playerHolder = new();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != _gameSceneName) return;
+        Debug.Log($"Player In Manager: {NetworkManager.GamePlayers}");
+        foreach (PlayerObjectController player in NetworkManager.GamePlayers)
+        {
+            Debug.Log($"Player ID: {player.PlayerIdNumber}");
+        }
     }
 
     private void DeclareSingletonInsatnce()

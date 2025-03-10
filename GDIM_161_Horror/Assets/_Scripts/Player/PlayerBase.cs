@@ -1,8 +1,6 @@
 using UnityEngine;
 using Mirror;
 using Player;
-using Steamworks;
-using UnityEngine.SceneManagement;
 
 public class PlayerBase : NetworkBehaviour
 {

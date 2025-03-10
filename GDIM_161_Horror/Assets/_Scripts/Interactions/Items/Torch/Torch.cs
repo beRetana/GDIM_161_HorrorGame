@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
-using Codice.Client.Common.GameUI;
 using System;
-using Player;
+
 
 namespace Interactions
 {
