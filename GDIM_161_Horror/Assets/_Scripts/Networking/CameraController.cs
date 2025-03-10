@@ -48,7 +48,7 @@ public class CameraController : NetworkBehaviour
         _handInventory.enabled = active;
         _basicRigidBodyPush.enabled = active;
         gameObject.SetActive(active);
-       // _mirrorIgnorancePlayer.enabled = active;
+        _mirrorIgnorancePlayer.enabled = active;
     }
 
     
