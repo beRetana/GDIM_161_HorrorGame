@@ -53,7 +53,8 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public virtual void Detected(int playerID)
     {
         if (!_isInteractable) return;
-        _lookAtCamera.SetCamera(Camera.current);
+        Debug.Log($"Detected, Camera: {Camera.main}");
+        _lookAtCamera.SetCamera(Camera.main);
         _textAnimation.SetBool(_fadeIn, true);
     }
 
