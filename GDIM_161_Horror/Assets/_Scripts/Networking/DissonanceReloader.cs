@@ -36,7 +36,7 @@ public class DissonanceReloader : MonoBehaviour
     // Wait for Mirror to fully reinitialize players
     yield return new WaitUntil(() => NetworkClient.ready);
 
-    yield return new WaitForSeconds(0.5f); // Extra delay to ensure networking syncs
+    yield return new WaitForSeconds(1.5f); // Extra delay to ensure networking syncs
 
     _dissonanceComms.enabled = true;
     Debug.Log("DissonanceComms restarted after Mirror was ready.");
