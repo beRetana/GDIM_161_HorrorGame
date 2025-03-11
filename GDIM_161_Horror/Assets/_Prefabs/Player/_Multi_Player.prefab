@@ -116,6 +116,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7903510137634922223, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8392857516868819608, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -160,6 +164,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8318325372954676720}
+    - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7265353846168237323}
     - targetCorrespondingSourceObject: {fileID: 3859778825119738745, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 337344913537284202}
@@ -322,6 +329,21 @@ MonoBehaviour:
   syncInterval: 0
   _cameraBrain: {fileID: 9116085853155801148}
   _playerCamera: {fileID: 8923352904098222661}
+--- !u!114 &7265353846168237323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373982209266735019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae0fc7e5ceca1c440b7b759812c6a0cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &3721777801884901046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3859778825119738745, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}

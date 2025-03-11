@@ -276,6 +276,11 @@ namespace Dissonance
         [UsedImplicitly] private void Awake()
         {
             _singleton = this;
+     
+
+            DontDestroyOnLoad(gameObject);
+
+
         }
 
         [UsedImplicitly] private void Start()

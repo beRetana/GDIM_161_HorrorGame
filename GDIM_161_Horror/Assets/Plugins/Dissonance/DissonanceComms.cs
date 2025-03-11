@@ -2,6 +2,7 @@
 
 namespace Dissonance
 {
+    
     /// <summary>
     ///     The central Dissonance Voice Comms component.
     ///     Place one of these on a voice comm entity near the root of your scene.
@@ -16,6 +17,7 @@ namespace Dissonance
     public sealed partial class DissonanceComms
         : MonoBehaviour
     {
+        
         // The implementation for this behaviour is contained in other files. e.g. `Core/DissonanceCommsImpl.cs`
     }
 }
