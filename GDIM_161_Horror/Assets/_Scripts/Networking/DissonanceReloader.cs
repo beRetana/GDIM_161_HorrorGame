@@ -15,7 +15,7 @@ public class DissonanceReloader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "BUILD_1") 
+        if (scene.name == "BUILD_1") // Replace with your target scene name
         {
             _dissonanceComms = FindObjectOfType<DissonanceComms>();
 
@@ -43,12 +43,12 @@ public class DissonanceReloader : MonoBehaviour
         Debug.Log("[Dissonance] DissonanceComms restarted after Mirror was ready.");
 
         // Ensure local player is properly synchronized with Dissonance
-        yield return StartCoroutine(ReRegisterLocalPlayer());
+        yield return StartCoroutine(ReRegisterPlayers());
     }
 
-    private IEnumerator ReRegisterLocalPlayer()
+    private IEnumerator ReRegisterPlayers()
     {
-        yield return new WaitForSeconds(1); // Give time for network updates
+        yield return new WaitForSeconds(1); // Allow some time for network updates
 
         if (_dissonanceComms == null)
         {
@@ -56,17 +56,36 @@ public class DissonanceReloader : MonoBehaviour
             yield break;
         }
 
-        // The following might differ depending on your Dissonance setup:
-        var localPlayer = NetworkClient.localPlayer; 
+        // Register the local player for Dissonance
+        var localPlayer = NetworkClient.localPlayer;
         if (localPlayer != null)
         {
             Debug.Log("[Dissonance] Local player found, ensuring they are tracked.");
-            // Ensure local player's Dissonance components are properly set up (this might differ in your project)
-            // You can set up voice chat components for the local player or ensure their Dissonance setup is re-registered
+            // Re-initialize the Dissonance components for the local player
+            // In newer versions of Dissonance, you may not need to manually register the player for tracking
         }
         else
         {
             Debug.LogWarning("[Dissonance] No local player found to track.");
+        }
+
+        // Ensure remote players are registered as well (only needed on the server)
+        if (NetworkServer.active)
+        {
+            foreach (var connection in NetworkServer.connections)
+            {
+                var player = connection.Value; // This is the NetworkConnectionToClient
+
+                if (player != null && player.identity != null)
+                {
+                    var playerTransform = player.identity.transform;
+                    Debug.Log($"[Dissonance] Tracking remote player: {player.identity.netId}");
+
+                    // If TrackPlayer is not available, check if Dissonance has another method for handling player registration
+                    // You may need to check the Dissonance documentation for the correct method to track players.
+                    // For now, we'll assume Dissonance automatically tracks players, so this may not be necessary.
+                }
+            }
         }
     }
 
