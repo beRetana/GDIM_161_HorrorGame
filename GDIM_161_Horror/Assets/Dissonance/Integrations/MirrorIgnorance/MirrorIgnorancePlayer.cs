@@ -63,6 +63,7 @@ namespace Dissonance.Integrations.MirrorIgnorance
 
         public void OnDisable()
         {
+            if (!gameObject.scene.isLoaded) return; // Prevent tracking from stopping during a scene transition
             if (IsTracking)
                 StopTracking();
         }
