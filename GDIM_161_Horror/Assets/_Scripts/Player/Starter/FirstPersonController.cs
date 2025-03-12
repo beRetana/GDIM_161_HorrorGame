@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using FMODUnity;
+
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -22,9 +24,15 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private const float _THRESHOLD = 0.01f;
         public GameObject PlayerModel;
+        public bool isWalking { get; private set; }
+
+        float time;
 
         [SerializeField] private GameObject _camera;
         [SerializeField] private string _buildScene = "BUILD_1";
+        [SerializeField] EventReference forestFootstep;
+        [SerializeField] GameObject player;
+        [SerializeField] float rate;
 
         public bool grounded { get; private set; }
 
@@ -92,7 +100,7 @@ namespace StarterAssets
         }
 
         private void Update()
-        {
+        {   time +=Time.deltaTime;
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -128,31 +136,59 @@ namespace StarterAssets
             _arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
 
+        public void PlayFootstep()
+            {
+                RuntimeManager.PlayOneShot(forestFootstep, player.transform.position);
+            }
+
         private void Move()
-        {
+        {   
+
+
+
             float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
 
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+                if (_input.move == Vector2.zero)
+                {
+                    targetSpeed = 0.0f;
+                    isWalking = false; // Player is stopped
+                }
+                else
+                {
+                    isWalking = true; // Player is moving
+                    
+                    
+                    if (isWalking)
+                    {
+                        if (time >= rate)
+                            {
+                                PlayFootstep();
+                                time = 0;
+                            }
+                       
+                        // RuntimeManager.PlayOneShot(forestFootstep, player.transform.position);
+                    }
+                }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-            if (currentHorizontalSpeed < (targetSpeed - speedOffset))
-            {
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
-                _speed = Mathf.Round(_speed * 1000f) / 1000f;
-            }
-            else if (currentHorizontalSpeed > (targetSpeed + speedOffset))
-            {
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate);
-                _speed = Mathf.Round(_speed * 1000f) / 1000f;
-            }
-            else
-            {
-                _speed = targetSpeed;
-            }
+                if (currentHorizontalSpeed < (targetSpeed - speedOffset))
+                {
+                    _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
+                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
+                }
+                else if (currentHorizontalSpeed > (targetSpeed + speedOffset))
+                {
+                    _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate);
+                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
+                }
+                else
+                {
+                    _speed = targetSpeed;
+                }
 
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
@@ -161,6 +197,7 @@ namespace StarterAssets
 
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
+
 
         private void JumpAndGravity()
         {

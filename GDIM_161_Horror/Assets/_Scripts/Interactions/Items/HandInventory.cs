@@ -129,6 +129,9 @@ public class HandInventory : NetworkBehaviour
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = inventorySlotToGain;
+                //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
+
+
                 Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
