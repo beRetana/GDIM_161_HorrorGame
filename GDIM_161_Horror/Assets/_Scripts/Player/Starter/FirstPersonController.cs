@@ -22,6 +22,7 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private StarterAssetsInputs _input;
+        private Animator _animator;
         private const float _THRESHOLD = 0.01f;
         public bool isWalking { get; private set; }
 
@@ -47,6 +48,9 @@ namespace StarterAssets
         }
         private bool _gravityOn = true;
 
+        private const string SPEED = "Speed";
+        private const string JUMP = "Jump";
+
         public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
@@ -70,6 +74,7 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
+            _animator = GetComponent<Animator>();
         }
 
         private void OnDestroy()
@@ -105,9 +110,19 @@ namespace StarterAssets
             Move();
         }
 
+        private void FixedUpdate()
+        {
+            UpdateSpeedAnimation();
+        }
+
         private void LateUpdate()
         {
             CameraRotation();
+        }
+
+        private void UpdateSpeedAnimation()
+        {
+            _animator.SetFloat(SPEED, new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
         }
 
         private void GroundedCheck()
@@ -202,6 +217,8 @@ namespace StarterAssets
 
                 if (_jumpTimeoutDelta >= 0.0f)
                     _jumpTimeoutDelta -= Time.deltaTime;
+
+                _animator.SetBool(JUMP, false);
             }
             else
             {
@@ -216,6 +233,7 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += gravity * Time.deltaTime;
+                _animator.SetBool(JUMP, true);
             }
         }
 

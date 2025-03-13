@@ -43,31 +43,41 @@ public class HandInventory : NetworkBehaviour
         public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
         public bool IsDominant { get { return _isDominant; } set { _isDominant = value; } }
 
-        public void SetRigidBody(Rigidbody rigidBody/*, float linearDrag*/)
+        public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
         {
             _itemRigidBody = rigidBody;
             ItemRigidBody.isKinematic = true; // no gravity
             
-            
-           /* ItemRigidBody.useGravity = false;
+            // Comment this later
+            ItemRigidBody.useGravity = false;
+            // Comment this later
             _initialLinearDamping = rigidBody.linearDamping;
+            // Comment this later
             ItemRigidBody.linearDamping = linearDrag;
+            // Comment this later
             ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-            ItemRigidBody.transform.parent = ItemTransform;*/
+            // Comment this later
+            ItemRigidBody.transform.parent = ItemTransform;
         }
 
         public Rigidbody RemoveRigidBody()
         {
             Rigidbody rigidBodyToDrop = ItemRigidBody;
-            /*Transform pickableParent = _itemTransform.parent;
-            Debug.Log(pickableParent);*/
+            // Comment this later
+            Transform pickableParent = _itemTransform.parent;
+
             ItemRigidBody.isKinematic = false;//useGravity = true;
             ItemTransform.SetParent(null);
 
-            /*ItemRigidBody.useGravity = true;
+            // Comment this later
+            ItemRigidBody.useGravity = true;
+            // Comment this later
             ItemRigidBody.linearDamping = _initialLinearDamping;
+            // Comment this later
             ItemRigidBody.freezeRotation = false;
-            ItemRigidBody.transform.parent = null;*/
+            // Comment this later
+            ItemRigidBody.transform.parent = null;
+
             _itemRigidBody = null;
 
             return rigidBodyToDrop;
@@ -286,7 +296,7 @@ public class HandInventory : NetworkBehaviour
     {
         bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
 
-        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
+        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
         inventorySlotOfNewItem.ItemTransform = pickableParent;
 
         pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
