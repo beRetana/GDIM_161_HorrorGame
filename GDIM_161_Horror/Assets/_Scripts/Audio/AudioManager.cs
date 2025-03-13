@@ -4,37 +4,36 @@ using UnityEngine;
 using FMODUnity;
 using UnityEngine.InputSystem;
 using StarterAssets;
+using UnityEngine.SceneManagement;
+using FMOD.Studio;
 
 
 public class AudioManager : MonoBehaviour
 {
+    private List<EventInstance> eventInstances;
 
-    // [SerializeField] EventReference forestFootstep;
-    // [SerializeField] float rate;
-    // [SerializeField] GameObject player;
-    // [SerializeField] FirstPersonController firstPersonController;
+    private List<StudioEventEmitter> eventEmitters;
 
-    // float time;
+    private EventInstance ambianceEventInstance;
+    public static AudioManager instance {get; private set;}
 
-    // public void PlayFootstep()
-    // {
-    //     RuntimeManager.PlayOneShot(forestFootstep,  player.transform.position);
-    // }
+
+
+   
+   private void Start()
+   {
+       InitializeAmbience(FMODEvents.instance.backgroundAmbiance);
+   }
+
     
-    // void Update()
-    // {
-    //     time +=Time.deltaTime;
-    //     if (firstPersonController.isWalking)
+    // private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     //     {
-    //         if (time >= rate)
+    //         if (scene.name == "BUILD_1") 
     //             {
-    //                 PlayFootstep();
-    //                 time = 0;
+    //                 InitializeAmbience(FMODEvents.instance.backgroundAmbiance);    
     //             }
     //     }
-    // }
-
-    public static AudioManager instance {get; private set;}
+    
 
     private void Awake()
     {
@@ -43,16 +42,56 @@ public class AudioManager : MonoBehaviour
             Debug.LogError ("Found more than one Audio Manager in the scene");
         }
         instance = this;
-
+        eventInstances = new List<EventInstance>();
+        eventEmitters = new List<StudioEventEmitter>();
     }
+
+    private void InitializeAmbience(EventReference ambianceEventReference )
+    {
+        ambianceEventInstance = CreateInstance(ambianceEventReference);
+        ambianceEventInstance.start();
+    }
+
 
     public void PlayOneShot(EventReference sound, Vector3 worldPos)
     {
         RuntimeManager.PlayOneShot(sound, worldPos);
     }
 
+    public EventInstance CreateInstance(EventReference eventReference)
+    {
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstances.Add(eventInstance);
+        return eventInstance;
+    }
 
+    public StudioEventEmitter InitializeEventEmitter(EventReference eventReference, GameObject emitterGameObject)
+    {
+        StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();
+        emitter.EventReference = eventReference;
+        eventEmitters.Add(emitter);
+        return emitter;
+    }
 
+    private void CleanUp()
+    {
+        foreach (EventInstance eventInstance in eventInstances)
+        {
+            eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            eventInstance.release();
+        }
+        //stop all the event emitters, bc if not, it could hang around for future scene changes
+        foreach (StudioEventEmitter emitter in eventEmitters)
+        {
+            emitter.Stop();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        CleanUp();
+    }
+    
 
 
 }

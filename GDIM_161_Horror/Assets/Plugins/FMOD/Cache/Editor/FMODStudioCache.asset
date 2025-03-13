@@ -81,6 +81,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-1299140445480587344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/WorldSpace.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
+  Name: WorldSpace
+  StudioPath: bank:/WorldSpace
+  lastModified: 638774167632530202
+  FileSizes:
+  - Name: Desktop
+    Value: 572768
+  Exists: 1
 --- !u!114 &-238223770636140962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +116,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638773244966814538
+  lastModified: 638774142562358391
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -117,16 +137,18 @@ MonoBehaviour:
   - {fileID: 1599044835148366132}
   - {fileID: -238223770636140962}
   - {fileID: 32562135611507061}
+  - {fileID: -1299140445480587344}
   EditorEvents:
   - {fileID: -4616598458146522360}
   - {fileID: -4661128867828970748}
   - {fileID: -3073548273832309031}
+  - {fileID: 6854522976295634600}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638773244971958552
+  cacheTime: 638774167632530202
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -143,7 +165,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638773244971958552
+  lastModified: 638774142086024621
   FileSizes:
   - Name: Desktop
     Value: 50752
@@ -163,8 +185,35 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638773244966870783
+  lastModified: 638774142562388491
   FileSizes:
   - Name: Desktop
-    Value: 918
+    Value: 1008
   Exists: 1
+--- !u!114 &6854522976295634600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/backgroundAmbiance
+  m_EditorClassIdentifier: 
+  Path: event:/backgroundAmbiance
+  Guid:
+    Data1: -1551080663
+    Data2: 1154017101
+    Data3: -522812263
+    Data4: -329901556
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 42500
