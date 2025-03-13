@@ -16,7 +16,7 @@ public class DissonanceReloader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "BUILD_1") // Replace with your target scene name
+        if (scene.name == "BUILD_1") 
         {
             _dissonanceComms = FindObjectOfType<DissonanceComms>();
             _dissonanceCommsNetwork = FindObjectOfType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();

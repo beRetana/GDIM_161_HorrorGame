@@ -8,6 +8,9 @@ public class FMODEvents : MonoBehaviour
 
     [field: Header("Torch SFX")]
     [field: SerializeField] public EventReference torchGrab {get; private set;}
+
+    [field: Header("backgroundAmbiance")]
+    [field: SerializeField] public EventReference backgroundAmbiance {get; private set;}
     
     public static FMODEvents instance {get; private set;}
 
