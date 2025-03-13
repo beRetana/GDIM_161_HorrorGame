@@ -40,6 +40,9 @@ namespace StarterAssets
                 #endif
             }
         }
+        private bool _gravityOn = true;
+
+        public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
         {
@@ -164,6 +167,8 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            if (!_gravityOn) return;
+
             if (grounded)
             {
                 _fallTimeoutDelta = fallTimeout;
