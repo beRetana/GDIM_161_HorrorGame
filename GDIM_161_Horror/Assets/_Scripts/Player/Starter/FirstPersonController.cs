@@ -23,16 +23,13 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private const float _THRESHOLD = 0.01f;
-        public GameObject PlayerModel;
         public bool isWalking { get; private set; }
 
-        float time;
+        float _stepSoundTime;
 
-        [SerializeField] private GameObject _camera;
         [SerializeField] private string _buildScene = "BUILD_1";
-        [SerializeField] EventReference forestFootstep;
-        [SerializeField] GameObject player;
-        [SerializeField] float rate;
+        [SerializeField] private EventReference _forestFootstep;
+        [SerializeField] private float _rate;
 
         public bool grounded { get; private set; }
 
@@ -97,13 +94,12 @@ namespace StarterAssets
             {
                 if (spawnPoint.IsOccupied) continue;
                 transform.position = spawnPoint.UseSpawner();
-                Debug.Log($"Player spawned at {transform.position}");
                 break;
             }
         }
 
         private void Update()
-        {   time +=Time.deltaTime;
+        {   
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -140,58 +136,47 @@ namespace StarterAssets
         }
 
         public void PlayFootstep()
-            {
-                RuntimeManager.PlayOneShot(forestFootstep, player.transform.position);
-            }
+        {
+            RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
+        }
 
         private void Move()
-        {   
-
-
+        {
+            _stepSoundTime += Time.deltaTime;
 
             float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
 
-                if (_input.move == Vector2.zero)
+            if (_input.move == Vector2.zero)
+            {
+                targetSpeed = 0.0f;
+                isWalking = false; // Player is stopped
+            }
+            else
+            {
+                isWalking = true; // Player is moving  
+                if (_stepSoundTime >= _rate)
                 {
-                    targetSpeed = 0.0f;
-                    isWalking = false; // Player is stopped
+                    PlayFootstep();
+                    _stepSoundTime = 0;
                 }
-                else
-                {
-                    isWalking = true; // Player is moving
-                    
-                    
-                    if (isWalking)
-                    {
-                        if (time >= rate)
-                            {
-                                PlayFootstep();
-                                time = 0;
-                            }
-                       
-                        // RuntimeManager.PlayOneShot(forestFootstep, player.transform.position);
-                    }
-                }
+            }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-                if (currentHorizontalSpeed < (targetSpeed - speedOffset))
-                {
-                    _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
-                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
-                }
-                else if (currentHorizontalSpeed > (targetSpeed + speedOffset))
-                {
-                    _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate);
-                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
-                }
-                else
-                {
-                    _speed = targetSpeed;
-                }
+            if (currentHorizontalSpeed < (targetSpeed - speedOffset))
+            {
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * accelerationRate);
+                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            }
+            else if (currentHorizontalSpeed > (targetSpeed + speedOffset))
+            {
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate);
+                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            }
+            else _speed = targetSpeed;
 
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
@@ -200,7 +185,6 @@ namespace StarterAssets
 
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
-
 
         private void JumpAndGravity()
         {

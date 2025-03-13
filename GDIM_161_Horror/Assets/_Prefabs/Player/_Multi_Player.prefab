@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_Height
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2946501653002084974, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 3567417533735339568, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -198,15 +202,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9070468886778292106, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4422003037589858050}
-    - targetCorrespondingSourceObject: {fileID: 3859778825119738745, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 337344913537284202}
   m_SourcePrefab: {fileID: 100100000, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
---- !u!4 &1254513678436422213 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1683841439467628426, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
-  m_PrefabInstance: {fileID: 447784172344227279}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2709225641590689041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2571488355673585886, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
@@ -306,7 +302,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -375,44 +371,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
---- !u!1 &3721777801884901046 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3859778825119738745, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
-  m_PrefabInstance: {fileID: 447784172344227279}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &337344913537284202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3721777801884901046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 1
-  syncMode: 0
-  syncInterval: 0
-  target: {fileID: 1254513678436422213}
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 0
-  onlySyncOnChange: 1
-  compressRotation: 1
-  interpolatePosition: 1
-  interpolateRotation: 1
-  interpolateScale: 1
-  coordinateSpace: 0
-  timelineOffset: 1
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
-  bufferResetMultiplier: 3
-  positionSensitivity: 0.01
-  rotationSensitivity: 0.01
-  scaleSensitivity: 0.01
 --- !u!4 &4725544762908803809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5161785678068823854, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
