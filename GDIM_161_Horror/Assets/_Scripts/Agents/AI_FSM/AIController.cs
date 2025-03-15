@@ -32,7 +32,7 @@ namespace AI_FSM{
 
         public Action onTaskCompleted;
 
-        private void Start()
+        private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
             _agentDefaultSpeed = _agent.speed;
@@ -77,7 +77,6 @@ namespace AI_FSM{
                             Debug.LogError("Task type not recognized");
                             break;
                     }
-                    
                     break;
                 case State.Done:
                     Debug.Log($"State of task is {_state}");
