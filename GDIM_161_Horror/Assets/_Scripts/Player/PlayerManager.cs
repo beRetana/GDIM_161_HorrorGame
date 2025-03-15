@@ -10,8 +10,6 @@ public class PlayerManager : NetworkBehaviour
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
 
-    [SerializeField] private string _gameSceneName = "BUILD_1";
-
     private NewNetworkManager _networkmanager;
 
     public NewNetworkManager NetworkManager
@@ -30,18 +28,6 @@ public class PlayerManager : NetworkBehaviour
     {
         DeclareSingletonInsatnce();
         _playerHolder = new();
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != _gameSceneName) return;
-        foreach (PlayerObjectController player in NetworkManager.GamePlayers)
-        {
-            PlayerBase playerBase;
-            player.TryGetComponent<PlayerBase>(out playerBase);
-            // if (playerBase != null) _playerHolder.AddPlayer(playerBase);
-        }
     }
 
     private void DeclareSingletonInsatnce()
