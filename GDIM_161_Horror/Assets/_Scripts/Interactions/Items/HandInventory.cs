@@ -270,7 +270,6 @@ public class HandInventory : NetworkBehaviour
         if (itemToUse == null) return;
 
         itemToUse.UseItem(_playerID);
-        // TK interact functionality
     }
 
     public bool PickUpItem(PickableItem pickableItem)

@@ -218,7 +218,6 @@ namespace StarterAssets
                 if (_jumpTimeoutDelta >= 0.0f)
                     _jumpTimeoutDelta -= Time.deltaTime;
 
-                _animator.SetBool(JUMP, false);
             }
             else
             {
@@ -228,6 +227,7 @@ namespace StarterAssets
                     _fallTimeoutDelta -= Time.deltaTime;
 
                 _input.jump = false;
+                _animator.SetBool(JUMP, false);
             }
 
             if (_verticalVelocity < _terminalVelocity)

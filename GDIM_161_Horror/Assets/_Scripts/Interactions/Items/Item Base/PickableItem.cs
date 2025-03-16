@@ -57,7 +57,7 @@ namespace Interactions
         {
             Transform parentTransform = transform.parent.transform;
             parentTransform.localPosition = Vector3.zero;
-            parentTransform.localEulerAngles = new Vector3(0f, -270f, 0f);
+            parentTransform.localEulerAngles = new Vector3(0f, 270f, 0f);
         }
     }
 }
