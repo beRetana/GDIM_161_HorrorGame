@@ -78,6 +78,8 @@ public class HandInventory : NetworkBehaviour
             // Comment this later
             ItemRigidBody.transform.parent = null;
 
+            rigidBodyToDrop.GetComponent<NetworkIdentity>().enabled = true;
+
             _itemRigidBody = null;
 
             return rigidBodyToDrop;
