@@ -5,7 +5,7 @@ namespace Interactions
 {
     public class FireCollision : MonoBehaviour
     {
-        [SerializeField, Tooltip("Torch / Hearth")] 
+        [SerializeField, Tooltip("Torch / Hearth")]
         private GameObject maybeFireable;
         private IFireable fireableObject;
 
@@ -13,15 +13,13 @@ namespace Interactions
 
         private void Start()
         {
-            fireableObject = maybeFireable.GetComponent<IFireable>();
+            fireableObject = maybeFireable.gameObject.GetComponent<IFireable>();
             if (fireableObject == null) Destroy(this);
+
         }
 
         private void OnTriggerEnter(Collider col)
         {
-            Debug.Log("Entered Collision");
-            if (this.IsLit()) return; //check if this is already lit
-
             if (!col.CompareTag(FIRE_TAG)) return; //check if other is fire
 
             FireCollision colFire = col.gameObject.GetComponent<FireCollision>();
@@ -33,7 +31,7 @@ namespace Interactions
         }
 
 
-        public bool IsLit()
+        private bool IsLit()
         {
             return fireableObject.IsLit();
         }
