@@ -15,13 +15,15 @@ namespace AI
         private NavMeshAgent _controller;
 
         
-        private EventInstance deerWalkEventInstance;
-        private EventInstance deerRunEventInstance;
+        // private EventInstance deerWalkEventInstance;
+        // private EventInstance deerRunEventInstance;
+        [SerializeField] private EventReference _deerWalkFootstep;
+        [SerializeField] private EventReference _deerRunFootstep;
         private bool isWalking = false;
         private bool isRunning = false;
 
-        private const float WalkThreshold = 0.3f; // Adjust for when to start playing walking sound
-        private const float RunThreshold = 0.6f;  // Adjust for when to start playing running sound
+        private const float WalkThreshold = 0.1f; // Adjust for when to start playing walking sound
+        private const float RunThreshold = 0.5f;  // Adjust for when to start playing running sound
 
         private void Start()
         {
@@ -55,17 +57,14 @@ namespace AI
             // Handle walking sound
             if (!isWalking && currentSpeed >= WalkThreshold && currentSpeed < RunThreshold)
             {
-                // Start walking sound
-                deerWalkEventInstance = RuntimeManager.CreateInstance(FMODEvents.instance.deerWalk);
-                RuntimeManager.AttachInstanceToGameObject(deerWalkEventInstance, transform);
-                deerWalkEventInstance.start();
+                PlayDeerwalkFootstep();
                 isWalking = true;
                 isRunning = false;
             }
             else if (isWalking && (currentSpeed < WalkThreshold || currentSpeed >= RunThreshold))
             {
-                // Stop walking sound if speed drops below walking threshold or increases to running speed
-                deerWalkEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+               
+                
                 isWalking = false;
             }
 
@@ -73,17 +72,26 @@ namespace AI
             if (!isRunning && currentSpeed >= RunThreshold)
             {
                 // Start running sound
-                deerRunEventInstance = RuntimeManager.CreateInstance(FMODEvents.instance.deerRun);
-                RuntimeManager.AttachInstanceToGameObject(deerRunEventInstance, transform);
-                deerRunEventInstance.start();
+                
+                PlayDeerrunFootstep();
                 isRunning = true;
             }
             else if (isRunning && currentSpeed < RunThreshold)
             {
-                // Stop running sound if speed decreases below running threshold
-                deerRunEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                
+                
                 isRunning = false;
             }
+        }
+        
+        public void PlayDeerwalkFootstep()
+        {
+            RuntimeManager.PlayOneShot(_deerWalkFootstep, transform.position);
+        }
+
+        public void PlayDeerrunFootstep()
+        {
+            RuntimeManager.PlayOneShot(_deerRunFootstep, transform.position);
         }
 
         private IEnumerator StartSequence()
@@ -107,20 +115,8 @@ namespace AI
             // No transitions
         }
 
-        private void OnDestroy()
-        {
-            // Clean up and stop the footstep sounds when the deer is destroyed
-            if (deerWalkEventInstance.isValid())
-            {
-                deerWalkEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-                deerWalkEventInstance.release();
-            }
+        
 
-            if (deerRunEventInstance.isValid())
-            {
-                deerRunEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-                deerRunEventInstance.release();
-            }
-        }
+       
     }
 }
