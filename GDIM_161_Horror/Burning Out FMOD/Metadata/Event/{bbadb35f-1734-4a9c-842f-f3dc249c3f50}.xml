@@ -57,7 +57,11 @@
 			<destination>{4e8d955c-d525-4d7b-ba44-56e641d6f03e}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{e934e4ff-ca7c-4daf-8197-0a68f01a91a4}" />
+	<object class="EventAutomatableProperties" id="{e934e4ff-ca7c-4daf-8197-0a68f01a91a4}">
+		<property name="maximumDistance">
+			<value>100</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{a72bc44e-e419-4412-bf71-6e13cb441fee}" />
 	<object class="GroupTrack" id="{d406bde6-e2c8-4efd-b53d-22557bd99ec7}">
 		<relationship name="modules">
@@ -92,9 +96,6 @@
 	<object class="MultiSound" id="{896cfc18-ec5b-4147-8b80-7a15adfabd3d}">
 		<property name="length">
 			<value>0.68000000000000005</value>
-		</property>
-		<property name="looping">
-			<value>true</value>
 		</property>
 		<relationship name="sounds">
 			<destination>{b172462a-bfb5-4970-b423-9fddd4c1fc73}</destination>
@@ -155,9 +156,5 @@
 	<object class="MixerBusFader" id="{de122c49-92e9-4cb9-9452-ae0d3212072a}" />
 	<object class="SpatialiserEffect" id="{cc611458-48b8-42b7-9b81-b146ceb9cc6c}" />
 	<object class="MixerBusFader" id="{7676214a-3315-47da-8693-8896c9fbfe65}" />
-	<object class="GainEffect" id="{5974f7d9-faa5-415a-9750-ca27615e4cc2}">
-		<property name="gain">
-			<value>5.5</value>
-		</property>
-	</object>
+	<object class="GainEffect" id="{5974f7d9-faa5-415a-9750-ca27615e4cc2}" />
 </objects>
