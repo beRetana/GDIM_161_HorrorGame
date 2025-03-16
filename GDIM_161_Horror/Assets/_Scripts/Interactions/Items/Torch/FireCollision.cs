@@ -1,8 +1,9 @@
 using UnityEngine;
+using Mirror;
 
 namespace Interactions
 {
-    public class FireCollision : MonoBehaviour
+    public class FireCollision : NetworkBehaviour
     {
         [SerializeField, Tooltip("Torch / Hearth")] private GameObject maybeFireable;
         private IFireable fireableObject;

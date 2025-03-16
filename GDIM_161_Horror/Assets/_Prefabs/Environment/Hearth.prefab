@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   maybeFireable: {fileID: 2523596723460159556}
 --- !u!1 &2523596723460159556
 GameObject:
@@ -105,6 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4390704284720005526}
   - component: {fileID: 4314775591687182890}
+  - component: {fileID: 8226403583260400781}
   m_Layer: 0
   m_Name: Hearth
   m_TagString: Untagged
@@ -122,7 +126,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4154, y: 1.4154, z: 1.4154}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8286567504530317272}
@@ -147,6 +151,23 @@ MonoBehaviour:
   flameRed: {fileID: 9123537906797114573}
   flameOrange: {fileID: 8857281802743645653}
   flameYellow: {fileID: 1939844585831223845}
+--- !u!114 &8226403583260400781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523596723460159556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 2953388617
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &3652198641300914004
 GameObject:
   m_ObjectHideFlags: 0
