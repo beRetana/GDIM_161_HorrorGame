@@ -300,8 +300,7 @@ public class HandInventory : NetworkBehaviour
         bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
 
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
-        inventorySlotOfNewItem.ItemTransform = pickableParent;
-        pickableParent.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
+        inventorySlotOfNewItem.ItemTransform = isLeftHandAction ? _leftHandSocket : _rightHandSocket;
 
         pickableItem.OrientItemInHand(isLeftHandAction);
     }
