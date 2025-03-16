@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 namespace Interactions
@@ -6,7 +7,7 @@ namespace Interactions
     /// This is a base class for items that can be picked up. It uses interactable items.
     /// </summary>
     [RequireComponent(typeof(InteractableItem))]
-    public class PickableItem : MonoBehaviour
+    public class PickableItem : NetworkBehaviour
     {
         protected InteractableItem _interactableItem;
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand

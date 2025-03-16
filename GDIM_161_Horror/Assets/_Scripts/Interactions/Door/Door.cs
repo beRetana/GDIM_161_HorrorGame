@@ -1,16 +1,17 @@
+using Mirror;
 using System;
 using UnityEngine;
 
 namespace Interactions
 {
-    public class Door : MonoBehaviour
+    public class Door : NetworkBehaviour
     {
         [Header("Door Settings/Components")]
         [SerializeField] private DoorHandle _rightDoorHandle;
         [SerializeField] private DoorHandle _leftDoorHandle;
         [SerializeField] private float _openDistance = 1.5f;
 
-        private int _playersOnHandles;
+        [SyncVar] private int _playersOnHandles;
 
         private enum DoorState
         {

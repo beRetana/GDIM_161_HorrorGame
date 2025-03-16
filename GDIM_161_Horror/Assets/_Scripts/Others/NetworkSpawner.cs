@@ -11,7 +11,10 @@ namespace OtherUtils
 
         void Start()
         {
-            StartCoroutine(SpawnPrefab());
+            if (isServer)
+            {
+                StartCoroutine(SpawnPrefab());
+            }
         }
 
         private IEnumerator SpawnPrefab()
