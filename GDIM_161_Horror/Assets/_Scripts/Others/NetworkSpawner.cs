@@ -10,7 +10,10 @@ namespace OtherUtils
         [SerializeField] private float _delay;
 
         [Server]
-        void Start() { if (isServer) StartCoroutine(SpawnPrefab()); }
+        void Start() 
+        { 
+            if (isServer) StartCoroutine(SpawnPrefab()); 
+        }
 
         private IEnumerator SpawnPrefab()
         {
