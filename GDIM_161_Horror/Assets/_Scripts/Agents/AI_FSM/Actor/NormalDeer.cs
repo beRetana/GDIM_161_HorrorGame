@@ -12,6 +12,10 @@ namespace AI
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
 
+        private float _previousSpeed = 0f;
+        private const float WalkThreshold = 0.3f;
+        private const float RunThreshold = 0.
+
         private void Start()
         {
             _wander = GetComponent<Wander>();
