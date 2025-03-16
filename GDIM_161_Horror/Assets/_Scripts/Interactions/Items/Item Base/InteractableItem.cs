@@ -59,6 +59,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public virtual void StoppedDetecting(int playerID)
     {
-        _textAnimation.SetBool(_fadeIn, false);
+        Debug.Log($"Object Being Called: {gameObject.name}");
+        _textAnimation?.SetBool(_fadeIn, false);
     }
 }

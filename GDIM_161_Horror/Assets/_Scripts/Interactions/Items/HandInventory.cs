@@ -4,6 +4,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -78,8 +79,6 @@ public class HandInventory : NetworkBehaviour
             // Comment this later
             ItemRigidBody.transform.parent = null;
 
-            rigidBodyToDrop.GetComponent<NetworkIdentity>().enabled = true;
-
             _itemRigidBody = null;
 
             return rigidBodyToDrop;
@@ -138,9 +137,10 @@ public class HandInventory : NetworkBehaviour
         public InventorySlot GainItem(PickableItem inventorySlotToGain)
         {
             InventorySlot selectedHand = GetDominantHand();
+            
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = inventorySlotToGain;
+                selectedHand.Item = CreateHeldItem(inventorySlotToGain, selectedHand.ItemTransform);
                 //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
 
 
@@ -150,11 +150,20 @@ public class HandInventory : NetworkBehaviour
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = inventorySlotToGain;
+                selectedHand.Item = CreateHeldItem(inventorySlotToGain, selectedHand.ItemTransform);
                 Debug.Log($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
+        }
+
+        private PickableItem CreateHeldItem(PickableItem itemToDestroy, Transform selectedHand)
+        {
+            PickableItemSO pickableSO = itemToDestroy.PickableItemSO;
+            Transform nonNetworkPrefab = Instantiate(pickableSO.Prefab, selectedHand);
+            NetworkServer.Destroy(itemToDestroy.transform.parent.gameObject);
+            Debug.Log("Network object Destroyed and Non-Network Created");
+            return nonNetworkPrefab.GetChild(0).GetComponent<PickableItem>();
         }
 
         public InventorySlot RemoveItem()
@@ -223,6 +232,7 @@ public class HandInventory : NetworkBehaviour
         // If we hit something in the layer.
         if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
         {
+            Debug.Log("DETECTED SOMETHING");
             IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something before.
@@ -257,9 +267,12 @@ public class HandInventory : NetworkBehaviour
         _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
     public void OnInteract(InputValue value) 
-    { 
-        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null) 
+    {
+        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
+        {
             _interactableComponent?.Interact(_playerID);
+            _interactableComponent = null;
+        }
     }
     public void OnDrop(InputValue value) { DropItem(); }
     public void OnThrow(InputValue value) { DropItem(_throwForce); }
@@ -274,22 +287,27 @@ public class HandInventory : NetworkBehaviour
         itemToUse.UseItem(_playerID);
     }
 
-    public bool PickUpItem(PickableItem pickableItem)
+    [Command]
+    public void CmdPickUpItem(PickableItem pickableItem)
     {
-        Transform pickableParent = pickableItem.transform.parent;
-        
-        if (pickableParent.GetComponent<Rigidbody>() == null) return false; // DropItem(); <-??
-
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
-        if (inventorySlotOfNewItem == null) return false;
+        
+        if (inventorySlotOfNewItem == null) return;
 
-        _PutItemInHand(inventorySlotOfNewItem, pickableParent, pickableItem);
+        // TK Might have to load to server manually.
+
+        _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
 
         _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
         Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
         Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
+    }
 
+    public bool PickUpItem(PickableItem pickableItem)
+    {
+        CmdPickUpItem(pickableItem);
+        _interactableComponent = null;
         return true;
     }
 
@@ -301,14 +319,17 @@ public class HandInventory : NetworkBehaviour
         inventorySlotOfNewItem.ItemTransform = pickableParent;
 
         pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
-        //pickableParent.transform.localPosition = Vector3.zero;
-        //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
 
         pickableItem.OrientItemInHand(isLeftHandAction);
     }
 
-
     private void DropItem(float throwForce = 0)
+    {
+        CmdDropItem(throwForce);
+    }
+
+    [Command]
+    public void CmdDropItem(float throwForce)
     {
         bool isThrow = _arms.IsDomOutStretched();
 
@@ -316,22 +337,31 @@ public class HandInventory : NetworkBehaviour
         if (dominantSlot.Item == null) return;
 
         PickableItem itemToDrop = dominantSlot.Item;
-        Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
+        PickableItemSO pickableItemSO = itemToDrop.PickableItemSO;
+        Transform networkItem = Instantiate(pickableItemSO.NetworkPrefab,
+                                            dominantSlot.ItemTransform.position,
+                                            dominantSlot.ItemTransform.rotation);
+
+        NetworkServer.Spawn(networkItem.gameObject);
+
+        Rigidbody networkRigidbody = networkItem.GetComponent<Rigidbody>();
+
+        networkRigidbody.isKinematic = false;
 
         _inventorySlots.RemoveItem();
 
-        if(isThrow)
+        Destroy(itemToDrop.transform.parent.gameObject);
+
+        if (isThrow)
         {
-            itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            networkRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
             _arms.ToggleHandMoveOutOrIn(_inventorySlots.IsLHandDom);
         }
         else
         {
-            itemRigidBodyToDrop.AddForce(transform.forward, ForceMode.Impulse);
+            networkRigidbody.AddForce(transform.forward, ForceMode.Impulse);
             _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
         }
-
-        itemToDrop.UnPossessItem();
     }
 
 
