@@ -290,8 +290,29 @@ public class HandInventory : NetworkBehaviour
     [Command]
     public void CmdPickUpItem(NetworkPickableItem pickableItem)
     {
+        if (!isServer) return;
+
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
         
+        if (inventorySlotOfNewItem == null) return;
+
+        // TK Might have to load to server manually.
+
+        _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
+
+        _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
+        Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
+        Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
+        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
+    }
+
+    [ClientRpc]
+    public void RpcPickupItem(NetworkPickableItem pickableItem)
+    {
+        if (!isClient) return;
+
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+
         if (inventorySlotOfNewItem == null) return;
 
         // TK Might have to load to server manually.
