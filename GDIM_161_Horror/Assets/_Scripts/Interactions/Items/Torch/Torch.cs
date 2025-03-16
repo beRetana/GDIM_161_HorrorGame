@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using Mirror;
 
 
 namespace Interactions
@@ -204,8 +205,15 @@ namespace Interactions
             flameSize = 0f;
             torchLight.intensity = 0f;
             ScaleFlameScale(0f);
+            DestroyTorch();
         }
 
+        [Server]
+        private void DestroyTorch()
+        {
+            Debug.Log("Destrying Torch");
+            NetworkServer.Destroy(transform.parent.gameObject);
+        }
 
         #endregion flame_helpers
 
