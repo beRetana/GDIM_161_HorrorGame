@@ -8,14 +8,12 @@ namespace AI
     public class NormalDeer : NetworkAIActor
     {
         private Wander _wander;
-        private Rigidbody _rigidbody;
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
 
         private void Start()
         {
             _wander = GetComponent<Wander>();
-            _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
             _controller = GetComponent<NavMeshAgent>();
             StartCoroutine(StartSequence());
@@ -24,7 +22,6 @@ namespace AI
         void Update()
         {
             _animator.SetSpeed(Mathf.Clamp01(_controller.velocity.magnitude/_controller.speed));
-            if (_rigidbody.linearVelocity.y > 0.001f) _animator.OnJump();
         }
 
         private IEnumerator StartSequence()
