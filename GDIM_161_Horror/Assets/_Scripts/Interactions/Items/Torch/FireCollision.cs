@@ -3,7 +3,7 @@ using Mirror;
 
 namespace Interactions
 {
-    public class FireCollision : NetworkBehaviour
+    public class FireCollision : MonoBehaviour
     {
         [SerializeField, Tooltip("Torch / Hearth")] private GameObject maybeFireable;
         private IFireable fireableObject;
