@@ -1,4 +1,3 @@
-using Mirror;
 using UnityEngine;
 
 namespace Interactions
@@ -25,10 +24,10 @@ namespace Interactions
         protected virtual void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
-            //_interactableItem.SetInteractAction(PickItem);
+            _interactableItem.SetInteractAction(PickItem);
         }
 
-        /*protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
+        protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
             if (IsPossessed)
             {
@@ -53,7 +52,7 @@ namespace Interactions
             IsPossessed = toPossess;
             OwnerPlayerID = playerID;
             _interactableItem.SetInteractive(!toPossess);
-        }*/
+        }
 
         public virtual void UseItem(int playerID) { }
 

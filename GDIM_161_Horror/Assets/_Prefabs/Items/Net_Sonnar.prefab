@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8724721889429760598}
   - component: {fileID: 5109410486686612695}
   - component: {fileID: 409505196352271945}
-  - component: {fileID: 164648993949427715}
+  - component: {fileID: 5772536388733224877}
   m_Layer: 3
   m_Name: Pickable
   m_TagString: Untagged
@@ -87,7 +87,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &164648993949427715
+--- !u!114 &5772536388733224877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,13 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1044840356496430894}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab4b25c4c0bb1984d8b72f555787699d, type: 3}
+  m_Script: {fileID: 11500000, guid: 06b09d0d83f17534ea4a344371545741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 8ab43b6301a426c42b8c42d617cd2542, type: 2}
+  _detectionRadius: 20
+  _sonarDetectable:
+    serializedVersion: 2
+    m_Bits: 64
+  _sonarDisplay: {fileID: 2404373559361504141}
 --- !u!1 &2791267377689233636
 GameObject:
   m_ObjectHideFlags: 0
