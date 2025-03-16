@@ -30,7 +30,7 @@ public class CameraController : NetworkBehaviour
         _playerArticulations = GetComponent<PlayerArticulations>();
         _playerInput = GetComponent<PlayerInput>();
 
-        if (isLocalPlayer) ToggleObjects(false);
+        ToggleObjects(false);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
