@@ -161,6 +161,7 @@ public class HandInventory : NetworkBehaviour
         {
             PickableItemSO pickableSO = itemToDestroy.PickableItemSO;
             Transform nonNetworkPrefab = Instantiate(pickableSO.Prefab, selectedHand);
+            NetworkServer.Spawn(nonNetworkPrefab.gameObject);
             NetworkServer.Destroy(itemToDestroy.transform.parent.gameObject);
             Debug.Log("Network object Destroyed and Non-Network Created");
             return nonNetworkPrefab.GetChild(0).GetComponent<PickableItem>();
@@ -232,7 +233,6 @@ public class HandInventory : NetworkBehaviour
         // If we hit something in the layer.
         if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
         {
-            Debug.Log("DETECTED SOMETHING");
             IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something before.

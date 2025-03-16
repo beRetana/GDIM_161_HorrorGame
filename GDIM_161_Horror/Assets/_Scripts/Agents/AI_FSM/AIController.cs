@@ -52,7 +52,7 @@ namespace AI_FSM{
                 case State.Started:
                     if (!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                         _state = State.Processing;
                     }
@@ -61,7 +61,7 @@ namespace AI_FSM{
 
                     if(!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                     }
 
