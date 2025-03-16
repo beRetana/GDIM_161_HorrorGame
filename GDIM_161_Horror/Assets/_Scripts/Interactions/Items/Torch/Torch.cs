@@ -79,7 +79,7 @@ namespace Interactions
         private void Update()
         {
             if (!Lit) return;
-            UpdateFlameOrientation(); 
+            UpdateFlameOrientation();
         }
 
         private void FixedUpdate()
@@ -174,6 +174,16 @@ namespace Interactions
             StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
         }
 
+        public void SmotherFlame()
+        {
+            if (!Lit) return;
+            flameSize = 0f;
+            lightIntensity = 0f;
+            ScaleFlameScale(0);
+            SetVisualLightIntensity(0);
+        }
+
+
         #endregion flame_core
 
         #region flame_helpers
@@ -205,6 +215,7 @@ namespace Interactions
             flameSize = 0f;
             torchLight.intensity = 0f;
             ScaleFlameScale(0f);
+            ToggleFlame(false);
         }
 
         [Server]
