@@ -11,6 +11,12 @@ public class FMODEvents : MonoBehaviour
 
     [field: Header("backgroundAmbiance")]
     [field: SerializeField] public EventReference backgroundAmbiance {get; private set;}
+
+    [field: Header("deerWalk")]
+    [field: SerializeField] public EventReference deerWalk {get; private set;}
+
+     [field: Header("deerRun")]
+    [field: SerializeField] public EventReference deerRun {get; private set;}
     
     public static FMODEvents instance {get; private set;}
 
