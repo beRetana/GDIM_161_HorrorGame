@@ -1,7 +1,9 @@
 using UnityEngine;
+using FMODUnity;
 using AI_FSM;
 using System.Collections;
 using UnityEngine.AI;
+using FMOD.Studio;
 
 namespace AI
 {
@@ -11,6 +13,17 @@ namespace AI
         private Rigidbody _rigidbody;
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
+
+        
+        // private EventInstance deerWalkEventInstance;
+        // private EventInstance deerRunEventInstance;
+        [SerializeField] private EventReference _deerWalkFootstep;
+        [SerializeField] private EventReference _deerRunFootstep;
+        private bool isWalking = false;
+        private bool isRunning = false;
+
+        private const float WalkThreshold = 0.1f; // Adjust for when to start playing walking sound
+        private const float RunThreshold = 0.5f;  // Adjust for when to start playing running sound
 
         private void Start()
         {
@@ -23,8 +36,62 @@ namespace AI
 
         void Update()
         {
-            _animator.SetSpeed(Mathf.Clamp01(_controller.velocity.magnitude/_controller.speed));
-            if (_rigidbody.linearVelocity.y > 0.001f) _animator.OnJump();
+            // Get normalized speed (0 to 1)
+            float currentSpeed = Mathf.Clamp01(_controller.velocity.magnitude / _controller.speed);
+
+            // Update animation speed
+            _animator.SetSpeed(currentSpeed);
+
+            // Handle footstep sounds based on speed changes
+            HandleFootstepSounds(currentSpeed);
+
+            // Trigger jump animation if deer is moving upward
+            if (_rigidbody.linearVelocity.y > 0.001f)
+            {
+                _animator.OnJump();
+            }
+        }
+
+        private void HandleFootstepSounds(float currentSpeed)
+        {
+            // Handle walking sound
+            if (!isWalking && currentSpeed >= WalkThreshold && currentSpeed < RunThreshold)
+            {
+                PlayDeerwalkFootstep();
+                isWalking = true;
+                isRunning = false;
+            }
+            else if (isWalking && (currentSpeed < WalkThreshold || currentSpeed >= RunThreshold))
+            {
+               
+                
+                isWalking = false;
+            }
+
+            // Handle running sound
+            if (!isRunning && currentSpeed >= RunThreshold)
+            {
+                // Start running sound
+                
+                PlayDeerrunFootstep();
+                isRunning = true;
+            }
+            else if (isRunning && currentSpeed < RunThreshold)
+            {
+                
+                
+                isRunning = false;
+            }
+        }
+        
+        public void PlayDeerwalkFootstep()
+        {
+            RuntimeManager.PlayOneShot(_deerWalkFootstep, transform.position);
+        }
+
+        public void PlayDeerrunFootstep()
+        {
+            RuntimeManager.PlayOneShot(_deerRunFootstep, transform.position);
         }
 
         private IEnumerator StartSequence()
@@ -45,7 +112,11 @@ namespace AI
 
         public override void TransitionOfBehaviors()
         {
-            // there are no transitions here.
+            // No transitions
         }
+
+        
+
+       
     }
 }
