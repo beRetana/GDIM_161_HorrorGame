@@ -205,11 +205,10 @@ namespace Interactions
             flameSize = 0f;
             torchLight.intensity = 0f;
             ScaleFlameScale(0f);
-            DestroyTorch();
         }
 
         [Server]
-        private void DestroyTorch()
+        private void NetworkDestroyTorch()
         {
             Debug.Log("Destrying Torch");
             NetworkServer.Destroy(transform.parent.gameObject);
@@ -217,6 +216,11 @@ namespace Interactions
 
         #endregion flame_helpers
 
+        private void KillTorch()
+        {
+            FlameFullExtinguish();
+            NetworkDestroyTorch();
+        }
 
         #region flame_spread
         private void RecieveFlameContact(Collider other)
@@ -239,12 +243,13 @@ namespace Interactions
 
                 SetVisualLightIntensity(lightIntensity);
 
+
                 yield return null;
             }
-            FlameFullExtinguish();
+            KillTorch();
         }
 
-      
+
         /// <summary>
         /// 1 / (1 + b * e^(-kx))
         /// </summary>
