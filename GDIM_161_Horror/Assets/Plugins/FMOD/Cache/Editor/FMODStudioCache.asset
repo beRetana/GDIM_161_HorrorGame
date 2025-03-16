@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 100
   Length: 680
+--- !u!114 &-8672198554686924945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/hearthBurning
+  m_EditorClassIdentifier: 
+  Path: event:/hearthBurning
+  Guid:
+    Data1: 2112172446
+    Data2: 1098031187
+    Data3: -312272477
+    Data4: 1472534078
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 9
+  Length: 38842
 --- !u!114 &-3730251587141651924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,10 +96,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638776826983862682
+  lastModified: 638777405765967049
   FileSizes:
   - Name: Desktop
-    Value: 572768
+    Value: 1126592
   Exists: 1
 --- !u!114 &-741973175630811167
 MonoBehaviour:
@@ -116,7 +143,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638777297583927201
+  lastModified: 638777391375986016
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -146,12 +173,13 @@ MonoBehaviour:
   - {fileID: -741973175630811167}
   - {fileID: 7889745519420996987}
   - {fileID: 4674370943878359690}
+  - {fileID: -8672198554686924945}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638777358792665162
+  cacheTime: 638777405765967049
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -188,10 +216,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638777297583948708
+  lastModified: 638777391376006565
   FileSizes:
   - Name: Desktop
-    Value: 1132
+    Value: 1176
   Exists: 1
 --- !u!114 &4674370943878359690
 MonoBehaviour:
@@ -235,7 +263,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638777358792665162
+  lastModified: 638777391375892941
   FileSizes:
   - Name: Desktop
     Value: 39520
