@@ -159,17 +159,6 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1803582562936510697, guid: 010dc5e7e2b845442b6d40ac898f5b1d, type: 3}
   m_PrefabInstance: {fileID: 1111914415269242975}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3027559608405286185 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2696069756226844022, guid: 010dc5e7e2b845442b6d40ac898f5b1d, type: 3}
-  m_PrefabInstance: {fileID: 1111914415269242975}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &3241753861720095343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2563486839383118384, guid: 010dc5e7e2b845442b6d40ac898f5b1d, type: 3}
@@ -203,6 +192,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3116399982643216359}
     m_Modifications:
+    - target: {fileID: -8545107607619284555, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
+      propertyPath: _assetId
+      value: 3541413849
+      objectReference: {fileID: 0}
     - target: {fileID: 41419630895823404, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: m_Name
       value: Pickable
@@ -283,10 +276,6 @@ PrefabInstance:
       propertyPath: flameBurnOutTime
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
-      propertyPath: torchFireCollider
-      value: 
-      objectReference: {fileID: 3027559608405286185}
     - target: {fileID: 449262622416046513, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
       propertyPath: pyrolysisIncrements
       value: 8
