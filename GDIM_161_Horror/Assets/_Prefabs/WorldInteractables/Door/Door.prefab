@@ -58,7 +58,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
@@ -136,7 +136,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
@@ -803,6 +803,10 @@ PrefabInstance:
       propertyPath: _textName
       value: GRAB
       objectReference: {fileID: 0}
+    - target: {fileID: 6974759429872520057, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _lookAtCamera
+      value: 
+      objectReference: {fileID: 1798698024236103913}
     - target: {fileID: 8056075763261549047, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.077
@@ -900,6 +904,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+--- !u!114 &1798698024236103913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1804777091525598354, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+  m_PrefabInstance: {fileID: 143439406780343419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e11c5f317ef6fe47a4c98f62fb3ff6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8467227684791519310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8393649598902922293, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}

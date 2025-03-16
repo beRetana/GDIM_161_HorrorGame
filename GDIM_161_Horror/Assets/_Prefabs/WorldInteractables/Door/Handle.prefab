@@ -659,6 +659,10 @@ PrefabInstance:
       propertyPath: _textName
       value: Interact
       objectReference: {fileID: 0}
+    - target: {fileID: 1065061671174951103, guid: 79cae658d5e41584092e131d71256396, type: 3}
+      propertyPath: _lookAtCamera
+      value: 
+      objectReference: {fileID: 1804777091525598354}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -667,6 +671,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8645881593545540256}
   m_SourcePrefab: {fileID: 100100000, guid: 79cae658d5e41584092e131d71256396, type: 3}
+--- !u!114 &1804777091525598354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8576914719996806996, guid: 79cae658d5e41584092e131d71256396, type: 3}
+  m_PrefabInstance: {fileID: 7929864007918279622}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7971282977388372458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e11c5f317ef6fe47a4c98f62fb3ff6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7971282977388372458 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 41419630895823404, guid: 79cae658d5e41584092e131d71256396, type: 3}
@@ -684,8 +699,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d6ad2b5638e1c4ba614a9e6acd5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animTime: 4
+  _doorsManager: {fileID: 0}
   _targetTransform: {fileID: 4659089062429858232}
+  _doorRigidbody: {fileID: 0}
+  _handleJoint: {fileID: 0}
+  _animTime: 4
+  _grabDisplayMessage: 
+  _releaseDisplayMessage: 
 --- !u!4 &8056075763261549047 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 126214538651071025, guid: 79cae658d5e41584092e131d71256396, type: 3}
