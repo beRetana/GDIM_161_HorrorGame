@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8724721889429760598}
   - component: {fileID: 5109410486686612695}
   - component: {fileID: 409505196352271945}
-  - component: {fileID: 164648993949427715}
-  m_Layer: 3
+  - component: {fileID: 4104677513631249288}
+  m_Layer: 0
   m_Name: Pickable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &164648993949427715
+--- !u!114 &4104677513631249288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,13 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1044840356496430894}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab4b25c4c0bb1984d8b72f555787699d, type: 3}
+  m_Script: {fileID: 11500000, guid: 06b09d0d83f17534ea4a344371545741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 8ab43b6301a426c42b8c42d617cd2542, type: 2}
+  _detectionRadius: 20
+  _sonarDetectable:
+    serializedVersion: 2
+    m_Bits: 64
+  _sonarDisplay: {fileID: 2404373559361504141}
 --- !u!1 &2791267377689233636
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +633,7 @@ GameObject:
   - component: {fileID: 7196985438415379472}
   - component: {fileID: 2733585555984207415}
   - component: {fileID: 7983361590915332718}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1213,11 +1215,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3839068366225448773}
   - component: {fileID: 5791794038038222547}
-  - component: {fileID: 8784057340909739523}
   - component: {fileID: 7148959182329906034}
   - component: {fileID: 7864013483826710735}
-  m_Layer: 9
-  m_Name: Net_Sonnar
+  - component: {fileID: 8784057340909739523}
+  m_Layer: 0
+  m_Name: Sonnar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1253,43 +1255,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 326205916
+  _assetId: 2653648513
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &8784057340909739523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5490541645237124335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  target: {fileID: 3839068366225448773}
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 1
-  onlySyncOnChange: 1
-  compressRotation: 1
-  interpolatePosition: 1
-  interpolateRotation: 1
-  interpolateScale: 1
-  coordinateSpace: 0
-  timelineOffset: 1
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
-  bufferResetMultiplier: 3
-  positionSensitivity: 0.01
-  rotationSensitivity: 0.01
-  scaleSensitivity: 0.01
 --- !u!65 &7148959182329906034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1338,6 +1307,39 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8784057340909739523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5490541645237124335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 3839068366225448773}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 1
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
 --- !u!1 &5986587276955303358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,7 +1353,7 @@ GameObject:
   - component: {fileID: 7806954495782720148}
   - component: {fileID: 6187804625446642420}
   - component: {fileID: 2404373559361504141}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: SonarDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1808,7 +1810,7 @@ GameObject:
   - component: {fileID: 1265319669371836309}
   - component: {fileID: 1368945961948068043}
   - component: {fileID: 5670196315383307093}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1945,13 +1947,13 @@ GameObject:
   - component: {fileID: 5259367699877664011}
   - component: {fileID: 741024801450628129}
   - component: {fileID: 836420856971597387}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: CanvasUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4975307918065384565
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2044,7 +2046,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4274630545919670144}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}

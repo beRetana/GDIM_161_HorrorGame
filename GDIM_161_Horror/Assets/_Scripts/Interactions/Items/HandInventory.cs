@@ -134,7 +134,7 @@ public class HandInventory : NetworkBehaviour
             }
         }
 
-        public InventorySlot GainItem(PickableItem inventorySlotToGain)
+        public InventorySlot GainItem(NetworkPickableItem inventorySlotToGain)
         {
             InventorySlot selectedHand = GetDominantHand();
             
@@ -157,7 +157,7 @@ public class HandInventory : NetworkBehaviour
             return null;
         }
 
-        private PickableItem CreateHeldItem(PickableItem itemToDestroy, Transform selectedHand)
+        private PickableItem CreateHeldItem(NetworkPickableItem itemToDestroy, Transform selectedHand)
         {
             PickableItemSO pickableSO = itemToDestroy.PickableItemSO;
             Transform nonNetworkPrefab = Instantiate(pickableSO.Prefab, selectedHand);
@@ -236,7 +236,7 @@ public class HandInventory : NetworkBehaviour
             IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something before.
-            if (_interactableComponent == null)
+            if (_interactableComponent == null || _interactableComponent.Equals(null))
             {
                 // Report it as detected
                 _interactableComponent = childCanvas;
@@ -247,13 +247,13 @@ public class HandInventory : NetworkBehaviour
             else if (childCanvas != _interactableComponent)
             {
                 // Stop animation and start the new one
-                _interactableComponent.StoppedDetecting(_playerID);
+                _interactableComponent?.StoppedDetecting(_playerID);
                 _interactableComponent = childCanvas;
                 _interactableComponent?.Detected(_playerID);
             }
         }
         // If we didn't hit anything did we hit something before?
-        else if (_interactableComponent != null)
+        else if (_interactableComponent != null && !_interactableComponent.Equals(null))
         {
             _interactableComponent.StoppedDetecting(_playerID);
             _mouse?.DefaultEffect();
@@ -288,7 +288,7 @@ public class HandInventory : NetworkBehaviour
     }
 
     [Command]
-    public void CmdPickUpItem(PickableItem pickableItem)
+    public void CmdPickUpItem(NetworkPickableItem pickableItem)
     {
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
         
@@ -304,7 +304,7 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
-    public bool PickUpItem(PickableItem pickableItem)
+    public bool PickUpItem(NetworkPickableItem pickableItem)
     {
         CmdPickUpItem(pickableItem);
         _interactableComponent = null;

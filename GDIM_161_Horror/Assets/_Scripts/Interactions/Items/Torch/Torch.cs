@@ -291,11 +291,11 @@ namespace Interactions
         }
         #endregion flame_animations
 
-        public override void UnPossessItem()
+        /*public override void UnPossessItem()
         {
             isDropping = true;
             base.UnPossessItem();
-        }
+        }*/
 
 
         //public void BurnOutFlame() // via end of wood
