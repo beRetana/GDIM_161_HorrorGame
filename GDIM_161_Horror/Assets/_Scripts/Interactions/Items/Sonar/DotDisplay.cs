@@ -24,6 +24,7 @@ namespace Interactions
             gameObject.SetActive(true);
             _animator.ResetTrigger(_TRIGGER_NAME);
             _animator.SetTrigger(_TRIGGER_NAME);
+            
         }
 
         public void DeactivateDot()
