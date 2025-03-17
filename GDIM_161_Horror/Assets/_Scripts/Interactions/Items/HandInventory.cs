@@ -323,7 +323,7 @@ public class HandInventory : NetworkBehaviour
     [ClientRpc]
     public void RpcPickupItem(ItemType itemType)
     {
-        if (isServer) return;
+        if (!isClient) return;
 
         GameObject prefab = null;
 
@@ -332,12 +332,12 @@ public class HandInventory : NetworkBehaviour
             case ItemType.Torch:
                 {
                     Debug.Log($"Torch Was Picked: {_torch}");
-                    prefab = _torch; break;
+                    prefab = this._torch; break;
                 }
             case ItemType.Sonnar:
                 {
                     Debug.Log($"Sonnar Was Picked: {_sonnar}");
-                    prefab = _sonnar; break;
+                    prefab = this._sonnar; break;
                 }
             default:
                 {
@@ -345,7 +345,8 @@ public class HandInventory : NetworkBehaviour
                 }
         }
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(_sonnar,
+        Debug.Log($"{this.gameObject.name}");
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(this._sonnar,
             _inventorySlots.GetDominantHand().ItemTransform).transform.GetChild(0).GetComponent<PickableItem>());
 
         if (inventorySlotOfNewItem == null) return;
