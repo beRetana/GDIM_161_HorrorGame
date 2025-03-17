@@ -27,8 +27,8 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
-    [SerializeField, SyncVar] private GameObject _sonnar;
-    [SerializeField, SyncVar] private GameObject _torch;
+    [SerializeField] private GameObject _sonnar;
+    [SerializeField] private GameObject _torch;
 
     private class InventorySlot
     {
