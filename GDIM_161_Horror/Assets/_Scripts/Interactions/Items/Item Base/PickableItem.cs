@@ -57,9 +57,10 @@ namespace Interactions
         public virtual void UseItem(int playerID) { }
 
 
-        public virtual void OrientItemInHand(bool isLeftHand) 
+        public virtual void OrientItemInHand(Transform targetTransform) 
         {
             Transform parentTransform = transform.parent.transform;
+            parentTransform.position = targetTransform.position;
             parentTransform.localPosition = _pickableItemSO.PickedPosition;
             parentTransform.localEulerAngles = _pickableItemSO.PickedAngle;
         }
