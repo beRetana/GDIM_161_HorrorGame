@@ -9,11 +9,14 @@ namespace Interactions
     [RequireComponent(typeof(InteractableItem))]
     public class PickableItem : MonoBehaviour
     {
-        [SerializeField] PickableItemSO _pickableItemSO;
+        [SerializeField] private PickableItemSO _pickableItemSO;
+        [SerializeField] private ItemType _itemType;
         
         protected InteractableItem _interactableItem;
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
+
+        public ItemType ItemType { get { return _itemType; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
 
