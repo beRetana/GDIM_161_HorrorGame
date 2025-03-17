@@ -232,11 +232,10 @@ namespace Interactions
             ToggleFlame(false);
         }
 
-        [Server]
         private void NetworkDestroyTorch()
         {
             Debug.Log("Destrying Torch");
-            NetworkServer.Destroy(transform.parent.gameObject);
+            Destroy(transform.parent.gameObject);
         }
 
         #endregion flame_helpers
