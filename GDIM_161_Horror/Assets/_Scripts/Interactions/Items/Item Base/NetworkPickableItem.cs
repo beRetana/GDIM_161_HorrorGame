@@ -39,6 +39,7 @@ namespace Interactions
                 return;
             }
 
+            Debug.Log(playerID);
             bool success = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().PickUpItem(this);
             if (!success) return;
 
