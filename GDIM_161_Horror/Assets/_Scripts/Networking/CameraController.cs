@@ -21,6 +21,11 @@ public class CameraController : NetworkBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
+    {
+        if (isLocalPlayer) ToggleObjects(true);
+    }
+
     private void Start()
     {
         _playerController = GetComponent<FirstPersonController>();
@@ -31,11 +36,6 @@ public class CameraController : NetworkBehaviour
         _playerInput = GetComponent<PlayerInput>();
 
         ToggleObjects(false);
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
-    {
-        if (isLocalPlayer) ToggleObjects(true);
     }
 
     void ToggleObjects(bool active)
