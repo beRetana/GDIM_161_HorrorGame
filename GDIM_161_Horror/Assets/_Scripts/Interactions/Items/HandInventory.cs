@@ -390,7 +390,6 @@ public class HandInventory : NetworkBehaviour
         CmdDropItem(throwForce);
     }
 
-    [Command]
     public void CmdDropItem(float throwForce)
     {
         bool isThrow = _arms.IsDomOutStretched();
