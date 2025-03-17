@@ -403,7 +403,7 @@ public class HandInventory : NetworkBehaviour
                                             dominantSlot.ItemTransform.position,
                                             dominantSlot.ItemTransform.rotation);
 
-        NetworkServer.Spawn(networkItem.gameObject);
+        SpawnItem(networkItem.gameObject);
 
         Rigidbody networkRigidbody = networkItem.GetComponent<Rigidbody>();
 
@@ -423,6 +423,12 @@ public class HandInventory : NetworkBehaviour
             networkRigidbody.AddForce(transform.forward, ForceMode.Impulse);
             _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
         }
+    }
+
+    [Command(requiresAuthority = false)]
+    public void SpawnItem(GameObject item)
+    {
+        NetworkServer.Spawn(item);
     }
 
 
