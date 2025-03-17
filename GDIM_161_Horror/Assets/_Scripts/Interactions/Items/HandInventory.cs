@@ -323,7 +323,7 @@ public class HandInventory : NetworkBehaviour
     [ClientRpc]
     public void RpcPickupItem(ItemType itemType)
     {
-        //if (isServer) return;
+        if (isServer) return;
 
         GameObject prefab = null;
 
