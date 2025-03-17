@@ -4,6 +4,7 @@ using Mirror;
 using Steamworks;
 using Player;
 using StarterAssets;
+using UnityEngine.SceneManagement;
 
 public class PlayerObjectController : NetworkBehaviour
 {
