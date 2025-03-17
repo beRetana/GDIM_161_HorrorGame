@@ -387,9 +387,13 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
-        CmdDropItem(throwForce);
+        if (isLocalPlayer)
+        {
+            CmdDropItem(throwForce);
+        }
     }
 
+    [Command]
     public void CmdDropItem(float throwForce)
     {
         bool isThrow = _arms.IsDomOutStretched();
@@ -425,15 +429,7 @@ public class HandInventory : NetworkBehaviour
         }
     }
 
-    [Command(requiresAuthority = false)]
-    public void SpawnItem(GameObject item)
-    {
-        NetworkServer.Spawn(item);
-    }
-
-
     public Arms GetArms() { return _arms; }
-
 
     #region graveyard
     private void MoveItemsPositionsToHands()
