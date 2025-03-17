@@ -290,6 +290,7 @@ public class HandInventory : NetworkBehaviour
     public bool PickUpItem(PickableItem pickableItem)
     {
         PickUpLogic(_inventorySlots.GainItem(pickableItem));
+        _interactableComponent = null;
         return true;
     }
 
@@ -299,7 +300,6 @@ public class HandInventory : NetworkBehaviour
 
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
         inventorySlotOfNewItem.ItemTransform = isLeftHandAction ? _leftHandSocket : _rightHandSocket;
-        pickableItem.Parent = inventorySlotOfNewItem.ItemTransform;
 
         //pickableItem.OrientItemInHand(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
     }
