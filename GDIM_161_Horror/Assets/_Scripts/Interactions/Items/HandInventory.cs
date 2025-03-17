@@ -4,7 +4,6 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
-using Unity.VisualScripting;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -136,13 +135,13 @@ public class HandInventory : NetworkBehaviour
             }
         }
 
-        public InventorySlot GainItem(Transform prefab)
+        public InventorySlot GainItem(PickableItem prefab)
         {
             InventorySlot selectedHand = GetDominantHand();
             
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = CreateHeldItem(prefab, selectedHand.ItemTransform);
+                selectedHand.Item = prefab;
                 //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
 
 
@@ -152,17 +151,11 @@ public class HandInventory : NetworkBehaviour
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = CreateHeldItem(prefab, selectedHand.ItemTransform);
+                selectedHand.Item = prefab;
                 Debug.Log($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
-        }
-
-        private PickableItem CreateHeldItem(Transform prefab, Transform selectedHand)
-        {
-            Transform nonNetworkPrefab = Instantiate(prefab, selectedHand);
-            return nonNetworkPrefab.GetChild(0).GetComponent<PickableItem>();
         }
 
         public InventorySlot RemoveItem()
@@ -310,7 +303,8 @@ public class HandInventory : NetworkBehaviour
                 }
         }
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(prefab);
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab, 
+            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
         
         if (inventorySlotOfNewItem == null) return;
 
@@ -351,7 +345,8 @@ public class HandInventory : NetworkBehaviour
                 }
         }
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(prefab);
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab,
+            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
 
         if (inventorySlotOfNewItem == null) return;
 
