@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -18,12 +20,23 @@ namespace StarterAssets
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
-		[SerializeField] private string _lobbySceneName = "Lobby_Brandon";
+		[SerializeField] private string _buildScene = "BUILD_1";
         public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM
-		public void OnMove(InputValue value)
+
+		private void OnStart()
+		{
+			SceneManager.sceneLoaded += OnSceneLoaded;
+		}
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode loadingmode)
+        {
+            if (SceneManager.GetActiveScene().name == _buildScene) SetCursorState(cursorLocked);
+        }
+
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -67,10 +80,10 @@ namespace StarterAssets
 			sprint = newSprintState;
 		}
 		
-		private void OnApplicationFocus(bool hasFocus)
+		/*private void OnApplicationFocus(bool hasFocus)
 		{
-			if (SceneManager.GetActiveScene().name != _lobbySceneName) SetCursorState(cursorLocked);
-		}
+			if (SceneManager.GetActiveScene().name != _buildScene) SetCursorState(cursorLocked);
+		}*/
 
 		private void SetCursorState(bool newState)
 		{

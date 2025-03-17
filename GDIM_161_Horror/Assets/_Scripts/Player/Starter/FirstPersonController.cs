@@ -32,6 +32,9 @@ namespace StarterAssets
         [SerializeField] private EventReference _forestFootstep;
         [SerializeField] private float _rate;
 
+        private bool _isSprinting;
+        private InputAction _onJump;
+
         public bool grounded { get; private set; }
 
         /// EDITOR ONLY!!!!
@@ -75,6 +78,8 @@ namespace StarterAssets
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
             _animator = GetComponent<Animator>();
+
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnDestroy()
