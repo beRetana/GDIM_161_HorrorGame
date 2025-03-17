@@ -7,7 +7,7 @@ namespace Interactions
     /// This is a base class for items that can be picked up. It uses interactable items.
     /// </summary>
     [RequireComponent(typeof(InteractableItem))]
-    public class PickableItem : MonoBehaviour
+    public class NetworkPickableItem : NetworkBehaviour
     {
         [SerializeField] PickableItemSO _pickableItemSO;
         
@@ -17,18 +17,18 @@ namespace Interactions
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
 
+        protected virtual void Start()
+        {
+            _interactableItem = GetComponent<InteractableItem>();
+            _interactableItem.SetInteractAction(PickItem);
+        }
+
         public override string ToString()
         {
             return $"Item: {this.name}";
         }
 
-        protected virtual void Start()
-        {
-            _interactableItem = GetComponent<InteractableItem>();
-            //_interactableItem.SetInteractAction(PickItem);
-        }
-
-        /*protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
+        protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
             if (IsPossessed)
             {
@@ -53,7 +53,7 @@ namespace Interactions
             IsPossessed = toPossess;
             OwnerPlayerID = playerID;
             _interactableItem.SetInteractive(!toPossess);
-        }*/
+        }
 
         public virtual void UseItem(int playerID) { }
 
