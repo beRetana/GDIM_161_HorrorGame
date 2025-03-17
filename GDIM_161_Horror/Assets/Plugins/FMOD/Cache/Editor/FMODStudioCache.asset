@@ -150,7 +150,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638777463558861571
+  lastModified: 638777569654954731
   FileSizes:
   - Name: Desktop
     Value: 1127712
@@ -197,7 +197,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638777491417866357
+  lastModified: 638777569647431272
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -221,6 +221,7 @@ MonoBehaviour:
   - {fileID: -1299140445480587344}
   - {fileID: 5014423181218453459}
   - {fileID: 2455978016907004454}
+  - {fileID: 8311810129274068945}
   EditorEvents:
   - {fileID: 6854522976295634600}
   - {fileID: -3730251587141651924}
@@ -232,12 +233,13 @@ MonoBehaviour:
   - {fileID: -6504518491452899249}
   - {fileID: 3101253625194940429}
   - {fileID: -9116544675628535649}
+  - {fileID: 166016322351117110}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638777491418609655
+  cacheTime: 638777576504290631
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -259,6 +261,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 33312
   Exists: 1
+--- !u!114 &166016322351117110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/lobbyMusic
+  m_EditorClassIdentifier: 
+  Path: event:/lobbyMusic
+  Guid:
+    Data1: 2067585400
+    Data2: 1170434954
+    Data3: 922727347
+    Data4: 1908210686
+  Banks:
+  - {fileID: 8311810129274068945}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 341186
 --- !u!114 &1599044835148366132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,10 +303,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638777491417901921
+  lastModified: 638777569647467822
   FileSizes:
   - Name: Desktop
-    Value: 1356
+    Value: 1444
   Exists: 1
 --- !u!114 &2455978016907004454
 MonoBehaviour:
@@ -294,7 +323,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638777491418609655
+  lastModified: 638777569662699290
   FileSizes:
   - Name: Desktop
     Value: 687264
@@ -368,7 +397,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638777432337962445
+  lastModified: 638777569647278853
   FileSizes:
   - Name: Desktop
     Value: 39520
@@ -427,3 +456,23 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &8311810129274068945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 638777576504290631
+  FileSizes:
+  - Name: Desktop
+    Value: 4003872
+  Exists: 1
