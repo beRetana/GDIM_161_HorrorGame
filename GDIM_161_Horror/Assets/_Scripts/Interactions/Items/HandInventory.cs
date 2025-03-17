@@ -323,7 +323,7 @@ public class HandInventory : NetworkBehaviour
     [ClientRpc]
     public void RpcPickupItem(ItemType itemType)
     {
-        if (isServer) return;
+        //if (isServer) return;
 
         GameObject prefab = null;
 
@@ -345,7 +345,7 @@ public class HandInventory : NetworkBehaviour
                 }
         }
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab,
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(_sonnar,
             _inventorySlots.GetDominantHand().ItemTransform).transform.GetChild(0).GetComponent<PickableItem>());
 
         if (inventorySlotOfNewItem == null) return;
