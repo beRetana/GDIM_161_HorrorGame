@@ -278,7 +278,7 @@ public class HandInventory : NetworkBehaviour
         itemToUse.UseItem(_playerID);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void CmdPickUpItem(ItemType itemType)
     {
         if (!isServer) return;
