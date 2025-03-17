@@ -54,6 +54,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 9
   Length: 38842
+--- !u!114 &-6504518491452899249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/torchBurning
+  m_EditorClassIdentifier: 
+  Path: event:/torchBurning
+  Guid:
+    Data1: -1591416209
+    Data2: 1226933995
+    Data3: -1948009067
+    Data4: 2094848060
+  Banks:
+  - {fileID: 2455978016907004454}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 46655
 --- !u!114 &-3730251587141651924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,10 +123,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638777405765967049
+  lastModified: 638777463558861571
   FileSizes:
   - Name: Desktop
-    Value: 1126592
+    Value: 1127712
   Exists: 1
 --- !u!114 &-741973175630811167
 MonoBehaviour:
@@ -143,7 +170,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638777391375986016
+  lastModified: 638777458807663926
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -166,6 +193,7 @@ MonoBehaviour:
   - {fileID: 32562135611507061}
   - {fileID: -1299140445480587344}
   - {fileID: 5014423181218453459}
+  - {fileID: 2455978016907004454}
   EditorEvents:
   - {fileID: 6854522976295634600}
   - {fileID: -3730251587141651924}
@@ -174,12 +202,14 @@ MonoBehaviour:
   - {fileID: 7889745519420996987}
   - {fileID: 4674370943878359690}
   - {fileID: -8672198554686924945}
+  - {fileID: -6504518491452899249}
+  - {fileID: 3101253625194940429}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638777405765967049
+  cacheTime: 638777463558861571
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -216,11 +246,58 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638777391376006565
+  lastModified: 638777458807699262
   FileSizes:
   - Name: Desktop
-    Value: 1176
+    Value: 1316
   Exists: 1
+--- !u!114 &2455978016907004454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/ItemsSFX.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
+  Name: ItemsSFX
+  StudioPath: bank:/ItemsSFX
+  lastModified: 638777432353127896
+  FileSizes:
+  - Name: Desktop
+    Value: 678592
+  Exists: 1
+--- !u!114 &3101253625194940429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/2DhearthMenuBurning
+  m_EditorClassIdentifier: 
+  Path: event:/2DhearthMenuBurning
+  Guid:
+    Data1: 1993669417
+    Data2: 1259772638
+    Data3: 906622357
+    Data4: 1152155210
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 38842
 --- !u!114 &4674370943878359690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +340,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638777391375892941
+  lastModified: 638777432337962445
   FileSizes:
   - Name: Desktop
     Value: 39520
