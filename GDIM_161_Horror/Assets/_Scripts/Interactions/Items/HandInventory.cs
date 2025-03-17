@@ -390,7 +390,6 @@ public class HandInventory : NetworkBehaviour
         CmdDropItem(throwForce);
     }
 
-    [Command(requiresAuthority = false)]
     public void CmdDropItem(float throwForce)
     {
         bool isThrow = _arms.IsDomOutStretched();
@@ -424,6 +423,12 @@ public class HandInventory : NetworkBehaviour
             networkRigidbody.AddForce(transform.forward, ForceMode.Impulse);
             _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
         }
+    }
+
+    [Command(requiresAuthority = false)]
+    public void Spawn(GameObject gameObject)
+    {
+        NetworkServer.Spawn(gameObject);
     }
 
     public Arms GetArms() { return _arms; }
