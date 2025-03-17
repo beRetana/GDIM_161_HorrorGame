@@ -487,6 +487,7 @@ GameObject:
   - component: {fileID: 3241753861720095343}
   - component: {fileID: 4746269070312977930}
   - component: {fileID: 2887979022202853580}
+  - component: {fileID: 7435346654175084701}
   m_Layer: 7
   m_Name: FlameBasePos
   m_TagString: Fire
@@ -544,6 +545,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maybeFireable: {fileID: 6533591682246883934}
+--- !u!114 &7435346654175084701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814854870198980137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1591416209
+      Data2: 1226933995
+      Data3: -1948009067
+      Data4: 2094848060
+    Path: event:/torchBurning
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &3500864740308416971
 PrefabInstance:
   m_ObjectHideFlags: 0

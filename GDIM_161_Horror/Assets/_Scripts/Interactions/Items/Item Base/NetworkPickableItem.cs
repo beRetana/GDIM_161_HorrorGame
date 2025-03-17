@@ -43,6 +43,7 @@ namespace Interactions
             if (!success) return;
 
             SetPossessed(true, playerID);
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
         }
 
         public virtual void UnPossessItem()
