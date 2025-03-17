@@ -281,8 +281,6 @@ public class HandInventory : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPickUpItem(ItemType itemType)
     {
-        if (!isClient) return;
-
         GameObject prefab = null;
 
         switch (itemType)
