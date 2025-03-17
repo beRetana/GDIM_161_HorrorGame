@@ -345,6 +345,8 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
+        return;
+
         bool isThrow = _arms.IsDomOutStretched();
 
         InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
