@@ -281,7 +281,7 @@ public class HandInventory : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPickUpItem(ItemType itemType)
     {
-        if (!isServer) return;
+        if (!isClient) return;
 
         GameObject prefab = null;
 
@@ -317,14 +317,14 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
 
-        RpcPickupItem(itemType);
+        //RpcPickupItem(itemType);
     }
 
     [ClientRpc]
     public void RpcPickupItem(ItemType itemType)
     {
-        if (isServer) return;
-        if (isLocalPlayer) return;
+        if (!isClient) return;
+        if (!isLocalPlayer) return;
 
         GameObject prefab = null;
 
