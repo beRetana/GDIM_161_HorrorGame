@@ -4,7 +4,6 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
-using Unity.VisualScripting;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -28,6 +27,8 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
+    [SerializeField, SyncVar] private Transform _sonnar;
+    [SerializeField, SyncVar] private Transform _torch;
 
     private class InventorySlot
     {
@@ -134,13 +135,13 @@ public class HandInventory : NetworkBehaviour
             }
         }
 
-        public InventorySlot GainItem(NetworkPickableItem inventorySlotToGain)
+        public InventorySlot GainItem(PickableItem prefab)
         {
             InventorySlot selectedHand = GetDominantHand();
             
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = CreateHeldItem(inventorySlotToGain, selectedHand.ItemTransform);
+                selectedHand.Item = prefab;
                 //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
 
 
@@ -150,21 +151,11 @@ public class HandInventory : NetworkBehaviour
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = CreateHeldItem(inventorySlotToGain, selectedHand.ItemTransform);
+                selectedHand.Item = prefab;
                 Debug.Log($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
-        }
-
-        private PickableItem CreateHeldItem(NetworkPickableItem itemToDestroy, Transform selectedHand)
-        {
-            PickableItemSO pickableSO = itemToDestroy.PickableItemSO;
-            Transform nonNetworkPrefab = Instantiate(pickableSO.Prefab, selectedHand);
-            NetworkServer.Spawn(nonNetworkPrefab.gameObject);
-            NetworkServer.Destroy(itemToDestroy.transform.parent.gameObject);
-            Debug.Log("Network object Destroyed and Non-Network Created");
-            return nonNetworkPrefab.GetChild(0).GetComponent<PickableItem>();
         }
 
         public InventorySlot RemoveItem()
@@ -288,11 +279,32 @@ public class HandInventory : NetworkBehaviour
     }
 
     [Command]
-    public void CmdPickUpItem(NetworkPickableItem pickableItem)
+    public void CmdPickUpItem(ItemType itemType)
     {
         if (!isServer) return;
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+        Transform prefab = null;
+
+        switch (itemType)
+        {
+            case ItemType.Torch:
+                {
+                    Debug.Log($"Torch Was Picked");
+                    prefab = _torch; break;
+                }
+            case ItemType.Sonnar:
+                {
+                    Debug.Log($"Sonnar Was Picked");
+                    prefab = _sonnar; break;
+                }
+            default:
+                {
+                    Debug.LogError("The Item Does Not Have Type Assigned"); return;
+                }
+        }
+
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab, 
+            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
         
         if (inventorySlotOfNewItem == null) return;
 
@@ -304,14 +316,37 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
         Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
+
+        RpcPickupItem(itemType);
     }
 
     [ClientRpc]
-    public void RpcPickupItem(NetworkPickableItem pickableItem)
+    public void RpcPickupItem(ItemType itemType)
     {
-        if (!isClient) return;
+        if (isServer) return;
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+        Transform prefab = null;
+
+        switch (itemType)
+        {
+            case ItemType.Torch:
+                {
+                    Debug.Log($"Torch Was Picked: {_torch}");
+                    prefab = _torch; break;
+                }
+            case ItemType.Sonnar:
+                {
+                    Debug.Log($"Sonnar Was Picked: {_sonnar}");
+                    prefab = _sonnar; break;
+                }
+            default:
+                {
+                    Debug.LogError("The Item Does Not Have Type Assigned"); return;
+                }
+        }
+
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab,
+            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
 
         if (inventorySlotOfNewItem == null) return;
 
@@ -327,7 +362,8 @@ public class HandInventory : NetworkBehaviour
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
-        CmdPickUpItem(pickableItem);
+        CmdPickUpItem(pickableItem.ItemType);
+        NetworkServer.Destroy(pickableItem.transform.parent.gameObject);
         _interactableComponent = null;
         return true;
     }
