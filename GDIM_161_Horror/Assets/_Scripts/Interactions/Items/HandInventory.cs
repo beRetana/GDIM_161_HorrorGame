@@ -411,7 +411,7 @@ public class HandInventory : NetworkBehaviour
 
         Destroy(itemToDrop.transform.parent.gameObject);
         
-        NetworkServer.Spawn(networkItem.gameObject);
+        Spawn(networkItem.gameObject);
 
         if (isThrow)
         {
