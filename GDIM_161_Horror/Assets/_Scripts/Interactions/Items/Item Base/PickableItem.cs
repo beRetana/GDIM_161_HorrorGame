@@ -12,6 +12,9 @@ namespace Interactions
         
         protected InteractableItem _interactableItem;
 
+        private Transform _parent;
+        public Transform Parent { get { return _parent; } set { _parent = value; } }
+
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
@@ -25,6 +28,14 @@ namespace Interactions
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(PickItem);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (_parent == null) return;
+
+            transform.position = _parent.position;
+            transform.rotation = _parent.rotation;
         }
 
         protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
