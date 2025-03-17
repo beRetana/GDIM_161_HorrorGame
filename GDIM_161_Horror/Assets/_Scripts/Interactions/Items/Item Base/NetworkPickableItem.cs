@@ -10,8 +10,11 @@ namespace Interactions
     public class NetworkPickableItem : NetworkBehaviour
     {
         [SerializeField] PickableItemSO _pickableItemSO;
-        
+        [SerializeField] ItemType _itemType;
+
         protected InteractableItem _interactableItem;
+
+        public ItemType ItemType { get { return _itemType; } }
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
