@@ -45,14 +45,14 @@ namespace AI_FSM{
                 case State.Idle:
                     if (!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                     }
                     break;
                 case State.Started:
                     if (!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                         _state = State.Processing;
                     }
@@ -61,7 +61,7 @@ namespace AI_FSM{
 
                     if(!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                     }
 
@@ -79,7 +79,7 @@ namespace AI_FSM{
                     }
                     break;
                 case State.Done:
-                    Debug.Log($"State of task is {_state}");
+                    //Debug.Log($"State of task is {_state}");
                     _state = State.Idle;
                     onTaskCompleted?.Invoke();
                     break;

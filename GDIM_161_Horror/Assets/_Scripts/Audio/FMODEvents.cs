@@ -17,6 +17,9 @@ public class FMODEvents : MonoBehaviour
 
      [field: Header("deerRun")]
     [field: SerializeField] public EventReference deerRun {get; private set;}
+
+    [field: Header("sonarPing")]
+    [field: SerializeField] public EventReference sonarPing {get; private set;}
     
     public static FMODEvents instance {get; private set;}
 

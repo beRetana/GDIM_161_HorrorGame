@@ -7,24 +7,28 @@ namespace Interactions
     /// This is a base class for items that can be picked up. It uses interactable items.
     /// </summary>
     [RequireComponent(typeof(InteractableItem))]
-    public class PickableItem : NetworkBehaviour
+    public class PickableItem : MonoBehaviour
     {
+        [SerializeField] PickableItemSO _pickableItemSO;
+        
         protected InteractableItem _interactableItem;
+
+        public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
-
-        protected virtual void Start()
-        {
-            _interactableItem = GetComponent<InteractableItem>();
-            _interactableItem.SetInteractAction(PickItem);
-        }
 
         public override string ToString()
         {
             return $"Item: {this.name}";
         }
 
-        protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
+        protected virtual void Start()
+        {
+            _interactableItem = GetComponent<InteractableItem>();
+            //_interactableItem.SetInteractAction(PickItem);
+        }
+
+        /*protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
             if (IsPossessed)
             {
@@ -43,13 +47,13 @@ namespace Interactions
             SetPossessed(false);
         }
 
-        protected virtual void SetPossessed(bool toPossess, int playerID = 0)
+        public virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
             Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
             IsPossessed = toPossess;
             OwnerPlayerID = playerID;
             _interactableItem.SetInteractive(!toPossess);
-        }
+        }*/
 
         public virtual void UseItem(int playerID) { }
 
@@ -57,8 +61,8 @@ namespace Interactions
         public virtual void OrientItemInHand(bool isLeftHand) 
         {
             Transform parentTransform = transform.parent.transform;
-            parentTransform.localPosition = Vector3.zero;
-            parentTransform.localEulerAngles = new Vector3(0f, 270f, 0f);
+            parentTransform.localPosition = _pickableItemSO.PickedPosition;
+            parentTransform.localEulerAngles = _pickableItemSO.PickedAngle;
         }
     }
 }

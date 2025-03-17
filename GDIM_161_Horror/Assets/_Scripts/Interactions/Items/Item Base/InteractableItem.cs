@@ -32,6 +32,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public virtual void SetDisplayMessage(string message)
     {
+        if (_textMesh == null) return;
         _textMesh.text = message;
     }
 
@@ -59,6 +60,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public virtual void StoppedDetecting(int playerID)
     {
-        _textAnimation.SetBool(_fadeIn, false);
+        try { _textAnimation?.SetBool(_fadeIn, false); }
+        finally{}
     }
 }

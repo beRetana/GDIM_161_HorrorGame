@@ -11,7 +11,6 @@ public class CameraController : NetworkBehaviour
 
     private FirstPersonController _playerController;
     private StarterAssetsInputs _playerStarterInput;
-    private HandInventory _handInventory;
     private BasicRigidBodyPush _basicRigidBodyPush;
     private PlayerArticulations _playerArticulations;
     private PlayerInput _playerInput;
@@ -25,12 +24,11 @@ public class CameraController : NetworkBehaviour
     {
         _playerController = GetComponent<FirstPersonController>();
         _playerStarterInput = GetComponent<StarterAssetsInputs>();
-        _handInventory = GetComponent<HandInventory>();
         _basicRigidBodyPush = GetComponent<BasicRigidBodyPush>();
         _playerArticulations = GetComponent<PlayerArticulations>();
         _playerInput = GetComponent<PlayerInput>();
 
-        if (isLocalPlayer) ToggleObjects(false);
+        ToggleObjects(false);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
@@ -43,7 +41,6 @@ public class CameraController : NetworkBehaviour
         _playerController.enabled = active;
         _playerStarterInput.enabled = active;
         _playerInput.enabled = active;
-        _handInventory.enabled = active;
         _basicRigidBodyPush.enabled = active;
         _playerArticulations.enabled = active;
         _cameraBrain.SetActive(active);
