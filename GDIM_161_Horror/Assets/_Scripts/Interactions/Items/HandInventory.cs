@@ -403,8 +403,6 @@ public class HandInventory : NetworkBehaviour
                                             dominantSlot.ItemTransform.position,
                                             dominantSlot.ItemTransform.rotation);
 
-        SpawnItem(networkItem.gameObject);
-
         Rigidbody networkRigidbody = networkItem.GetComponent<Rigidbody>();
 
         networkRigidbody.isKinematic = false;
@@ -412,6 +410,8 @@ public class HandInventory : NetworkBehaviour
         _inventorySlots.RemoveItem();
 
         Destroy(itemToDrop.transform.parent.gameObject);
+        
+        NetworkServer.Spawn(networkItem.gameObject);
 
         if (isThrow)
         {
