@@ -197,7 +197,7 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        _playerID = gameObject.GetComponent<PlayerBase>().ID();
+        if (gameObject.TryGetComponent<PlayerBase>(out PlayerBase playerBase)) _playerID = playerBase.ID();
         PrepareList();
     }
 
