@@ -143,6 +143,7 @@ public class HandInventory : NetworkBehaviour
                 selectedHand.Item = CreateHeldItem(inventorySlotToGain, selectedHand.ItemTransform);
                 //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
 
+
                 Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
@@ -160,6 +161,8 @@ public class HandInventory : NetworkBehaviour
         {
             PickableItemSO pickableSO = itemToDestroy.PickableItemSO;
             Transform nonNetworkPrefab = Instantiate(pickableSO.Prefab, selectedHand);
+            NetworkServer.Spawn(nonNetworkPrefab.gameObject);
+            NetworkServer.Destroy(itemToDestroy.transform.parent.gameObject);
             Debug.Log("Network object Destroyed and Non-Network Created");
             return nonNetworkPrefab.GetChild(0).GetComponent<PickableItem>();
         }
@@ -203,7 +206,7 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        if (gameObject.TryGetComponent<PlayerBase>(out PlayerBase playerBase)) _playerID = playerBase.ID();
+        _playerID = gameObject.GetComponent<PlayerBase>().ID();
         PrepareList();
     }
 
@@ -220,7 +223,7 @@ public class HandInventory : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        MoveItemsPositionsToHands();
+        //MoveItemsPositionsToHands();
     }
 
     private void CheckForRaycastInteractables()
@@ -284,8 +287,13 @@ public class HandInventory : NetworkBehaviour
         itemToUse.UseItem(_playerID);
     }
 
-    private void PickUpLogic(InventorySlot inventorySlotOfNewItem)
+    [Command]
+    public void CmdPickUpItem(NetworkPickableItem pickableItem)
     {
+        if (!isServer) return;
+
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+        
         if (inventorySlotOfNewItem == null) return;
 
         // TK Might have to load to server manually.
@@ -295,16 +303,7 @@ public class HandInventory : NetworkBehaviour
         _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
         Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
         Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
-    }
-
-    [Command]
-    public void CmdPickUpItem(NetworkPickableItem pickableItem)
-    {
-        if (!isServer) return;
-        
-        PickUpLogic(_inventorySlots.GainItem(pickableItem));
-        
-        RpcPickupItem(pickableItem);
+        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
     [ClientRpc]
@@ -312,21 +311,25 @@ public class HandInventory : NetworkBehaviour
     {
         if (!isClient) return;
 
-        PickUpLogic(_inventorySlots.GainItem(pickableItem));
+        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
+
+        if (inventorySlotOfNewItem == null) return;
+
+        // TK Might have to load to server manually.
+
+        _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
+
+        _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
+        Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
+        Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
+        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
         CmdPickUpItem(pickableItem);
-        StartCoroutine(DestroyPickableItem(pickableItem));
         _interactableComponent = null;
         return true;
-    }
-
-    private IEnumerator DestroyPickableItem(NetworkPickableItem pickableItem)
-    {
-        yield return new WaitForNextFrameUnit();
-        NetworkServer.Destroy(pickableItem.transform.parent.gameObject);
     }
 
     private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
@@ -346,7 +349,7 @@ public class HandInventory : NetworkBehaviour
         CmdDropItem(throwForce);
     }
 
-    //[Command]
+    [Command]
     public void CmdDropItem(float throwForce)
     {
         bool isThrow = _arms.IsDomOutStretched();
@@ -389,8 +392,8 @@ public class HandInventory : NetworkBehaviour
     #region graveyard
     private void MoveItemsPositionsToHands()
     {
-        MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
-        MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
+        //MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
+        //MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
         return;
     }
 
