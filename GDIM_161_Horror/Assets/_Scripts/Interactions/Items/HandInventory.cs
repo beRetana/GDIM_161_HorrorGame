@@ -359,13 +359,18 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
-    [Command(requiresAuthority = false)]
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
         CmdPickUpItem(pickableItem.ItemType);
-        NetworkServer.Destroy(pickableItem.transform.parent.gameObject);
+        DestroyItem(pickableItem);
         _interactableComponent = null;
         return true;
+    }
+
+    [Command(requiresAuthority = false)]
+    public void DestroyItem(NetworkPickableItem pickableItem)
+    {
+        NetworkServer.Destroy(pickableItem.transform.parent.gameObject);
     }
 
     private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
