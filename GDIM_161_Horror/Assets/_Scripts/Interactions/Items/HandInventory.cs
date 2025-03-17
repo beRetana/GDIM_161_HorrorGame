@@ -278,7 +278,6 @@ public class HandInventory : NetworkBehaviour
         itemToUse.UseItem(_playerID);
     }
 
-    [Command(requiresAuthority = false)]
     public void CmdPickUpItem(ItemType itemType)
     {
         GameObject prefab = null;
@@ -360,6 +359,7 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
+    [Command(requiresAuthority = false)]
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
         CmdPickUpItem(pickableItem.ItemType);
