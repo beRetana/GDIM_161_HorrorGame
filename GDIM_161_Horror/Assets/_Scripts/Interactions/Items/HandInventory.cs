@@ -387,10 +387,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
-        if (isLocalPlayer)
-        {
-            CmdDropItem(throwForce);
-        }
+        CmdDropItem(throwForce);
     }
 
     [Command]
