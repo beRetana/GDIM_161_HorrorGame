@@ -65,5 +65,12 @@ namespace Interactions
             base.UseItem(playerId);
             ScanArea(playerId);
         }
+
+        public override void OrientItemInHand(Transform targetTransform)
+        {
+            Transform parentTransform = transform.parent.transform;
+            parentTransform.position = new Vector3(-0.017f, 0.159f, -0.127f) + targetTransform.position;
+            parentTransform.localEulerAngles = new Vector3(0f, -90f, -55f);
+        }
     }
 }

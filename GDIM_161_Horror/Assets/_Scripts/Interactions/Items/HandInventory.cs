@@ -4,6 +4,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using TMPro;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -57,7 +58,7 @@ public class HandInventory : NetworkBehaviour
             // Comment this later
             ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
             // Comment this later
-            ItemRigidBody.transform.parent = ItemTransform;
+            //ItemRigidBody.transform.parent = ItemTransform;
         }
 
         public Rigidbody RemoveRigidBody()
@@ -77,8 +78,6 @@ public class HandInventory : NetworkBehaviour
             ItemRigidBody.freezeRotation = false;
             // Comment this later
             ItemRigidBody.transform.parent = null;
-
-            rigidBodyToDrop.GetComponent<NetworkIdentity>().enabled = true;
 
             _itemRigidBody = null;
 
@@ -138,11 +137,11 @@ public class HandInventory : NetworkBehaviour
         public InventorySlot GainItem(PickableItem inventorySlotToGain)
         {
             InventorySlot selectedHand = GetDominantHand();
+            
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = inventorySlotToGain;
                 //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
-
 
                 Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
@@ -196,7 +195,7 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        _playerID = gameObject.GetComponent<PlayerBase>().ID();
+        if (gameObject.TryGetComponent<PlayerBase>(out PlayerBase playerBase)) _playerID = playerBase.ID();
         PrepareList();
     }
 
@@ -213,7 +212,7 @@ public class HandInventory : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        //MoveItemsPositionsToHands();
+        MoveItemsPositionsToHands();
     }
 
     private void CheckForRaycastInteractables()
@@ -226,7 +225,7 @@ public class HandInventory : NetworkBehaviour
             IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something before.
-            if (_interactableComponent == null)
+            if (_interactableComponent == null || _interactableComponent.Equals(null))
             {
                 // Report it as detected
                 _interactableComponent = childCanvas;
@@ -237,13 +236,13 @@ public class HandInventory : NetworkBehaviour
             else if (childCanvas != _interactableComponent)
             {
                 // Stop animation and start the new one
-                _interactableComponent.StoppedDetecting(_playerID);
+                _interactableComponent?.StoppedDetecting(_playerID);
                 _interactableComponent = childCanvas;
                 _interactableComponent?.Detected(_playerID);
             }
         }
         // If we didn't hit anything did we hit something before?
-        else if (_interactableComponent != null)
+        else if (_interactableComponent != null && !_interactableComponent.Equals(null))
         {
             _interactableComponent.StoppedDetecting(_playerID);
             _mouse?.DefaultEffect();
@@ -257,9 +256,12 @@ public class HandInventory : NetworkBehaviour
         _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
     public void OnInteract(InputValue value) 
-    { 
-        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null) 
+    {
+        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
+        {
             _interactableComponent?.Interact(_playerID);
+            _interactableComponent = null;
+        }
     }
     public void OnDrop(InputValue value) { DropItem(); }
     public void OnThrow(InputValue value) { DropItem(_throwForce); }
@@ -274,22 +276,21 @@ public class HandInventory : NetworkBehaviour
         itemToUse.UseItem(_playerID);
     }
 
-    public bool PickUpItem(PickableItem pickableItem)
+    private void PickUpLogic(InventorySlot inventorySlotOfNewItem)
     {
-        Transform pickableParent = pickableItem.transform.parent;
-        
-        if (pickableParent.GetComponent<Rigidbody>() == null) return false; // DropItem(); <-??
+        if (inventorySlotOfNewItem == null) return;
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
-        if (inventorySlotOfNewItem == null) return false;
-
-        _PutItemInHand(inventorySlotOfNewItem, pickableParent, pickableItem);
+        _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
 
         _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
         Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
         Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
-        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
+    }
 
+    public bool PickUpItem(PickableItem pickableItem)
+    {
+        PickUpLogic(_inventorySlots.GainItem(pickableItem));
+        _interactableComponent = null;
         return true;
     }
 
@@ -298,17 +299,12 @@ public class HandInventory : NetworkBehaviour
         bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
 
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
-        inventorySlotOfNewItem.ItemTransform = pickableParent;
+        inventorySlotOfNewItem.ItemTransform = isLeftHandAction ? _leftHandSocket : _rightHandSocket;
 
-        pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
-        //pickableParent.transform.localPosition = Vector3.zero;
-        //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
-
-        pickableItem.OrientItemInHand(isLeftHandAction);
+        //pickableItem.OrientItemInHand(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
     }
 
-
-    private void DropItem(float throwForce = 0)
+    private void DropItem(float throwForce = 0f)
     {
         bool isThrow = _arms.IsDomOutStretched();
 
@@ -316,18 +312,21 @@ public class HandInventory : NetworkBehaviour
         if (dominantSlot.Item == null) return;
 
         PickableItem itemToDrop = dominantSlot.Item;
-        Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
+
+        Rigidbody itemRigidbody = itemToDrop.transform.parent.GetComponent<Rigidbody>();
+
+        itemRigidbody.isKinematic = false;
 
         _inventorySlots.RemoveItem();
 
-        if(isThrow)
+        if (isThrow)
         {
-            itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            itemRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
             _arms.ToggleHandMoveOutOrIn(_inventorySlots.IsLHandDom);
         }
         else
         {
-            itemRigidBodyToDrop.AddForce(transform.forward, ForceMode.Impulse);
+            itemRigidbody.AddForce(transform.forward, ForceMode.Impulse);
             _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
         }
 
@@ -341,19 +340,21 @@ public class HandInventory : NetworkBehaviour
     #region graveyard
     private void MoveItemsPositionsToHands()
     {
-        //MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
-        //MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
+        MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
+        MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
         return;
     }
 
     private void MoveItemPositionToHand(InventorySlot inventorySlot)
     {
         if (inventorySlot.Item == null) return;
+        Vector3 distance = inventorySlot.ItemRigidBody.transform.position - inventorySlot.ItemTransform.position;
+        Debug.Log($"Direction: {distance}");
+        if (Vector3.Magnitude(distance) <= .1f) return;
 
-        Vector3 direction = inventorySlot.ItemRigidBody.transform.parent.position - inventorySlot.ItemRigidBody.position;
-        if (Vector3.Magnitude(direction) <= .1f) return;
-
-        inventorySlot.ItemRigidBody.AddForce(direction * _pickUpForce);
+        inventorySlot.ItemRigidBody.MovePosition(Vector3.Lerp(inventorySlot.ItemRigidBody.transform.position,
+                                                              inventorySlot.ItemTransform.position, 
+                                                              _pickUpForce * Time.deltaTime));
     }
 
     private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration = 1f)

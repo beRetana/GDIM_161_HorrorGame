@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System;
 using StarterAssets;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 //using static System.IO.Enumeration.FileSystemEnumerable<TResult>;
 
 
