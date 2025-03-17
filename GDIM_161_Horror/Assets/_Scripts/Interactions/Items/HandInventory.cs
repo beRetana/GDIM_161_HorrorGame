@@ -4,7 +4,6 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
-using TMPro;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -58,7 +57,7 @@ public class HandInventory : NetworkBehaviour
             // Comment this later
             ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
             // Comment this later
-            //ItemRigidBody.transform.parent = ItemTransform;
+            ItemRigidBody.transform.parent = ItemTransform;
         }
 
         public Rigidbody RemoveRigidBody()
@@ -280,6 +279,8 @@ public class HandInventory : NetworkBehaviour
     {
         if (inventorySlotOfNewItem == null) return;
 
+        // TK Might have to load to server manually.
+
         _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
 
         _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
@@ -301,7 +302,7 @@ public class HandInventory : NetworkBehaviour
         inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>(), _linearDrag);
         inventorySlotOfNewItem.ItemTransform = isLeftHandAction ? _leftHandSocket : _rightHandSocket;
 
-        //pickableItem.OrientItemInHand(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
+        pickableItem.OrientItemInHand(isLeftHandAction);
     }
 
     private void DropItem(float throwForce = 0f)
@@ -348,13 +349,11 @@ public class HandInventory : NetworkBehaviour
     private void MoveItemPositionToHand(InventorySlot inventorySlot)
     {
         if (inventorySlot.Item == null) return;
-        Vector3 distance = inventorySlot.ItemRigidBody.transform.position - inventorySlot.ItemTransform.position;
-        Debug.Log($"Direction: {distance}");
-        if (Vector3.Magnitude(distance) <= .1f) return;
 
-        inventorySlot.ItemRigidBody.MovePosition(Vector3.Lerp(inventorySlot.ItemRigidBody.transform.position,
-                                                              inventorySlot.ItemTransform.position, 
-                                                              _pickUpForce * Time.deltaTime));
+        Vector3 direction = inventorySlot.ItemRigidBody.transform.parent.position - inventorySlot.ItemTransform.position;
+        if (Vector3.Magnitude(direction) <= .1f) return;
+
+        inventorySlot.ItemRigidBody.AddForce(direction * _pickUpForce);
     }
 
     private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration = 1f)
