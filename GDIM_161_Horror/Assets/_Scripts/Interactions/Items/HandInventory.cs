@@ -27,8 +27,8 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
-    [SerializeField] private GameObject _sonnar;
-    [SerializeField] private GameObject _torch;
+    [SerializeField] private PickableItemSO _sonnar;
+    [SerializeField] private PickableItemSO _torch;
 
     private class InventorySlot
     {
@@ -280,19 +280,19 @@ public class HandInventory : NetworkBehaviour
 
     public void CmdPickUpItem(ItemType itemType)
     {
-        GameObject prefab = null;
+        Transform prefab = null;
 
         switch (itemType)
         {
             case ItemType.Torch:
                 {
                     Debug.Log($"Torch Was Picked");
-                    prefab = _torch; break;
+                    prefab = _torch.Prefab; break;
                 }
             case ItemType.Sonnar:
                 {
                     Debug.Log($"Sonnar Was Picked");
-                    prefab = _sonnar; break;
+                    prefab = _sonnar.Prefab; break;
                 }
             default:
                 {
@@ -315,48 +315,6 @@ public class HandInventory : NetworkBehaviour
         Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
 
         //RpcPickupItem(itemType);
-    }
-
-    [ClientRpc]
-    public void RpcPickupItem(ItemType itemType)
-    {
-        if (!isClient) return;
-        if (!isLocalPlayer) return;
-
-        GameObject prefab = null;
-
-        switch (itemType)
-        {
-            case ItemType.Torch:
-                {
-                    Debug.Log($"Torch Was Picked: {_torch}");
-                    prefab = this._torch; break;
-                }
-            case ItemType.Sonnar:
-                {
-                    Debug.Log($"Sonnar Was Picked: {_sonnar}");
-                    prefab = this._sonnar; break;
-                }
-            default:
-                {
-                    Debug.LogError("The Item Does Not Have Type Assigned"); return;
-                }
-        }
-
-        Debug.Log($"{this.gameObject.name}");
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(this._sonnar,
-            _inventorySlots.GetDominantHand().ItemTransform).transform.GetChild(0).GetComponent<PickableItem>());
-
-        if (inventorySlotOfNewItem == null) return;
-
-        // TK Might have to load to server manually.
-
-        _PutItemInHand(inventorySlotOfNewItem, inventorySlotOfNewItem.Item.transform.parent, inventorySlotOfNewItem.Item);
-
-        _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
-        Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
-        Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
-        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
     }
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
@@ -387,11 +345,6 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
-        CmdDropItem(throwForce);
-    }
-
-    public void CmdDropItem(float throwForce)
-    {
         bool isThrow = _arms.IsDomOutStretched();
 
         InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
@@ -399,19 +352,44 @@ public class HandInventory : NetworkBehaviour
 
         PickableItem itemToDrop = dominantSlot.Item;
         PickableItemSO pickableItemSO = itemToDrop.PickableItemSO;
-        Transform networkItem = Instantiate(pickableItemSO.NetworkPrefab,
-                                            dominantSlot.ItemTransform.position,
-                                            dominantSlot.ItemTransform.rotation);
+
+        CmdDropItem(throwForce, itemToDrop.ItemType, dominantSlot.ItemTransform, isThrow);
+
+        _inventorySlots.RemoveItem();
+
+        Destroy(itemToDrop.transform.parent.gameObject);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdDropItem(float throwForce, ItemType itemType, Transform location, bool isThrow)
+    {
+        Transform prefab = null;
+
+        switch (itemType)
+        {
+            case ItemType.Torch:
+                {
+                    Debug.Log($"Torch Was Picked");
+                    prefab = _torch.Prefab; break;
+                }
+            case ItemType.Sonnar:
+                {
+                    Debug.Log($"Sonnar Was Picked");
+                    prefab = _sonnar.Prefab; break;
+                }
+            default:
+                {
+                    Debug.LogError("The Item Does Not Have Type Assigned"); return;
+                }
+        }
+
+        Transform networkItem = Instantiate(prefab, location.position, location.rotation);
 
         Rigidbody networkRigidbody = networkItem.GetComponent<Rigidbody>();
 
         networkRigidbody.isKinematic = false;
 
-        _inventorySlots.RemoveItem();
-
-        Destroy(itemToDrop.transform.parent.gameObject);
-        
-        Spawn(networkItem.gameObject);
+        NetworkServer.Spawn(networkItem.gameObject);
 
         if (isThrow)
         {
@@ -424,13 +402,6 @@ public class HandInventory : NetworkBehaviour
             _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
         }
     }
-
-    [Command(requiresAuthority = false)]
-    public void Spawn(GameObject gameObject)
-    {
-        NetworkServer.Spawn(gameObject);
-    }
-
     public Arms GetArms() { return _arms; }
 
     #region graveyard
