@@ -27,8 +27,8 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
-    [SerializeField, SyncVar] private Transform _sonnar;
-    [SerializeField, SyncVar] private Transform _torch;
+    [SerializeField, SyncVar] private GameObject _sonnar;
+    [SerializeField, SyncVar] private GameObject _torch;
 
     private class InventorySlot
     {
@@ -283,7 +283,7 @@ public class HandInventory : NetworkBehaviour
     {
         if (!isServer) return;
 
-        Transform prefab = null;
+        GameObject prefab = null;
 
         switch (itemType)
         {
@@ -304,7 +304,7 @@ public class HandInventory : NetworkBehaviour
         }
 
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab, 
-            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
+            _inventorySlots.GetDominantHand().ItemTransform).transform.GetChild(0).GetComponent<PickableItem>());
         
         if (inventorySlotOfNewItem == null) return;
 
@@ -325,7 +325,7 @@ public class HandInventory : NetworkBehaviour
     {
         if (isServer) return;
 
-        Transform prefab = null;
+        GameObject prefab = null;
 
         switch (itemType)
         {
@@ -346,7 +346,7 @@ public class HandInventory : NetworkBehaviour
         }
 
         InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(Instantiate(prefab,
-            _inventorySlots.GetDominantHand().ItemTransform).GetChild(0).GetComponent<PickableItem>());
+            _inventorySlots.GetDominantHand().ItemTransform).transform.GetChild(0).GetComponent<PickableItem>());
 
         if (inventorySlotOfNewItem == null) return;
 
