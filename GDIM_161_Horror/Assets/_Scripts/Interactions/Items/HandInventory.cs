@@ -137,16 +137,17 @@ public class HandInventory : NetworkBehaviour
 
         public InventorySlot GainItem(PickableItem prefab)
         {
+           
             InventorySlot selectedHand = GetDominantHand();
             
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = prefab;
-                //AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, GameObject.FindObjectOfType<HandInventory>().transform.position);
-
+                
 
                 Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
+
             }
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
