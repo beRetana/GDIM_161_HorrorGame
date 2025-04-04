@@ -176,7 +176,7 @@ namespace StarterAssets
                 isWalking = true; // Player is moving  
                 if (_stepSoundTime >= _rate)
                 {
-                    PlayFootstep();
+                   // PlayFootstep();
                     _stepSoundTime = 0;
                 }
             }

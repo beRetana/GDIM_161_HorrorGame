@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{0eacb4b4-51d5-4590-a727-67dd61d2ddbe}">
-		<property name="note" />
 		<property name="name">
 			<value>forestFootstep</value>
 		</property>
@@ -79,6 +78,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{bd287f37-a876-4402-a543-f13c516fd34d}">
+		<property name="volume">
+			<value>-56</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{73c4f2dd-22f3-481c-b07d-8e73922d5f5b}</destination>
 		</relationship>
