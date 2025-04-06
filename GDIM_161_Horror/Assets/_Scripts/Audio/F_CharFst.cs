@@ -14,27 +14,27 @@ public class F_CharFst : MonoBehaviour
 
     
     //Section Used for finding FMOD parameter ID number (instead of name)
-    /*
-    private EventDescription EventDes;
-    private PARAMETER_DESCRIPTION ParamDes;
-    */
+    
+    // private EventDescription EventDes;
+    // private PARAMETER_DESCRIPTION ParamDes;
+    
 
     private void Start()
     {
         // This section returns the parameter ID in the console
-        
-        /* EventDes = RuntimeManager.GetEventDescription(EventPath);
+        /*
+        EventDes = RuntimeManager.GetEventDescription(EventPath);
         EventDes.getParameterDescriptionByName("Terrain", out ParamDes);
         ParamID = ParamDes.id;
-        Debug.Log(ParamID.data1 + " " + ParamID.data2);*/
+        Debug.Log(ParamID.data1 + " " + ParamID.data2);  */
         
 
         // Assigns the ID of 'Terrain'
-        ParamID.data1 = 1082362436;
-        ParamID.data2 = 3768982689;
+            // ParamID.data1 = 1082362436;
+            // ParamID.data2 = 3768982689;
         // Assigns the ID for 'WalkRun'
-        ParamID2.data1 = 4001576615;
-        ParamID2.data2 = 3268475985;
+                // ParamID2.data1 = 4001576615;
+                // ParamID2.data2 = 3268475985;
         lm = LayerMask.GetMask("Ground");        
     }
 
@@ -54,14 +54,14 @@ public class F_CharFst : MonoBehaviour
         RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
 
         // Sets the Terrain parameter
-        Run.setParameterByID(ParamID, MaterialValue, false);
+            //Run.setParameterByID(ParamID, MaterialValue, false);
 
         // Sets the 'WalkRun' parameter
-        Run.setParameterByID(ParamID2, 1, false);
+            // Run.setParameterByID(ParamID2, 1, false);
 
         // Can be used as alternative to IDs
-        //Run.setParameterByName("Terrain", MaterialValue);
-        //Run.setParameterByName("WalkRun", 1, false);
+        Run.setParameterByName("Terrain", MaterialValue);
+        Run.setParameterByName("WalkRun", 1, false);
 
         Run.start();
         Run.release();
@@ -75,13 +75,13 @@ public class F_CharFst : MonoBehaviour
         RuntimeManager.AttachInstanceToGameObject(Walk, transform, GetComponent<Rigidbody>());
 
         // Sets the Terrain parameter
-        Walk.setParameterByID(ParamID, MaterialValue, false);
+            //Walk.setParameterByID(ParamID, MaterialValue, false);
 
         // Sets the 'WalkRun' parameter
-        Walk.setParameterByID(ParamID2, 1, false);
+        // Walk.setParameterByID(ParamID2, 1, false);
 
         // Can be used as alternative to IDs
-        // Run.setParameterByName("Terrain", MaterialValue);
+        Walk.setParameterByName("Terrain", MaterialValue);
 
         Walk.start();
         Walk.release();
