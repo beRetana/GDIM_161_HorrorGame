@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Interactions
 {
-    public class Sonar : PickableItem
+    public class Sonar : NetworkPickableItem
     {
         [Tooltip("Detection Radious for the Sonar")]
         [SerializeField, Range(1f, 100f)] private float _detectionRadius = 20f;

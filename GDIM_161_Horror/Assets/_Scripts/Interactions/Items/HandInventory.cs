@@ -320,8 +320,7 @@ public class HandInventory : NetworkBehaviour
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
-        CmdPickUpItem(pickableItem.ItemType);
-        DestroyItem(pickableItem);
+        // start soft-parenting
         _interactableComponent = null;
         return true;
     }
