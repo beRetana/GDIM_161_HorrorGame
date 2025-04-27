@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 8979800026659449354}
   - component: {fileID: 2894710136987931879}
   - component: {fileID: -3323143276070280358}
+  - component: {fileID: 6099041590943197619}
   m_Layer: 6
   m_Name: NormalDeer
   m_TagString: Untagged
@@ -137,20 +138,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _deerWalkFootstep:
-    Guid:
-      Data1: 2001809690
-      Data2: 1303923397
-      Data3: 851080102
-      Data4: 266263900
-    Path: event:/deerWalk
-  _deerRunFootstep:
-    Guid:
-      Data1: -1146244257
-      Data2: 1251743540
-      Data3: -588042364
-      Data4: 1346346020
-    Path: event:/deerRun
 --- !u!114 &5039417571630091474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +256,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6099041590943197619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5300555771477976309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33b6688036bcf04fb23828d8f2093ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1958904761522493999
 PrefabInstance:
   m_ObjectHideFlags: 0

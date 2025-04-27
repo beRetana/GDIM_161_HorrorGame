@@ -133,7 +133,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 85
-  Length: 5000
+  Length: 420
 --- !u!114 &-6700441153078424905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +243,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 38842
+--- !u!114 &-4130136567384615563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/deerFootsteps/Terrain
+  m_EditorClassIdentifier: 
+  Name: Terrain
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 2183370811
+    data2: 770289844
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &-2543721544794085470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,7 +356,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638804452405980819
+  lastModified: 638812855124472896
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -372,12 +396,14 @@ MonoBehaviour:
   - {fileID: -7077840785984954102}
   - {fileID: -6686683114781440644}
   - {fileID: 3911595572360525214}
+  - {fileID: 5209088259789346791}
+  - {fileID: 5519182465514486171}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638804452406015936
+  cacheTime: 638812855124498805
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -394,10 +420,34 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638804441950081277
+  lastModified: 638812834607262039
   FileSizes:
   - Name: Desktop
-    Value: 86432
+    Value: 91136
+  Exists: 1
+--- !u!114 &720745191692017039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/deerFootsteps/WalkRun
+  m_EditorClassIdentifier: 
+  Name: WalkRun
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2528840115
+    data2: 97273575
+  Type: 1
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &1599044835148366132
 MonoBehaviour:
@@ -414,10 +464,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638804452406015936
+  lastModified: 638812855124498805
   FileSizes:
   - Name: Desktop
-    Value: 1838
+    Value: 1918
   Exists: 1
 --- !u!114 &1610504155292384772
 MonoBehaviour:
@@ -485,10 +535,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638784508747087077
+  lastModified: 638812855124253888
   FileSizes:
   - Name: Desktop
-    Value: 39520
+    Value: 43840
   Exists: 1
 --- !u!114 &1850634957915625653
 MonoBehaviour:
@@ -564,6 +614,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 4003872
   Exists: 1
+--- !u!114 &5209088259789346791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/Heartbeat
+  m_EditorClassIdentifier: 
+  Path: event:/Character/Heartbeat
+  Guid:
+    Data1: -2145065089
+    Data2: 1197376553
+    Data3: -1481632623
+    Data4: 1685658807
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 382
 --- !u!114 &5494821571666886798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,6 +665,35 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &5519182465514486171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/deerFootsteps
+  m_EditorClassIdentifier: 
+  Path: event:/deerFootsteps
+  Guid:
+    Data1: -1106729930
+    Data2: 1194258579
+    Data3: -1173612897
+    Data4: 823356742
+  Banks:
+  - {fileID: 1806087220756254382}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -4130136567384615563}
+  - {fileID: 720745191692017039}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6854522976295634600
 MonoBehaviour:
   m_ObjectHideFlags: 0
