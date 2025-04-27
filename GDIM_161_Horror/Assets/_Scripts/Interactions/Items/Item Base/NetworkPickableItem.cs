@@ -61,7 +61,15 @@ namespace Interactions
 
         public virtual void UseItem(int playerID) { }
 
+        private void FixedUpdate()
+        {
+            if (IsPossessed) SoftParenting();
+        }
 
+        private void SoftParenting()
+        {
+            //transform.position += PlayerManager.Instance.GetPlayer(OwnerPlayerID).
+        }
         public virtual void OrientItemInHand(bool isLeftHand) 
         {
             Transform parentTransform = transform.parent.transform;

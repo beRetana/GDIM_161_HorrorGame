@@ -6,7 +6,7 @@ using Mirror;
 
 namespace Interactions
 {
-    public class Torch : PickableItem, IFireable
+    public class Torch : NetworkPickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
