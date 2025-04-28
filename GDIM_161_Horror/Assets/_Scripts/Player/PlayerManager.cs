@@ -80,10 +80,10 @@ public class PlayerManager : NetworkBehaviour
     }
 }
 
-public class PlayerHolder : NetworkBehaviour
+public class PlayerHolder
 {
     static readonly int _MAX_PLAYER_COUNT = 4;
-    [SyncVar] private int totalPlayers = 0;
+    private int totalPlayers = 0;
     private PlayerBase[] playerList = new PlayerBase[4];
 
     public int AddPlayer(PlayerBase player)
