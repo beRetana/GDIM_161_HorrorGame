@@ -88,7 +88,7 @@ namespace Interactions
             SmotherCheck();
         }
 
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);

@@ -47,7 +47,7 @@ namespace Dissonance.Integrations.MirrorIgnorance
         {
             while (_comms == null)
             {
-                _comms = FindObjectOfType<DissonanceComms>();
+                _comms = FindFirstObjectByType<DissonanceComms>();
 
                 if (_comms != null)
                 {
@@ -77,7 +77,7 @@ namespace Dissonance.Integrations.MirrorIgnorance
             base.OnStartLocalPlayer();
 
             if (_comms == null)
-                _comms = FindObjectOfType<DissonanceComms>();
+                _comms = FindFirstObjectByType<DissonanceComms>();
 
             if (_comms == null)
             {

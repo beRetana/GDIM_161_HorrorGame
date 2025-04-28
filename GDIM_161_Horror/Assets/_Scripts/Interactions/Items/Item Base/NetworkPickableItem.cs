@@ -1,5 +1,7 @@
 using Mirror;
+using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.Splines.Interpolators;
 
 namespace Interactions
 {
@@ -9,21 +11,21 @@ namespace Interactions
     [RequireComponent(typeof(InteractableItem))]
     public class NetworkPickableItem : NetworkBehaviour
     {
-        [SerializeField] PickableItemSO _pickableItemSO;
-        [SerializeField] ItemType _itemType;
+        [SerializeField] PickableItemSO _pickableItemSO; // Contains information for soft parenting
 
         protected InteractableItem _interactableItem;
-
-        public ItemType ItemType { get { return _itemType; } }
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
+        protected Transform locationTarget;
+        protected Collider _itemCollider;
 
         protected virtual void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(PickItem);
+            _itemCollider = transform.parent.transform.GetComponent<Collider>();
         }
 
         public override string ToString()
@@ -61,20 +63,20 @@ namespace Interactions
 
         public virtual void UseItem(int playerID) { }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (IsPossessed) SoftParenting();
         }
 
-        private void SoftParenting()
+        protected virtual void SoftParenting()
         {
-            //transform.position += PlayerManager.Instance.GetPlayer(OwnerPlayerID).
+            transform.parent.transform.position = locationTarget.position + _pickableItemSO.PickedPosition;
+            transform.parent.transform.rotation = locationTarget.rotation * Quaternion.Euler(_pickableItemSO.PickedAngle);
         }
-        public virtual void OrientItemInHand(bool isLeftHand) 
+        public virtual void OrientItemInHand(Transform handLocation, int playerID) 
         {
-            Transform parentTransform = transform.parent.transform;
-            parentTransform.localPosition = _pickableItemSO.PickedPosition;
-            parentTransform.localEulerAngles = _pickableItemSO.PickedAngle;
+            locationTarget = handLocation;
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
         }
     }
 }
