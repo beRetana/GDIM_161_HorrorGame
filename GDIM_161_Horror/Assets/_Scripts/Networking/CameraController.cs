@@ -13,6 +13,7 @@ public class CameraController : NetworkBehaviour
     private StarterAssetsInputs _playerStarterInput;
     private BasicRigidBodyPush _basicRigidBodyPush;
     private PlayerArticulations _playerArticulations;
+    private HandInventory _handInventory;
     private PlayerInput _playerInput;
 
     override public void OnStartAuthority()
@@ -31,6 +32,7 @@ public class CameraController : NetworkBehaviour
         _playerStarterInput = GetComponent<StarterAssetsInputs>();
         _basicRigidBodyPush = GetComponent<BasicRigidBodyPush>();
         _playerArticulations = GetComponent<PlayerArticulations>();
+        _handInventory = GetComponent<HandInventory>();
         _playerInput = GetComponent<PlayerInput>();
 
         ToggleObjects(false);
@@ -43,6 +45,7 @@ public class CameraController : NetworkBehaviour
         _playerInput.enabled = active;
         _basicRigidBodyPush.enabled = active;
         _playerArticulations.enabled = active;
+        _handInventory.enabled = active;
         _cameraBrain.SetActive(active);
         _playerCamera.SetActive(active);
     }

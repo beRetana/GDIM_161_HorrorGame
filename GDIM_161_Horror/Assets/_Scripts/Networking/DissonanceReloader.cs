@@ -18,8 +18,8 @@ public class DissonanceReloader : MonoBehaviour
     {
         if (scene.name == "BUILD_1") 
         {
-            _dissonanceComms = FindFirstObjectByType<DissonanceComms>();
-            _dissonanceCommsNetwork = FindFirstObjectByType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
+            _dissonanceComms = FindObjectOfType<DissonanceComms>();
+            _dissonanceCommsNetwork = FindObjectOfType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
 
             if (_dissonanceComms != null && _dissonanceCommsNetwork != null)
             {

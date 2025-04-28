@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Interactions
 {
-    public class Sonar : NetworkPickableItem
+    public class Sonar : PickableItem
     {
         [Tooltip("Detection Radious for the Sonar")]
         [SerializeField, Range(1f, 100f)] private float _detectionRadius = 20f;
@@ -61,12 +61,20 @@ namespace Interactions
             if (_objectsRelativeLocation.Count == 0) return;
             _sonarDisplay.LoadInformation(_objectsRelativeLocation, GetClosestLocationDistance(playerId));
             AudioManager.instance.PlayOneShot(FMODEvents.instance.sonarPing, this.transform.position);
+            
         }
 
         public override void UseItem(int playerId)
         {
             base.UseItem(playerId);
             ScanArea(playerId);
+        }
+
+        public override void OrientItemInHand(bool isLeftHand)
+        {
+            Transform parentTransform = transform.parent.transform;
+            parentTransform.localPosition = new Vector3(-0.017f, 0.159f, -0.127f);
+            parentTransform.localEulerAngles = new Vector3(0f, -90f, -55f);
         }
     }
 }

@@ -26,11 +26,11 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
-        DeclareSingletonInstance();
+        DeclareSingletonInsatnce();
         _playerHolder = new();
     }
 
-    private void DeclareSingletonInstance()
+    private void DeclareSingletonInsatnce()
     {
         if (Instance == null)
         {
@@ -42,6 +42,7 @@ public class PlayerManager : NetworkBehaviour
             Destroy(gameObject);
         }
     }
+
     public int AttemptAddPlayer(PlayerBase player) // returns -1 if error
     {
         int newID = _playerHolder.AddPlayer(player);
@@ -52,6 +53,7 @@ public class PlayerManager : NetworkBehaviour
 
         return newID; // returns -1 if error
     }
+
     public void LockPlayerInput(int playerID)
     {
         _playerHolder[playerID].LockPlayer();
@@ -65,6 +67,7 @@ public class PlayerManager : NetworkBehaviour
         if (NetworkServer.active) return GetPlayerFromNetworkManager(playerID);
         return _playerHolder[playerID];
     }
+
     private PlayerBase GetPlayerFromNetworkManager(int playerID)
     {
         foreach (PlayerObjectController player in NetworkManager.GamePlayers)
@@ -77,10 +80,10 @@ public class PlayerManager : NetworkBehaviour
     }
 }
 
-public class PlayerHolder
+public class PlayerHolder : NetworkBehaviour
 {
     static readonly int _MAX_PLAYER_COUNT = 4;
-    private int totalPlayers = 0;
+    [SyncVar] private int totalPlayers = 0;
     private PlayerBase[] playerList = new PlayerBase[4];
 
     public int AddPlayer(PlayerBase player)
