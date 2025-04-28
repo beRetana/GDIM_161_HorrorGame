@@ -33,7 +33,7 @@ namespace Interactions
             return $"Item: {this.name}";
         }
 
-        protected virtual void PickItem(HandInventory playerInventory) // <= (InteractableItem)this.Interact()
+        protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
             if (IsPossessed)
             {
@@ -41,16 +41,16 @@ namespace Interactions
                 return;
             }
 
-            bool success = playerInventory.PickUpItem(this);
+            bool success = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().PickUpItem(this);
             if (!success) return;
 
-            SetPossessed(true, playerInventory.PlayerID);
+            SetPossessed(true, playerID);
             AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
         }
 
-        public virtual void UnPossessItem(int playerID)
+        public virtual void UnPossessItem()
         {
-            SetPossessed(false, playerID);
+            SetPossessed(false);
             locationTarget = null;
         }
 
@@ -74,9 +74,10 @@ namespace Interactions
             transform.parent.transform.position = locationTarget.position + _pickableItemSO.PickedPosition;
             transform.parent.transform.rotation = locationTarget.rotation * Quaternion.Euler(_pickableItemSO.PickedAngle);
         }
-        public virtual void OrientItemInHand(Transform handLocation) 
+        public virtual void OrientItemInHand(Transform handLocation, int playerID) 
         {
             locationTarget = handLocation;
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
         }
     }
 }
