@@ -258,9 +258,19 @@ public class HandInventory : NetworkBehaviour
         }
     }
 
-    public void OnDrop(InputValue value) { DropItem(); }
+    public void OnDrop(InputValue value) 
+    {
+        Debugger($"Drop-Is Player {_playerID} Server: {isServer}");
+        if (isServer) RpcDropItem();
+        else CmdDropItem();
+    }
 
-    public void OnThrow(InputValue value) { DropItem(_throwForce); }
+    public void OnThrow(InputValue value) 
+    {
+        Debugger($"Throw-Is Player {_playerID} Server: {isServer}");
+        if (isServer) RpcDropItem(_throwForce);
+        else CmdDropItem(_throwForce);
+    }
 
     public void OnUseItem(InputValue value) { UseItem(); }
 
@@ -289,9 +299,16 @@ public class HandInventory : NetworkBehaviour
         return true;
     }
 
-    private void DropItem(float throwForce = 0)
+    private void RpcDropItem(float throwForce = 0)
     {
-        _inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
+        Debugger($"RPC crop item being Called with Force: {throwForce}");
+        this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
+    }
+
+    private void CmdDropItem(float throwForce = 0)
+    {
+        Debugger($"CMD Drop item being called with Force: {throwForce}");
+        RpcDropItem(throwForce);
     }
 
     private void Debugger(string log) 
