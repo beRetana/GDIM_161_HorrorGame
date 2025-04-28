@@ -1,7 +1,5 @@
 using Mirror;
-using Unity.MLAgents;
 using UnityEngine;
-using UnityEngine.Splines.Interpolators;
 
 namespace Interactions
 {
@@ -84,38 +82,3 @@ namespace Interactions
         }
     }
 }
-
-// enum with flags if u want it
-/*[Flags]
-public enum PickableItemStateEnum
-{
-    None = 0,               //000
-    IsPossessed = 1 << 0,   //001
-    IsInHand = 1 << 1       //010
-}
-public PickableItemStateEnum itemStateEnum = PickableItemStateEnum.None;
-
-private void SetPossessed(bool isPossessed)
-{
-    if (isPossessed)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}
-private void SetInHand(bool isInHand)
-{
-    if (isInHand)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsInHand;
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}*/

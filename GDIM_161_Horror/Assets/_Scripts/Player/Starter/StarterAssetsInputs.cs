@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -20,21 +18,13 @@ namespace StarterAssets
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
-		[SerializeField] private string _buildScene = "BUILD_1";
         public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+        [Header("Debugging")]
+		[SerializeField] private bool _debugLogs = true;
+
 #if ENABLE_INPUT_SYSTEM
-
-		private void OnStart()
-		{
-			SceneManager.sceneLoaded += OnSceneLoaded;
-		}
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode loadingmode)
-        {
-            if (SceneManager.GetActiveScene().name == _buildScene) SetCursorState(cursorLocked);
-        }
 
         public void OnMove(InputValue value)
 		{
@@ -79,15 +69,10 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
-		
-		/*private void OnApplicationFocus(bool hasFocus)
-		{
-			if (SceneManager.GetActiveScene().name != _buildScene) SetCursorState(cursorLocked);
-		}*/
 
-		private void SetCursorState(bool newState)
+		private void Debugger(string log)
 		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+			if (_debugLogs) Debug.Log(log);
 		}
 	}
 	
