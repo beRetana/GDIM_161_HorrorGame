@@ -35,7 +35,6 @@ Transform:
   m_Children:
   - {fileID: 6627252046561620547}
   - {fileID: 8335155052713882908}
-  - {fileID: 6588639178972943521}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &358601240143403709
@@ -146,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6588639178972943521}
   m_Layer: 0
-  m_Name: BasePos
+  m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,13 +159,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1522899249806462209}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3971938011049401888}
-  m_Father: {fileID: 3116399982643216359}
+  m_Father: {fileID: 6627252046561620547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2380343770705185604
 GameObject:
@@ -508,6 +507,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1234030213810770181}
+  - {fileID: 6588639178972943521}
   m_Father: {fileID: 3116399982643216359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3260482526421632806
@@ -577,6 +577,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
+  _debugger: 1
   approxWoodLife_Minutes: 1
   maxTickVariance_WoodBurn: 0
   tickSpeedMultiplier_ByFloor: 1
