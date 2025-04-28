@@ -1,7 +1,5 @@
 using Mirror;
-using Unity.MLAgents;
 using UnityEngine;
-using UnityEngine.Splines.Interpolators;
 
 namespace Interactions
 {
@@ -11,7 +9,8 @@ namespace Interactions
     [RequireComponent(typeof(InteractableItem))]
     public class NetworkPickableItem : NetworkBehaviour
     {
-        [SerializeField] PickableItemSO _pickableItemSO; // Contains information for soft parenting
+        [SerializeField] private PickableItemSO _pickableItemSO; // Contains information for soft parenting
+        [SerializeField] private bool _debugger = true;
 
         protected InteractableItem _interactableItem;
 
@@ -52,6 +51,7 @@ namespace Interactions
         {
             Debug.Log($"THROWWWW: " + throwDir);
             this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
             this.SetPossessed(false, playerID);
             this.locationTarget = null;
         }
@@ -81,6 +81,11 @@ namespace Interactions
         {
             locationTarget = handLocation;
             Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
+        }
+
+        protected virtual void Debugger(string log)
+        {
+            if (_debugger) Debug.Log(log);
         }
     }
 }
