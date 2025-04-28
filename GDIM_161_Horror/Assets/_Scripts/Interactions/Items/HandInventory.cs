@@ -148,14 +148,13 @@ public class HandInventory : NetworkBehaviour
             return null;
         }
 
-        public InventorySlot RemoveItem(Vector3 throwDir)
+        public InventorySlot RemoveItem(Vector3 throwDir, int playerID)
         {
             InventorySlot inventorySlotToRemove = GetDominantHand();
             if (inventorySlotToRemove.Item == null) return null;
-            inventorySlotToRemove.Item.UnPossessItem();
+            inventorySlotToRemove.RemoveRigidBody();
+            inventorySlotToRemove.Item.UnPossessItem(throwDir, playerID);
             inventorySlotToRemove.Item = null;
-            Rigidbody temp = inventorySlotToRemove.RemoveRigidBody();
-            temp.AddForce(throwDir, ForceMode.Impulse);
 
             return inventorySlotToRemove;
         }
@@ -292,7 +291,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
-        _inventorySlots.RemoveItem(transform.forward * throwForce);
+        _inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
     }
 
     private void Debugger(string log) 

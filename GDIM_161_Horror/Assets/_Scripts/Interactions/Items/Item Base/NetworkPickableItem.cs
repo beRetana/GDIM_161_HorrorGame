@@ -48,17 +48,24 @@ namespace Interactions
             AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
         }
 
-        public virtual void UnPossessItem()
+        public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
-            SetPossessed(false);
+            ThrowItem(throwDir);
+            SetPossessed(false, playerID);
             locationTarget = null;
+        }
+
+        private void ThrowItem(Vector3 throwDir)
+        {
+            Debug.Log($"THROWWWW: "+throwDir);
+            transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
             Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
             IsPossessed = toPossess;
-            OwnerPlayerID = playerID;
+            OwnerPlayerID = toPossess ? playerID : -1;
             _interactableItem.SetInteractive(!toPossess);
         }
 
