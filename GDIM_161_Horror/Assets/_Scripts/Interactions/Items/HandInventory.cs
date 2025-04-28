@@ -251,18 +251,16 @@ public class HandInventory : NetworkBehaviour
 
     public void OnInteract(InputValue value) 
     {
-        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
-        {
-            _interactableComponent?.Interact(_playerID);
-            _interactableComponent = null;
-        }
+        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        if (isServer) RpcOnInteract();
+        else CmdOnInteract();
     }
 
     public void OnDrop(InputValue value) 
     {
         Debugger($"Drop-Is Player {_playerID} Server: {isServer}");
-        if (isServer) RpcDropItem();
-        else CmdDropItem();
+        if (isServer) RpcDropItem(0f);
+        else CmdDropItem(0f);
     }
 
     public void OnThrow(InputValue value) 
@@ -299,13 +297,33 @@ public class HandInventory : NetworkBehaviour
         return true;
     }
 
-    private void RpcDropItem(float throwForce = 0)
+    [ClientRpc]
+    private void RpcOnInteract()
     {
-        Debugger($"RPC crop item being Called with Force: {throwForce}");
+        Debugger($"RPC OnInteract being called");
+        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
+        {
+            _interactableComponent?.Interact(_playerID);
+            _interactableComponent = null;
+        }
+    }
+
+    [Command]
+    private void CmdOnInteract()
+    {
+        Debugger($"CMD OnInteract being called");
+        RpcOnInteract();
+    }
+
+    [ClientRpc]
+    private void RpcDropItem(float throwForce)
+    {
+        Debugger($"RPC drop item being Called with Force: {throwForce}");
         this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
     }
 
-    private void CmdDropItem(float throwForce = 0)
+    [Command]
+    private void CmdDropItem(float throwForce)
     {
         Debugger($"CMD Drop item being called with Force: {throwForce}");
         RpcDropItem(throwForce);
