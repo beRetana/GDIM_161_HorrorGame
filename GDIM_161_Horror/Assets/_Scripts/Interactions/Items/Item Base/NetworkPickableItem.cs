@@ -50,24 +50,10 @@ namespace Interactions
 
         public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
-            if (isServer) RpcThrowItem(throwDir);
-            else CmdThrowItem(throwDir);
-            SetPossessed(false, playerID);
-            locationTarget = null;
-        }
-
-        [ClientRpc]
-        private void RpcThrowItem(Vector3 throwDir)
-        {
-            Debug.Log($"RPC THROWWWW: " + throwDir);
+            Debug.Log($"THROWWWW: " + throwDir);
             this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
-        }
-
-        [Command]
-        private void CmdThrowItem(Vector3 throwDir)
-        {
-            Debug.Log($"CMD THROWWWW: " + throwDir);
-            RpcThrowItem(throwDir);
+            this.SetPossessed(false, playerID);
+            this.locationTarget = null;
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
@@ -87,6 +73,7 @@ namespace Interactions
 
         protected virtual void SoftParenting()
         {
+
             transform.parent.transform.position = locationTarget.position + _pickableItemSO.PickedPosition;
             transform.parent.transform.rotation = locationTarget.rotation * Quaternion.Euler(_pickableItemSO.PickedAngle);
         }
