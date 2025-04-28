@@ -66,8 +66,8 @@ namespace Interactions
         [Command]
         private void CmdThrowItem(Vector3 throwDir)
         {
-            Debug.Log($"CMD THROWWWW: "+throwDir);
-            this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
+            Debug.Log($"CMD THROWWWW: " + throwDir);
+            RpcThrowItem(throwDir);
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
