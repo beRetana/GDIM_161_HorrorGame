@@ -148,11 +148,12 @@ public class HandInventory : NetworkBehaviour
             return null;
         }
 
-        public InventorySlot RemoveItem(Vector3 throwDir)
+        public InventorySlot RemoveItem(Vector3 throwDir, Collider playerCollider)
         {
             InventorySlot inventorySlotToRemove = GetDominantHand();
             if (inventorySlotToRemove.Item == null) return null;
             inventorySlotToRemove.Item.UnPossessItem();
+            Physics.IgnoreCollision(inventorySlotToRemove.Item.transform.parent.GetComponent<Collider>(), playerCollider, true);
             inventorySlotToRemove.Item = null;
             Rigidbody temp = inventorySlotToRemove.RemoveRigidBody();
             temp.AddForce(throwDir, ForceMode.Impulse);
@@ -187,6 +188,8 @@ public class HandInventory : NetworkBehaviour
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
+
+    public int PlayerID {  get { return _playerID; } set { _playerID = value; } }
 
     void Start()
     {
@@ -278,10 +281,10 @@ public class HandInventory : NetworkBehaviour
         InventorySlot handSlot = _inventorySlots.AddItemToSlot(pickableItem);
 
         if (handSlot == null) return false;
-
+        Physics.IgnoreCollision(pickableItem.transform.parent.GetComponent<Collider>(), GetComponent<Collider>(), true);
         bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!handSlot.IsDominant);
         handSlot.SetRigidBody(pickableItem.transform.parent.transform.GetComponent<Rigidbody>(), _linearDrag);
-        pickableItem.OrientItemInHand(handSlot.ItemTransform, _playerID);
+        pickableItem.OrientItemInHand(handSlot.ItemTransform);
 
         Debugger($"Player Is placing item: {pickableItem.name} in: {(isLeftHandAction ? "Left" : "Right")} Hand");
         _interactableComponent = null;
@@ -291,7 +294,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DropItem(float throwForce = 0)
     {
-        _inventorySlots.RemoveItem(transform.forward * throwForce);
+        _inventorySlots.RemoveItem(transform.forward * throwForce, GetComponent<Collider>());
     }
 
     private void Debugger(string log) 
