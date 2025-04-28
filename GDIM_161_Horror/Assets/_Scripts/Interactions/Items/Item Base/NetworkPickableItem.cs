@@ -50,15 +50,16 @@ namespace Interactions
 
         public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
-            ThrowItem(throwDir);
+            CmdThrowItem(throwDir);
             SetPossessed(false, playerID);
             locationTarget = null;
         }
 
-        private void ThrowItem(Vector3 throwDir)
+        [ClientRpc]
+        private void CmdThrowItem(Vector3 throwDir)
         {
             Debug.Log($"THROWWWW: "+throwDir);
-            transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
+            this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
