@@ -34,6 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6627252046561620547}
+  - {fileID: 6588639178972943521}
   - {fileID: 8335155052713882908}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -160,12 +161,12 @@ Transform:
   m_GameObject: {fileID: 1522899249806462209}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3971938011049401888}
-  m_Father: {fileID: 6627252046561620547}
+  m_Father: {fileID: 3116399982643216359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2380343770705185604
 GameObject:
@@ -432,7 +433,7 @@ Transform:
   m_GameObject: {fileID: 5333556900930843067}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.375, z: -1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 0.099999994, y: 0.25, z: 0.099999994}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -473,6 +474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maybeFireable: {fileID: 6533591682246883934}
+  _debugger: 0
 --- !u!1 &6533591682246883934
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +509,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1234030213810770181}
-  - {fileID: 6588639178972943521}
   m_Father: {fileID: 3116399982643216359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3260482526421632806
@@ -577,7 +578,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
-  _debugger: 1
+  _debugger: 0
   approxWoodLife_Minutes: 1
   maxTickVariance_WoodBurn: 0
   tickSpeedMultiplier_ByFloor: 1
@@ -616,12 +617,24 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.45
+      value: -1.0320001
       objectReference: {fileID: 0}
     - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_LocalPosition.z
