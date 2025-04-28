@@ -190,7 +190,7 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        if (gameObject.TryGetComponent<PlayerBase>(out PlayerBase playerBase)) _playerID = playerBase.ID();
+        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) _playerID = playerController.PlayerIdNumber;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
     }
