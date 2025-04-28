@@ -188,10 +188,6 @@ public class HandInventory : NetworkBehaviour
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
-    private void Awake()
-    {
-        if (!isLocalPlayer) this.enabled = false;
-    }
     void Start()
     {
         if (gameObject.TryGetComponent<PlayerBase>(out PlayerBase playerBase)) _playerID = playerBase.ID();
