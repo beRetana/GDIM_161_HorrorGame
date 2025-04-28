@@ -51,6 +51,7 @@ namespace Interactions
         public virtual void UnPossessItem()
         {
             SetPossessed(false);
+            locationTarget = null;
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
@@ -63,7 +64,7 @@ namespace Interactions
 
         public virtual void UseItem(int playerID) { }
 
-        protected virtual void FixedUpdate()
+        protected virtual void Update()
         {
             if (IsPossessed) SoftParenting();
         }

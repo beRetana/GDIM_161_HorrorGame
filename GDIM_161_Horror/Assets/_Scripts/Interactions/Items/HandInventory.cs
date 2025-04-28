@@ -148,13 +148,14 @@ public class HandInventory : NetworkBehaviour
             return null;
         }
 
-        public InventorySlot RemoveItem()
+        public InventorySlot RemoveItem(Vector3 throwDir)
         {
             InventorySlot inventorySlotToRemove = GetDominantHand();
             if (inventorySlotToRemove.Item == null) return null;
-
+            inventorySlotToRemove.Item.UnPossessItem();
             inventorySlotToRemove.Item = null;
-            inventorySlotToRemove.RemoveRigidBody();
+            Rigidbody temp = inventorySlotToRemove.RemoveRigidBody();
+            temp.AddForce(throwDir, ForceMode.Impulse);
 
             return inventorySlotToRemove;
         }
@@ -274,27 +275,23 @@ public class HandInventory : NetworkBehaviour
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
     {
-        Debugger($"Player picked and Item: {pickableItem.name}");
         InventorySlot handSlot = _inventorySlots.AddItemToSlot(pickableItem);
-        if (handSlot == null) return false;
-        _PutItemInHand(handSlot, pickableItem);
-        _interactableComponent = null;
-        return true;
-    }
 
-    private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, NetworkPickableItem pickableItem)
-    {
-        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
-        inventorySlotOfNewItem.SetRigidBody(pickableItem.transform.parent.transform.GetComponent<Rigidbody>(), _linearDrag);
-        pickableItem.OrientItemInHand(inventorySlotOfNewItem.ItemTransform, _playerID);
-        
+        if (handSlot == null) return false;
+
+        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!handSlot.IsDominant);
+        handSlot.SetRigidBody(pickableItem.transform.parent.transform.GetComponent<Rigidbody>(), _linearDrag);
+        pickableItem.OrientItemInHand(handSlot.ItemTransform, _playerID);
+
         Debugger($"Player Is placing item: {pickableItem.name} in: {(isLeftHandAction ? "Left" : "Right")} Hand");
+        _interactableComponent = null;
+
+        return true;
     }
 
     private void DropItem(float throwForce = 0)
     {
-        Debugger("Drop Is Not Enabled Right Now");
-        return;
+        _inventorySlots.RemoveItem(transform.forward * throwForce);
     }
 
     private void Debugger(string log) 

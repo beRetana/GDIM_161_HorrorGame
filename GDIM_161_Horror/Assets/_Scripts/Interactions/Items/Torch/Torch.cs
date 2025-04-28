@@ -81,14 +81,15 @@ namespace Interactions
             //LightFlame();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (!Lit) return;
             UpdateFlameOrientation();
             SmotherCheck();
         }
 
-        protected override void FixedUpdate()
+        protected void FixedUpdate()
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);
