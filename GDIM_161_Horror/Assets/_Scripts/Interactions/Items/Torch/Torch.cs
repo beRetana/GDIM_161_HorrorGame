@@ -3,10 +3,9 @@ using System.Collections;
 using System;
 using Mirror;
 
-
 namespace Interactions
 {
-    public class Torch : PickableItem, IFireable
+    public class Torch : NetworkPickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
@@ -38,7 +37,6 @@ namespace Interactions
             , Range(1.1f, 10f)] float flameGrowCurveB = 5f;
 
         [SerializeField] Light torchLight;
-
 
         [SerializeField] LayerMask groundLayers;
 
@@ -81,14 +79,15 @@ namespace Interactions
             //LightFlame();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (!Lit) return;
             UpdateFlameOrientation();
             SmotherCheck();
         }
 
-        private void FixedUpdate()
+        protected void FixedUpdate()
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);
@@ -103,7 +102,6 @@ namespace Interactions
             Debug.Log("Using torch");
             PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
         }
-
 
         private void SmotherCheck()
         {
@@ -289,18 +287,5 @@ namespace Interactions
             FlameFullSize();
         }
         #endregion flame_animations
-
-        /*public override void UnPossessItem()
-        {
-            isDropping = true;
-            base.UnPossessItem();
-        }*/
-
-
-        //public void BurnOutFlame() // via end of wood
-        //public void SmotherFlame() // via dropping
-
-        //watch velocity (and air pressure) or burn out
-
     }
 }

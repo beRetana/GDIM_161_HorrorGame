@@ -5,7 +5,7 @@ public class UI_Testing : MonoBehaviour
 {
     void Start()
     {
-        if (SteamAPI.IsSteamRunning())
+        if (!SteamAPI.IsSteamRunning())
         {
             Debug.LogError("Steam is not initialized.");
             return;
@@ -14,7 +14,7 @@ public class UI_Testing : MonoBehaviour
 
     public void OpenOverlay()
     {
-        if (SteamAPI.IsSteamRunning())
+        if (!SteamAPI.IsSteamRunning())
         {
             SteamFriends.ActivateGameOverlay("Friends"); // Opens Steam Overlay
         }

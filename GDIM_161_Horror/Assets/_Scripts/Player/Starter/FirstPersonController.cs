@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using FMODUnity;
 
-
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -28,7 +27,8 @@ namespace StarterAssets
 
         float _stepSoundTime;
 
-        [SerializeField] private string _buildScene = "BUILD_1";
+        [SerializeField] private string _buildScene = "Building_Brandon";
+        [SerializeField] private bool _debugging = true;
         [SerializeField] private EventReference _forestFootstep;
         [SerializeField] private float _rate;
 
@@ -78,8 +78,6 @@ namespace StarterAssets
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
             _animator = GetComponent<Animator>();
-
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnDestroy()
@@ -90,7 +88,8 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != _buildScene) return;
-
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             StartCoroutine(FindSpawnPoint());
         }
 
@@ -253,6 +252,11 @@ namespace StarterAssets
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
+        }
+
+        private void Debugger(string log)
+        {
+            if (_debugging) Debug.Log(log);
         }
     }
 }

@@ -5,8 +5,7 @@ namespace Interactions
 {
     public class FireCollision : MonoBehaviour
     {
-        [SerializeField, Tooltip("Torch / Hearth")]
-        private GameObject maybeFireable;
+        [SerializeField, Tooltip("Torch / Hearth")] private GameObject maybeFireable;
         private IFireable fireableObject;
 
         private const string FIRE_TAG = "Fire";
@@ -15,7 +14,6 @@ namespace Interactions
         {
             fireableObject = maybeFireable.gameObject.GetComponent<IFireable>();
             if (fireableObject == null) Destroy(this);
-
         }
 
         private void OnTriggerEnter(Collider col)
