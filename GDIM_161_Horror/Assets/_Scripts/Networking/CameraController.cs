@@ -45,7 +45,7 @@ public class CameraController : NetworkBehaviour
         _playerInput.enabled = active;
         _basicRigidBodyPush.enabled = active;
         _playerArticulations.enabled = active;
-        _handInventory.enabled = active;
+        //_handInventory.enabled = active;
         _cameraBrain.SetActive(active);
         _playerCamera.SetActive(active);
     }

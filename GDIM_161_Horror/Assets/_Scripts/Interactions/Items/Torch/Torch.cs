@@ -6,7 +6,7 @@ using Mirror;
 
 namespace Interactions
 {
-    public class Torch : PickableItem, IFireable
+    public class Torch : NetworkPickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
@@ -81,14 +81,15 @@ namespace Interactions
             //LightFlame();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (!Lit) return;
             UpdateFlameOrientation();
             SmotherCheck();
         }
 
-        private void FixedUpdate()
+        protected void FixedUpdate()
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);

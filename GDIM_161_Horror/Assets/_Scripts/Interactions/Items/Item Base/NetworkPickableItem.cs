@@ -9,21 +9,22 @@ namespace Interactions
     [RequireComponent(typeof(InteractableItem))]
     public class NetworkPickableItem : NetworkBehaviour
     {
-        [SerializeField] PickableItemSO _pickableItemSO;
-        [SerializeField] ItemType _itemType;
+        [SerializeField] private PickableItemSO _pickableItemSO; // Contains information for soft parenting
+        [SerializeField] private bool _debugger = true;
 
         protected InteractableItem _interactableItem;
-
-        public ItemType ItemType { get { return _itemType; } }
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
+        protected Transform locationTarget;
+        protected Collider _itemCollider;
 
         protected virtual void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(PickItem);
+            _itemCollider = transform.parent.transform.GetComponent<Collider>();
         }
 
         public override string ToString()
@@ -46,27 +47,45 @@ namespace Interactions
             AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
         }
 
-        public virtual void UnPossessItem()
+        public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
-            SetPossessed(false);
+            Debug.Log($"THROWWWW: " + throwDir);
+            this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
+            this.SetPossessed(false, playerID);
+            this.locationTarget = null;
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
             Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
             IsPossessed = toPossess;
-            OwnerPlayerID = playerID;
+            OwnerPlayerID = toPossess ? playerID : -1;
             _interactableItem.SetInteractive(!toPossess);
         }
 
         public virtual void UseItem(int playerID) { }
 
-
-        public virtual void OrientItemInHand(bool isLeftHand) 
+        protected virtual void Update()
         {
-            Transform parentTransform = transform.parent.transform;
-            parentTransform.localPosition = _pickableItemSO.PickedPosition;
-            parentTransform.localEulerAngles = _pickableItemSO.PickedAngle;
+            if (IsPossessed) SoftParenting();
+        }
+
+        protected virtual void SoftParenting()
+        {
+
+            transform.parent.transform.position = locationTarget.position + _pickableItemSO.PickedPosition;
+            transform.parent.transform.rotation = locationTarget.rotation * Quaternion.Euler(_pickableItemSO.PickedAngle);
+        }
+        public virtual void OrientItemInHand(Transform handLocation, int playerID) 
+        {
+            locationTarget = handLocation;
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
+        }
+
+        protected virtual void Debugger(string log)
+        {
+            if (_debugger) Debug.Log(log);
         }
     }
 }
