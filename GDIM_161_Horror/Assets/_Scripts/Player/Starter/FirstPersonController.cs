@@ -150,9 +150,9 @@ namespace StarterAssets
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
-            Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
-            float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
-            _arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
+            //Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
+            //float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
+            //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
 
         public void PlayFootstep()
