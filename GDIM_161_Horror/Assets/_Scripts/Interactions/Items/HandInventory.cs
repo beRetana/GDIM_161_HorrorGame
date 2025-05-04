@@ -303,6 +303,7 @@ public class HandInventory : NetworkBehaviour
         Debugger($"RPC OnInteract being called");
         if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
         {
+            Debugger($"Interactable is: {_interactableComponent}");
             _interactableComponent?.Interact(_playerID);
             _interactableComponent = null;
         }

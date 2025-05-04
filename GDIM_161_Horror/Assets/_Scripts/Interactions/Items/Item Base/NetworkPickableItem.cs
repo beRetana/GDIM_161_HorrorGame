@@ -16,10 +16,12 @@ namespace Interactions
         protected InteractableItem _interactableItem;
         protected Transform _targetHand;
         protected Collider _itemCollider;
+        [SyncVar] protected bool _isPossessed;
+        [SyncVar] protected int _ownerPlayerID;
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
-        public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
-        public int OwnerPlayerID { get; private set; }
+        public bool IsPossessed { get { return _isPossessed; }} // Held in Hand || Moving to Hand
+        public int OwnerPlayerID { get { return _ownerPlayerID; }}
 
         protected virtual void Start()
         {
@@ -35,7 +37,7 @@ namespace Interactions
 
         protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
-            if (IsPossessed)
+            if (_isPossessed)
             {
                 Debugger($"tried PICK UP on {this}, but is already possessed");
                 return;
@@ -60,18 +62,14 @@ namespace Interactions
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
             Debugger($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
-            IsPossessed = toPossess;
-            OwnerPlayerID = toPossess ? playerID : -1;
+            _isPossessed = toPossess;
+            _ownerPlayerID = toPossess ? playerID : -1;
             _interactableItem.SetInteractive(!toPossess);
         }
 
         public virtual void UseItem(int playerID) { }
 
         protected virtual void LateUpdate()
-        {
-            if (IsPossessed) SoftParenting();
-        }
-        protected virtual void Update()
         {
             if (IsPossessed) SoftParenting();
         }
