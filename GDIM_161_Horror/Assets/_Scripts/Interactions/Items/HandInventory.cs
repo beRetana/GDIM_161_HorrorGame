@@ -29,7 +29,8 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private PickableItemSO _torch;
 
     [Header("Debugging")]
-    [SerializeField] private static bool _enableDebugging = true;
+    [SerializeField] private bool _enableDebugging;
+    private static bool _staticDebugging;
 
     public Arms GetArms() { return _arms; }
 
@@ -189,6 +190,7 @@ public class HandInventory : NetworkBehaviour
     void Start()
     {
         if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) _playerID = playerController.PlayerIdNumber;
+        _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
     }
@@ -331,11 +333,12 @@ public class HandInventory : NetworkBehaviour
         RpcDropItem(throwForce);
     }
 
-    private static void Debugger(object log) 
-    { 
-        if (_enableDebugging) Debug.Log(log);
+    private static void Debugger(object log)
+    {
+        if (_staticDebugging) Debug.Log(log);
     }
 
+    // This is to get references to the players through the network but player manager does this already.
     private NetworkIdentity GetPlayerIdentity()
     {
         return GetComponent<NetworkIdentity>();

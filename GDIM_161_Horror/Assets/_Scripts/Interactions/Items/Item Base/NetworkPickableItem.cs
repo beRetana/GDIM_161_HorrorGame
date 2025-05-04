@@ -71,7 +71,7 @@ namespace Interactions
 
         protected virtual void LateUpdate()
         {
-            if (IsPossessed) SoftParenting();
+            if (_targetHand != null && IsPossessed) SoftParenting();
         }
 
         protected virtual void SoftParenting()
