@@ -29,7 +29,7 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private PickableItemSO _torch;
 
     [Header("Debugging")]
-    [SerializeField] private static bool _enableDebugging;
+    [SerializeField] private static bool _enableDebugging = true;
 
     public Arms GetArms() { return _arms; }
 
