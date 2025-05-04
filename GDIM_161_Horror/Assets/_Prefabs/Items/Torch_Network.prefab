@@ -473,6 +473,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   maybeFireable: {fileID: 6533591682246883934}
   _debugger: 0
 --- !u!1 &6533591682246883934
@@ -578,7 +581,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
-  _debugger: 0
+  _debugger: 1
   approxWoodLife_Minutes: 8
   maxTickVariance_WoodBurn: 0.192
   tickSpeedMultiplier_ByFloor: 1.0887
