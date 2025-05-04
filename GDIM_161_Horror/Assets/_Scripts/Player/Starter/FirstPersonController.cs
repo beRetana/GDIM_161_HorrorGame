@@ -2,6 +2,8 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using FMODUnity;
+using Dissonance;
+
 
 
 #if ENABLE_INPUT_SYSTEM
@@ -62,6 +64,17 @@ namespace StarterAssets
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
+        /// <testing \>
+        
+
+        /// </summary>
+
+
+
+
+
+
+
         protected override void Start()
         {   
             base.Start();
@@ -80,6 +93,12 @@ namespace StarterAssets
             _animator = GetComponent<Animator>();
 
             Cursor.lockState = CursorLockMode.Locked;
+
+
+           
+
+
+
         }
 
         private void OnDestroy()
