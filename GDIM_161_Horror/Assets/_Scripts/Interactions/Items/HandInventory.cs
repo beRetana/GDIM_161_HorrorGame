@@ -146,15 +146,16 @@ public class HandInventory : NetworkBehaviour
             return null;
         }
 
-        public InventorySlot RemoveItem(Vector3 throwDir, int playerID)
+        public NetworkPickableItem RemoveItem(Vector3 throwDir, int playerID)
         {
             InventorySlot inventorySlotToRemove = GetDominantHand();
             if (inventorySlotToRemove.Item == null) return null;
             inventorySlotToRemove.RemoveRigidBody();
             inventorySlotToRemove.Item.UnPossessItem(throwDir, playerID);
+            NetworkPickableItem holder = inventorySlotToRemove.Item;
             inventorySlotToRemove.Item = null;
 
-            return inventorySlotToRemove;
+            return holder;
         }
 
         public bool SwapDominance()
@@ -300,24 +301,27 @@ public class HandInventory : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcOnInteract(NetworkIdentity networkID)
+    private void RpcOnInteract(NetworkIdentity interactableID, int playerID)
     {
         Debugger($"RPC OnInteract being called");
-        Debugger($"Interactable is: {networkID.name}");
-        networkID.GetComponentInChildren<IInteractable>()?.Interact(_playerID);
+        Debugger($"Interactable is: {interactableID.name}");
+        if (playerID != _playerID) return;
+        interactableID.GetComponentInChildren<IInteractable>()?.Interact(playerID);
     }
 
     [Command]
     private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        interactableID.GetComponentInChildren<IInteractable>()?.Interact(playerID);
+        interactableID.AssignClientAuthority(connectionToClient);
+        RpcOnInteract(interactableID, playerID);
     }
 
     [ClientRpc]
     private void RpcDropItem(float throwForce)
     {
         Debugger($"RPC drop item being Called with Force: {throwForce}");
-        this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
+        NetworkPickableItem temp = this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
+        temp.GetComponent<IInteractable>().GetNetworkID().RemoveClientAuthority();
     }
 
     [Command]
