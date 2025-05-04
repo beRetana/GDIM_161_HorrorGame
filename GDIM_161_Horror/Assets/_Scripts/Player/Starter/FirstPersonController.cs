@@ -95,9 +95,7 @@ namespace StarterAssets
             Cursor.lockState = CursorLockMode.Locked;
 
 
-            var local = FindObjectOfType<DissonanceComms>();
-
-            local.AddToken("AddWalkie");
+           
 
 
 
