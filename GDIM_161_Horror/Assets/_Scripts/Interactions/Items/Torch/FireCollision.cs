@@ -3,7 +3,7 @@ using Mirror;
 
 namespace Interactions
 {
-    public class FireCollision : MonoBehaviour
+    public class FireCollision : NetworkBehaviour
     {
         [SerializeField, Tooltip("Torch / Hearth")] private GameObject maybeFireable;
         [SerializeField, Tooltip("Enable Debuglogs")] private bool _debugger;
@@ -26,7 +26,20 @@ namespace Interactions
 
             if (!colFire.IsLit()) return; //check if other fire is lit
 
+            if (isServer) RpcLightingObject();
+            else CmdLightingObject();
+        }
+
+        [ClientRpc]
+        private void RpcLightingObject()
+        {
             fireableObject.LightFlame();
+        }
+
+        [Command]
+        private void CmdLightingObject()
+        {
+            RpcLightingObject();
         }
 
         private bool IsLit()
