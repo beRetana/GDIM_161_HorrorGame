@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5109410486686612695}
   - component: {fileID: 409505196352271945}
   - component: {fileID: 8602382050043374446}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Pickable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,8 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b09d0d83f17534ea4a344371545741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 8ab43b6301a426c42b8c42d617cd2542, type: 2}
-  _itemType: 2
+  _debugger: 1
   _detectionRadius: 20
   _sonarDetectable:
     serializedVersion: 2
@@ -118,7 +121,7 @@ GameObject:
   - component: {fileID: 3982401368643788885}
   - component: {fileID: 1164589882971492368}
   - component: {fileID: 2229754937240059278}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +248,7 @@ GameObject:
   - component: {fileID: 7917944752238822106}
   - component: {fileID: 5455344154231011561}
   - component: {fileID: 3776652507957089015}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +374,7 @@ GameObject:
   - component: {fileID: 8142565373906839658}
   - component: {fileID: 2077444277116935567}
   - component: {fileID: 4821393009223526634}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DistanceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,7 +511,7 @@ GameObject:
   - component: {fileID: 4394538249945945004}
   - component: {fileID: 3940789633206941835}
   - component: {fileID: 1565377940565417881}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -634,7 +637,7 @@ GameObject:
   - component: {fileID: 7196985438415379472}
   - component: {fileID: 2733585555984207415}
   - component: {fileID: 7983361590915332718}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -710,7 +713,7 @@ GameObject:
   - component: {fileID: 3911727094433942512}
   - component: {fileID: 3988529293271902765}
   - component: {fileID: 7671950400497940105}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +840,7 @@ GameObject:
   - component: {fileID: 6576503633379007653}
   - component: {fileID: 8049476148986196942}
   - component: {fileID: 2308325936979347621}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -964,7 +967,7 @@ GameObject:
   - component: {fileID: 2559037749870916006}
   - component: {fileID: 7235724922603475613}
   - component: {fileID: 4016821003491805691}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1091,7 +1094,7 @@ GameObject:
   - component: {fileID: 7759874463649104699}
   - component: {fileID: 8645087733528323949}
   - component: {fileID: 2211426669690630112}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1354,7 +1357,7 @@ GameObject:
   - component: {fileID: 7806954495782720148}
   - component: {fileID: 6187804625446642420}
   - component: {fileID: 2404373559361504141}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: SonarDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1483,7 +1486,7 @@ GameObject:
   - component: {fileID: 1815552634661118261}
   - component: {fileID: 3052980900323794548}
   - component: {fileID: 2124592280184586879}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1609,7 +1612,7 @@ GameObject:
   - component: {fileID: 3040731980776696494}
   - component: {fileID: 4054870651565654162}
   - component: {fileID: 70212049415267287}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Section
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1685,7 +1688,7 @@ GameObject:
   - component: {fileID: 1755570319185220923}
   - component: {fileID: 5644078359273766844}
   - component: {fileID: 5195284205996369792}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1811,7 +1814,7 @@ GameObject:
   - component: {fileID: 1265319669371836309}
   - component: {fileID: 1368945961948068043}
   - component: {fileID: 5670196315383307093}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1948,7 +1951,7 @@ GameObject:
   - component: {fileID: 5259367699877664011}
   - component: {fileID: 741024801450628129}
   - component: {fileID: 836420856971597387}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: CanvasUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2047,7 +2050,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4274630545919670144}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2080,7 +2083,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3873967264285144650}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DotsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2128,7 +2131,7 @@ GameObject:
   - component: {fileID: 7077026296534376591}
   - component: {fileID: 9109024859543743503}
   - component: {fileID: 1928752303461404638}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2291,9 +2294,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7587210977328822658, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -7235015103121818086, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -2615453208677245630, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -1009592932544089387, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -999699216750014788, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8140499575222096, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 688255452808413857, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
       propertyPath: m_Name
       value: sonar
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152823294375020646, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1201676253405009772, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660082303864255234, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3808149055157210296, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6542534596059073395, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234614204242969185, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7780994922199701062, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182320217418860803, guid: abd66c7ccf905114daca711a25a744ac, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
