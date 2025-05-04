@@ -7,8 +7,6 @@ public class PlayerMovementController_test : NetworkBehaviour
     public float Speed = 0.1f;
     public GameObject PlayerModel;  
 
-    
-    
     private bool positionInvoked = false;
 
     private void Start()
