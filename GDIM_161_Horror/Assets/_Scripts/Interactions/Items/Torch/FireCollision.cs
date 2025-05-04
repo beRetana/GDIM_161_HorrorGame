@@ -33,7 +33,7 @@ namespace Interactions
         [ClientRpc]
         private void RpcLightingObject()
         {
-            fireableObject.LightFlame();
+            this.fireableObject.LightFlame();
         }
 
         [Command]
