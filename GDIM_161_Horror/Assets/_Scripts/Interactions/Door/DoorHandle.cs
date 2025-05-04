@@ -6,7 +6,7 @@ namespace Interactions
 {
     public class DoorHandle : MonoBehaviour
     {
-        [SerializeField] private Door _doorsManager;
+        [SerializeField] private DoubleDoor _doorsManager;
         [SerializeField] private Transform _targetTransform;
         [SerializeField] private Rigidbody _doorRigidbody;
         [SerializeField] private FixedJoint _handleJoint;

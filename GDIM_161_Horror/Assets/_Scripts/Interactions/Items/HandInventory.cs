@@ -315,7 +315,7 @@ public class HandInventory : NetworkBehaviour
     [Command]
     private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        interactableID.AssignClientAuthority(connectionToClient);
+        //interactableID.AssignClientAuthority(connectionToClient);
         RpcOnInteract(interactableID, playerID);
     }
 
@@ -324,7 +324,7 @@ public class HandInventory : NetworkBehaviour
     {
         Debugger($"RPC drop item being Called with Force: {throwForce}");
         NetworkPickableItem temp = this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
-        temp?.GetComponent<IInteractable>().GetNetworkID().RemoveClientAuthority();
+        //temp?.GetComponent<IInteractable>().GetNetworkID().RemoveClientAuthority();
     }
 
     [Command]

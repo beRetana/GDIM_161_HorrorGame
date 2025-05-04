@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Interactions
 {
-    public class Door : MonoBehaviour
+    public class DoubleDoor : MonoBehaviour
     {
         [Header("Door Settings/Components")]
         [SerializeField] private DoorHandle _rightDoorHandle;
