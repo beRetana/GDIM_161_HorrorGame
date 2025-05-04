@@ -93,6 +93,14 @@ namespace StarterAssets
             _animator = GetComponent<Animator>();
 
             Cursor.lockState = CursorLockMode.Locked;
+
+
+            var local = FindObjectOfType<DissonanceComms>();
+
+            local.AddToken("Green Team");
+
+
+
         }
 
         private void OnDestroy()
