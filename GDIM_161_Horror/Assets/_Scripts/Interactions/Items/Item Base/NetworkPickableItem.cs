@@ -71,12 +71,15 @@ namespace Interactions
         {
             if (IsPossessed) SoftParenting();
         }
+        protected virtual void Update()
+        {
+            if (IsPossessed) SoftParenting();
+        }
 
         protected virtual void SoftParenting()
         {
             if (_isLeftHand) SetRotationLocation(_pickableItemSO.LeftHandPosition, _pickableItemSO.LeftHandRotation);
             else SetRotationLocation(_pickableItemSO.RightHandPosition, _pickableItemSO.RightHandRotation);
-
         }
 
         public virtual void OrientItemInHand(Transform target, bool isLeftHand)
