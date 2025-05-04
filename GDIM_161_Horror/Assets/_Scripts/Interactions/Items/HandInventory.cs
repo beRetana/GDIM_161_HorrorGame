@@ -252,8 +252,8 @@ public class HandInventory : NetworkBehaviour
         if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
         {
             Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
-            if (isServer) RpcOnInteract(_interactableComponent.GetNetworkID());
-            else CmdOnInteract(_interactableComponent.GetNetworkID());
+            if (isServer) _interactableComponent?.Interact(_playerID);
+            else CmdOnInteract(_interactableComponent.GetNetworkID(), _playerID);
         }
     }
 
@@ -308,10 +308,9 @@ public class HandInventory : NetworkBehaviour
     }
 
     [Command]
-    private void CmdOnInteract(NetworkIdentity networkID)
+    private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        Debugger($"CMD OnInteract being called");
-        RpcOnInteract(networkID);
+        interactableID.GetComponentInChildren<IInteractable>()?.Interact(playerID);
     }
 
     [ClientRpc]
@@ -331,5 +330,10 @@ public class HandInventory : NetworkBehaviour
     private static void Debugger(object log) 
     { 
         if (_enableDebugging) Debug.Log(log);
+    }
+
+    private NetworkIdentity GetPlayerIdentity()
+    {
+        return GetComponent<NetworkIdentity>();
     }
 }

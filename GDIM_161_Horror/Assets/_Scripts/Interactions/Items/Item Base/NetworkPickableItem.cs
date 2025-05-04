@@ -14,7 +14,7 @@ namespace Interactions
         protected bool _isLeftHand;
 
         protected InteractableItem _interactableItem;
-        [SyncVar] protected Transform _targetHand;
+        protected Transform _targetHand;
         protected Collider _itemCollider;
         [SyncVar] protected bool _isPossessed;
         [SyncVar] protected int _ownerPlayerID;
@@ -71,7 +71,7 @@ namespace Interactions
 
         protected virtual void LateUpdate()
         {
-            if (IsPossessed && _targetHand != null) SoftParenting();
+            if (IsPossessed && isServer) SoftParenting();
         }
 
         protected virtual void SoftParenting()
