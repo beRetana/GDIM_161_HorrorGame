@@ -257,6 +257,7 @@ public class HandInventory : NetworkBehaviour
             Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
             if (isServer) _interactableComponent?.Interact(_playerID);
             else CmdOnInteract(_interactableComponent?.GetNetworkID(), _playerID);
+            _interactableComponent = null;
         }
     }
 
