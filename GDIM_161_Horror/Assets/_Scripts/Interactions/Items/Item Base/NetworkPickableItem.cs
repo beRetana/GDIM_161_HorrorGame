@@ -14,7 +14,7 @@ namespace Interactions
         protected bool _isLeftHand;
 
         protected InteractableItem _interactableItem;
-        protected Transform _targetHand;
+        [SyncVar] protected Transform _targetHand;
         protected Collider _itemCollider;
         [SyncVar] protected bool _isPossessed;
         [SyncVar] protected int _ownerPlayerID;

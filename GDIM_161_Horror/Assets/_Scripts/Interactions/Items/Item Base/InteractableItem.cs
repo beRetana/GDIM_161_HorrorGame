@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using TMPro;
+using Mirror;
 
 /// <summary>
 /// This class allows items to be interacted with a player.
@@ -62,5 +63,10 @@ public class InteractableItem : MonoBehaviour, IInteractable
     {
         try { _textAnimation?.SetBool(_fadeIn, false); }
         finally{}
+    }
+
+    public NetworkIdentity GetNetworkID()
+    {
+        return transform.parent.GetComponent<NetworkIdentity>();
     }
 }

@@ -249,9 +249,12 @@ public class HandInventory : NetworkBehaviour
 
     public void OnInteract(InputValue value) 
     {
-        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
-        if (isServer) RpcOnInteract();
-        else CmdOnInteract();
+        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
+        {
+            Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+            if (isServer) RpcOnInteract(_interactableComponent.GetNetworkID());
+            else CmdOnInteract(_interactableComponent.GetNetworkID());
+        }
     }
 
     public void OnDrop(InputValue value) 
@@ -290,7 +293,6 @@ public class HandInventory : NetworkBehaviour
         pickableItem.OrientItemInHand(handSlot.ItemTransform, isLeftHandAction);
 
         Debugger($"Player Is placing item: {pickableItem.name} in: {(isLeftHandAction ? "Left" : "Right")} Hand");
-        _interactableComponent = null;
 
         Physics.IgnoreCollision(pickableItem.transform.parent.transform.GetComponent<Collider>(), GetComponent<Collider>(), true);
 
@@ -298,22 +300,18 @@ public class HandInventory : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcOnInteract()
+    private void RpcOnInteract(NetworkIdentity networkID)
     {
         Debugger($"RPC OnInteract being called");
-        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
-        {
-            Debugger($"Interactable is: {_interactableComponent}");
-            _interactableComponent?.Interact(_playerID);
-            _interactableComponent = null;
-        }
+        Debugger($"Interactable is: {networkID.name}");
+        networkID.GetComponentInChildren<IInteractable>()?.Interact(_playerID);
     }
 
     [Command]
-    private void CmdOnInteract()
+    private void CmdOnInteract(NetworkIdentity networkID)
     {
         Debugger($"CMD OnInteract being called");
-        RpcOnInteract();
+        RpcOnInteract(networkID);
     }
 
     [ClientRpc]
