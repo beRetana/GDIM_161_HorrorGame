@@ -261,14 +261,14 @@ public class HandInventory : NetworkBehaviour
     public void OnDrop(InputValue value) 
     {
         Debugger($"Drop-Is Player {_playerID} Server: {isServer}");
-        if (isServer) RpcDropItem(0f);
+        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
         else CmdDropItem(0f);
     }
 
     public void OnThrow(InputValue value) 
     {
         Debugger($"Throw-Is Player {_playerID} Server: {isServer}");
-        if (isServer) RpcDropItem(_throwForce);
+        if (isServer) this._inventorySlots.RemoveItem(transform.forward * _throwForce, _playerID);
         else CmdDropItem(_throwForce);
     }
 
@@ -321,7 +321,7 @@ public class HandInventory : NetworkBehaviour
     {
         Debugger($"RPC drop item being Called with Force: {throwForce}");
         NetworkPickableItem temp = this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
-        temp.GetComponent<IInteractable>().GetNetworkID().RemoveClientAuthority();
+        temp?.GetComponent<IInteractable>().GetNetworkID().RemoveClientAuthority();
     }
 
     [Command]
