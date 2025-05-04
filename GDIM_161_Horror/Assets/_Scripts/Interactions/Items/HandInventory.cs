@@ -14,8 +14,6 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private LayerMask _interactableLayer;
     [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
-    [SerializeField] private Transform _rightHandSocket; // item slots
-    [SerializeField] private Transform _leftHandSocket;
 
     [Header("Arms")]
     [SerializeField] private Arms _arms;
@@ -31,7 +29,7 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private PickableItemSO _torch;
 
     [Header("Debugging")]
-    [SerializeField] private bool _enableDebugging;
+    [SerializeField] private static bool _enableDebugging;
 
     public Arms GetArms() { return _arms; }
 
@@ -102,7 +100,7 @@ public class HandInventory : NetworkBehaviour
             L_HandSlot.SetDominant(isLHandDom);
             R_HandSlot.SetDominant(!isLHandDom);
             IsLHandDom = isLHandDom;
-            Debug.Log(this);
+            Debugger(this);
         }
 
         // Indexing
@@ -135,14 +133,14 @@ public class HandInventory : NetworkBehaviour
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
+                Debugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debug.Log($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
+                Debugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
@@ -167,13 +165,13 @@ public class HandInventory : NetworkBehaviour
 
         public InventorySlot GetDominantHand()
         {
-            Debug.Log($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
+            Debugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
             return this[IsLHandDom ? 0 : 1];
         }
 
         public InventorySlot GetOffHand()
         {
-            Debug.Log($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
+            Debugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
             return this[IsLHandDom ? 1 : 0];
         }
 
@@ -289,10 +287,12 @@ public class HandInventory : NetworkBehaviour
 
         bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!handSlot.IsDominant);
         handSlot.SetRigidBody(pickableItem.transform.parent.transform.GetComponent<Rigidbody>(), _linearDrag);
-        pickableItem.OrientItemInHand(handSlot.ItemTransform, _playerID);
+        pickableItem.OrientItemInHand(handSlot.ItemTransform, isLeftHandAction);
 
         Debugger($"Player Is placing item: {pickableItem.name} in: {(isLeftHandAction ? "Left" : "Right")} Hand");
         _interactableComponent = null;
+
+        Physics.IgnoreCollision(pickableItem.transform.parent.transform.GetComponent<Collider>(), GetComponent<Collider>(), true);
 
         return true;
     }
@@ -329,7 +329,7 @@ public class HandInventory : NetworkBehaviour
         RpcDropItem(throwForce);
     }
 
-    private void Debugger(string log) 
+    private static void Debugger(object log) 
     { 
         if (_enableDebugging) Debug.Log(log);
     }
