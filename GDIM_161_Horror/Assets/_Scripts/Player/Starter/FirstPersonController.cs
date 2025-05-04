@@ -97,7 +97,7 @@ namespace StarterAssets
 
             var local = FindObjectOfType<DissonanceComms>();
 
-            local.AddToken("Green Team");
+            local.AddToken("AddWalkie");
 
 
 
