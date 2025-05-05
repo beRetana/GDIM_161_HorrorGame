@@ -20,13 +20,13 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     protected bool _isInteractable;
 
-    void Awake()
+    protected virtual void Awake()
     {
         OnInteractAction = (int playerId) => Debug.Log($"Player: {playerId} Interacted");
         _isInteractable = true;
     }
 
-    public void Start()
+    protected virtual void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
         if (_networkIdentity == null) _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();

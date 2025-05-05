@@ -32,7 +32,7 @@ namespace Interactions
 
         private void Start()
         {
-            _interactableItem = GetComponent<InteractableItem>();
+            _interactableItem = GetComponent<PolyInteractable>();
             _interactableItem.SetInteractAction(OnInteracted);
             _targetRotation = _playerGrabTarget.rotation;
         }

@@ -25,8 +25,6 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
-    [SerializeField] private PickableItemSO _sonnar;
-    [SerializeField] private PickableItemSO _torch;
 
     [Header("Debugging")]
     [SerializeField] private bool _enableDebugging;
@@ -254,10 +252,9 @@ public class HandInventory : NetworkBehaviour
     {
         if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
         {
-            Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
-            if (isServer) _interactableComponent?.Interact(_playerID);
-            else CmdOnInteract(_interactableComponent?.GetNetworkID(), _playerID);
-            _interactableComponent = null;
+            if (_interactableComponent is PolyInteractable)
+                PolyInteractableSync();
+            else InteractableSync();
         }
     }
 
@@ -303,6 +300,48 @@ public class HandInventory : NetworkBehaviour
         return true;
     }
 
+    private void InteractableSync()
+    {
+        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        if (isServer) _interactableComponent?.Interact(_playerID);
+        else CmdOnInteract(_interactableComponent?.GetNetworkID(), _playerID);
+        _interactableComponent = null;
+    }
+
+    private void PolyInteractableSync()
+    {
+        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        if (isServer) _interactableComponent?.Interact(_playerID);
+        else CmdOnPolyInteract(_interactableComponent?.GetNetworkID(), _playerID, 
+            (_interactableComponent as PolyInteractable).Order);
+        _interactableComponent = null;
+    }
+
+    [ClientRpc]
+    private void RpcOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order)
+    {
+        Debugger($"RPC OnInteract being called");
+        Debugger($"Interactable is: {interactableID.name}");
+        if (playerID != _playerID) return;
+
+        PolyInteractable[] interactables = interactableID.GetComponentsInChildren<PolyInteractable>();
+        foreach(PolyInteractable interactable in interactables)
+        {
+            if (interactable.Order == order)
+            {
+                interactable.Interact(_playerID);
+                return;
+            }
+        }
+    }
+
+    [Command]
+    private void CmdOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order)
+    {
+        Debugger($"Interacting with object {interactableID.ToString()}");
+        RpcOnPolyInteract(interactableID, playerID, order);
+    }
+
     [ClientRpc]
     private void RpcOnInteract(NetworkIdentity interactableID, int playerID)
     {
@@ -315,6 +354,7 @@ public class HandInventory : NetworkBehaviour
     [Command]
     private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
+        Debugger($"Interacting with object {interactableID.ToString()}");
         RpcOnInteract(interactableID, playerID);
     }
 
