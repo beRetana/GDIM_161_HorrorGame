@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 1814222937536579039}
   - component: {fileID: 3694775324650173385}
   - component: {fileID: 1712232636837814462}
+  - component: {fileID: 3957157810912688686}
   m_Layer: 9
   m_Name: Handle
   m_TagString: Untagged
@@ -452,6 +453,23 @@ CapsuleCollider:
   m_Height: 2.5
   m_Direction: 0
   m_Center: {x: 0.8, y: 0, z: -2.05}
+--- !u!114 &3957157810912688686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037653246759746223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1893615316
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &4268124469424417331
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,6 +806,7 @@ MonoBehaviour:
   _grabDisplayMessage: GRAB
   _releaseDisplayMessage: RELEASE
   _animTime: 4
+  _openDoorDelay: 2
   _openingDoorsDuration: 5
   _debugger: 1
 --- !u!4 &8056075763261549047 stripped

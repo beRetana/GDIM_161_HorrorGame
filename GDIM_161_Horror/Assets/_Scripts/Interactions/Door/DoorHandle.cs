@@ -17,6 +17,7 @@ namespace Interactions
         [SerializeField] private string _grabDisplayMessage;
         [SerializeField] private string _releaseDisplayMessage;
         [SerializeField] private float _animTime;
+        [SerializeField] private float _openDoorDelay = 2f;
         [SerializeField] private float _openingDoorsDuration;
         [SerializeField] private bool _debugger;
 
@@ -24,7 +25,7 @@ namespace Interactions
         private UnlockPlayer OnUnlockPlayer;
 
         private InteractableItem _interactableItem;
-        private Vector3 _targetPosition, _initialPosition;
+        private Vector3 _targetPosition;
         private Quaternion _targetRotation;
         [SyncVar] private bool _isPlayerOnHandle;
         [SyncVar] private int _playerUserID;
@@ -34,7 +35,6 @@ namespace Interactions
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(OnInteracted);
             _targetRotation = _playerGrabTarget.rotation;
-            _initialPosition = transform.position;
         }
 
         public void OnInteracted(int playerId)
@@ -113,6 +113,8 @@ namespace Interactions
 
         IEnumerator OpenDoors(int playerID, float duration, Vector3 playerTarget, Vector3 doorTarget)
         { 
+            yield return new WaitForSeconds(_openDoorDelay);
+
             Transform playerTransform = PlayerManager.Instance.GetPlayer(playerID).transform;
             float timeElapsed = 0;
 
