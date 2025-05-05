@@ -1,18 +1,20 @@
+using Mirror;
 using System;
 using UnityEngine;
 
 namespace Interactions
 {
-    public class DoubleDoor : MonoBehaviour
+    public class DoubleDoor : NetworkBehaviour
     {
         [Header("Door Settings/Components")]
         [SerializeField] private DoorHandle _rightDoorHandle;
         [SerializeField] private DoorHandle _leftDoorHandle;
         [SerializeField] private float _openDistance = 1.5f;
+        [SerializeField] private bool _debugger;
 
-        private int _playersOnHandles;
+        [SyncVar] private int _playersOnHandles;
 
-        private enum DoorState
+        public enum DoorState
         {
             Locked = 1 << 0,
             Locking = 1 << 1,
@@ -20,7 +22,7 @@ namespace Interactions
             Unlocked = 1 << 3,
         }
 
-        private DoorState _doorState;
+        [SyncVar] private DoorState _doorState;
 
         private void Start()
         {
@@ -32,8 +34,22 @@ namespace Interactions
             if (_doorState == DoorState.Unlocking) CheckFullyOpened();
         }
 
-        public void UpdateDoorState()
+        public void UpdateDoorState(DoorState state)
         {
+            if (isServer) RpcDoorState(state);
+            else CmdDoorState(state);
+        }
+
+        [Command]
+        private void CmdDoorState(DoorState state)
+        {
+            RpcDoorState(state);
+        }
+
+        [ClientRpc]
+        private void RpcDoorState(DoorState state)
+        {
+            this._doorState = state;
             switch (_doorState)
             {
                 case DoorState.Locked:
@@ -77,7 +93,7 @@ namespace Interactions
         {
             if (DistancedEnough(_leftDoorHandle.transform.position) || DistancedEnough(_rightDoorHandle.transform.position)) return;
             _doorState = DoorState.Unlocked;
-            UpdateDoorState();
+            UpdateDoorState(DoorState.Unlocked);
         }
 
         private bool DistancedEnough(Vector3 position)
@@ -89,12 +105,13 @@ namespace Interactions
         {
             if (isPlayerOnHandler) ++_playersOnHandles; 
             else --_playersOnHandles;
+            Debugger($"DOUBLE DOOR: There are {_playersOnHandles} players on the Handles");
+            if (_playersOnHandles >= 2 ) UpdateDoorState(DoorState.Unlocking);
+        }
 
-            if (_playersOnHandles >= 2f ) 
-            {
-                _doorState = DoorState.Unlocking;
-                UpdateDoorState();
-            }
+        private void Debugger(object log)
+        {
+            if (_debugger) Debug.Log(log);
         }
     }
 }

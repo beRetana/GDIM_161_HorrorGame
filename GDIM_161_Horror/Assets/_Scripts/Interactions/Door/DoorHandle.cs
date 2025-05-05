@@ -8,12 +8,14 @@ namespace Interactions
     public class DoorHandle : NetworkBehaviour
     {
         [SerializeField] private DoubleDoor _doorsManager;
+        [SerializeField] private NetworkIdentity _networkIdentity;
         [SerializeField] private Transform _targetTransform;
         [SerializeField] private Rigidbody _doorRigidbody;
         [SerializeField] private FixedJoint _handleJoint;
-        [SerializeField] private float _animTime;
         [SerializeField] private string _grabDisplayMessage;
         [SerializeField] private string _releaseDisplayMessage;
+        [SerializeField] private float _animTime;
+        [SerializeField] private bool _debugger;
 
         private delegate void UnlockPlayer();
         private UnlockPlayer OnUnlockPlayer;
@@ -21,7 +23,8 @@ namespace Interactions
         private InteractableItem _interactableItem;
         private Vector3 _targetPosition, _initialPosition;
         private Quaternion _targetRotation;
-        private bool _isPlayerOnHandle;
+        [SyncVar] private bool _isPlayerOnHandle;
+        [SyncVar] private int _playerUserID;
 
         private void Start()
         {
@@ -33,26 +36,50 @@ namespace Interactions
 
         public void OnInteracted(int playerId)
         {
-            if (!_isPlayerOnHandle ) PlayerGettingOnHandle(playerId);
+            if (_isPlayerOnHandle && _playerUserID != playerId) return;
+            if (!_isPlayerOnHandle) PlayerGettingOnHandle(playerId);
             else PlayerGettingOffHandle(playerId);
         }
 
-        private void PlayerGettingOffHandle(int playerId)
+        private void PlayerGettingOnHandle(int playerID)
         {
-            _isPlayerOnHandle = false;
+            PlayerManager.Instance.LockPlayerInput(playerID);
+            StartCoroutine(MovePlayerAnimation(playerID));
+            UpdateHandleState(playerID, true);
+        }
+
+        private void PlayerGettingOffHandle(int playerID)
+        {
             _interactableItem.SetDisplayMessage(_grabDisplayMessage);
-            PlayerManager.Instance.UnlockPlayerInput(playerId);
+            PlayerManager.Instance.UnlockPlayerInput(playerID);
             DetachingFromPlayer();
             OnUnlockPlayer = null;
-            _doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler:false);
-            StartCoroutine(CloseDoorAnimation());
+            UpdateHandleState(playerID, false);
         }
-        
-        private void PlayerGettingOnHandle(int playerId)
+
+        private void UpdateDoorManager(bool isPlayerOnHandler)
         {
-            _isPlayerOnHandle = true;
-            PlayerManager.Instance.LockPlayerInput(playerId);
-            StartCoroutine(MovePlayerAnimation(playerId));
+            this._doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler);
+        }
+
+        private void UpdateHandleState(int playerID, bool isPlayerOnHandle)
+        {
+            if (isServer) RpcUpdateHandleState(playerID, isPlayerOnHandle);
+            else CmdUpdateHandleState(playerID, isPlayerOnHandle);
+        }
+
+        [ClientRpc]
+        private void RpcUpdateHandleState(int playerID, bool isPlayerOnHandle)
+        {
+            this._playerUserID = playerID;
+            this._isPlayerOnHandle = isPlayerOnHandle;
+            this.UpdateDoorManager(isPlayerOnHandle);
+        }
+
+        [Command]
+        private void CmdUpdateHandleState(int playerID, bool isPlayerOnHandle)
+        {
+            RpcUpdateHandleState(playerID, isPlayerOnHandle);
         }
 
         public void DetachingFromPlayer()
@@ -95,7 +122,7 @@ namespace Interactions
                 time += Time.deltaTime;
             }
 
-            _doorsManager.UpdateDoorState();
+            _doorsManager.UpdateDoorState(DoubleDoor.DoorState.Locked);
         }
 
         IEnumerator MovePlayerAnimation(int playerId)
@@ -123,7 +150,16 @@ namespace Interactions
 
             AttachingToPlayer(playerId);
             _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
-            _doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler: true);
+        }
+
+        private NetworkIdentity GetNetworkID()
+        {
+            return _networkIdentity;
+        }
+
+        private void Debugger(object log)
+        {
+            if (_debugger) Debug.Log(log);
         }
     }
 }
