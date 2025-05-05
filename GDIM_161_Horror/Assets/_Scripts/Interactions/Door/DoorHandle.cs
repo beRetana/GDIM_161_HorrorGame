@@ -8,8 +8,10 @@ namespace Interactions
     public class DoorHandle : NetworkBehaviour
     {
         [SerializeField] private DoubleDoor _doorsManager;
-        [SerializeField] private Transform _targetTransform;
-        [SerializeField] private Transform _doorOpenedTarget;
+        [SerializeField] private Transform _door;
+        [SerializeField] private Transform _playerGrabTarget;
+        [SerializeField] private Transform _playerOpenTarget;
+        [SerializeField] private Transform _doorOpenTarget;
         [SerializeField] private Rigidbody _doorRigidbody;
         [SerializeField] private FixedJoint _handleJoint;
         [SerializeField] private string _grabDisplayMessage;
@@ -31,7 +33,7 @@ namespace Interactions
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(OnInteracted);
-            _targetRotation = _targetTransform.rotation;
+            _targetRotation = _playerGrabTarget.rotation;
             _initialPosition = transform.position;
         }
 
@@ -47,7 +49,6 @@ namespace Interactions
         {
             PlayerManager.Instance.LockPlayerInput(playerID);
             StartCoroutine(MovePlayerAnimation(playerID));
-            UpdateHandleState(playerID, true);
         }
 
         private void PlayerGettingOffHandle(int playerID)
@@ -101,7 +102,8 @@ namespace Interactions
         public void DoorCanMove()
         {
             SetInteractive(false);
-            StartCoroutine(OpenDoors(_playerUserID, _openingDoorsDuration, _doorOpenedTarget.position));
+            StartCoroutine(OpenDoors(_playerUserID, _openingDoorsDuration, 
+                _doorOpenTarget.position, _doorOpenTarget.position));
         }
 
         public void SetInteractive(bool isInteractive)
@@ -109,17 +111,21 @@ namespace Interactions
             _interactableItem.SetInteractive(isInteractive);
         }
 
-        IEnumerator OpenDoors(int playerID, float duration, Vector3 target)
+        IEnumerator OpenDoors(int playerID, float duration, Vector3 playerTarget, Vector3 doorTarget)
         { 
             Transform playerTransform = PlayerManager.Instance.GetPlayer(playerID).transform;
             float timeElapsed = 0;
 
             Vector3 playerOriginalPosition = playerTransform.position;
-            _targetPosition = new Vector3(target.x, playerTransform.position.y, target.z);
+            playerTarget = new Vector3(playerTarget.x, playerTransform.position.y, playerTarget.z);
 
+            Vector3 doorOriginalPosition = _door.position;
+            float ratio = 0;
             for (; timeElapsed <= _animTime; timeElapsed += Time.deltaTime)
             {
-                playerTransform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, Mathf.Clamp01(timeElapsed/duration));
+                ratio = Mathf.Clamp01(timeElapsed / duration);
+                playerTransform.position = Vector3.Lerp(playerOriginalPosition, playerTarget, ratio);
+                _door.position = Vector3.Lerp(doorOriginalPosition, doorTarget, ratio);
                 yield return null;
             }
 
@@ -134,7 +140,7 @@ namespace Interactions
             Transform playerTransform = player.transform;
 
             Vector3 playerOriginalPosition = player.transform.position;
-            _targetPosition = new Vector3(_targetTransform.position.x, player.transform.position.y, _targetTransform.position.z);
+            _targetPosition = new Vector3(_playerGrabTarget.position.x, player.transform.position.y, _playerGrabTarget.position.z);
 
             Quaternion playerOriginalRotation = player.transform.rotation;
 
@@ -149,6 +155,7 @@ namespace Interactions
 
             AttachingToPlayer(playerId);
             _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
+            UpdateHandleState(playerId, true);
         }
 
         private void Debugger(object log)

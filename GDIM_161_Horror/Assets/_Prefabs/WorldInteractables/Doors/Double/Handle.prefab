@@ -548,7 +548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4139530554715748721}
   m_Layer: 0
-  m_Name: OpenDoorTargetPosition
+  m_Name: PlayerOpenTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -579,7 +579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4659089062429858232}
   m_Layer: 0
-  m_Name: GrabbingPosition
+  m_Name: PlayerGrabbingTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -779,14 +779,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _doorsManager: {fileID: 0}
-  _targetTransform: {fileID: 4659089062429858232}
-  _doorOpenedTarget: {fileID: 0}
+  _door: {fileID: 0}
+  _playerGrabTarget: {fileID: 4659089062429858232}
+  _playerOpenTarget: {fileID: 4139530554715748721}
+  _doorOpenTarget: {fileID: 0}
   _doorRigidbody: {fileID: 0}
   _handleJoint: {fileID: 0}
   _grabDisplayMessage: GRAB
   _releaseDisplayMessage: RELEASE
   _animTime: 4
-  _openingDoorsDuration: 0
+  _openingDoorsDuration: 5
   _debugger: 1
 --- !u!4 &8056075763261549047 stripped
 Transform:
