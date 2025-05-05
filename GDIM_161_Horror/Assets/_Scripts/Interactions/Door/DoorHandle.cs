@@ -154,7 +154,7 @@ namespace Interactions
                 yield return null;
                 time += Time.deltaTime;
             }
-
+            Debugger($"{transform.parent.parent.parent.name}: Is moving Player {playerId}");
             AttachingToPlayer(playerId);
             _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
             UpdateHandleState(playerId, true);
