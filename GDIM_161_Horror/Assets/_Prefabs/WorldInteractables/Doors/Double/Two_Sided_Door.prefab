@@ -575,11 +575,24 @@ PrefabInstance:
       propertyPath: _doorRigidbody
       value: 
       objectReference: {fileID: 5091908740641119196}
+    - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _doorOpenedTarget
+      value: 
+      objectReference: {fileID: 4075485508365081866}
+    - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _openingDoorsDuration
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+--- !u!4 &4075485508365081866 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4139530554715748721, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+  m_PrefabInstance: {fileID: 143439406780343419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8467227684791519310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8393649598902922293, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
@@ -781,8 +794,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 133767132785533221}
     - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _doorOpenedTarget
+      value: 
+      objectReference: {fileID: 1108473284431812596}
+    - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: _grabDisplayMessage
       value: GRAB
+      objectReference: {fileID: 0}
+    - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _openingDoorsDuration
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: _releaseDisplayMessage
@@ -794,6 +815,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+--- !u!4 &1108473284431812596 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4139530554715748721, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+  m_PrefabInstance: {fileID: 3895762726783594117}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4750400471195872293 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
