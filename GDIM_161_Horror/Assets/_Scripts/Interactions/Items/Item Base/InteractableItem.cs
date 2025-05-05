@@ -10,6 +10,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 {
     [SerializeField] protected Animator _textAnimation;
     [SerializeField] protected LookAtCamera _lookAtCamera;
+    [SerializeField] protected NetworkIdentity _networkIdentity;
     [SerializeField] protected string _textName;
     [SerializeField] protected string _fadeIn;
 
@@ -28,6 +29,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
+        if (_networkIdentity == null) _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
         SetDisplayMessage(_textName);
     }
 
@@ -67,6 +69,6 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public NetworkIdentity GetNetworkID()
     {
-        return transform.parent.GetComponent<NetworkIdentity>();
+        return _networkIdentity;
     }
 }

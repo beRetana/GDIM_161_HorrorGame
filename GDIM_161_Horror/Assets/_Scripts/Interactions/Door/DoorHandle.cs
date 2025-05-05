@@ -1,10 +1,11 @@
 using MessengerSystem;
+using Mirror;
 using System.Collections;
 using UnityEngine;
 
 namespace Interactions
 {
-    public class DoorHandle : MonoBehaviour
+    public class DoorHandle : NetworkBehaviour
     {
         [SerializeField] private DoubleDoor _doorsManager;
         [SerializeField] private Transform _targetTransform;

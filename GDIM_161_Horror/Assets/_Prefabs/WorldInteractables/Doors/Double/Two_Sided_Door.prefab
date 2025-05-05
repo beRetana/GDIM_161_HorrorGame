@@ -198,6 +198,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6885474385128341961}
+  - component: {fileID: 7811484287015804871}
   - component: {fileID: 1030719748832876965}
   m_Layer: 0
   m_Name: Two_Sided_Door
@@ -223,6 +224,23 @@ Transform:
   - {fileID: 7227384843888557295}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7811484287015804871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4486008596400445310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1004189192
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!114 &1030719748832876965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,6 +825,10 @@ PrefabInstance:
       propertyPath: _lookAtCamera
       value: 
       objectReference: {fileID: 1798698024236103913}
+    - target: {fileID: 6974759429872520057, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _networkIdentity
+      value: 
+      objectReference: {fileID: 7811484287015804871}
     - target: {fileID: 8056075763261549047, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.077
@@ -983,6 +1005,10 @@ PrefabInstance:
       propertyPath: _textName
       value: GRAB
       objectReference: {fileID: 0}
+    - target: {fileID: 6974759429872520057, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
+      propertyPath: _networkIdentity
+      value: 
+      objectReference: {fileID: 7811484287015804871}
     - target: {fileID: 8056075763261549047, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
