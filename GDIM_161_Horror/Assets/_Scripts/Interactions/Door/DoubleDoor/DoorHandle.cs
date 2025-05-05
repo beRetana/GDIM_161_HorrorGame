@@ -103,7 +103,7 @@ namespace Interactions
         {
             SetInteractive(false);
             StartCoroutine(OpenDoors(_playerUserID, _openingDoorsDuration, 
-                _doorOpenTarget.position, _doorOpenTarget.position));
+                _playerOpenTarget.position, _doorOpenTarget.position));
         }
 
         public void SetInteractive(bool isInteractive)
