@@ -40,7 +40,7 @@ namespace Interactions
         public void OnInteracted(int playerId)
         {
             if (_isPlayerOnHandle && _playerUserID != playerId) return;
-            Debugger($"{gameObject.name}: Player {playerId} is interacting");
+            Debugger($"{transform.parent.parent.parent.name}: Player {playerId} is interacting");
             if (!_isPlayerOnHandle) PlayerGettingOnHandle(playerId);
             else PlayerGettingOffHandle(playerId);
         }
