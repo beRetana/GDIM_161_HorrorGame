@@ -8,13 +8,14 @@ namespace Interactions
     public class DoorHandle : NetworkBehaviour
     {
         [SerializeField] private DoubleDoor _doorsManager;
-        [SerializeField] private NetworkIdentity _networkIdentity;
         [SerializeField] private Transform _targetTransform;
+        [SerializeField] private Transform _doorOpenedTarget;
         [SerializeField] private Rigidbody _doorRigidbody;
         [SerializeField] private FixedJoint _handleJoint;
         [SerializeField] private string _grabDisplayMessage;
         [SerializeField] private string _releaseDisplayMessage;
         [SerializeField] private float _animTime;
+        [SerializeField] private float _openingDoorsDuration;
         [SerializeField] private bool _debugger;
 
         private delegate void UnlockPlayer();
@@ -37,6 +38,7 @@ namespace Interactions
         public void OnInteracted(int playerId)
         {
             if (_isPlayerOnHandle && _playerUserID != playerId) return;
+            Debugger($"{gameObject.name}: Player {playerId} is interacting");
             if (!_isPlayerOnHandle) PlayerGettingOnHandle(playerId);
             else PlayerGettingOffHandle(playerId);
         }
@@ -98,41 +100,38 @@ namespace Interactions
 
         public void DoorCanMove()
         {
-            OnUnlockPlayer?.Invoke();
+            SetInteractive(false);
+            StartCoroutine(OpenDoors(_playerUserID, _openingDoorsDuration, _doorOpenedTarget.position));
         }
-
-        public void CloseDoor() { StartCoroutine(CloseDoorAnimation()); }
 
         public void SetInteractive(bool isInteractive)
         {
             _interactableItem.SetInteractive(isInteractive);
         }
-        
-        IEnumerator CloseDoorAnimation()
-        {
-            float time = 0;
 
-            Vector3 leftAtPosition = transform.position;
+        IEnumerator OpenDoors(int playerID, float duration, Vector3 target)
+        { 
+            Transform playerTransform = PlayerManager.Instance.GetPlayer(playerID).transform;
+            float timeElapsed = 0;
 
-            while (time <= _animTime)
+            Vector3 playerOriginalPosition = playerTransform.position;
+            _targetPosition = new Vector3(target.x, playerTransform.position.y, target.z);
+
+            for (; timeElapsed <= _animTime; timeElapsed += Time.deltaTime)
             {
-                transform.position = Vector3.Lerp(leftAtPosition, _initialPosition, time / _animTime);
-
+                playerTransform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, Mathf.Clamp01(timeElapsed/duration));
                 yield return null;
-                time += Time.deltaTime;
             }
 
-            _doorsManager.UpdateDoorState(DoubleDoor.DoorState.Locked);
+            OnUnlockPlayer?.Invoke();
         }
 
         IEnumerator MovePlayerAnimation(int playerId)
         {
             PlayerBase player = PlayerManager.Instance.GetPlayer(playerId);
-            int cameraRootChildIndex = 1;
             float time = 0;
 
             Transform playerTransform = player.transform;
-            Transform playerCameraRoot = player.transform.GetChild(cameraRootChildIndex);
 
             Vector3 playerOriginalPosition = player.transform.position;
             _targetPosition = new Vector3(_targetTransform.position.x, player.transform.position.y, _targetTransform.position.z);
@@ -150,11 +149,6 @@ namespace Interactions
 
             AttachingToPlayer(playerId);
             _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
-        }
-
-        private NetworkIdentity GetNetworkID()
-        {
-            return _networkIdentity;
         }
 
         private void Debugger(object log)
