@@ -21,9 +21,11 @@ public class FMODEvents : MonoBehaviour
     [field: Header("sonarPing")]
     [field: SerializeField] public EventReference sonarPing {get; private set;}
 
-    
-    
-    
+    [field: Header("Torch burning SFX")]
+    [field: SerializeField] public EventReference torchLit { get; private set; }
+
+
+
     public static FMODEvents instance {get; private set;}
 
     private void Awake()
