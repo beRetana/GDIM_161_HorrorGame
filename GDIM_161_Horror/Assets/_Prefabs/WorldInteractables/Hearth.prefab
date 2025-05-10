@@ -53,7 +53,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.64
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &6054963845885053786
 Rigidbody:
@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 4314775591687182890}
   - component: {fileID: 6738802945491703440}
   - component: {fileID: 7340025323550406647}
+  - component: {fileID: 7173510339929271077}
   m_Layer: 3
   m_Name: Hearth
   m_TagString: Untagged
@@ -201,6 +202,22 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!208 &7173510339929271077
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523596723460159556}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.35, y: 0.1, z: 0.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3652198641300914004
 GameObject:
   m_ObjectHideFlags: 0

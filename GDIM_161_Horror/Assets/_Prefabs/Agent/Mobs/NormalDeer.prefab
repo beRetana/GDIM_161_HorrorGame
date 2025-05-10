@@ -15,10 +15,10 @@ GameObject:
   - component: {fileID: 634844121483240505}
   - component: {fileID: 281365148222402477}
   - component: {fileID: 5039417571630091474}
+  - component: {fileID: 2894710136987931879}
   - component: {fileID: 3560595322029444759}
   - component: {fileID: 1238957792968549522}
   - component: {fileID: 8979800026659449354}
-  - component: {fileID: 2894710136987931879}
   - component: {fileID: -3323143276070280358}
   - component: {fileID: 6099041590943197619}
   m_Layer: 6
@@ -150,6 +150,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44069e1ce6ebfc4e851d914c801f516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2894710136987931879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5300555771477976309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260dcd7b40967814e9fe8406fbdf877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wanderRadius: 20
+  _wanderTime: 5
 --- !u!65 &3560595322029444759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -196,7 +210,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!195 &8979800026659449354
 NavMeshAgent:
@@ -207,33 +221,19 @@ NavMeshAgent:
   m_GameObject: {fileID: 5300555771477976309}
   m_Enabled: 1
   m_AgentTypeID: -1372625422
-  m_Radius: 0.5
+  m_Radius: 0.7
   m_Speed: 4
   m_Acceleration: 3
-  avoidancePriority: 50
-  m_AngularSpeed: 100
-  m_StoppingDistance: 0
+  avoidancePriority: 70
+  m_AngularSpeed: 360
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0
-  m_WalkableMask: 1
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!114 &2894710136987931879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5300555771477976309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 260dcd7b40967814e9fe8406fbdf877e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _wanderRadius: 20
-  _wanderTime: 5
 --- !u!95 &-3323143276070280358
 Animator:
   serializedVersion: 7
@@ -245,9 +245,9 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a84ccf7be45443540a75e389f59565e4, type: 3}
   m_Controller: {fileID: 9100000, guid: 904c20b7442578b499f192f3c6332e67, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_CullingMode: 2
+  m_UpdateMode: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 1

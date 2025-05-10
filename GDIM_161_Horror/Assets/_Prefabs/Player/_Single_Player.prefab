@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 1650157976401792045}
   - component: {fileID: 6685703048618153942}
   - component: {fileID: 3795071159714687488}
+  - component: {fileID: 7155060189504786965}
   m_Layer: 6
   m_Name: _Single_Player
   m_TagString: Player
@@ -248,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 1624317751
+  _assetId: 407748864
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -523,8 +524,6 @@ MonoBehaviour:
   _throwForce: 5
   _mouse: {fileID: 4169692208235092329}
   _playerCamera: {fileID: 5337597220645752238}
-  _sonnar: {fileID: 11400000, guid: 8ab43b6301a426c42b8c42d617cd2542, type: 2}
-  _torch: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
   _enableDebugging: 0
 --- !u!114 &1385938723204227578
 MonoBehaviour:
@@ -675,6 +674,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c734fda02c2d144b1b2caa201b3e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &7155060189504786965
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.4, y: 1, z: 0.4}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3785727921734397045
 GameObject:
   m_ObjectHideFlags: 0
