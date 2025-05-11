@@ -21,9 +21,17 @@ public class FMODEvents : MonoBehaviour
     [field: Header("sonarPing")]
     [field: SerializeField] public EventReference sonarPing {get; private set;}
 
-    
-    
-    
+    [field: Header("walkieStart")]
+    [field: SerializeField] public EventReference walkieStart { get; private set; }
+
+    [field: Header("walkieEnd")]
+    [field: SerializeField] public EventReference walkieEnd { get; private set; }
+
+    [field: Header("radioStatic")]
+    [field: SerializeField] public EventReference radioStatic { get; private set; }
+
+
+
     public static FMODEvents instance {get; private set;}
 
     private void Awake()
