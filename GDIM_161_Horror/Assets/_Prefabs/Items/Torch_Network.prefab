@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2564414193202022935}
   - component: {fileID: 5805892794512141954}
   - component: {fileID: 3390137401255878559}
+  - component: {fileID: 6690730418953068238}
   m_Layer: 9
   m_Name: Torch_Network
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 831233360205059484}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -67,13 +68,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.05
   target: {fileID: 3116399982643216359}
   syncPosition: 1
   syncRotation: 1
-  syncScale: 0
+  syncScale: 1
   onlySyncOnChange: 1
   compressRotation: 1
   interpolatePosition: 1
@@ -108,7 +109,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.5285387, z: 0.1}
-  m_Center: {x: 0, y: 0.2576819, z: 0}
+  m_Center: {x: 0, y: 0.22, z: 0}
 --- !u!54 &3390137401255878559
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133,9 +134,25 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 2
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!208 &6690730418953068238
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831233360205059484}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.1, y: 0.25, z: 0.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0.25, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1522899249806462209
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,8 +490,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   maybeFireable: {fileID: 6533591682246883934}
-  _debugger: 0
+  _debugger: 1
 --- !u!1 &6533591682246883934
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textAnimation: {fileID: 5874142033088813881}
   _lookAtCamera: {fileID: 3260482526421632806}
+  _networkIdentity: {fileID: 0}
   _textName: Torch
   _fadeIn: FadeIn
 --- !u!95 &5874142033088813881

@@ -27,8 +27,7 @@ namespace Interactions
         public void UpdateUI()
         {
             DisplayDots(_objectLocations);
-            _distanceDisplay.text = _closestLocation.ToString();
-            
+            _distanceDisplay.text = $"{_closestLocation} m";
         }
 
         private void DisplayDots(List<Vector2> objectsLocation)
@@ -38,7 +37,6 @@ namespace Interactions
                 _dots[i].transform.localPosition = objectsLocation[i] * _SCREEN_SCALE;
                 _dots[i].GetComponent<DotDisplay>().ActivateDot();
             }
-            
         }
     }
 }

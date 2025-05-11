@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class WalkieTalkie : NetworkPickableItem
 {
-   
     protected  override void PickItem(int playerid)
     { 
         base.PickItem(playerid);
 
-        var local = FindObjectOfType<DissonanceComms>();
+        var local = FindFirstObjectByType<DissonanceComms>();
         local.AddToken("AddWalkie");
     }
 
@@ -17,11 +16,7 @@ public class WalkieTalkie : NetworkPickableItem
     { 
         base.UnPossessItem(throwDir, playerID);
 
-        var local = FindObjectOfType<DissonanceComms>();
+        var local = FindFirstObjectByType<DissonanceComms>();
         local.RemoveToken("AddWalkie");
     }
-
-
-
-
 }
