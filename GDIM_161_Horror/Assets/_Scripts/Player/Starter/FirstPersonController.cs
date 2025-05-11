@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using FMODUnity;
+using Dissonance;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -20,11 +22,18 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private StarterAssetsInputs _input;
+        private Animator _animator;
         private const float _THRESHOLD = 0.01f;
-        public GameObject PlayerModel;
+        public bool isWalking { get; private set; }
 
-        [SerializeField] private GameObject _camera;
+        float _stepSoundTime;
+
         [SerializeField] private string _buildScene = "BUILD_1";
+        [SerializeField] private EventReference _forestFootstep;
+        [SerializeField] private float _rate;
+
+        private bool _isSprinting;
+        private InputAction _onJump;
 
         public bool grounded { get; private set; }
 
@@ -40,6 +49,12 @@ namespace StarterAssets
                 #endif
             }
         }
+        private bool _gravityOn = true;
+
+        private const string SPEED = "Speed";
+        private const string JUMP = "Jump";
+
+        public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
         {
@@ -62,6 +77,9 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
+            _animator = GetComponent<Animator>();
+
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnDestroy()
@@ -91,15 +109,25 @@ namespace StarterAssets
         }
 
         private void Update()
-        {
+        {   
             JumpAndGravity();
             GroundedCheck();
             Move();
         }
 
+        private void FixedUpdate()
+        {
+            UpdateSpeedAnimation();
+        }
+
         private void LateUpdate()
         {
             CameraRotation();
+        }
+
+        private void UpdateSpeedAnimation()
+        {
+            _animator.SetFloat(SPEED, new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
         }
 
         private void GroundedCheck()
@@ -122,16 +150,36 @@ namespace StarterAssets
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
-            Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
-            float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
-            _arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
+            //Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
+            //float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
+            //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
+        }
+
+        public void PlayFootstep()
+        {
+            RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
         }
 
         private void Move()
         {
+            _stepSoundTime += Time.deltaTime;
+
             float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
 
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            if (_input.move == Vector2.zero)
+            {
+                targetSpeed = 0.0f;
+                isWalking = false; // Player is stopped
+            }
+            else
+            {
+                isWalking = true; // Player is moving  
+                if (_stepSoundTime >= _rate)
+                {
+                   // PlayFootstep();
+                    _stepSoundTime = 0;
+                }
+            }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
@@ -148,10 +196,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * decelerationRate);
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
-            else
-            {
-                _speed = targetSpeed;
-            }
+            else _speed = targetSpeed;
 
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
@@ -163,6 +208,8 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            if (!_gravityOn) return;
+
             if (grounded)
             {
                 _fallTimeoutDelta = fallTimeout;
@@ -175,6 +222,7 @@ namespace StarterAssets
 
                 if (_jumpTimeoutDelta >= 0.0f)
                     _jumpTimeoutDelta -= Time.deltaTime;
+
             }
             else
             {
@@ -184,11 +232,13 @@ namespace StarterAssets
                     _fallTimeoutDelta -= Time.deltaTime;
 
                 _input.jump = false;
+                _animator.SetBool(JUMP, false);
             }
 
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += gravity * Time.deltaTime;
+                _animator.SetBool(JUMP, true);
             }
         }
 

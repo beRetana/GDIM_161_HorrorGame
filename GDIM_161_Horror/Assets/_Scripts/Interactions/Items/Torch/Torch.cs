@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using Codice.Client.Common.GameUI;
 using System;
-using Player;
+using Mirror;
+
 
 namespace Interactions
 {
-    public class Torch : PickableItem, IFireable
+    public class Torch : NetworkPickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
@@ -37,8 +37,10 @@ namespace Interactions
         [SerializeField, Tooltip("(1)/(1+n) is starting size for flame when lit. larger n = smaller start")
             , Range(1.1f, 10f)] float flameGrowCurveB = 5f;
 
-
         [SerializeField] Light torchLight;
+
+
+        [SerializeField] LayerMask groundLayers;
 
         public float BurnTimer { get; private set; }
         private float burnVelocity = 1f;
@@ -56,6 +58,9 @@ namespace Interactions
         private float flameSize;
         private float maxLightIntensity;
         private float lightIntensity = -1f;
+
+        private bool isDropping = false;
+        private const float SMOTHER_RADIUS = 0.5f;
 
         public bool Lit { get; private set; }
         public bool IsLit() { return Lit; }
@@ -76,13 +81,14 @@ namespace Interactions
             //LightFlame();
         }
 
-        private void Update()
+        protected void Update()
         {
             if (!Lit) return;
-            UpdateFlameOrientation(); 
+            UpdateFlameOrientation();
+            SmotherCheck();
         }
 
-        private void FixedUpdate()
+        protected void FixedUpdate()
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);
@@ -94,15 +100,21 @@ namespace Interactions
         }
         public override void UseItem(int playerId)
         {
-            // extend torch in arm
-            // enable torch collider
-            // check if torch colliding with fire
-            // OR
-            // check if handinventory raycast hitting campfire or player
-
-            // ?light torch
             Debug.Log("Using torch");
             PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
+        }
+
+
+        private void SmotherCheck()
+        {
+            if (!Lit || !isDropping) return;
+            if (GroundCheck()) SmotherFlame();
+        }
+
+        private bool GroundCheck()
+        {
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            return Physics.CheckSphere(spherePosition, SMOTHER_RADIUS, groundLayers, QueryTriggerInteraction.Ignore);
         }
 
         #region pyrolysis
@@ -174,6 +186,18 @@ namespace Interactions
             StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
         }
 
+        public void SmotherFlame()
+        {
+            if (!Lit) return;
+            flameSize = 0f;
+            lightIntensity = 0f;
+            ScaleFlameScale(0);
+            SetVisualLightIntensity(0);
+            isDropping = false;
+            ToggleFlame(false);
+        }
+
+
         #endregion flame_core
 
         #region flame_helpers
@@ -205,19 +229,23 @@ namespace Interactions
             flameSize = 0f;
             torchLight.intensity = 0f;
             ScaleFlameScale(0f);
+            ToggleFlame(false);
         }
 
+        private void NetworkDestroyTorch()
+        {
+            Debug.Log("Destrying Torch");
+            Destroy(transform.parent.gameObject);
+        }
 
         #endregion flame_helpers
 
-
-        #region flame_spread
-        private void RecieveFlameContact(Collider other)
+        private void KillTorch()
         {
-            
+            FlameFullExtinguish();
+            NetworkDestroyTorch();
         }
 
-        #endregion flame_spread
 
         #region flame_animations
         private IEnumerator BurnOutFire(float burnOutTime, float flameExpDecayRate, float lightExpDecayRate)
@@ -232,12 +260,13 @@ namespace Interactions
 
                 SetVisualLightIntensity(lightIntensity);
 
+
                 yield return null;
             }
-            FlameFullExtinguish();
+            KillTorch();
         }
 
-      
+
         /// <summary>
         /// 1 / (1 + b * e^(-kx))
         /// </summary>
@@ -260,6 +289,12 @@ namespace Interactions
             FlameFullSize();
         }
         #endregion flame_animations
+
+        /*public override void UnPossessItem()
+        {
+            isDropping = true;
+            base.UnPossessItem();
+        }*/
 
 
         //public void BurnOutFlame() // via end of wood

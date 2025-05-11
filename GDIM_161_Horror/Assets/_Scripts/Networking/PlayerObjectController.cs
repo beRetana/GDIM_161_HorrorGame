@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using Player;
+using StarterAssets;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -80,6 +80,7 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStartClient()
     {
         Manager.GamePlayers.Add(this);
+        PlayerManager.Instance.AttemptAddPlayer(GetComponent<FirstPersonController>());
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
     }

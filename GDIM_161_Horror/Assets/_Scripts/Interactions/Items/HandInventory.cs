@@ -14,8 +14,6 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private LayerMask _interactableLayer;
     [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
-    [SerializeField] private Transform _rightHandSocket; // item slots
-    [SerializeField] private Transform _leftHandSocket;
 
     [Header("Arms")]
     [SerializeField] private Arms _arms;
@@ -28,46 +26,43 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
 
+    [Header("Debugging")]
+    [SerializeField] private bool _enableDebugging;
+    private static bool _staticDebugging;
+
+    public Arms GetArms() { return _arms; }
+
     private class InventorySlot
     {
-        private PickableItem _pickableItem;
+        private NetworkPickableItem _pickableItem;
         private Rigidbody _itemRigidBody;
         private Transform _itemTransform;
-        private float _initialLinearDamping;
         private bool _isDominant;
 
-        public PickableItem Item { get { return _pickableItem; } set { _pickableItem = value; } }
+        public NetworkPickableItem Item { get { return _pickableItem; } set { _pickableItem = value; } }
 
         public Rigidbody ItemRigidBody { get { return _itemRigidBody; } set { _itemRigidBody = value; } }
 
         public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
         public bool IsDominant { get { return _isDominant; } set { _isDominant = value; } }
 
-        public void SetRigidBody(Rigidbody rigidBody/*, float linearDrag*/)
+        public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
         {
             _itemRigidBody = rigidBody;
-            ItemRigidBody.isKinematic = true; // no gravity
-            
-            
-           /* ItemRigidBody.useGravity = false;
-            _initialLinearDamping = rigidBody.linearDamping;
-            ItemRigidBody.linearDamping = linearDrag;
+            // No more physics
+            ItemRigidBody.isKinematic = true; 
+            ItemRigidBody.useGravity = false;
             ItemRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-            ItemRigidBody.transform.parent = ItemTransform;*/
         }
 
         public Rigidbody RemoveRigidBody()
         {
             Rigidbody rigidBodyToDrop = ItemRigidBody;
-            /*Transform pickableParent = _itemTransform.parent;
-            Debug.Log(pickableParent);*/
-            ItemRigidBody.isKinematic = false;//useGravity = true;
-            ItemTransform.SetParent(null);
 
-            /*ItemRigidBody.useGravity = true;
-            ItemRigidBody.linearDamping = _initialLinearDamping;
+            // Re-eanble physics
+            ItemRigidBody.isKinematic = false;
+            ItemRigidBody.useGravity = true;
             ItemRigidBody.freezeRotation = false;
-            ItemRigidBody.transform.parent = null;*/
             _itemRigidBody = null;
 
             return rigidBodyToDrop;
@@ -104,9 +99,10 @@ public class HandInventory : NetworkBehaviour
             L_HandSlot.SetDominant(isLHandDom);
             R_HandSlot.SetDominant(!isLHandDom);
             IsLHandDom = isLHandDom;
-            Debug.Log(this);
+            Debugger(this);
         }
 
+        // Indexing
         public InventorySlot this[int index]
         {
             get
@@ -123,34 +119,42 @@ public class HandInventory : NetworkBehaviour
             }
         }
 
-        public InventorySlot GainItem(PickableItem inventorySlotToGain)
+        /// <summary>
+        /// Sets the item passed as the value item for the (dominant hand has priority) Inventory slot.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public InventorySlot AddItemToSlot(NetworkPickableItem item)
         {
+           
             InventorySlot selectedHand = GetDominantHand();
+            
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = inventorySlotToGain;
-                Debug.Log($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
+                selectedHand.Item = item;
+                Debugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
-                selectedHand.Item = inventorySlotToGain;
-                Debug.Log($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
+                selectedHand.Item = item;
+                Debugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
         }
 
-        public InventorySlot RemoveItem()
+        public NetworkPickableItem RemoveItem(Vector3 throwDir, int playerID)
         {
             InventorySlot inventorySlotToRemove = GetDominantHand();
             if (inventorySlotToRemove.Item == null) return null;
-
-            inventorySlotToRemove.Item = null;
             inventorySlotToRemove.RemoveRigidBody();
+            inventorySlotToRemove.Item.UnPossessItem(throwDir, playerID);
+            NetworkPickableItem holder = inventorySlotToRemove.Item;
+            inventorySlotToRemove.Item = null;
 
-            return inventorySlotToRemove;
+            return holder;
         }
 
         public bool SwapDominance()
@@ -161,14 +165,16 @@ public class HandInventory : NetworkBehaviour
 
         public InventorySlot GetDominantHand()
         {
-            Debug.Log($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
+            Debugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
             return this[IsLHandDom ? 0 : 1];
         }
+
         public InventorySlot GetOffHand()
         {
-            Debug.Log($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
+            Debugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
             return this[IsLHandDom ? 1 : 0];
         }
+
         public int GetDominantIndex() { return IsLHandDom ? 0 : 1; }
     }
 
@@ -181,26 +187,26 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        _playerID = gameObject.GetComponent<PlayerBase>().ID();
-        PrepareList();
+        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) _playerID = playerController.PlayerIdNumber;
+        _staticDebugging = _enableDebugging;
+        Debugger($"The Player ID is: {_playerID}");
+        SetHandTransforms();
     }
 
-    void PrepareList()
+    private void SetHandTransforms()
     {
         _inventorySlots[_LEFT_HAND_ID].ItemTransform = _leftHandTransform;
         _inventorySlots[_RIGHT_HAND_ID].ItemTransform = _rightHandTransform;
     }
 
-    void Update()
+    private void Update()
     {
         CheckForRaycastInteractables();
     }
 
-    private void FixedUpdate()
-    {
-        //MoveItemsPositionsToHands();
-    }
-
+    /// <summary>
+    /// Detects interactable items to display options on interacting with that object
+    /// </summary>
     private void CheckForRaycastInteractables()
     {
         Ray rayToInteract = _playerCamera.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
@@ -211,7 +217,7 @@ public class HandInventory : NetworkBehaviour
             IInteractable childCanvas = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something before.
-            if (_interactableComponent == null)
+            if (_interactableComponent == null || _interactableComponent.Equals(null))
             {
                 // Report it as detected
                 _interactableComponent = childCanvas;
@@ -222,13 +228,13 @@ public class HandInventory : NetworkBehaviour
             else if (childCanvas != _interactableComponent)
             {
                 // Stop animation and start the new one
-                _interactableComponent.StoppedDetecting(_playerID);
+                _interactableComponent?.StoppedDetecting(_playerID);
                 _interactableComponent = childCanvas;
                 _interactableComponent?.Detected(_playerID);
             }
         }
         // If we didn't hit anything did we hit something before?
-        else if (_interactableComponent != null)
+        else if (_interactableComponent != null && !_interactableComponent.Equals(null))
         {
             _interactableComponent.StoppedDetecting(_playerID);
             _mouse?.DefaultEffect();
@@ -241,119 +247,139 @@ public class HandInventory : NetworkBehaviour
         bool isLHandDom = _inventorySlots.SwapDominance();
         _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
+
     public void OnInteract(InputValue value) 
-    { 
-        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null) 
-            _interactableComponent?.Interact(_playerID);
+    {
+        if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
+        {
+            if (_interactableComponent is PolyInteractable)
+                PolyInteractableSync();
+            else InteractableSync();
+        }
     }
-    public void OnDrop(InputValue value) { DropItem(); }
-    public void OnThrow(InputValue value) { DropItem(_throwForce); }
+
+    public void OnDrop(InputValue value) 
+    {
+        Debugger($"Drop-Is Player {_playerID} Server: {isServer}");
+        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
+        else CmdDropItem(0f);
+    }
+
+    public void OnThrow(InputValue value) 
+    {
+        Debugger($"Throw-Is Player {_playerID} Server: {isServer}");
+        if (isServer) this._inventorySlots.RemoveItem(transform.forward * _throwForce, _playerID);
+        else CmdDropItem(_throwForce);
+    }
+
     public void OnUseItem(InputValue value) { UseItem(); }
 
     public void UseItem()
     {
         InventorySlot inventorySlotToUse = _inventorySlots.GetDominantHand();
-        PickableItem itemToUse = inventorySlotToUse?.Item;
+        NetworkPickableItem itemToUse = inventorySlotToUse?.Item;
         if (itemToUse == null) return;
 
         itemToUse.UseItem(_playerID);
-        // TK interact functionality
     }
 
-    public bool PickUpItem(PickableItem pickableItem)
+    public bool PickUpItem(NetworkPickableItem pickableItem)
     {
-        Transform pickableParent = pickableItem.transform.parent;
-        
-        if (pickableParent.GetComponent<Rigidbody>() == null) return false; // DropItem(); <-??
+        InventorySlot handSlot = _inventorySlots.AddItemToSlot(pickableItem);
 
-        InventorySlot inventorySlotOfNewItem = _inventorySlots.GainItem(pickableItem);
-        if (inventorySlotOfNewItem == null) return false;
+        if (handSlot == null) return false;
 
-        _PutItemInHand(inventorySlotOfNewItem, pickableParent, pickableItem);
+        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!handSlot.IsDominant);
+        handSlot.SetRigidBody(pickableItem.transform.parent.transform.GetComponent<Rigidbody>(), _linearDrag);
+        pickableItem.OrientItemInHand(handSlot.ItemTransform, isLeftHandAction);
 
-        _arms.HandMoveOutAndIn((_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant));
-        Debug.Log($"Is left Dominant {_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID}");
-        Debug.Log($"Is my Slot Dominant {inventorySlotOfNewItem.IsDominant}");
-        Debug.Log($"Should I grab with Left {(_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant)}");
+        Debugger($"Player Is placing item: {pickableItem.name} in: {(isLeftHandAction ? "Left" : "Right")} Hand");
+
+        Physics.IgnoreCollision(pickableItem.transform.parent.transform.GetComponent<Collider>(), GetComponent<Collider>(), true);
 
         return true;
     }
 
-    private void _PutItemInHand(InventorySlot inventorySlotOfNewItem, Transform pickableParent, PickableItem pickableItem)
+    private void InteractableSync()
     {
-        bool isLeftHandAction = (_inventorySlots.GetDominantIndex() == _LEFT_HAND_ID) ^ (!inventorySlotOfNewItem.IsDominant);
-
-        inventorySlotOfNewItem.SetRigidBody(pickableParent.GetComponent<Rigidbody>());
-        inventorySlotOfNewItem.ItemTransform = pickableParent;
-
-        pickableParent.transform.SetParent(isLeftHandAction ? _leftHandSocket : _rightHandSocket);
-        //pickableParent.transform.localPosition = Vector3.zero;
-        //pickableParent.transform.localEulerAngles = new Vector3(0f, -270f, 0f);
-
-        pickableItem.OrientItemInHand(isLeftHandAction);
+        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        if (isServer) _interactableComponent?.Interact(_playerID);
+        else CmdOnInteract(_interactableComponent?.GetNetworkID(), _playerID);
+        _interactableComponent = null;
     }
 
-
-    private void DropItem(float throwForce = 0)
+    private void PolyInteractableSync()
     {
-        bool isThrow = _arms.IsDomOutStretched();
+        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        if (isServer) _interactableComponent?.Interact(_playerID);
+        else CmdOnPolyInteract(_interactableComponent?.GetNetworkID(), _playerID, 
+            (_interactableComponent as PolyInteractable).Order);
+        _interactableComponent = null;
+    }
 
-        InventorySlot dominantSlot = _inventorySlots.GetDominantHand();
-        if (dominantSlot.Item == null) return;
+    [ClientRpc]
+    private void RpcOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order)
+    {
+        Debugger($"RPC OnInteract being called");
+        Debugger($"Interactable is: {interactableID.name}");
+        if (playerID != _playerID) return;
 
-        PickableItem itemToDrop = dominantSlot.Item;
-        Rigidbody itemRigidBodyToDrop = dominantSlot.ItemRigidBody;
-
-        _inventorySlots.RemoveItem();
-
-        if(isThrow)
+        PolyInteractable[] interactables = interactableID.GetComponentsInChildren<PolyInteractable>();
+        foreach(PolyInteractable interactable in interactables)
         {
-            itemRigidBodyToDrop.AddForce(transform.forward * throwForce, ForceMode.Impulse);
-            _arms.ToggleHandMoveOutOrIn(_inventorySlots.IsLHandDom);
+            if (interactable.Order == order)
+            {
+                interactable.Interact(_playerID);
+                return;
+            }
         }
-        else
-        {
-            itemRigidBodyToDrop.AddForce(transform.forward, ForceMode.Impulse);
-            _arms.HandMoveOutAndIn(_inventorySlots.IsLHandDom);
-        }
-
-        itemToDrop.UnPossessItem();
     }
 
-
-    public Arms GetArms() { return _arms; }
-
-
-    #region graveyard
-    private void MoveItemsPositionsToHands()
+    [Command]
+    private void CmdOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order)
     {
-        //MoveItemPositionToHand(_inventorySlots[_LEFT_HAND_ID]);
-        //MoveItemPositionToHand(_inventorySlots[_RIGHT_HAND_ID]);
-        return;
+        Debugger($"Interacting with object {interactableID.ToString()}");
+        RpcOnPolyInteract(interactableID, playerID, order);
     }
 
-    private void MoveItemPositionToHand(InventorySlot inventorySlot)
+    [ClientRpc]
+    private void RpcOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        if (inventorySlot.Item == null) return;
-
-        Vector3 direction = inventorySlot.ItemRigidBody.transform.parent.position - inventorySlot.ItemRigidBody.position;
-        if (Vector3.Magnitude(direction) <= .1f) return;
-
-        inventorySlot.ItemRigidBody.AddForce(direction * _pickUpForce);
+        Debugger($"RPC OnInteract being called");
+        Debugger($"Interactable is: {interactableID.name}");
+        if (playerID != _playerID) return;
+        interactableID.GetComponentInChildren<IInteractable>()?.Interact(playerID);
     }
 
-    private IEnumerator AnimateRotationTowards(Transform target, Quaternion rotation, float duration = 1f)
+    [Command]
+    private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        float timer = 0f;
-        Quaternion start = target.rotation;
-        while (timer < duration)
-        {
-            target.rotation = Quaternion.Slerp(start, rotation, timer / duration);
-            yield return null;
-            timer += Time.deltaTime;
-        }
-        target.rotation = rotation;
+        Debugger($"Interacting with object {interactableID.ToString()}");
+        RpcOnInteract(interactableID, playerID);
     }
 
-    #endregion graveyard
+    [ClientRpc]
+    private void RpcDropItem(float throwForce)
+    {
+        Debugger($"RPC drop item being Called with Force: {throwForce}");
+        NetworkPickableItem temp = this._inventorySlots.RemoveItem(transform.forward * throwForce, _playerID);
+    }
+
+    [Command]
+    private void CmdDropItem(float throwForce)
+    {
+        Debugger($"CMD Drop item being called with Force: {throwForce}");
+        RpcDropItem(throwForce);
+    }
+
+    private static void Debugger(object log)
+    {
+        if (_staticDebugging) Debug.Log(log);
+    }
+
+    // This is to get references to the players through the network but player manager does this already.
+    private NetworkIdentity GetPlayerIdentity()
+    {
+        return GetComponent<NetworkIdentity>();
+    }
 }

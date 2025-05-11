@@ -8,7 +8,7 @@ namespace Interactions
     {
         [SerializeField] private TextMeshProUGUI _distanceDisplay;
         [SerializeField] private List<GameObject> _dots;
-
+     
         private List<Vector2> _objectLocations;
         private float _closestLocation;
 
@@ -27,7 +27,7 @@ namespace Interactions
         public void UpdateUI()
         {
             DisplayDots(_objectLocations);
-            _distanceDisplay.text = _closestLocation.ToString();
+            _distanceDisplay.text = $"{_closestLocation} m";
         }
 
         private void DisplayDots(List<Vector2> objectsLocation)

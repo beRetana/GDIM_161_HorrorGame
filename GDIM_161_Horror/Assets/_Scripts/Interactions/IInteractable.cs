@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 public interface IInteractable
@@ -7,4 +8,6 @@ public interface IInteractable
     public void Detected(int playerID);
 
     public void StoppedDetecting(int playerID);
+
+    public NetworkIdentity GetNetworkID();
 }

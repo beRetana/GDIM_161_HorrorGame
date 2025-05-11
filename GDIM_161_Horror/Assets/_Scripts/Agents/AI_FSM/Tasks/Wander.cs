@@ -12,10 +12,9 @@ namespace AI_FSM{
 
         public Action OnReachedLocation;
 
-        private bool _reachedLocation;
-
         //WANDERING BEHAVIOR
-        public override void Enable(){
+        public override void Enable()
+        {
             _aiController.MoveToRandomLocation(_wanderRadius);
             _aiController.onTaskCompleted += UpdateReachedLocation;
         }
@@ -33,14 +32,8 @@ namespace AI_FSM{
 
         IEnumerator MoveRandomly()
         {
-            while (true)
-            {
-                _aiController.MoveToRandomLocation(_wanderRadius);
-                yield return new WaitUntil(() => _reachedLocation);
-                OnReachedLocation.Invoke();
-                yield return new WaitForSeconds(_wanderTime);
-                Debug.Log($"Reached Random Location");
-            }
+            yield return new WaitForSecondsRealtime(_wanderTime);
+            _aiController.MoveToRandomLocation(_wanderRadius);
         }
     }
 }

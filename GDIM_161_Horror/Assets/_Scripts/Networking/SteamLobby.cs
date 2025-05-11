@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
-using UnityEngine.UI;
-using TMPro;
 
 // DO NOT FUCKING TOUCH THIS SCRIPT UNLESS YOU KNOW WHAT YOU'RE DOING
 public class SteamLobby : MonoBehaviour

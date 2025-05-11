@@ -85,7 +85,7 @@ public class LobbyController : MonoBehaviour
 
         if(AllReady)
         {
-            if(LocalplayerController.PlayerIdNumber == 1)
+            if(LocalplayerController.PlayerIdNumber == 0)
             {
                 StartGameButton.interactable = true;
             }
@@ -203,7 +203,9 @@ public class LobbyController : MonoBehaviour
         {
             foreach(PlayerListItem playerlistItemToRemove in playerListItemToRemove)
             {
-                GameObject ObjectToRemove = playerlistItemToRemove.gameObject;
+                if (playerlistItemToRemove == null) continue;
+
+                GameObject ObjectToRemove = playerlistItemToRemove?.gameObject;
                 PlayerListItems.Remove(playerlistItemToRemove);
                 Destroy(ObjectToRemove);
                 ObjectToRemove = null;

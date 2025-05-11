@@ -32,7 +32,7 @@ namespace AI_FSM{
 
         public Action onTaskCompleted;
 
-        private void Start()
+        private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
             _agentDefaultSpeed = _agent.speed;
@@ -45,14 +45,14 @@ namespace AI_FSM{
                 case State.Idle:
                     if (!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                     }
                     break;
                 case State.Started:
                     if (!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                         _state = State.Processing;
                     }
@@ -61,7 +61,7 @@ namespace AI_FSM{
 
                     if(!_stateTriggered)
                     {
-                        Debug.Log($"State of task is {_state}");
+                        //Debug.Log($"State of task is {_state}");
                         _stateTriggered = true;
                     }
 
@@ -77,10 +77,9 @@ namespace AI_FSM{
                             Debug.LogError("Task type not recognized");
                             break;
                     }
-                    
                     break;
                 case State.Done:
-                    Debug.Log($"State of task is {_state}");
+                    //Debug.Log($"State of task is {_state}");
                     _state = State.Idle;
                     onTaskCompleted?.Invoke();
                     break;

@@ -4,10 +4,14 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 using Steamworks;
+
 public class NewNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController _playerController;
     [SerializeField] private string _lobby_scene_name = "Lobby_Brandon";
+    [SerializeField] private Transform[] _spawnPoints;
+
+    private int _spawnCount = 0;
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
@@ -15,10 +19,12 @@ public class NewNetworkManager : NetworkManager
     {
         if (SceneManager.GetActiveScene().name == _lobby_scene_name)
         {
-            PlayerObjectController GamePlayerInstance = Instantiate(_playerController);
+            PlayerObjectController GamePlayerInstance = Instantiate(_playerController, 
+                                    _spawnPoints[_spawnCount].position, _spawnPoints[_spawnCount].rotation);
+            _spawnCount++;
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
-            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count + 1;
+            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count;
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
@@ -26,7 +32,6 @@ public class NewNetworkManager : NetworkManager
             LobbyController.Instance.UpdatePlayerList();
         }
     }
-    
 
     public void StartGame(string SceneName)
     {

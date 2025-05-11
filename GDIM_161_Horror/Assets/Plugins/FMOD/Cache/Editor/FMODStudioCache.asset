@@ -1,0 +1,743 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8753088625097109596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/deerFootsteps/WalkRun
+  m_EditorClassIdentifier: 
+  Name: WalkRun
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2528840115
+    data2: 97273575
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &-5788099683331802207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/ItemsSFX.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
+  Name: ItemsSFX
+  StudioPath: bank:/ItemsSFX
+  lastModified: 638816535101752633
+  FileSizes:
+  - Name: Desktop
+    Value: 687264
+  Exists: 1
+--- !u!114 &-5667404381922474094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/Water Footstep Demo
+  m_EditorClassIdentifier: 
+  Path: event:/Character/Water Footstep Demo
+  Guid:
+    Data1: 720630940
+    Data2: 1167561220
+    Data3: -393589594
+    Data4: -1033260837
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-5160533320845746620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/footsteps/Terrain
+  m_EditorClassIdentifier: 
+  Name: Terrain
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 2183370811
+    data2: 770289844
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &-5032667799072162787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/torchGrab
+  m_EditorClassIdentifier: 
+  Path: event:/Character/torchGrab
+  Guid:
+    Data1: -1611269432
+    Data2: 1273089934
+    Data3: -333983856
+    Data4: -383996526
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-5013093178361491513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/forestFootstep/Terrain
+  m_EditorClassIdentifier: 
+  Name: Terrain
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 2183370811
+    data2: 770289844
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &-4871003578909601523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/lobbyMusic
+  m_EditorClassIdentifier: 
+  Path: event:/lobbyMusic
+  Guid:
+    Data1: 2067585400
+    Data2: 1170434954
+    Data3: 922727347
+    Data4: 1908210686
+  Banks:
+  - {fileID: 9085424581204162882}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 341186
+--- !u!114 &-4259175121292947500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/hearthBurning
+  m_EditorClassIdentifier: 
+  Path: event:/hearthBurning
+  Guid:
+    Data1: 2112172446
+    Data2: 1098031187
+    Data3: -312272477
+    Data4: 1472534078
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 9
+  Length: 38842
+--- !u!114 &-3454834273344955169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/AnimalSFX.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
+  Name: AnimalSFX
+  StudioPath: bank:/AnimalSFX
+  lastModified: 638816535094128578
+  FileSizes:
+  - Name: Desktop
+    Value: 43840
+  Exists: 1
+--- !u!114 &-3415173919948483853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Forest Reverb
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Forest Reverb
+  Guid:
+    Data1: -395929507
+    Data2: 1093009968
+    Data3: 665755530
+    Data4: -477115960
+  Banks:
+  - {fileID: -238223770636140962}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
+--- !u!114 &-2660480752692111302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Maze lvl 1 Reverb
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Maze lvl 1 Reverb
+  Guid:
+    Data1: -589438850
+    Data2: 1177473620
+    Data3: -901808193
+    Data4: 40107644
+  Banks:
+  - {fileID: -238223770636140962}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
+--- !u!114 &-1981044346059462879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/forestFootstep
+  m_EditorClassIdentifier: 
+  Path: event:/Character/forestFootstep
+  Guid:
+    Data1: 246199476
+    Data2: 1167086037
+    Data3: -580442201
+    Data4: -1092758943
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -5013093178361491513}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-1299140445480587344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/WorldSpace.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
+  Name: WorldSpace
+  StudioPath: bank:/WorldSpace
+  lastModified: 638816535156557594
+  FileSizes:
+  - Name: Desktop
+    Value: 1127712
+  Exists: 1
+--- !u!114 &-238223770636140962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638816535101904883
+  FileSizes:
+  - Name: Desktop
+    Value: 5026
+  Exists: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: 
+  EditorBanks:
+  - {fileID: 1599044835148366132}
+  - {fileID: -238223770636140962}
+  - {fileID: 32562135611507061}
+  - {fileID: -1299140445480587344}
+  - {fileID: -3454834273344955169}
+  - {fileID: -5788099683331802207}
+  - {fileID: 9085424581204162882}
+  EditorEvents:
+  - {fileID: 6854522976295634600}
+  - {fileID: 7531683133953282101}
+  - {fileID: 4701926797804929306}
+  - {fileID: 5939572221690513463}
+  - {fileID: 656147043767145509}
+  - {fileID: 7892484839743825347}
+  - {fileID: -3415173919948483853}
+  - {fileID: -2660480752692111302}
+  - {fileID: -4871003578909601523}
+  - {fileID: 2842449838900246796}
+  - {fileID: -5667404381922474094}
+  - {fileID: -1981044346059462879}
+  - {fileID: -5032667799072162787}
+  - {fileID: 5106331636027809222}
+  - {fileID: 8400410590536064447}
+  - {fileID: -4259175121292947500}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: -238223770636140962}
+  StringsBanks:
+  - {fileID: 1599044835148366132}
+  cacheTime: 638816535156557594
+  cacheVersion: 131623
+--- !u!114 &32562135611507061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/PlayerSFX.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
+  Name: PlayerSFX
+  StudioPath: bank:/PlayerSFX
+  lastModified: 638816535149156709
+  FileSizes:
+  - Name: Desktop
+    Value: 91136
+  Exists: 1
+--- !u!114 &243448042434621514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/footsteps/WalkRun
+  m_EditorClassIdentifier: 
+  Name: WalkRun
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2528840115
+    data2: 97273575
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &656147043767145509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/torchBurning
+  m_EditorClassIdentifier: 
+  Path: event:/Character/torchBurning
+  Guid:
+    Data1: -1591416209
+    Data2: 1226933995
+    Data3: -1948009067
+    Data4: 2094848060
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 46655
+--- !u!114 &1599044835148366132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638816535101929922
+  FileSizes:
+  - Name: Desktop
+    Value: 1918
+  Exists: 1
+--- !u!114 &2823883132745449994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/deerFootsteps/Terrain
+  m_EditorClassIdentifier: 
+  Name: Terrain
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 2183370811
+    data2: 770289844
+  Type: 1
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &2842449838900246796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/Heartbeat
+  m_EditorClassIdentifier: 
+  Path: event:/Character/Heartbeat
+  Guid:
+    Data1: -2145065089
+    Data2: 1197376553
+    Data3: -1481632623
+    Data4: 1685658807
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 382
+--- !u!114 &4701926797804929306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/deerFootsteps
+  m_EditorClassIdentifier: 
+  Path: event:/deerFootsteps
+  Guid:
+    Data1: -1106729930
+    Data2: 1194258579
+    Data3: -1173612897
+    Data4: 823356742
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 2823883132745449994}
+  - {fileID: -8753088625097109596}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5106331636027809222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/footsteps
+  m_EditorClassIdentifier: 
+  Path: event:/Character/footsteps
+  Guid:
+    Data1: -1049862926
+    Data2: 1101674637
+    Data3: -1678294368
+    Data4: -571745018
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -5160533320845746620}
+  - {fileID: 243448042434621514}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5939572221690513463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/deerRun
+  m_EditorClassIdentifier: 
+  Path: event:/deerRun
+  Guid:
+    Data1: -1146244257
+    Data2: 1251743540
+    Data3: -588042364
+    Data4: 1346346020
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 100
+  Length: 680
+--- !u!114 &6854522976295634600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/backgroundAmbiance
+  m_EditorClassIdentifier: 
+  Path: event:/backgroundAmbiance
+  Guid:
+    Data1: -1551080663
+    Data2: 1154017101
+    Data3: -522812263
+    Data4: -329901556
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 42500
+--- !u!114 &7531683133953282101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/deerWalk
+  m_EditorClassIdentifier: 
+  Path: event:/deerWalk
+  Guid:
+    Data1: 2001809690
+    Data2: 1303923397
+    Data3: 851080102
+    Data4: 266263900
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 85
+  Length: 420
+--- !u!114 &7892484839743825347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/sonarPing
+  m_EditorClassIdentifier: 
+  Path: event:/Character/sonarPing
+  Guid:
+    Data1: 1595208341
+    Data2: 1087017112
+    Data3: -102317894
+    Data4: 710373934
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8400410590536064447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/2DhearthMenuBurning
+  m_EditorClassIdentifier: 
+  Path: event:/2DhearthMenuBurning
+  Guid:
+    Data1: 1993669417
+    Data2: 1259772638
+    Data3: 906622357
+    Data4: 1152155210
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 38842
+--- !u!114 &9085424581204162882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 638816535148316007
+  FileSizes:
+  - Name: Desktop
+    Value: 4003872
+  Exists: 1
