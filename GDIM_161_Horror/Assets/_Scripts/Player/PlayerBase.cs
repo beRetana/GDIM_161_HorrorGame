@@ -5,6 +5,7 @@ using Player;
 public class PlayerBase : NetworkBehaviour
 {
     static private int _myID = 0; // 0, 1, 2, 3
+    [SerializeField] protected bool _debugger;
 
     private NewNetworkManager _networkmanager;
 
@@ -110,27 +111,27 @@ public class PlayerBase : NetworkBehaviour
     #region PlayerStateMachine
     public void LockPlayer()
     {
-        Debug.Log($"Unlocking Player{_myID}");
+        Debugger($"Unlocking Player{_myID}");
         EnterState(PlayerStateEnum.Locked);
     }
     public void UnlockPlayer()
     {
-        Debug.Log($"Locking Player{_myID}");
+        Debugger($"Locking Player{_myID}");
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
     {
-        Debug.Log($"Limping Player{_myID}");
+        Debugger($"Limping Player{_myID}");
         EnterState(PlayerStateEnum.Limp);
     }
     public void DownPlayer()
     {
-        Debug.Log($"Locking Player{_myID}");
+        Debugger($"Locking Player{_myID}");
         EnterState(PlayerStateEnum.Downed);
     }
     private void EnterState(PlayerStateEnum enterState)
     {
-        Debug.Log($"{name} entering {enterState}");
+        Debugger($"{name} entering {enterState}");
         playerStateEnum = enterState;
         
         switch (enterState)
@@ -193,14 +194,19 @@ public class PlayerBase : NetworkBehaviour
         if (newID != -1)
         {
             _myID = newID;
-            Debug.Log($"Player {_myID} spawned");
+            Debugger($"Player {_myID} spawned");
             return true;
         }
         else
         {
-            Debug.Log($"ERROR: Could not add self {this} to PlayerList. Destoring self.");
+            Debugger($"ERROR: Could not add self {this} to PlayerList. Destoring self.");
             Destroy(this);
             return false;
         }
+    }
+
+    protected void Debugger(object log)
+    {
+        if (_debugger) Debug.Log(log);
     }
 }
