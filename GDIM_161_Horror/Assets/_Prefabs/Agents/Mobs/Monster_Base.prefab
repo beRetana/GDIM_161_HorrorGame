@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 8101340911783084350}
   - component: {fileID: 7151339707029349449}
   - component: {fileID: 1369710893841643461}
+  - component: {fileID: 711085083035516619}
   m_Layer: 6
   m_Name: Monster_Base
   m_TagString: Untagged
@@ -243,6 +244,7 @@ MonoBehaviour:
   m_Graph: {fileID: 3800988148416640209, guid: 8a67d8a61f88b3b40b7f9d472152ecc6, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 6831410033082499180
+  - rid: 6831410052563993435
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -256,6 +258,14 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 6314777827733659042}
+    - rid: 6831410052563993435
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18209231014682904225
+          m_Value1: 18034246974287321051
+        Name: SearchRange
+        m_Value: 10
 --- !u!114 &1369710893841643461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,23 +278,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118597f33da6397489fb6cea41b9a0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _range: 10
-  _angle: 30
-  height: 2
   _initialPosition: {x: 0, y: 0, z: 0}
-  _scanFrequency: 30
-  _maxDetectables: 50
   _detectableLayers:
     serializedVersion: 2
     m_Bits: 1024
   _obstructableLayers:
     serializedVersion: 2
     m_Bits: 264
-  _enableDebugVisuals: 1
+  _range: 10
+  _angle: 45
+  _height: 2
+  _scanFrequency: 30
+  _maxDetectables: 50
+  _enableDebugger: 0
   _debugMeshColor: {r: 0, g: 1, b: 0, a: 1}
   _debugColorObjectDectected: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
-  _debugSphereSizeDetectedObjects: 0.2
+  _debugSphereSizeDetectedObjects: 1
   _debugSegments: 10
+  _enableDebugVisuals: 0
+--- !u!114 &711085083035516619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314777827733659042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bced0f9349ae2574fa1ffe5cde9079e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_debugger: 1
 --- !u!1 &9162086175069888368
 GameObject:
   m_ObjectHideFlags: 0

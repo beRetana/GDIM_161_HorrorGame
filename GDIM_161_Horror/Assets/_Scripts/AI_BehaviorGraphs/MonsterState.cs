@@ -7,5 +7,6 @@ public enum MonsterState
     Wander,
 	Chase,
 	Attack,
-	Eat
+	Eat,
+	Search
 }

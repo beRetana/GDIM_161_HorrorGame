@@ -119,7 +119,8 @@ public partial class RandomLocationAction : Action
     {
         for (int tries = 0; tries < 10; ++tries)
         {
-            Vector3 randomLocation = Agent.Value.transform.position + UnityEngine.Random.insideUnitSphere * Range;
+            Vector3 randomLocation = UnityEngine.Random.insideUnitSphere * Range;
+            randomLocation = Agent.Value.transform.position + new Vector3(randomLocation.x, 0, randomLocation.y);
             if (NavMesh.SamplePosition(randomLocation, out NavMeshHit hit, Range, NavMesh.AllAreas))
             {
                 m_NavMeshAgent.SetDestination(randomLocation);
