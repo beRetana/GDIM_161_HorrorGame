@@ -34,6 +34,7 @@ namespace Interactions
         private void RpcLightingObject()
         {
             this.fireableObject.LightFlame();
+            
         }
 
         [Command]
@@ -45,6 +46,7 @@ namespace Interactions
         private bool IsLit()
         {
             return fireableObject.IsLit();
+            
         }
 
         private void Debugger(string log)
