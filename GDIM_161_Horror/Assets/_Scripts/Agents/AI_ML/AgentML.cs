@@ -11,7 +11,7 @@ public class AgentML : Agent
     [SerializeField] private TrainningVisuals _trainingVisuals;
 
     private float _maxSteps;
-    private float _commulativeReward;
+    //private float _commulativeReward;
     private float _reward;
     private float _episodeCount;
 
@@ -37,7 +37,7 @@ public class AgentML : Agent
     {
         _agentController.ResetAgentToOriginalPosition();
         //ResetPlayerDummy();
-        _commulativeReward = 0;
+        //_commulativeReward = 0;
         _episodeCount += 1;
     }
 

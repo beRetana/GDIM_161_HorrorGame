@@ -10,13 +10,10 @@ namespace Interactions
     public class PickableItem : MonoBehaviour
     {
         [SerializeField] private PickableItemSO _pickableItemSO;
-        [SerializeField] private ItemType _itemType;
         
         protected InteractableItem _interactableItem;
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
-
-        public ItemType ItemType { get { return _itemType; } }
         public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
         public int OwnerPlayerID { get; private set; }
 
@@ -28,79 +25,20 @@ namespace Interactions
         protected virtual void Start()
         {
             _interactableItem = GetComponent<InteractableItem>();
-            //_interactableItem.SetInteractAction(PickItem);
         }
-
-        /*protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
-        {
-            if (IsPossessed)
-            {
-                Debug.Log($"tried PICK UP on {this}, but is already possessed");
-                return;
-            }
-
-            bool success = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().PickUpItem(this);
-            if (!success) return;
-
-            SetPossessed(true, playerID);
-        }
-
-        public virtual void UnPossessItem()
-        {
-            SetPossessed(false);
-        }
-
-        public virtual void SetPossessed(bool toPossess, int playerID = 0)
-        {
-            Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
-            IsPossessed = toPossess;
-            OwnerPlayerID = playerID;
-            _interactableItem.SetInteractive(!toPossess);
-        }*/
 
         public virtual void UseItem(int playerID) { }
 
-
         public virtual void OrientItemInHand(bool isLeftHand) 
         {
-            Transform parentTransform = transform.parent.transform;
-            parentTransform.localPosition = _pickableItemSO.PickedPosition;
-            parentTransform.localEulerAngles = _pickableItemSO.PickedAngle;
+            if (isLeftHand) SetRotationLocation(_pickableItemSO.LeftHandPosition, _pickableItemSO.LeftHandRotation);
+            else SetRotationLocation(_pickableItemSO.RightHandPosition, _pickableItemSO.RightHandRotation);
+        }
+
+        protected virtual void SetRotationLocation(Vector3 location, Vector3 rotation)
+        {
+            transform.parent.transform.localPosition = location;
+            transform.parent.transform.localEulerAngles = rotation;
         }
     }
 }
-
-// enum with flags if u want it
-/*[Flags]
-public enum PickableItemStateEnum
-{
-    None = 0,               //000
-    IsPossessed = 1 << 0,   //001
-    IsInHand = 1 << 1       //010
-}
-public PickableItemStateEnum itemStateEnum = PickableItemStateEnum.None;
-
-private void SetPossessed(bool isPossessed)
-{
-    if (isPossessed)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}
-private void SetInHand(bool isInHand)
-{
-    if (isInHand)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsInHand;
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}*/

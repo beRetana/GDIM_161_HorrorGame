@@ -81,9 +81,8 @@ namespace Interactions
             //LightFlame();
         }
 
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
             if (!Lit) return;
             UpdateFlameOrientation();
             SmotherCheck();

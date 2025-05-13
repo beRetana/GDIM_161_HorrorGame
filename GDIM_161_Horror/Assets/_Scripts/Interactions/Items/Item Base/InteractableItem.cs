@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using TMPro;
+using Mirror;
 
 /// <summary>
 /// This class allows items to be interacted with a player.
@@ -9,6 +10,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 {
     [SerializeField] protected Animator _textAnimation;
     [SerializeField] protected LookAtCamera _lookAtCamera;
+    [SerializeField] protected NetworkIdentity _networkIdentity;
     [SerializeField] protected string _textName;
     [SerializeField] protected string _fadeIn;
 
@@ -18,15 +20,16 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     protected bool _isInteractable;
 
-    void Awake()
+    protected virtual void Awake()
     {
         OnInteractAction = (int playerId) => Debug.Log($"Player: {playerId} Interacted");
         _isInteractable = true;
     }
 
-    public void Start()
+    protected virtual void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
+        if (_networkIdentity == null) _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
         SetDisplayMessage(_textName);
     }
 
@@ -62,5 +65,10 @@ public class InteractableItem : MonoBehaviour, IInteractable
     {
         try { _textAnimation?.SetBool(_fadeIn, false); }
         finally{}
+    }
+
+    public NetworkIdentity GetNetworkID()
+    {
+        return _networkIdentity;
     }
 }

@@ -1546,6 +1546,20 @@ MonoBehaviour:
     Path: event:/deerRun
   <sonarPing>k__BackingField:
     Guid:
+      Data1: 1595208341
+      Data2: 1087017112
+      Data3: -102317894
+      Data4: 710373934
+    Path: event:/Character/sonarPing
+  <walkieStart>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <walkieEnd>k__BackingField:
+    Guid:
       Data1: 0
       Data2: 0
       Data3: 0
@@ -2346,8 +2360,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1361974751}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: 0.022482153, y: -0.037481602, z: 0.00084351515, w: 0.99904406}
+  m_LocalPosition: {x: 0.06696999, y: -0.41179264, z: -9.342414}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3356,18 +3370,19 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4030339971140852442, guid: c3ae504975462784589a4ee8c41c6047, type: 3}
+  playerPrefab: {fileID: 3373982209266735019, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 3373982209266735019, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
-  - {fileID: 3373982209266735019, guid: ee3f13f0cb4190c4b844f9ed05bd0cc6, type: 3}
   - {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+  - {fileID: 1761584724700036159, guid: d2d0daee74598004cbb98744c57a1eda, type: 3}
+  - {fileID: 1761584724700036159, guid: d2d0daee74598004cbb98744c57a1eda, type: 3}
   - {fileID: 831233360205059484, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
+  - {fileID: 4739839219727970882, guid: be112bb20134ece429e27afac5e52c2c, type: 3}
+  - {fileID: 4739839219727970882, guid: be112bb20134ece429e27afac5e52c2c, type: 3}
+  - {fileID: 2523596723460159556, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
   - {fileID: 6501694531602772746, guid: 71a36fde0c6979945a9014e5a2b60625, type: 3}
   - {fileID: 1528011063499508, guid: 33b43533fb4799c4796560f465e0eb26, type: 3}
-  - {fileID: 5490541645237124335, guid: 8bc73719eddaa7c439146d63264f1f5c, type: 3}
-  - {fileID: 831233360205059484, guid: cfd31e61983bced47b8ee39217a92935, type: 3}
   - {fileID: 3359743052295645163, guid: 7feb2d295cadf8e4c876c8160e715bf4, type: 3}
   - {fileID: 5300555771477976309, guid: c067bdf432ea02c48a085ca2382a7372, type: 3}
   - {fileID: 41419630895823404, guid: 386f18b99925da74aacecfe9bae5464b, type: 3}
@@ -3375,9 +3390,12 @@ MonoBehaviour:
   - {fileID: 4688359221116879167, guid: 5551d990d1e762748ba3b556124df550, type: 3}
   - {fileID: 913346080594634945, guid: 4c101f868015d1d488632bc091c584f4, type: 3}
   - {fileID: 2187478208706028096, guid: 5485a45c48d9f2c4895570068d845d93, type: 3}
+  - {fileID: 5490541645237124335, guid: 8bc73719eddaa7c439146d63264f1f5c, type: 3}
   - {fileID: 3597920850473753931, guid: 55f90a704a8d08b4b877ad640c32f2aa, type: 3}
-  - {fileID: 831233360205059484, guid: 3731351be46e63a499f30f31358d8fb6, type: 3}
+  - {fileID: 8149292924023825433, guid: e4604289512799247936e8a5f9032cf7, type: 3}
+  - {fileID: 831233360205059484, guid: cfd31e61983bced47b8ee39217a92935, type: 3}
   - {fileID: 6990750008966049524, guid: f524728a837f86645bbe61cc06f88603, type: 3}
+  - {fileID: 975445287397488079, guid: 7f271affa8abe934d9a574e6ffa54a4a, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -3393,7 +3411,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  _playerController: {fileID: 6141512509936404535, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
+  _playerController: {fileID: 4637961047269564748, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
   _lobby_scene_name: Lobby_Brandon
   _spawnPoints:
   - {fileID: 1223511532}
@@ -3605,6 +3623,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hearth
       objectReference: {fileID: 0}
+    - target: {fileID: 4314775591687182890, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4390704284720005526, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.17
@@ -3645,13 +3667,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5186526545428707875, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.129
+      objectReference: {fileID: 0}
+    - target: {fileID: 6060330800227028525, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6738802945491703440, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
       propertyPath: OverrideMaxDistance
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 7340025323550406647, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+      propertyPath: sceneId
+      value: 1639796138
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367086907141242481, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6738802945491703440, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
-    m_RemovedGameObjects: []
+    - {fileID: 4314775591687182890, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+    - {fileID: 7340025323550406647, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+    - {fileID: 6060330800227028525, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+    - {fileID: 6054963845885053786, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 542340871483494283, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2523596723460159556, guid: 1ae8253a4801d4848a62fa23f82d9f5d, type: 3}

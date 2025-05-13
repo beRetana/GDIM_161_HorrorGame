@@ -6,8 +6,7 @@ public class MouseUI : MonoBehaviour
 {
     [SerializeField] private Color defaultColor;
     [SerializeField] private Color interactedColor;
-
-    private Image mouseImage;
+    [SerializeField] private Image mouseImage;
 
     void Awake()
     {

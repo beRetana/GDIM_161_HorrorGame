@@ -4,11 +4,11 @@ namespace AI
 {
     public class DeerAnimator : MonoBehaviour
     {
-        private Animator _animator;
+        [SerializeField] private Animator _animator;
 
-        private const string JUMP = "Jump", SPEED = "Speed";
+        private const string JUMP = "JUMP", SPEED = "SPEED";
 
-        private void Start() { _animator = GetComponent<Animator>(); }
+        private void Start() {if (_animator == null) TryGetComponent<Animator>(out _animator); }
 
         public void OnJump() { _animator.SetTrigger(JUMP); }
 

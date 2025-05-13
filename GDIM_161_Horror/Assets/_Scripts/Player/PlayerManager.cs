@@ -1,14 +1,11 @@
-using MessengerSystem;
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Mirror;
-using Steamworks;
 
 public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
+    protected static bool _debug;
 
     private NewNetworkManager _networkmanager;
 
@@ -26,11 +23,11 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
-        DeclareSingletonInsatnce();
+        DeclareSingletonInstance();
         _playerHolder = new();
     }
 
-    private void DeclareSingletonInsatnce()
+    private void DeclareSingletonInstance()
     {
         if (Instance == null)
         {
@@ -46,10 +43,10 @@ public class PlayerManager : NetworkBehaviour
     public int AttemptAddPlayer(PlayerBase player) // returns -1 if error
     {
         int newID = _playerHolder.AddPlayer(player);
-        Debug.Log($"Player {player.name} added to {_playerHolder}");
+        Debugger($"Player {player.name} added to {_playerHolder}");
 
-        if (newID != -1)    Debug.Log($"Player {newID} added to {_playerHolder}. Finishing PlayerBase set up.");
-        else                Debug.Log($"ERROR: Player not added to {_playerHolder}");
+        if (newID != -1)    Debugger($"Player {newID} added to {_playerHolder}. Finishing PlayerBase set up.");
+        else                Debugger($"ERROR: Player not added to {_playerHolder}");
 
         return newID; // returns -1 if error
     }
@@ -78,6 +75,11 @@ public class PlayerManager : NetworkBehaviour
         }
         throw new System.Exception($"NETWORK ERROR: Player {playerID} does not exist");
     }
+
+    private static void Debugger(object log)
+    {
+        if (_debug) Debug.Log(log);
+    }
 }
 
 public class PlayerHolder
@@ -100,7 +102,7 @@ public class PlayerHolder
         }
 
         playerList[totalPlayers] = player;
-        Debug.Log($"List size: {totalPlayers}");
+        //Debug.Log($"List size: {totalPlayers}");
         return totalPlayers++;
     }
 
@@ -119,7 +121,7 @@ public class PlayerHolder
     private bool IndexInRange(int index) { return (index >= 0 && index < _MAX_PLAYER_COUNT); }
     private bool IndexPlayerExists(int index) 
     { 
-        Debug.Log($"Checking if player {index} exists in {playerList} total players of {totalPlayers}");
+        //Debug.Log($"Checking if player {index} exists in {playerList} total players of {totalPlayers}");
         return (index >= 0 && index < totalPlayers); 
     }
 

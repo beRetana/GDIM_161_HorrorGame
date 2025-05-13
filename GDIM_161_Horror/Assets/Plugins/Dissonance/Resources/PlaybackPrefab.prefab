@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 82279272996311362}
   - component: {fileID: 114316682808651866}
   - component: {fileID: 6362357847714811055}
+  - component: {fileID: 3503375920143233313}
   m_Layer: 0
   m_Name: PlaybackPrefab
   m_TagString: Untagged
@@ -181,3 +182,18 @@ AudioLowPassFilter:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3503375920143233313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010352696724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf68365af529be49b33e17aa4ca09d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalMixerGroup: {fileID: -5758529469254421073, guid: c99c8ba0be23e4b49961100db0617f18, type: 2}
+  talkieMixerGroup: {fileID: 4277382152329951435, guid: c99c8ba0be23e4b49961100db0617f18, type: 2}
+  talkieRoomName: Walkie

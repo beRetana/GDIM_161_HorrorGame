@@ -10,15 +10,18 @@ namespace Interactions
     public class NetworkPickableItem : NetworkBehaviour
     {
         [SerializeField] private PickableItemSO _pickableItemSO; // Contains information for soft parenting
-        [SerializeField] private bool _debugger = true;
+        [SerializeField] protected bool _debugger;
+        protected bool _isLeftHand;
 
         protected InteractableItem _interactableItem;
+        protected Transform _targetHand;
+        protected Collider _itemCollider;
+        [SyncVar] protected bool _isPossessed;
+        [SyncVar] protected int _ownerPlayerID;
 
         public PickableItemSO PickableItemSO { get { return _pickableItemSO; } }
-        public bool IsPossessed {  get; private set; } // Held in Hand || Moving to Hand
-        public int OwnerPlayerID { get; private set; }
-        protected Transform locationTarget;
-        protected Collider _itemCollider;
+        public bool IsPossessed { get { return _isPossessed; }} // Held in Hand || Moving to Hand
+        public int OwnerPlayerID { get { return _ownerPlayerID; }}
 
         protected virtual void Start()
         {
@@ -34,9 +37,9 @@ namespace Interactions
 
         protected virtual void PickItem(int playerID) // <= (InteractableItem)this.Interact()
         {
-            if (IsPossessed)
+            if (_isPossessed)
             {
-                Debug.Log($"tried PICK UP on {this}, but is already possessed");
+                Debugger($"tried PICK UP on {this}, but is already possessed");
                 return;
             }
 
@@ -49,38 +52,44 @@ namespace Interactions
 
         public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
-            Debug.Log($"THROWWWW: " + throwDir);
+            Debugger($"THROWWWW: " + throwDir);
             this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
-            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
+            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), false);
             this.SetPossessed(false, playerID);
-            this.locationTarget = null;
+            this._targetHand = null;
         }
 
         public virtual void SetPossessed(bool toPossess, int playerID = 0)
         {
-            Debug.Log($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
-            IsPossessed = toPossess;
-            OwnerPlayerID = toPossess ? playerID : -1;
+            Debugger($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
+            _isPossessed = toPossess;
+            _ownerPlayerID = toPossess ? playerID : -1;
             _interactableItem.SetInteractive(!toPossess);
         }
 
         public virtual void UseItem(int playerID) { }
 
-        protected virtual void Update()
+        protected virtual void LateUpdate()
         {
-            if (IsPossessed) SoftParenting();
+            if (_targetHand != null && IsPossessed) SoftParenting();
         }
 
         protected virtual void SoftParenting()
         {
-
-            transform.parent.transform.position = locationTarget.position + _pickableItemSO.PickedPosition;
-            transform.parent.transform.rotation = locationTarget.rotation * Quaternion.Euler(_pickableItemSO.PickedAngle);
+            if (_isLeftHand) SetRotationLocation(_pickableItemSO.LeftHandPosition, _pickableItemSO.LeftHandRotation);
+            else SetRotationLocation(_pickableItemSO.RightHandPosition, _pickableItemSO.RightHandRotation);
         }
-        public virtual void OrientItemInHand(Transform handLocation, int playerID) 
+
+        public virtual void OrientItemInHand(Transform target, bool isLeftHand)
         {
-            locationTarget = handLocation;
-            Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), true);
+            _isLeftHand = isLeftHand;
+            _targetHand = target;
+        }
+
+        protected virtual void SetRotationLocation(Vector3 location, Vector3 rotation)
+        {
+            transform.parent.transform.position = _targetHand.position + (_targetHand.rotation * location);
+            transform.parent.transform.rotation = _targetHand.rotation * Quaternion.Euler(rotation);
         }
 
         protected virtual void Debugger(string log)
@@ -89,38 +98,3 @@ namespace Interactions
         }
     }
 }
-
-// enum with flags if u want it
-/*[Flags]
-public enum PickableItemStateEnum
-{
-    None = 0,               //000
-    IsPossessed = 1 << 0,   //001
-    IsInHand = 1 << 1       //010
-}
-public PickableItemStateEnum itemStateEnum = PickableItemStateEnum.None;
-
-private void SetPossessed(bool isPossessed)
-{
-    if (isPossessed)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}
-private void SetInHand(bool isInHand)
-{
-    if (isInHand)
-    {
-        itemStateEnum |= PickableItemStateEnum.IsInHand;
-        itemStateEnum &= ~PickableItemStateEnum.IsPossessed;
-    }
-    else
-    {
-        itemStateEnum &= ~PickableItemStateEnum.IsInHand;
-    }
-}*/
