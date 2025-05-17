@@ -323,10 +323,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638828345832747207
+  lastModified: 638830872044065642
   FileSizes:
   - Name: Desktop
-    Value: 43840
+    Value: 111776
   Exists: 1
 --- !u!114 &-2696077309983655181
 MonoBehaviour:
@@ -417,7 +417,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638828345834003830
+  lastModified: 638830870570469963
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -462,12 +462,14 @@ MonoBehaviour:
   - {fileID: 2501516922021157986}
   - {fileID: -7383223727355408771}
   - {fileID: -8591464112481530083}
+  - {fileID: 5014530949436838635}
+  - {fileID: 252035891419052609}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638828355696759301
+  cacheTime: 638830872044065642
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -489,6 +491,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 87616
   Exists: 1
+--- !u!114 &252035891419052609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/monsterDeerRoar
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/monsterDeerRoar
+  Guid:
+    Data1: -321790497
+    Data2: 1267404152
+    Data3: 458764221
+    Data4: -233382746
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &408356832103984802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -558,10 +587,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638828345834031270
+  lastModified: 638830870570499459
   FileSizes:
   - Name: Desktop
-    Value: 2058
+    Value: 2160
   Exists: 1
 --- !u!114 &2501516922021157986
 MonoBehaviour:
@@ -686,6 +715,33 @@ MonoBehaviour:
     Data4: 710373934
   Banks:
   - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5014530949436838635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/monsterDeerCall
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/monsterDeerCall
+  Guid:
+    Data1: 804005955
+    Data2: 1152435475
+    Data3: 390688142
+    Data4: -1339961508
+  Banks:
+  - {fileID: -3454834273344955169}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
