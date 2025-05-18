@@ -217,7 +217,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.5
-  m_Speed: 10
+  m_Speed: 4
   m_Acceleration: 3
   avoidancePriority: 20
   m_AngularSpeed: 380
@@ -245,6 +245,14 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 6831410033082499180
   - rid: 6831410052563993435
+  - rid: 6831410202846429263
+  - rid: 6831410202846429264
+  - rid: 6831410202846429265
+  - rid: 6831410202846429266
+  - rid: 6831410202846429267
+  - rid: 6831410202846429268
+  - rid: 6831410202846429269
+  - rid: 6831410202846429270
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -266,6 +274,70 @@ MonoBehaviour:
           m_Value1: 18034246974287321051
         Name: SearchRange
         m_Value: 10
+    - rid: 6831410202846429263
+      type: {class: 'BlackboardVariable`1[[AI_FSM.AISightSensor, AI]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8756006530881961722
+          m_Value1: 18301295802946592457
+        Name: SightSensor
+        m_Value: {fileID: 1369710893841643461}
+    - rid: 6831410202846429264
+      type: {class: 'BlackboardVariable`1[[AI_FSM.SoundSensor, AI]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18341614470001986583
+          m_Value1: 6951489477359944025
+        Name: SoundSensor
+        m_Value: {fileID: 711085083035516619}
+    - rid: 6831410202846429265
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8960954836081867147
+          m_Value1: 641926710990553417
+        Name: WanderLoops
+        m_Value: 8
+    - rid: 6831410202846429266
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10381052911015119457
+          m_Value1: 8076324505109042703
+        Name: AttackRange
+        m_Value: 3
+    - rid: 6831410202846429267
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13249902258178188211
+          m_Value1: 18002394646168109234
+        Name: FireRange
+        m_Value: 10
+    - rid: 6831410202846429268
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17786965431721723036
+          m_Value1: 16099800109313575074
+        Name: RoamingRange
+        m_Value: 30
+    - rid: 6831410202846429269
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3701359077516105444
+          m_Value1: 748635645918276727
+        Name: ChasePlayerLowerBound
+        m_Value: 180
+    - rid: 6831410202846429270
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 15221098695166313177
+          m_Value1: 13848867537724720497
+        Name: ChasePlayerUpperBound
+        m_Value: 240
 --- !u!114 &1369710893841643461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +361,7 @@ MonoBehaviour:
   _angle: 45
   _height: 2
   _scanFrequency: 30
-  _maxDetectables: 50
+  _maxDetectables: 10
   _enableDebugger: 0
   _debugMeshColor: {r: 0, g: 1, b: 0, a: 1}
   _debugColorObjectDectected: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
@@ -308,7 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bced0f9349ae2574fa1ffe5cde9079e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debugger: 1
+  m_debugger: 0
 --- !u!1 &9162086175069888368
 GameObject:
   m_ObjectHideFlags: 0
