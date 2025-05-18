@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2332699400978675366}
   - component: {fileID: 6788050439499714034}
+  - component: {fileID: 8290359827418057565}
+  - component: {fileID: 2643168493608919460}
+  - component: {fileID: 8339870369327454229}
   - component: {fileID: 4711898805188277765}
   - component: {fileID: 9016742241622781866}
   - component: {fileID: 7932874422151118214}
@@ -53,6 +56,89 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &8290359827418057565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931667385431110910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b20dc110904e47f8a154cdcf6433eae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2332699400978675366}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+--- !u!114 &2643168493608919460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931667385431110910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b20dc110904e47f8a154cdcf6433eae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 63218190351349214}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+--- !u!114 &8339870369327454229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931667385431110910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  animator: {fileID: 9016742241622781866}
 --- !u!114 &4711898805188277765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,6 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3fe9983ce13294aa41ff26a0df959c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   m_Animator: {fileID: 9016742241622781866}
   m_Food: {fileID: 5669270062162083739}
   m_RangeToOpen: 10
@@ -330,6 +419,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4451238507104562860}
   m_SourcePrefab: {fileID: 100100000, guid: b28b605adf06da6409b318a5f942bb05, type: 3}
+--- !u!4 &63218190351349214 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1955707026753887233, guid: b28b605adf06da6409b318a5f942bb05, type: 3}
+  m_PrefabInstance: {fileID: 2000875549863094751}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &138634909033712586 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1884771842572870165, guid: b28b605adf06da6409b318a5f942bb05, type: 3}
