@@ -221,7 +221,7 @@ public class HandInventory : NetworkBehaviour
             {
                 // Report it as detected
                 _interactableComponent = childCanvas;
-                _interactableComponent.Detected(_playerID);
+                _interactableComponent?.Detected(_playerID);
                 _mouse?.InteractionEffect();
             } 
             // If we are hitting a different object than before.
