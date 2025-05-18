@@ -50,16 +50,27 @@ public class Pavlov : NetworkBehaviour
     {
         if (m_Enemy != null && DistanceCheck() && !m_IsPavlovOpen)
         {
-            if (isServer) Debugger("Server is trigering open pavlov");
-            else Debugger("Client is trigering open pavlov");
-                m_IsPavlovOpen = true;
-            m_Animator.SetTrigger(OPEN_PAVLOV);
+            if (isServer) RpcOpenPavlov();
+            else CmdOpenPavlov();
         }
     }
 
     private bool DistanceCheck()
     {
         return m_RangeSquared >= (m_Enemy.position - transform.position).sqrMagnitude;
+    }
+
+    [Command]
+    private void CmdOpenPavlov()
+    {
+        RpcOpenPavlov();
+    }
+
+    [ClientRpc]
+    private void RpcOpenPavlov()
+    {
+        m_IsPavlovOpen = true;
+        m_Animator.SetTrigger(OPEN_PAVLOV);
     }
 
     public void TakeFood()
