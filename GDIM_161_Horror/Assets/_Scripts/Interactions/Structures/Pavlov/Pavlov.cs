@@ -10,7 +10,7 @@ public class Pavlov : NetworkBehaviour
     [SerializeField, Range(0f, 600f)] private float m_DelayToClose = 30f;
     [SerializeField] private bool m_debugger;
 
-    private Transform m_Enemy;
+    [SyncVar] private Transform m_Enemy;
     private Coroutine m_Coroutine;
     private const string OPEN_PAVLOV = "OPEN_PAVLOV";
     private const string CLOSE_PAVLOV = "CLOSE_PAVLOV";
@@ -53,8 +53,6 @@ public class Pavlov : NetworkBehaviour
             m_IsPavlovOpen = true;
             m_Animator.SetTrigger(OPEN_PAVLOV);
         }
-
-        if (Input.GetKeyDown(KeyCode.Tab)) TakeFood();
     }
 
     private bool DistanceCheck()
