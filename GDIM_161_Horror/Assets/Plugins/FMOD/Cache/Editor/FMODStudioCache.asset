@@ -181,10 +181,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638828355696759301
+  lastModified: 638832954051965805
   FileSizes:
   - Name: Desktop
-    Value: 723008
+    Value: 856448
   Exists: 1
 --- !u!114 &-5367524864338901802
 MonoBehaviour:
@@ -328,6 +328,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 111776
   Exists: 1
+--- !u!114 &-3257371393975237183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/doorsClosing
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/doorsClosing
+  Guid:
+    Data1: 95552639
+    Data2: 1175093713
+    Data3: -1014340710
+    Data4: 1692117390
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3426
 --- !u!114 &-2696077309983655181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +444,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638830870570469963
+  lastModified: 638832954052149606
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -464,12 +491,15 @@ MonoBehaviour:
   - {fileID: -8591464112481530083}
   - {fileID: 5014530949436838635}
   - {fileID: 252035891419052609}
+  - {fileID: -3257371393975237183}
+  - {fileID: 7263508385118517536}
+  - {fileID: 8374926557077598836}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638830872044065642
+  cacheTime: 638832954052171679
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -587,10 +617,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638830870570499459
+  lastModified: 638832954052171679
   FileSizes:
   - Name: Desktop
-    Value: 2160
+    Value: 2336
   Exists: 1
 --- !u!114 &2501516922021157986
 MonoBehaviour:
@@ -827,6 +857,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 100
   Length: 680
+--- !u!114 &7263508385118517536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/pavlovHumming
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/pavlovHumming
+  Guid:
+    Data1: 1117970130
+    Data2: 1229318678
+    Data3: -1091167604
+    Data4: 336664706
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 7000
 --- !u!114 &7314431433766037890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -881,3 +938,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 85
   Length: 420
+--- !u!114 &8374926557077598836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/doorsOpening
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/doorsOpening
+  Guid:
+    Data1: 2007760865
+    Data2: 1213871412
+    Data3: -1328731008
+    Data4: 1364812034
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3074
