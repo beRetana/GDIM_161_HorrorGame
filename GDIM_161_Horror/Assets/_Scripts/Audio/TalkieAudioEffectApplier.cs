@@ -28,7 +28,7 @@ public class TalkieAudioEffectApplier : MonoBehaviour
     {
         _audioSource = GetComponent<AudioSource>();
         _playback = GetComponent<VoicePlayback>();
-        _comms = FindObjectOfType<DissonanceComms>();
+        _comms = FindFirstObjectByType<DissonanceComms>();
         // Default routing
         _audioSource.outputAudioMixerGroup = globalMixerGroup;
     }
