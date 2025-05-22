@@ -30,8 +30,15 @@ public class FMODEvents : MonoBehaviour
     [field: Header("radioStatic")]
     [field: SerializeField] public EventReference radioStatic { get; private set; }
 
+    [field: Header("doorsOpening")]
+    [field: SerializeField] public EventReference doorsOpening { get; private set; }
+
+    [field: Header("doorsClosing")]
+    [field: SerializeField] public EventReference doorsClosing { get; private set; }
 
 
+    //Example for future one shot referrences
+    //AudioManager.instance.PlayOneShot(FMODEvents.instance.sonarPing, this.transform.position);
     public static FMODEvents instance {get; private set;}
 
     private void Awake()
