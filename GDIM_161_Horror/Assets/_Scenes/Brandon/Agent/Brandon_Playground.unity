@@ -119,6 +119,120 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &54078958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 54078959}
+  - component: {fileID: 54078960}
+  m_Layer: 0
+  m_Name: FMODEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &54078959
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54078958}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1577382963}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &54078960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54078958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bae050c7d04eec4caa19d40a1ecf282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <torchGrab>k__BackingField:
+    Guid:
+      Data1: -1611269432
+      Data2: 1273089934
+      Data3: -333983856
+      Data4: -383996526
+    Path: event:/torchGrab
+  <backgroundAmbiance>k__BackingField:
+    Guid:
+      Data1: -1551080663
+      Data2: 1154017101
+      Data3: -522812263
+      Data4: -329901556
+    Path: event:/backgroundAmbiance
+  <deerWalk>k__BackingField:
+    Guid:
+      Data1: 2001809690
+      Data2: 1303923397
+      Data3: 851080102
+      Data4: 266263900
+    Path: event:/deerWalk
+  <deerRun>k__BackingField:
+    Guid:
+      Data1: -1146244257
+      Data2: 1251743540
+      Data3: -588042364
+      Data4: 1346346020
+    Path: event:/deerRun
+  <sonarPing>k__BackingField:
+    Guid:
+      Data1: 1595208341
+      Data2: 1087017112
+      Data3: -102317894
+      Data4: 710373934
+    Path: event:/sonarPing
+  <walkieStart>k__BackingField:
+    Guid:
+      Data1: 1357506827
+      Data2: 1091045033
+      Data3: 998661545
+      Data4: -1450216684
+    Path: event:/Character/walkieStart
+  <walkieEnd>k__BackingField:
+    Guid:
+      Data1: 2073630874
+      Data2: 1168152558
+      Data3: -994044512
+      Data4: -552423056
+    Path: event:/Character/walkieEnd
+  <radioStatic>k__BackingField:
+    Guid:
+      Data1: -898452981
+      Data2: 1129995542
+      Data3: -2103841360
+      Data4: -587016934
+    Path: event:/Character/radioStatic
+  <doorsOpening>k__BackingField:
+    Guid:
+      Data1: 2007760865
+      Data2: 1213871412
+      Data3: -1328731008
+      Data4: 1364812034
+    Path: event:/Machines/PAVLOV/doorsOpening
+  <doorsClosing>k__BackingField:
+    Guid:
+      Data1: 95552639
+      Data2: 1175093713
+      Data3: -1014340710
+      Data4: 1692117390
+    Path: event:/Machines/PAVLOV/doorsClosing
 --- !u!1001 &201000916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1632,6 +1746,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d21254ce5a127314593e5f1307dc9965, type: 3}
+--- !u!1 &1577382961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1577382963}
+  - component: {fileID: 1577382962}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1577382962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577382961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5552481d30ea241b8319ba5d08a47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterVolume: 1
+  musicVolume: 1
+  ambianceVolume: 0
+  SFXVolume: 1
+--- !u!4 &1577382963
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577382961}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -107.4, y: -7.2, z: 11.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 54078959}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1722043756 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 711085083035516619, guid: b4990ff639c55e444920805371198c7c, type: 3}
@@ -2126,6 +2289,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1577382963}
   - {fileID: 2114283753834967213}
   - {fileID: 955265905}
   - {fileID: 1821777908}

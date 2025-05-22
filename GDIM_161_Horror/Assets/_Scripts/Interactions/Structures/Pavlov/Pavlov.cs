@@ -71,6 +71,7 @@ public class Pavlov : NetworkBehaviour
     {
         m_IsPavlovOpen = true;
         m_Animator.SetTrigger(OPEN_PAVLOV);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.doorsOpening, this.transform.position);
     }
 
     public void TakeFood()
@@ -98,6 +99,7 @@ public class Pavlov : NetworkBehaviour
         yield return new WaitForSeconds(m_DelayToClose);
         m_Animator.SetTrigger(CLOSE_PAVLOV);
         m_IsPavlovOpen = false;
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.doorsClosing, this.transform.position);
     }
 
     // Getting called by animation.

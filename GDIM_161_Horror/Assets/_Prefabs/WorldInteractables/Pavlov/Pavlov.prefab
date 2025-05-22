@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7932874422151118214}
   - component: {fileID: 5123135506906825125}
   - component: {fileID: 2883267849726186298}
+  - component: {fileID: 1786068361409523711}
   m_Layer: 0
   m_Name: Pavlov
   m_TagString: Pavlov
@@ -276,6 +277,37 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &1786068361409523711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931667385431110910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1117970130
+      Data2: 1229318678
+      Data3: -1091167604
+      Data4: 336664706
+    Path: event:/Machines/PAVLOV/pavlovHumming
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &8511359820902098667
 GameObject:
   m_ObjectHideFlags: 0
