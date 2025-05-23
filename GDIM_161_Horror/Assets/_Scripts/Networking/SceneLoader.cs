@@ -17,24 +17,11 @@ public class SceneLoader : NetworkBehaviour
         if (isServer) ScenesLoader();
     }
 
-    [ClientRpc]
-    private void RpcSceneLoaded()
-    {
-        Debugger("CLIENT: SCENE LOADED");
-    }
-
-    [Command]
-    private void CmdSceneLoaded()
-    {
-        Debugger("SERVER: SCENE LOADED");
-        RpcSceneLoaded();
-    }
-
     private void SceneLoaded(Scene name, LoadSceneMode mode)
     {
         m_loaded = true;
-        if (isServer) RpcSceneLoaded();
-        else CmdSceneLoaded();
+        if (isServer) Debugger("SERVER: SCENE LOADED");
+        else Debugger("CLIENT: SCENE LOADED");
     }
 
     [Server]
@@ -43,6 +30,13 @@ public class SceneLoader : NetworkBehaviour
         Debugger("COROUTINE");
         if (!NetworkServer.active) return;
         StartCoroutine(LoadSceneAsync());
+        RpcScenesLoader();
+    }
+
+    [ClientRpc]
+    private void RpcScenesLoader()
+    {
+        if (!isServer) StartCoroutine(LoadSceneAsync());
     }
 
     IEnumerator LoadSceneAsync()
