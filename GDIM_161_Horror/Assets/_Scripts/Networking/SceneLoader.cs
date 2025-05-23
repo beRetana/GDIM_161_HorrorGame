@@ -8,39 +8,40 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : NetworkBehaviour
 {
     [SerializeField] private List<string> m_scenesToLoad;
-    private bool m_loaded;
+    [SyncVar] private bool m_loaded;
     public bool m_debugger;
     void Start()
     {
         Debugger("STARTED");
         SceneManager.sceneLoaded += SceneLoaded;
-        if (isServer) RpcScenesLoader();
-        else CmdScenesLoader();
+        if (isServer) ScenesLoader();
     }
 
     [ClientRpc]
-    private void RpcScenesLoader()
+    private void RpcSceneLoaded()
     {
-        Debugger("CLIENT");
-        ScenesLoader();
+        Debugger("CLIENT: SCENE LOADED");
     }
 
     [Command]
-    private void CmdScenesLoader()
+    private void CmdSceneLoaded()
     {
-        Debugger("SERVER");
-        RpcScenesLoader();
+        Debugger("SERVER: SCENE LOADED");
+        RpcSceneLoaded();
     }
 
     private void SceneLoaded(Scene name, LoadSceneMode mode)
     {
-        Debugger("SCENE LOADED");
         m_loaded = true;
+        if (isServer) RpcSceneLoaded();
+        else CmdSceneLoaded();
     }
 
+    [Server]
     private void ScenesLoader()
     {
         Debugger("COROUTINE");
+        if (!NetworkServer.active) return;
         StartCoroutine(LoadSceneAsync());
     }
 
