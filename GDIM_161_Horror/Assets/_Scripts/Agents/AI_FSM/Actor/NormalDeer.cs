@@ -14,15 +14,13 @@ namespace AI
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
 
-        
-        
         //[SerializeField] private EventReference _deerWalkFootstep;
         //[SerializeField] private EventReference _deerRunFootstep;
-        private bool isWalking = false;
-        private bool isRunning = false;
+        //private bool isWalking = false;
+        //private bool isRunning = false;
 
-       // private const float WalkThreshold = 0.1f; // Adjust for when to start playing walking sound
-       // private const float RunThreshold = 0.5f;  // Adjust for when to start playing running sound
+        // private const float WalkThreshold = 0.1f; // Adjust for when to start playing walking sound
+        // private const float RunThreshold = 0.5f;  // Adjust for when to start playing running sound
 
         private void Start()
         {
@@ -113,9 +111,5 @@ namespace AI
         {
             // No transitions
         }
-
-        
-
-       
     }
 }

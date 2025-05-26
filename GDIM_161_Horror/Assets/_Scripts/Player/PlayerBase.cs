@@ -131,9 +131,25 @@ public class PlayerBase : NetworkBehaviour
     }
     private void EnterState(PlayerStateEnum enterState)
     {
+        if (isServer) RpcChangeState(enterState);
+        else CmdChangeState(enterState);
+    }
+
+    [Command]
+    private void CmdChangeState(PlayerStateEnum enterState)
+    {
+        RpcChangeState(enterState);
+    }
+
+    [ClientRpc]
+    private void RpcChangeState(PlayerStateEnum enterState)
+    {
         Debugger($"{name} entering {enterState}");
         playerStateEnum = enterState;
-        
+        UpdateState(enterState);
+    }
+    private void UpdateState(PlayerStateEnum enterState)
+    {
         switch (enterState)
         {
             case PlayerStateEnum.Locked:

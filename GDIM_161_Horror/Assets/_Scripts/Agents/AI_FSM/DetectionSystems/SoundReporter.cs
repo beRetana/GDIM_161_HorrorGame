@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AI_FSM{
     public class SoundReporter : MonoBehaviour{
@@ -11,6 +12,7 @@ namespace AI_FSM{
 
         [Tooltip("The layer mask that will be used to detect sound obstructions (exclude player and enemy).")]
         [SerializeField] private LayerMask _soundObstructions;
+        [SerializeField] private bool _debugger;
 
         private float _MIN_DB = 20f;
 
@@ -37,7 +39,8 @@ namespace AI_FSM{
 
             if (db < _MIN_DB) return;
 
-            enemy.ReceiveReportSound(position);
+            enemy?.ReceiveReportSound(position);
+            Debugger($"Sound Produced By {this.gameObject.name} at location {position}");
         }
 
         private float CalculateEnemyDistance(SoundSensor enemy)
@@ -74,7 +77,13 @@ namespace AI_FSM{
         private void OnCollisionEnter(Collision collision){
 
             if (!_enableSoundDetection) return;
+            Debugger($"Collision Produced By {this.gameObject.name}");
             ReportSound(collision.transform.position, collision.impulse.magnitude);
+        }
+
+        private void Debugger(object log)
+        {
+            if (_debugger) Debug.Log(log);
         }
     }
 }

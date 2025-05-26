@@ -9,7 +9,6 @@ namespace Interactions
         [Header("Door Settings/Components")]
         [SerializeField] private DoorHandle _rightDoorHandle;
         [SerializeField] private DoorHandle _leftDoorHandle;
-        [SerializeField] private float _openDistance = 1.5f;
         [SerializeField] private bool _debugger;
 
         [SyncVar] private int _playersOnHandles;
