@@ -27,17 +27,17 @@ public class Torch : NetworkPickableItem, IFireable
     {
         if (!fireController.IsLit) return;
         model.UpdateOrientation();
-        if (model.CheckGrounded() && !IsHeld)
+        if (model.CheckGrounded())
             fireController.Smother();
     }
 
     private void FixedUpdate()
     {
-        if (!fireController.IsList) return;
+        if (!fireController.IsLit) return;
 
         data.UpdateTimers(Time.fixedDeltaTime);
 
-        if(data.ShouldUpdatePyrolysis())
+        if (data.ShouldUpdatePyrolysis())
         {
             model.UpdatePyrolysis(data.BurnRatio);
             data.ResetPyrolysisTimer();
@@ -52,7 +52,7 @@ public class Torch : NetworkPickableItem, IFireable
         //TK
     }
 
-    public void Light() => fireController.Light();
-    public void Extinguish() => fireController.Extinguish();
+    public void IgniteFire() => fireController.Light();
+    public void ExtinguishFire() => fireController.Extinguish();
     public bool IsLit => fireController.IsLit;
 }

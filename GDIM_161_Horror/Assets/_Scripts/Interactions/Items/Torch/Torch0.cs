@@ -6,7 +6,7 @@ using Mirror;
 
 namespace Interactions
 {
-    public class Torch : NetworkPickableItem, IFireable
+    public class Torch0 : NetworkPickableItem, IFireable
     {
         private const int SECONDS_PER_MINUTE = 60;
 
@@ -56,7 +56,6 @@ namespace Interactions
         private const float SMOTHER_RADIUS = 0.5f;
 
         public bool Lit { get; private set; }
-        public bool IsLit() { return Lit; }
 
         protected override void Start()
         {
@@ -295,5 +294,9 @@ namespace Interactions
 
         //watch velocity (and air pressure) or burn out
 
+
+        public bool IsLit => Lit;
+        public void IgniteFire() { } //pass
+        public void ExtinguishFire() { } //pass
     }
 }

@@ -27,8 +27,6 @@ namespace Interactions
 
             StartFire();
         }
-        public bool IsLit() { return Lit; }
-        public void LightFlame() { } //pass
 
         private void StartFire()
         {
@@ -83,5 +81,12 @@ namespace Interactions
             fireVFX.gameObject.SetActive(false);
             fireLight.enabled = false;
         }
+
+
+
+        public bool IsLit => Lit;
+        public void IgniteFire() { } //pass
+        public void ExtinguishFire() { } //pass
     }
+
 }

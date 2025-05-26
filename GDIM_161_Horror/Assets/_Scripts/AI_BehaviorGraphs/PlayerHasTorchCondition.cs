@@ -17,7 +17,7 @@ public partial class PlayerHasTorchCondition : Condition
         {
             if (collider.gameObject.TryGetComponent<IFireable>(out IFireable component))
             {
-                if (!component.IsLit()) continue;
+                if (!component.IsLit) continue;
                 return true;
             }
         }

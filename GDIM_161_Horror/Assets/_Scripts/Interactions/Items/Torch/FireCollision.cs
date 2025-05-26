@@ -33,7 +33,7 @@ namespace Interactions
         [ClientRpc]
         private void RpcLightingObject()
         {
-            this.fireableObject.LightFlame();
+            this.fireableObject.IgniteFire();
             
         }
 
@@ -45,7 +45,7 @@ namespace Interactions
 
         private bool IsLit()
         {
-            return fireableObject.IsLit();
+            return fireableObject.IsLit;
             
         }
 
