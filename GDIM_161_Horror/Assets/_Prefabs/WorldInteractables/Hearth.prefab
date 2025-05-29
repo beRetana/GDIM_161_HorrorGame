@@ -109,7 +109,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4390704284720005526}
   - component: {fileID: 4314775591687182890}
-  - component: {fileID: 6738802945491703440}
   - component: {fileID: 7340025323550406647}
   - component: {fileID: 7173510339929271077}
   m_Layer: 3
@@ -154,37 +153,6 @@ MonoBehaviour:
   flameRed: {fileID: 9123537906797114573}
   flameOrange: {fileID: 8857281802743645653}
   flameYellow: {fileID: 1939844585831223845}
---- !u!114 &6738802945491703440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2523596723460159556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 2112172446
-      Data2: 1098031187
-      Data3: -312272477
-      Data4: 1472534078
-    Path: event:/hearthBurning
-  Event: 
-  EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 9
 --- !u!114 &7340025323550406647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,7 +500,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2347329676077029387, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
       insertIndex: -1
       addedObject: {fileID: 721264728231356803}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1401886914597690457, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8337662366746357789}
   m_SourcePrefab: {fileID: 100100000, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
 --- !u!198 &712342059094095534 stripped
 ParticleSystem:
@@ -549,6 +520,42 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2347329676077029387, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
   m_PrefabInstance: {fileID: 7451589926134784552}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8367086907141242481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1401886914597690457, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+  m_PrefabInstance: {fileID: 7451589926134784552}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8337662366746357789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8367086907141242481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2112172446
+      Data2: 1098031187
+      Data3: -312272477
+      Data4: 1472534078
+    Path: event:/hearthBurning
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 9
 --- !u!4 &8857281802743645653 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2126331593734072317, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
