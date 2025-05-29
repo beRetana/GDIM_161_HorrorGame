@@ -99,13 +99,13 @@ public class F_DeerFst : MonoBehaviour
                 case "Grass":
                     MaterialType = 0; // Labeled parameters in FMOD
                     break;
-                case "Gravel":
+                case "Stone":
                     MaterialType = 1;
                     break;
                 case "Metal":
                     MaterialType = 2;
                     break;
-                case "Stone":
+                case "Gravel":
                     MaterialType = 3;
                     break;
                 case "Wood":
