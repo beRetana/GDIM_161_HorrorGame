@@ -8,7 +8,6 @@ using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private string _lobby_scene_name = "Lobby_Brandon";
     [SerializeField] private Transform[] _spawnPoints;
 
     private int _spawnCount = 0;
@@ -17,7 +16,7 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == _lobby_scene_name)
+        if (SceneManager.GetActiveScene().name == onlineScene)
         {
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController, 
                                     _spawnPoints[_spawnCount].position, _spawnPoints[_spawnCount].rotation);
@@ -36,5 +35,15 @@ public class NewNetworkManager : NetworkManager
     public void StartGame(string SceneName)
     {
         ServerChangeScene(SceneName);
+    }
+
+    public override void OnStopHost()
+    {
+        SceneManager.LoadScene(offlineScene);
+    }
+
+    public override void OnStopClient()
+    {
+        SceneManager.LoadScene(offlineScene);
     }
 }
