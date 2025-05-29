@@ -1061,7 +1061,7 @@ RectTransform:
   - {fileID: 1863505706}
   - {fileID: 1620490078}
   - {fileID: 185750615}
-  m_Father: {fileID: 1858924968}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1566,6 +1566,20 @@ MonoBehaviour:
       Data4: 0
     Path: 
   <radioStatic>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <doorsOpening>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <doorsClosing>k__BackingField:
     Guid:
       Data1: 0
       Data2: 0
@@ -3368,8 +3382,8 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: Assets/_Scenes/Brandon/MainMenu_Brandon.unity
-  onlineScene: Assets/_Scenes/Brandon/Lobby_Brandon.unity
+  offlineScene: Assets/_Scenes/_Playtest/MainMenu_Playtest.unity
+  onlineScene: Assets/_Scenes/_Playtest/Lobby_Playtest.unity
   offlineSceneLoadDelay: 0
   transport: {fileID: 1858924966}
   networkAddress: localhost
@@ -3421,7 +3435,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   _playerController: {fileID: 4637961047269564748, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
-  _lobby_scene_name: Lobby_Brandon
+  _lobby_scene_name: Lobby_Playtest
   _spawnPoints:
   - {fileID: 1223511532}
   - {fileID: 494512365}
@@ -3439,8 +3453,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 529104129}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1863505703
@@ -3737,7 +3750,7 @@ MonoBehaviour:
     Path: event:/2DhearthMenuBurning
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 2
+  EventStopTrigger: 12
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
@@ -4371,6 +4384,7 @@ SceneRoots:
   - {fileID: 1413135532}
   - {fileID: 180096390}
   - {fileID: 1858924968}
+  - {fileID: 529104129}
   - {fileID: 1361974755}
   - {fileID: 165348871}
   - {fileID: 1630360591}

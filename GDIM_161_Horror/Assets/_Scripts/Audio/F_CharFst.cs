@@ -99,13 +99,13 @@ public class F_CharFst : MonoBehaviour
                 case "Grass":
                     MaterialValue = 0; // Labeled parameters in FMOD
                     break;
-                case "Gravel":
+                case "Stone":
                     MaterialValue = 1;
                     break;
                 case "Metal":
                     MaterialValue = 2;
                     break;
-                case "Stone":
+                case "Gravel":
                     MaterialValue = 3;
                     break;
                 case "Wood":
