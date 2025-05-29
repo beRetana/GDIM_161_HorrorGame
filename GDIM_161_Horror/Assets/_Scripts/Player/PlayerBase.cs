@@ -2,7 +2,12 @@ using UnityEngine;
 using Mirror;
 using Player;
 
-public class PlayerBase : NetworkBehaviour
+public class PlayerBase :
+#if MIRROR
+    NetworkBehaviour
+#else
+    MonoBehaviour
+#endif
 {
     static private int _myID = 0; // 0, 1, 2, 3
     [SerializeField] protected bool _debugger;
@@ -131,10 +136,28 @@ public class PlayerBase : NetworkBehaviour
     }
     private void EnterState(PlayerStateEnum enterState)
     {
-        if (isServer) RpcChangeState(enterState);
-        else CmdChangeState(enterState);
+#if MIRROR
+        // Only use Mirror commands if networking is active
+        if (Mirror.NetworkClient.active || Mirror.NetworkServer.active)
+        {
+            if (isServer)
+                RpcChangeState(enterState);
+            else
+                CmdChangeState(enterState);
+        }
+        else
+        {
+            // Fallback to local state change in non-networked mode
+            playerStateEnum = enterState;
+            UpdateState(enterState);
+        }
+#else
+        playerStateEnum = enterState;
+        UpdateState(enterState);
+#endif
     }
 
+#if MIRROR
     [Command]
     private void CmdChangeState(PlayerStateEnum enterState)
     {
@@ -148,6 +171,18 @@ public class PlayerBase : NetworkBehaviour
         playerStateEnum = enterState;
         UpdateState(enterState);
     }
+#endif
+
+#if !MIRROR
+    // For non-networked version, just call this directly
+    private void RpcChangeState(PlayerStateEnum enterState)
+    {
+        Debugger($"{name} entering {enterState}");
+        playerStateEnum = enterState;
+        UpdateState(enterState);
+    }
+#endif
+
     private void UpdateState(PlayerStateEnum enterState)
     {
         switch (enterState)
@@ -205,7 +240,8 @@ public class PlayerBase : NetworkBehaviour
     public int ID() { return _myID; }
     private bool AssignID()
     {
-        int newID = GetComponent<PlayerObjectController>().PlayerIdNumber;
+        var poc = GetComponent<PlayerObjectController>();
+        int newID = poc != null ? poc.PlayerIdNumber : -1;
 
         if (newID != -1)
         {

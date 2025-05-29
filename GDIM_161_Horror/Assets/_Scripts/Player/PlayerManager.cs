@@ -1,9 +1,9 @@
 using UnityEngine;
 using Mirror;
 
-public class PlayerManager : NetworkBehaviour
+public class PlayerManager : MonoBehaviour // Remove NetworkBehaviour inheritance
 {
-    public static PlayerManager Instance {  get; private set; }
+    public static PlayerManager Instance { get; private set; }
     private PlayerHolder _playerHolder;
     protected static bool _debug;
 
@@ -45,8 +45,8 @@ public class PlayerManager : NetworkBehaviour
         int newID = _playerHolder.AddPlayer(player);
         Debugger($"Player {player.name} added to {_playerHolder}");
 
-        if (newID != -1)    Debugger($"Player {newID} added to {_playerHolder}. Finishing PlayerBase set up.");
-        else                Debugger($"ERROR: Player not added to {_playerHolder}");
+        if (newID != -1) Debugger($"Player {newID} added to {_playerHolder}. Finishing PlayerBase set up.");
+        else Debugger($"ERROR: Player not added to {_playerHolder}");
 
         return newID; // returns -1 if error
     }
@@ -61,10 +61,13 @@ public class PlayerManager : NetworkBehaviour
     }
     public PlayerBase GetPlayer(int playerID) // ID: 0, 1, 2, 3
     {
-        if (NetworkServer.active) return GetPlayerFromNetworkManager(playerID);
+#if MIRROR
+        if (Mirror.NetworkServer.active) return GetPlayerFromNetworkManager(playerID);
+#endif
         return _playerHolder[playerID];
     }
 
+#if MIRROR
     private PlayerBase GetPlayerFromNetworkManager(int playerID)
     {
         foreach (PlayerObjectController player in NetworkManager.GamePlayers)
@@ -75,6 +78,7 @@ public class PlayerManager : NetworkBehaviour
         }
         throw new System.Exception($"NETWORK ERROR: Player {playerID} does not exist");
     }
+#endif
 
     private static void Debugger(object log)
     {

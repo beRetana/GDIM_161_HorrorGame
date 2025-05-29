@@ -2,30 +2,43 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 
+#if MIRROR
 public class PlayerMovementController_test : NetworkBehaviour
+#else
+public class PlayerMovementController_test : MonoBehaviour
+#endif
 {
     public float Speed = 0.1f;
-    public GameObject PlayerModel;  
+    public GameObject PlayerModel;
 
     private bool positionInvoked = false;
 
+    private bool IsOwned()
+    {
+#if MIRROR
+        return isOwned;
+#else
+        return true;
+#endif
+    }
+
     private void Start()
     {
-        PlayerModel.SetActive(false);
+        if (PlayerModel != null)
+            PlayerModel.SetActive(false);
     }
 
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == "Game")
         {
-            if (!PlayerModel.activeSelf && !positionInvoked)
+            if (PlayerModel != null && !PlayerModel.activeSelf && !positionInvoked)
             {
                 positionInvoked = true;
-                // Invoke the ActivatePlayer method after .5 seconds
                 Invoke("ActivatePlayer", .5f);
             }
 
-            if (isOwned)
+            if (IsOwned())
             {
                 Movement();
             }
@@ -35,7 +48,8 @@ public class PlayerMovementController_test : NetworkBehaviour
     private void ActivatePlayer()
     {
         SetPosition();
-        PlayerModel.SetActive(true);
+        if (PlayerModel != null)
+            PlayerModel.SetActive(true);
     }
 
     private void SetPosition()

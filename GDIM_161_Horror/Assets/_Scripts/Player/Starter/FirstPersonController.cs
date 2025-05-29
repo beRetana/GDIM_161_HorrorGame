@@ -58,7 +58,9 @@ namespace StarterAssets
 
         private void Awake()
         {
-			DontDestroyOnLoad(this.gameObject);
+#if MIRROR
+            DontDestroyOnLoad(this.gameObject);
+#endif
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
