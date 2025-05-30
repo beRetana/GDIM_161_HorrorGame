@@ -2,12 +2,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using StarterAssets;
+using Steamworks;
 
 public class VolumeMenu : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject firstSelected;
+    public GameObject PauseMenu;
+    public GameObject SettingsMenu;
 
     [Header("Player")]
     [SerializeField] private FirstPersonController firstPersonController;
@@ -90,4 +93,17 @@ public class VolumeMenu : MonoBehaviour
             }
         }
     }
+
+    public void OpenSettings()
+    {
+        PauseMenu.SetActive(false);
+        SettingsMenu.SetActive(true);
+    }
+
+    public void CloseSettings()
+    { 
+        PauseMenu.SetActive(true);
+        SettingsMenu.SetActive(false);
+    }
+
 }
