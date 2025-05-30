@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.AppUI.Editor;
-using NUnit.Framework;
+
 public class SettingMenuManager : MonoBehaviour
 {
     public TMP_Dropdown ResDropDown;
