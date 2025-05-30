@@ -9,6 +9,9 @@ public class SettingMenuManager : MonoBehaviour
 {
     public TMP_Dropdown ResDropDown;
     public Toggle FullScreenToggle;
+    public Slider fovSlider;
+    public Camera mainCamera;
+
 
     Resolution[] AllResolutions;
     bool IsFullScreen;
@@ -35,6 +38,19 @@ public class SettingMenuManager : MonoBehaviour
 
 
         ResDropDown.AddOptions(resolutionStringList);
+
+
+        if (fovSlider != null && mainCamera != null)
+        {
+            fovSlider.minValue = 60f;
+            fovSlider.maxValue = 120f;
+            fovSlider.value = mainCamera.fieldOfView;
+            fovSlider.onValueChanged.AddListener(delegate { ChangeFOV(); });
+        }
+
+
+
+
     }
 
     public void ChangeResolution()
@@ -49,6 +65,15 @@ public class SettingMenuManager : MonoBehaviour
         IsFullScreen = FullScreenToggle.isOn;
         Screen.SetResolution(SelectedResolutionList[SelectedResolution].width, SelectedResolutionList[SelectedResolution].height, IsFullScreen);
     }
+
+    public void ChangeFOV()
+    {
+        if (mainCamera != null && fovSlider != null)
+        {
+            mainCamera.fieldOfView = fovSlider.value;
+        }
+    }
+
 
     void Update()
     {
