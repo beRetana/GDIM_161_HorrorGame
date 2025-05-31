@@ -28,11 +28,4 @@ public class UI_Testing : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void BacktoMain()
-    {
-
-        SceneManager.LoadScene(0); 
-    }
-
 }
