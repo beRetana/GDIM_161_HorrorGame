@@ -14,7 +14,7 @@ public class UI_Testing : MonoBehaviour
 
     public void OpenOverlay()
     {
-        if (!SteamAPI.IsSteamRunning())
+        if (SteamAPI.IsSteamRunning())
         {
             SteamFriends.ActivateGameOverlay("Friends"); // Opens Steam Overlay
         }
