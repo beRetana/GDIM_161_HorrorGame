@@ -880,6 +880,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411227276}
   m_CullTransparentMesh: 1
+--- !u!1 &413864860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3949746268570491323, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
+  m_PrefabInstance: {fileID: 3794844147683275007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &438104457 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5358003229463590499, guid: 7d2134ebcf868a94da9b88c14e943e43, type: 3}
@@ -1069,6 +1074,11 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5358003229463590499, guid: 7d2134ebcf868a94da9b88c14e943e43, type: 3}
   m_PrefabInstance: {fileID: 1316228947}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &591444452 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1437092805428982118, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
+  m_PrefabInstance: {fileID: 3794844147683275007}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &610902574 stripped
 Transform:
@@ -3337,6 +3347,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2392893160581668636, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
+      propertyPath: volumeMenu
+      value: 
+      objectReference: {fileID: 591444452}
+    - target: {fileID: 2392893160581668636, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
+      propertyPath: SettingsMenu
+      value: 
+      objectReference: {fileID: 413864860}
     - target: {fileID: 3375580772919842679, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
       propertyPath: mainCamera
       value: 
@@ -3384,6 +3402,10 @@ PrefabInstance:
     - target: {fileID: 7347174030702565915, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
       propertyPath: m_Name
       value: MASTERMENU
+      objectReference: {fileID: 0}
+    - target: {fileID: 7347174030702565915, guid: 8dfcfb9efd70cef41a152148f29b643d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

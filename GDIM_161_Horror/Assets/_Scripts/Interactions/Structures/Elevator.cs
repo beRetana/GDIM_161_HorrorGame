@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] private float _moveSpeed = 5f;
 
     private void OnTriggerEnter(Collider other)
     {
