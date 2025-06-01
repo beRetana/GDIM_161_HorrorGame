@@ -141,7 +141,8 @@ namespace StarterAssets
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch,
+                0.0f, cinemachineCameraTarget.transform.localRotation.z);
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
