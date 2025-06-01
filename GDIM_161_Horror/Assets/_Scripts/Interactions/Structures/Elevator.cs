@@ -10,6 +10,7 @@ public class Elevator : MonoBehaviour
         if (other.TryGetComponent<CharacterController>(out CharacterController character))
         {
             other.GetComponent<FirstPersonController>().GravityOn = false;
+            other.GetComponent<PlayerAnimator>().SetAnimLadder(true);
         }
     }
 
@@ -26,6 +27,7 @@ public class Elevator : MonoBehaviour
         if (other.TryGetComponent<CharacterController>(out CharacterController character))
         {
             other.GetComponent<FirstPersonController>().GravityOn = true;
+            other.GetComponent<PlayerAnimator>().SetAnimLadder(false);
         }
     }
 }
