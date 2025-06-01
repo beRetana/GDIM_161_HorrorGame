@@ -253,6 +253,8 @@ public class HandInventory : NetworkBehaviour
     {
         if (_inventorySlots[_LEFT_HAND_ID].Item == null || _inventorySlots[_RIGHT_HAND_ID].Item == null)
         {
+            if (_interactableComponent == null) return;
+
             _interactableComponent.StoppedDetecting(_playerID);
             _mouse.DefaultEffect();
 
@@ -305,7 +307,8 @@ public class HandInventory : NetworkBehaviour
 
     private void InteractableSync()
     {
-        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        Debugger($"Player {_playerID} Interacted with {_interactableComponent.GetNetworkID().gameObject.name}");
+        Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
             if (isServer) _interactableComponent.Interact(_playerID);
@@ -320,7 +323,8 @@ public class HandInventory : NetworkBehaviour
 
     private void PolyInteractableSync()
     {
-        Debugger($"Interact-Is Player {_playerID} Server: {isServer}");
+        Debugger($"Player {_playerID} Interacted with {_interactableComponent.GetNetworkID().gameObject.name}");
+        Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
             if (isServer) _interactableComponent.Interact(_playerID);
@@ -355,23 +359,22 @@ public class HandInventory : NetworkBehaviour
     [Command]
     private void CmdOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order)
     {
-        Debugger($"Interacting with object {interactableID.ToString()}");
+        Debugger($"CMD POLY: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
         RpcOnPolyInteract(interactableID, playerID, order);
     }
 
     [ClientRpc]
     private void RpcOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        Debugger($"RPC OnInteract being called");
-        Debugger($"Interactable is: {interactableID.name}");
+        Debugger($"RPC: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
         if (playerID != _playerID) return;
-        interactableID.GetComponentInChildren<IInteractable>()?.Interact(playerID);
+        interactableID.GetComponentInChildren<IInteractable>().Interact(playerID);
     }
 
     [Command]
     private void CmdOnInteract(NetworkIdentity interactableID, int playerID)
     {
-        Debugger($"Interacting with object {interactableID.ToString()}");
+        Debugger($"CMD: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
         RpcOnInteract(interactableID, playerID);
     }
 
