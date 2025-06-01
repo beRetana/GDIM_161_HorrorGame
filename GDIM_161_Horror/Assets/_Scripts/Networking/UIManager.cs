@@ -14,9 +14,10 @@ public class UIManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Tab)) SetScene(false);
     }
 
-    private void SetScene(bool won)
+    public void SetScene(bool won)
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         m_EndScreen.SetActive(true);
         if (won) m_StartScreen.SetText(m_WinTitle);
         else m_StartScreen.SetText(m_LoseTitle);
