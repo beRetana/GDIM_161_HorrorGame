@@ -4,6 +4,7 @@ using UnityEngine;
 public class Elevator : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private bool _debugger;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -11,6 +12,7 @@ public class Elevator : MonoBehaviour
         {
             other.GetComponent<FirstPersonController>().GravityOn = false;
             other.GetComponent<PlayerAnimator>().SetAnimLadder(true);
+            Debugger("Player Going Up the Ladder");
         }
     }
 
@@ -28,6 +30,12 @@ public class Elevator : MonoBehaviour
         {
             other.GetComponent<FirstPersonController>().GravityOn = true;
             other.GetComponent<PlayerAnimator>().SetAnimLadder(false);
+            Debugger("Player Off the Ladder");
         }
+    }
+
+    private void Debugger(object log)
+    {
+        if (_debugger) Debug.Log(log);
     }
 }
