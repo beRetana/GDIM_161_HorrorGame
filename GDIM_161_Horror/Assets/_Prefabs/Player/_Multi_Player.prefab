@@ -597,9 +597,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4706823857796436932, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4706823857796436932, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.508
+      objectReference: {fileID: 0}
+    - target: {fileID: 4706823857796436932, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.133
+      objectReference: {fileID: 0}
     - target: {fileID: 4848861366070383520, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: _buildScene
       value: Brandon_Playground
+      objectReference: {fileID: 0}
+    - target: {fileID: 5345982675721772152, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_AnimatePhysics
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5345982675721772152, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5986331846394051606, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: _assetId
@@ -613,6 +633,10 @@ PrefabInstance:
       propertyPath: _enableDebugging
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9056412249771875329, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: Damping
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -625,6 +649,9 @@ PrefabInstance:
       addedObject: {fileID: 8419203282409049267}
     - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: 17
+      addedObject: {fileID: 7331462967510437318}
+    - targetCorrespondingSourceObject: {fileID: 2946501653002084964, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      insertIndex: 18
       addedObject: {fileID: 318492975401406375}
     - targetCorrespondingSourceObject: {fileID: 4687324348939525717, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
@@ -658,6 +685,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &7331462967510437318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373982209266735019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8930c1f05bd49b342ba6cc2f786d80eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &318492975401406375
 MonoBehaviour:
   m_ObjectHideFlags: 0
