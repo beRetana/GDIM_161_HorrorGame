@@ -1424,6 +1424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 323912489}
   firstSelected: {fileID: 0}
+  PauseMenu: {fileID: 0}
+  SettingsMenu: {fileID: 0}
+  volumeMenu: {fileID: 0}
   firstPersonController: {fileID: 5006952673801610863, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
 --- !u!114 &738450405
 MonoBehaviour:
@@ -1522,7 +1525,7 @@ MonoBehaviour:
       Data2: 1273089934
       Data3: -333983856
       Data4: -383996526
-    Path: event:/torchGrab
+    Path: event:/Character/torchGrab
   <backgroundAmbiance>k__BackingField:
     Guid:
       Data1: -1551080663
@@ -3435,12 +3438,12 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   _playerController: {fileID: 4637961047269564748, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
-  _lobby_scene_name: Lobby_Brandon
   _spawnPoints:
   - {fileID: 1223511532}
   - {fileID: 494512365}
   - {fileID: 1211033082}
   - {fileID: 1243701984}
+  m_Debugger: 0
 --- !u!4 &1858924968
 Transform:
   m_ObjectHideFlags: 0

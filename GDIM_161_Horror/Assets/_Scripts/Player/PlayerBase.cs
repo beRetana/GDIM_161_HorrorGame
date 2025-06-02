@@ -6,6 +6,7 @@ public class PlayerBase : NetworkBehaviour
 {
     static private int _myID = 0; // 0, 1, 2, 3
     [SerializeField] protected bool _debugger;
+    protected PlayerAnimator _animator;
 
     private NewNetworkManager _networkmanager;
 
@@ -102,9 +103,10 @@ public class PlayerBase : NetworkBehaviour
     //Animator anim;
     protected virtual void Start()
     {
+        _animator = GetComponent<PlayerAnimator>();
         AssignID();
-        SetPlayerStats();
         EnterState(PlayerStateEnum.Unlocked);
+        SetPlayerStats();
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
@@ -127,6 +129,7 @@ public class PlayerBase : NetworkBehaviour
     public void DownPlayer()
     {
         Debugger($"Locking Player{_myID}");
+        _animator.SetAnimCrawl(true);
         EnterState(PlayerStateEnum.Downed);
     }
     private void EnterState(PlayerStateEnum enterState)
@@ -198,7 +201,6 @@ public class PlayerBase : NetworkBehaviour
 
         return true;
     }
-
 
     #endregion PlayerState
 

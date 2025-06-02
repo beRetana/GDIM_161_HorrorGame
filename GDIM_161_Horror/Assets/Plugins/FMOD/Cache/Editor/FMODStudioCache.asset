@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8918844015007227087
+--- !u!114 &-8902831560799369597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Character/walkieEnd
+  m_Name: event:/hearthBurning
   m_EditorClassIdentifier: 
-  Path: event:/Character/walkieEnd
+  Path: event:/hearthBurning
   Guid:
-    Data1: 2080201518
-    Data2: 1155188936
-    Data3: 452581563
-    Data4: 619651946
+    Data1: 2112172446
+    Data2: 1098031187
+    Data3: -312272477
+    Data4: 1472534078
   Banks:
-  - {fileID: -5788099683331802207}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 20
-  Length: 0
+  MaxDistance: 4.4
+  Length: 38842
 --- !u!114 &-8730954369301553497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-6610038710968925490
+--- !u!114 &-7357133101030854855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,22 +122,49 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/hearthBurning
+  m_Name: event:/Monsters/monsterDeerCall
   m_EditorClassIdentifier: 
-  Path: event:/hearthBurning
+  Path: event:/Monsters/monsterDeerCall
   Guid:
-    Data1: 2112172446
-    Data2: 1098031187
-    Data3: -312272477
-    Data4: 1472534078
+    Data1: 804005955
+    Data2: 1152435475
+    Data3: 390688142
+    Data4: -1339961508
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-6763538885667401015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/2DhearthMenuBurning
+  m_EditorClassIdentifier: 
+  Path: event:/2DhearthMenuBurning
+  Guid:
+    Data1: 1993669417
+    Data2: 1259772638
+    Data3: 906622357
+    Data4: 1152155210
   Banks:
   - {fileID: -1299140445480587344}
   IsStream: 1
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 4.4
+  MaxDistance: 20
   Length: 38842
 --- !u!114 &-6497715958798440725
 MonoBehaviour:
@@ -181,7 +208,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638840745361380745
+  lastModified: 638843822294185718
   FileSizes:
   - Name: Desktop
     Value: 856448
@@ -210,33 +237,6 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
---- !u!114 &-5062085875905363431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Monsters/monsterDeerCall
-  m_EditorClassIdentifier: 
-  Path: event:/Monsters/monsterDeerCall
-  Guid:
-    Data1: 804005955
-    Data2: 1152435475
-    Data3: 390688142
-    Data4: -1339961508
-  Banks:
-  - {fileID: -3454834273344955169}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
 --- !u!114 &-4997491258284619187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,38 +252,11 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638828345834673838
+  lastModified: 638843822339995724
   FileSizes:
   - Name: Desktop
     Value: 4003872
   Exists: 1
---- !u!114 &-4742103357640697939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/backgroundAmbiance
-  m_EditorClassIdentifier: 
-  Path: event:/backgroundAmbiance
-  Guid:
-    Data1: -1551080663
-    Data2: 1154017101
-    Data3: -522812263
-    Data4: -329901556
-  Banks:
-  - {fileID: -1299140445480587344}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 42500
 --- !u!114 &-3810936530723824693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,33 +281,6 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
---- !u!114 &-3740062834583403988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/2DhearthMenuBurning
-  m_EditorClassIdentifier: 
-  Path: event:/2DhearthMenuBurning
-  Guid:
-    Data1: 1993669417
-    Data2: 1259772638
-    Data3: 906622357
-    Data4: 1152155210
-  Banks:
-  - {fileID: -1299140445480587344}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 38842
 --- !u!114 &-3454834273344955169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,38 +296,11 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638840745359312759
+  lastModified: 638843822286313021
   FileSizes:
   - Name: Desktop
     Value: 111776
   Exists: 1
---- !u!114 &-3155990232300064098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Machines/PAVLOV/doorsOpening
-  m_EditorClassIdentifier: 
-  Path: event:/Machines/PAVLOV/doorsOpening
-  Guid:
-    Data1: 2007760865
-    Data2: 1213871412
-    Data3: -1328731008
-    Data4: 1364812034
-  Banks:
-  - {fileID: -5788099683331802207}
-  IsStream: 0
-  Is3D: 1
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 3074
 --- !u!114 &-2696077309983655181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +328,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 46655
+--- !u!114 &-2495869937787157005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/doorsClosing
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/doorsClosing
+  Guid:
+    Data1: 95552639
+    Data2: 1175093713
+    Data3: -1014340710
+    Data4: 1692117390
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3426
 --- !u!114 &-2117465086621362093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,33 +382,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 382
---- !u!114 &-1456545224742983555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Character/radioStatic
-  m_EditorClassIdentifier: 
-  Path: event:/Character/radioStatic
-  Guid:
-    Data1: 1339631217
-    Data2: 1305724905
-    Data3: 228181680
-    Data4: 1598960762
-  Banks:
-  - {fileID: -5788099683331802207}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 2500
 --- !u!114 &-1299140445480587344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,11 +397,65 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638840745362319028
+  lastModified: 638843822347932767
   FileSizes:
   - Name: Desktop
     Value: 1127712
   Exists: 1
+--- !u!114 &-981276713472088124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/monsterDeerRoar
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/monsterDeerRoar
+  Guid:
+    Data1: -321790497
+    Data2: 1267404152
+    Data3: 458764221
+    Data4: -233382746
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-812202938441216734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/pavlovHumming
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/pavlovHumming
+  Guid:
+    Data1: 1117970130
+    Data2: 1229318678
+    Data3: -1091167604
+    Data4: 336664706
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 7000
 --- !u!114 &-238223770636140962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +471,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638832954052149606
+  lastModified: 638843822294328785
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -526,9 +499,6 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: 7531683133953282101}
   - {fileID: 5939572221690513463}
-  - {fileID: -4742103357640697939}
-  - {fileID: -3740062834583403988}
-  - {fileID: -6610038710968925490}
   - {fileID: -8730954369301553497}
   - {fileID: -2696077309983655181}
   - {fileID: 4255967990678202288}
@@ -540,20 +510,23 @@ MonoBehaviour:
   - {fileID: 2501516922021157986}
   - {fileID: -7383223727355408771}
   - {fileID: -8591464112481530083}
-  - {fileID: -5062085875905363431}
-  - {fileID: 1508612283455626483}
-  - {fileID: -8918844015007227087}
-  - {fileID: 4383392424841822560}
-  - {fileID: -1456545224742983555}
-  - {fileID: 6656620241798933324}
-  - {fileID: 4779018488623673709}
-  - {fileID: -3155990232300064098}
+  - {fileID: -7357133101030854855}
+  - {fileID: -981276713472088124}
+  - {fileID: 6846626182616586449}
+  - {fileID: 4853172404756204929}
+  - {fileID: 5395145797795455561}
+  - {fileID: -2495869937787157005}
+  - {fileID: -812202938441216734}
+  - {fileID: 457205617744511322}
+  - {fileID: 2338621308737970198}
+  - {fileID: -6763538885667401015}
+  - {fileID: -8902831560799369597}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638840745362319028
+  cacheTime: 638843822347932767
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -570,7 +543,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638828345835520993
+  lastModified: 638843822340808708
   FileSizes:
   - Name: Desktop
     Value: 87616
@@ -602,6 +575,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &457205617744511322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Machines/PAVLOV/doorsOpening
+  m_EditorClassIdentifier: 
+  Path: event:/Machines/PAVLOV/doorsOpening
+  Guid:
+    Data1: 2007760865
+    Data2: 1213871412
+    Data3: -1328731008
+    Data4: 1364812034
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3074
 --- !u!114 &543125321283750675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,33 +629,6 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
---- !u!114 &1508612283455626483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Monsters/monsterDeerRoar
-  m_EditorClassIdentifier: 
-  Path: event:/Monsters/monsterDeerRoar
-  Guid:
-    Data1: -321790497
-    Data2: 1267404152
-    Data3: 458764221
-    Data4: -233382746
-  Banks:
-  - {fileID: -3454834273344955169}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
 --- !u!114 &1599044835148366132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,11 +644,38 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638832954052171679
+  lastModified: 638843822294363981
   FileSizes:
   - Name: Desktop
     Value: 2336
   Exists: 1
+--- !u!114 &2338621308737970198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/backgroundAmbiance
+  m_EditorClassIdentifier: 
+  Path: event:/backgroundAmbiance
+  Guid:
+    Data1: -1551080663
+    Data2: 1154017101
+    Data3: -522812263
+    Data4: -329901556
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 42500
 --- !u!114 &2501516922021157986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,7 +779,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &4383392424841822560
+--- !u!114 &4853172404756204929
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -806,7 +806,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &4779018488623673709
+--- !u!114 &5395145797795455561
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -816,23 +816,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Machines/PAVLOV/pavlovHumming
+  m_Name: event:/Character/radioStatic
   m_EditorClassIdentifier: 
-  Path: event:/Machines/PAVLOV/pavlovHumming
+  Path: event:/Character/radioStatic
   Guid:
-    Data1: 1117970130
-    Data2: 1229318678
-    Data3: -1091167604
-    Data4: 336664706
+    Data1: 1339631217
+    Data2: 1305724905
+    Data3: 228181680
+    Data4: 1598960762
   Banks:
   - {fileID: -5788099683331802207}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 7000
+  Length: 2500
 --- !u!114 &5448121935442281603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -911,7 +911,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 100
   Length: 680
---- !u!114 &6656620241798933324
+--- !u!114 &6846626182616586449
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -921,23 +921,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Machines/PAVLOV/doorsClosing
+  m_Name: event:/Character/walkieEnd
   m_EditorClassIdentifier: 
-  Path: event:/Machines/PAVLOV/doorsClosing
+  Path: event:/Character/walkieEnd
   Guid:
-    Data1: 95552639
-    Data2: 1175093713
-    Data3: -1014340710
-    Data4: 1692117390
+    Data1: 2080201518
+    Data2: 1155188936
+    Data3: 452581563
+    Data4: 619651946
   Banks:
   - {fileID: -5788099683331802207}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 3426
+  Length: 0
 --- !u!114 &7531683133953282101
 MonoBehaviour:
   m_ObjectHideFlags: 0

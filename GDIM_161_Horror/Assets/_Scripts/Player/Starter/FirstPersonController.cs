@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using FMODUnity;
 using Dissonance;
+using Unity.VisualScripting;
+
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -22,7 +24,6 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private StarterAssetsInputs _input;
-        private Animator _animator;
         private const float _THRESHOLD = 0.01f;
         public bool isWalking { get; private set; }
 
@@ -51,14 +52,11 @@ namespace StarterAssets
         }
         private bool _gravityOn = true;
 
-        private const string SPEED = "Speed";
-        private const string JUMP = "Jump";
-
         public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
         {
-			DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -77,7 +75,6 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-            _animator = GetComponent<Animator>();
 
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -127,7 +124,7 @@ namespace StarterAssets
 
         private void UpdateSpeedAnimation()
         {
-            _animator.SetFloat(SPEED, new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
+            _animator.SetAnimSpeed(new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
         }
 
         private void GroundedCheck()
@@ -145,8 +142,10 @@ namespace StarterAssets
             _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
+            Debugger($"X Rotation Velovity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
+
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
@@ -232,13 +231,13 @@ namespace StarterAssets
                     _fallTimeoutDelta -= Time.deltaTime;
 
                 _input.jump = false;
-                _animator.SetBool(JUMP, false);
+                _animator.SetAnimJump(false);
             }
 
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += gravity * Time.deltaTime;
-                _animator.SetBool(JUMP, true);
+                _animator.SetAnimJump(true);
             }
         }
 
@@ -253,6 +252,30 @@ namespace StarterAssets
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
+        }
+
+        public void SetInputState(bool active)
+        {
+            if (active)
+            {
+                _playerInput.actions["Swap"].Enable();
+                _playerInput.actions["Interact"].Enable();
+                _playerInput.actions["Drop"].Enable();
+                _playerInput.actions["Throw"].Enable();
+                _playerInput.actions["UseItem"].Enable();
+                _playerInput.actions["Sprint"].Enable();
+                _playerInput.actions["Jump"].Enable();
+            }
+            else
+            {
+                _playerInput.actions["Swap"].Disable();
+                _playerInput.actions["Interact"].Disable();
+                _playerInput.actions["Drop"].Disable();
+                _playerInput.actions["Throw"].Disable();
+                _playerInput.actions["UseItem"].Disable();
+                _playerInput.actions["Sprint"].Disable();
+                _playerInput.actions["Jump"].Disable();
+            }
         }
     }
 }

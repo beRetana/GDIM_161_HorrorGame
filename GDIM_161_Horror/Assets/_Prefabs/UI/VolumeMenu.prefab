@@ -220,7 +220,6 @@ GameObject:
   - component: {fileID: 3842259884622308856}
   - component: {fileID: 7399975858443189191}
   - component: {fileID: 149839491172956454}
-  - component: {fileID: 4980547053229410447}
   m_Layer: 5
   m_Name: VolumeMenu
   m_TagString: Untagged
@@ -265,8 +264,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -283,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -318,7 +317,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4654971150475570508}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a869535d1caf213408b9b237b62af0c8, type: 3}
   m_Name: 
@@ -329,18 +328,6 @@ MonoBehaviour:
   SettingsMenu: {fileID: 0}
   volumeMenu: {fileID: 0}
   firstPersonController: {fileID: 5006952673801610863, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
---- !u!114 &4980547053229410447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4654971150475570508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60cd342eb95cc4343ae0c34add3259d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5556377195229883303
 GameObject:
   m_ObjectHideFlags: 0
