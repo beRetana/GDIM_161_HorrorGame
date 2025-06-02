@@ -10,7 +10,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: SPEED
-    m_EventTreshold: 4.5
+    m_EventTreshold: 7.5
   - m_ConditionMode: 3
     m_ConditionEvent: SPEED
     m_EventTreshold: 0.01
@@ -26,9 +26,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.051294398
+  m_TransitionDuration: 0.06861546
   m_TransitionOffset: 0
-  m_ExitTime: 0.000000007341467
+  m_ExitTime: 0.0000000066483916
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -57,9 +57,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.034540374
+  m_TransitionDuration: 0.1353324
   m_TransitionOffset: 0
-  m_ExitTime: 0.000000001213392
+  m_ExitTime: 0.0000000012404147
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -73,7 +73,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Walking
-  m_Speed: 1.5
+  m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 591995578736053784}
@@ -129,6 +129,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: CRAWL
     m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: SPEED
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3311680295765916621}
   m_Solo: 0
@@ -140,9 +143,9 @@ AnimatorStateTransition:
   m_ExitTime: 0
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_CanTransitionToSelf: 0
 --- !u!1102 &-3311680295765916621
 AnimatorState:
   serializedVersion: 6
@@ -239,9 +242,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.09984681
+  m_TransitionDuration: 0.13781682
   m_TransitionOffset: 0
-  m_ExitTime: 0
+  m_ExitTime: 0.0000000028213967
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 1
@@ -270,9 +273,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.24111931
+  m_TransitionDuration: 0.4530642
   m_TransitionOffset: 0
-  m_ExitTime: 0.000000013116556
+  m_ExitTime: 0.00000002492151
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 1
@@ -288,7 +291,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: SPEED
-    m_EventTreshold: 4.5
+    m_EventTreshold: 7.5
   - m_ConditionMode: 2
     m_ConditionEvent: LADDER
     m_EventTreshold: 0
@@ -301,9 +304,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.037446372
+  m_TransitionDuration: 0.0927978
   m_TransitionOffset: 0
-  m_ExitTime: 0.0000000024222606
+  m_ExitTime: 0.0000000025193632
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -497,12 +500,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 0.114035
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 1
+  m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1102 &7917812323905673951

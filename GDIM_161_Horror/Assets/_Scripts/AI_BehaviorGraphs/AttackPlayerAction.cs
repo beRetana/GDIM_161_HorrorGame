@@ -3,6 +3,7 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
+using StarterAssets;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "AttackPlayer", story: "Enemy attacks [Player]", category: "Action", id: "e6b4af2c023fdb12db722fb12e2e7192")]
@@ -12,7 +13,9 @@ public partial class AttackPlayerAction : Action
 
     protected override Status OnStart()
     {
-        Player.Value.GetComponent<PlayerBase>().DownPlayer();
+        FirstPersonController firstPersonController = Player.Value.GetComponent<FirstPersonController>();
+        firstPersonController.DownPlayer();
+        firstPersonController.SetInputState(false);
         return Status.Success;
     }
 }

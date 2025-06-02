@@ -141,8 +141,7 @@ namespace StarterAssets
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch,
-                0.0f, cinemachineCameraTarget.transform.localRotation.z);
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
@@ -249,6 +248,30 @@ namespace StarterAssets
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
+        }
+
+        public void SetInputState(bool active)
+        {
+            if (active)
+            {
+                _playerInput.actions["Swap"].Enable();
+                _playerInput.actions["Interact"].Enable();
+                _playerInput.actions["Drop"].Enable();
+                _playerInput.actions["Throw"].Enable();
+                _playerInput.actions["UseItem"].Enable();
+                _playerInput.actions["Sprint"].Enable();
+                _playerInput.actions["Jump"].Enable();
+            }
+            else
+            {
+                _playerInput.actions["Swap"].Disable();
+                _playerInput.actions["Interact"].Disable();
+                _playerInput.actions["Drop"].Disable();
+                _playerInput.actions["Throw"].Disable();
+                _playerInput.actions["UseItem"].Disable();
+                _playerInput.actions["Sprint"].Disable();
+                _playerInput.actions["Jump"].Disable();
+            }
         }
     }
 }
