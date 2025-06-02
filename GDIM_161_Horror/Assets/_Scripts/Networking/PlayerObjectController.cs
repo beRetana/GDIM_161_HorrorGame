@@ -211,7 +211,7 @@ public class PlayerObjectController
     {
         manager.StartGame(SceneName);
     }
-#endif
+#endif // MIRROR
 
     private void EnableLocalPlayerComponents()
     {
