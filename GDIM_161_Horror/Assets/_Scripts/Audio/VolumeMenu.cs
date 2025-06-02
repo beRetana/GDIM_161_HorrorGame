@@ -48,20 +48,13 @@ public class VolumeMenu : MonoBehaviour
     private void ForceCursorState()
     {
         string currentScene = SceneManager.GetActiveScene().name;
-
-        if (menu.gameObject.activeInHierarchy)
-        {
-           
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (currentScene == "BUILD_1")
+        if (currentScene == "BUILD_1" && !isPaused)
         {
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        else
+        else if (currentScene == "BUILD_1")
         {
             
             Cursor.lockState = CursorLockMode.None;
@@ -123,6 +116,5 @@ public class VolumeMenu : MonoBehaviour
     public void ClosePauseMenu()
     {
         ToggleVolumeMenu();
-
     }
 }

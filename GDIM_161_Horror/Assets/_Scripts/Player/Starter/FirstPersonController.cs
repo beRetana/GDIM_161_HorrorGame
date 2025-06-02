@@ -75,8 +75,6 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnDestroy()
@@ -87,7 +85,7 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != _buildScene) return;
-
+            Cursor.lockState = CursorLockMode.Locked;
             StartCoroutine(FindSpawnPoint());
         }
 
