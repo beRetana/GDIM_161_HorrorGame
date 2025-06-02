@@ -142,6 +142,8 @@ namespace StarterAssets
             _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
+            Debugger($"X Rotation Velovity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
+
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
 
