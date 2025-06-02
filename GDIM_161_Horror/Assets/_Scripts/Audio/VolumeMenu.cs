@@ -77,7 +77,7 @@ public class VolumeMenu : MonoBehaviour
         if (isPaused)
         {
             menu.gameObject.SetActive(true);
-            //EventSystem.current.SetSelectedGameObject(firstSelected);
+            EventSystem.current.SetSelectedGameObject(firstSelected);
 
             if (currentScene == "BUILD_1")
             {
