@@ -244,7 +244,20 @@ public class HandInventory : NetworkBehaviour
     }
 
     public void OnSwap(InputValue value) 
-    { 
+    {
+        if (isServer) RpcSwapDominance();
+        else CmdSwapDominance();
+    }
+
+    [Command]
+    private void CmdSwapDominance()
+    {
+        RpcSwapDominance();
+    }
+
+    [ClientRpc]
+    private void RpcSwapDominance()
+    {
         bool isLHandDom = _inventorySlots.SwapDominance();
         _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
@@ -265,7 +278,7 @@ public class HandInventory : NetworkBehaviour
 
     public void OnDrop(InputValue value) 
     {
-        Debugger($"Drop-Is Player {_playerID} Server: {isServer}");
+        Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
         if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
         else CmdDropItem(0f);
     }
