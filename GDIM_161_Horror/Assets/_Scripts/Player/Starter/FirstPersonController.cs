@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using FMODUnity;
 using Dissonance;
+using Unity.VisualScripting;
+
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -54,7 +56,7 @@ namespace StarterAssets
 
         private void Awake()
         {
-			DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 

@@ -105,8 +105,8 @@ public class PlayerBase : NetworkBehaviour
     {
         _animator = GetComponent<PlayerAnimator>();
         AssignID();
-        SetPlayerStats();
         EnterState(PlayerStateEnum.Unlocked);
+        SetPlayerStats();
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
