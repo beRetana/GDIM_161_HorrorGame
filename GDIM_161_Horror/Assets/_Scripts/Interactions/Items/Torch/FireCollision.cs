@@ -27,26 +27,17 @@ namespace Interactions
             if (!colFire.IsLit()) return; //check if other fire is lit
 
             if (isServer) RpcLightingObject();
-            else CmdLightingObject();
         }
 
         [ClientRpc]
         private void RpcLightingObject()
         {
             this.fireableObject.LightFlame();
-            
-        }
-
-        [Command]
-        private void CmdLightingObject()
-        {
-            RpcLightingObject();
         }
 
         private bool IsLit()
         {
             return fireableObject.IsLit();
-            
         }
 
         private void Debugger(string log)

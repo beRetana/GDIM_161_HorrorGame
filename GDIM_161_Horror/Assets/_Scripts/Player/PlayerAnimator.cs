@@ -20,7 +20,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void SetAnimJump(bool jump)
     {
-        m_PlayerAnimator.SetBool(JUMP, jump);
+        m_PlayerAnimator?.SetBool(JUMP, jump);
     }
     public void SetAnimLadder(bool ladder)
     {
