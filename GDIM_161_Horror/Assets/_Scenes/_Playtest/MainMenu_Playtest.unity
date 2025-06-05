@@ -1424,6 +1424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 323912489}
   firstSelected: {fileID: 0}
+  PauseMenu: {fileID: 0}
+  SettingsMenu: {fileID: 0}
+  volumeMenu: {fileID: 0}
   firstPersonController: {fileID: 5006952673801610863, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
 --- !u!114 &738450405
 MonoBehaviour:
@@ -1522,7 +1525,7 @@ MonoBehaviour:
       Data2: 1273089934
       Data3: -333983856
       Data4: -383996526
-    Path: event:/torchGrab
+    Path: event:/Character/torchGrab
   <backgroundAmbiance>k__BackingField:
     Guid:
       Data1: -1551080663
@@ -3435,12 +3438,12 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   _playerController: {fileID: 4637961047269564748, guid: 1a8c3643b8f55a945a5a5eaadbcb978a, type: 3}
-  _lobby_scene_name: Lobby_Playtest
   _spawnPoints:
   - {fileID: 1223511532}
   - {fileID: 494512365}
   - {fileID: 1211033082}
   - {fileID: 1243701984}
+  m_Debugger: 0
 --- !u!4 &1858924968
 Transform:
   m_ObjectHideFlags: 0
@@ -3544,8 +3547,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1923564266}
-  - component: {fileID: 1923564268}
   - component: {fileID: 1923564267}
+  - component: {fileID: 1923564268}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -3562,7 +3565,7 @@ Transform:
   m_GameObject: {fileID: 1923564265}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -500.93, y: -0.85, z: -502.16}
+  m_LocalPosition: {x: -11.64, y: -0.85, z: -13.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3586,7 +3589,7 @@ TerrainCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: e1729ba2a12dd694089a145966d5e318, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: e2cb599d094639b438c83b67db3e7c61, type: 2}
   m_EnableTreeColliders: 1
 --- !u!218 &1923564268
 Terrain:
@@ -3597,7 +3600,7 @@ Terrain:
   m_GameObject: {fileID: 1923564265}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: e1729ba2a12dd694089a145966d5e318, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: e2cb599d094639b438c83b67db3e7c61, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -3620,11 +3623,11 @@ Terrain:
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
   m_ReceiveGI: 1
-  m_ScaleInLightmap: 0.0256
+  m_ScaleInLightmap: 1
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
   m_RenderingLayerMask: 1
-  m_AllowAutoConnect: 1
+  m_AllowAutoConnect: 0
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
   m_TreeMotionVectorModeOverride: 3
@@ -3750,7 +3753,7 @@ MonoBehaviour:
     Path: event:/2DhearthMenuBurning
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 2
+  EventStopTrigger: 12
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0

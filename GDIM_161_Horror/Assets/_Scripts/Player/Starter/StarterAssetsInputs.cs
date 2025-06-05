@@ -56,7 +56,7 @@ namespace StarterAssets
 
 		public void OnSprint(InputValue value)
 		{
-			SprintInput(value.isPressed);
+			ToggleSprint();
 		}
 #endif
 
@@ -75,9 +75,9 @@ namespace StarterAssets
 			jump = newJumpState;
 		}
 
-		public void SprintInput(bool newSprintState)
+		public void ToggleSprint()
 		{
-			sprint = newSprintState;
+			sprint = !sprint;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)

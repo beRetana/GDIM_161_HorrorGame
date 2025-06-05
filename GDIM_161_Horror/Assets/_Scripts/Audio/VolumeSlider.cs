@@ -35,7 +35,7 @@ public class VolumeSlider : MonoBehaviour
         switch(volumeType)
         {
             case VolumeType.MASTER:
-                volumeSlider.value = AudioManager.instance.masterVolume;
+                //volumeSlider.value = AudioManager.instance.masterVolume;
                 break;
             case VolumeType.MUSIC:
                 volumeSlider.value = AudioManager.instance.musicVolume;

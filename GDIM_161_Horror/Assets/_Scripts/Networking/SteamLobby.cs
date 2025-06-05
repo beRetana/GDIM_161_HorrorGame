@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using System.Collections;
 
 // DO NOT FUCKING TOUCH THIS SCRIPT UNLESS YOU KNOW WHAT YOU'RE DOING
 public class SteamLobby : MonoBehaviour
@@ -77,4 +78,12 @@ public class SteamLobby : MonoBehaviour
 
         _manager.StartClient();
     }
+
+    public void LeaveServer()
+    {
+        SteamMatchmaking.LeaveLobby(new CSteamID(_currentLobbyID));
+        _currentLobbyID = 0;
+    }
+
+    //IEnumerator
 }

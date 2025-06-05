@@ -2,12 +2,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using StarterAssets;
+using Steamworks;
 
 public class VolumeMenu : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject firstSelected;
+    public GameObject PauseMenu;
+    public GameObject SettingsMenu;
+    public GameObject volumeMenu;
 
     [Header("Player")]
     [SerializeField] private FirstPersonController firstPersonController;
@@ -35,7 +39,7 @@ public class VolumeMenu : MonoBehaviour
     {
         ForceCursorState(); 
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleVolumeMenu();
         }
@@ -44,20 +48,13 @@ public class VolumeMenu : MonoBehaviour
     private void ForceCursorState()
     {
         string currentScene = SceneManager.GetActiveScene().name;
-
-        if (menu.gameObject.activeInHierarchy)
-        {
-           
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (currentScene == "BUILD_1")
+        if (currentScene == "BUILD_1" && !isPaused)
         {
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        else
+        else if (currentScene == "BUILD_1")
         {
             
             Cursor.lockState = CursorLockMode.None;
@@ -65,7 +62,7 @@ public class VolumeMenu : MonoBehaviour
         }
     }
 
-    private void ToggleVolumeMenu()
+    public void ToggleVolumeMenu()
     {
         isPaused = !isPaused;
         string currentScene = SceneManager.GetActiveScene().name;
@@ -73,7 +70,7 @@ public class VolumeMenu : MonoBehaviour
         if (isPaused)
         {
             menu.gameObject.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(firstSelected);
+            //EventSystem.current.SetSelectedGameObject(firstSelected);
 
             if (currentScene == "BUILD_1")
             {
@@ -89,5 +86,35 @@ public class VolumeMenu : MonoBehaviour
                 firstPersonController.enabled = true;
             }
         }
+    }
+
+    public void OpenSettings()
+    {
+        PauseMenu.SetActive(false);
+        SettingsMenu.SetActive(true);
+    }
+
+    public void CloseSettings()
+    { 
+        PauseMenu.SetActive(true);
+        SettingsMenu.SetActive(false);
+    }
+
+    public void OpenVolumeMenu()
+    {
+        PauseMenu.SetActive(false);
+        volumeMenu.SetActive(true);
+    }
+
+
+    public void CloseVolumeMenu()
+    {
+        PauseMenu.SetActive(true);
+        volumeMenu.SetActive(false);
+    }
+
+    public void ClosePauseMenu()
+    {
+        ToggleVolumeMenu();
     }
 }
