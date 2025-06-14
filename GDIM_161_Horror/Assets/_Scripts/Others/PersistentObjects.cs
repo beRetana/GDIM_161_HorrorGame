@@ -9,7 +9,7 @@ using UnityEngine;
     /// </summary>
 public class PersistentObject : MonoBehaviour
 {
-    void Awake()
+    protected virtual void Awake()
     {
         DontDestroyOnLoad(gameObject);
     }

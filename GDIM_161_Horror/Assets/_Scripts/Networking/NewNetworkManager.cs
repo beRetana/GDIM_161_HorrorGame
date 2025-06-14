@@ -8,9 +8,8 @@ using Steamworks;
 public class NewNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private bool m_Debugger;
-
+    [SerializeField] private Transform[] _spawnPoints;
     private int _spawnCount = 0;
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -21,7 +20,7 @@ public class NewNetworkManager : NetworkManager
         {
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController, 
                                     _spawnPoints[_spawnCount].position, _spawnPoints[_spawnCount].rotation);
-            _spawnCount++;
+            ++_spawnCount;
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerIdNumber = GamePlayers.Count;

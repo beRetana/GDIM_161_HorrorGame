@@ -221,6 +221,8 @@ public class LobbyController : MonoBehaviour
 
     public void StopGame()
     {
+        SteamLobby.Instance.LeaveServer();
+
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             Debugger("HOST SHUTTING DOWN");
@@ -231,8 +233,6 @@ public class LobbyController : MonoBehaviour
             Debugger("CLIENT DISCONNECTING");
             NetworkManager.singleton.StopClient();
         }
-
-        SteamLobby.Instance.LeaveServer();
     }
 
     private void Debugger(object log)
