@@ -49,7 +49,6 @@ public class VolumeSlider : MonoBehaviour
             default:
                 Debug.LogWarning("Volume Type not supported: " + volumeType);
                 break;
-
         }
     }
 
@@ -75,6 +74,4 @@ public class VolumeSlider : MonoBehaviour
 
         }
     }
-
-   
 }
