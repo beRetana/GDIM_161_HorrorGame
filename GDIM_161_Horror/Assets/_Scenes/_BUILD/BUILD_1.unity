@@ -1490,6 +1490,60 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 115496ae31009094a8d3895d9645bd19, type: 3}
+--- !u!1 &1772484158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1772484159}
+  - component: {fileID: 1772484160}
+  m_Layer: 0
+  m_Name: MonsterCallLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1772484159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772484158}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.47, y: -0.83, z: 1.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1769060979548817889}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1772484160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772484158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 087fbddab90f3d048b8ab37fbc55e2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location1: {fileID: 1772484158}
+  location2: {fileID: 0}
+  location3: {fileID: 0}
+  MonsterCall:
+    Guid:
+      Data1: 804005955
+      Data2: 1152435475
+      Data3: 390688142
+      Data4: -1339961508
+    Path: event:/Monsters/monsterDeerCall
 --- !u!1 &1920762028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,9 +1707,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5349253302689923705, guid: 87bd09b2935fb5e43ba1e4db141a2851, type: 3}
+      insertIndex: 10
+      addedObject: {fileID: 1772484159}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87bd09b2935fb5e43ba1e4db141a2851, type: 3}
+--- !u!4 &1769060979548817889 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5349253302689923705, guid: 87bd09b2935fb5e43ba1e4db141a2851, type: 3}
+  m_PrefabInstance: {fileID: 1769060979548817888}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class PlayOneRandomLocations : MonoBehaviour
     [SerializeField]
     private GameObject location3;
 
-    private EventReference shot;
+    [SerializeField] private EventReference MonsterCall;
 
     private void Update()
     {
@@ -38,7 +38,7 @@ public class PlayOneRandomLocations : MonoBehaviour
         { 
             randomLocation = location3.transform.position;
         }
-        RuntimeManager.PlayOneShot(shot, randomLocation);
+        RuntimeManager.PlayOneShot(MonsterCall, randomLocation);
         Debug.Log(randomLocation);
     
     }
