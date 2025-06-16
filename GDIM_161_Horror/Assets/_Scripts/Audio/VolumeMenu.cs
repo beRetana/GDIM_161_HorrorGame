@@ -37,7 +37,7 @@ public class VolumeMenu : MonoBehaviour
 
     private void Update()
     {
-        ForceCursorState(); 
+        //ForceCursorState(); 
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -50,13 +50,13 @@ public class VolumeMenu : MonoBehaviour
         string currentScene = SceneManager.GetActiveScene().name;
         if (currentScene == "BUILD_1" && !isPaused)
         {
-            
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
         else if (currentScene == "BUILD_1")
         {
-            
+
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -72,19 +72,19 @@ public class VolumeMenu : MonoBehaviour
             menu.gameObject.SetActive(true);
             //EventSystem.current.SetSelectedGameObject(firstSelected);
 
-            if (currentScene == "BUILD_1")
-            {
-                firstPersonController.enabled = false;
-            }
+            //if (currentScene == "BUILD_1")
+            //{
+            //    firstPersonController.enabled = false;
+            //}
         }
         else
         {
             menu.gameObject.SetActive(false);
 
-            if (currentScene == "BUILD_1")
-            {
-                firstPersonController.enabled = true;
-            }
+            //if (currentScene == "BUILD_1")
+            //{
+            //    firstPersonController.enabled = true;
+            //}
         }
     }
 
