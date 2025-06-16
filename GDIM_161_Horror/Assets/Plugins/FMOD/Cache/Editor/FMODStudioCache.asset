@@ -25,7 +25,7 @@ MonoBehaviour:
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
-  MaxDistance: 4.4
+  MaxDistance: 1.4
   Length: 38842
 --- !u!114 &-8730954369301553497
 MonoBehaviour:
@@ -208,7 +208,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638843822294185718
+  lastModified: 638856254330731146
   FileSizes:
   - Name: Desktop
     Value: 856448
@@ -252,7 +252,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638843822339995724
+  lastModified: 638856254331594913
   FileSizes:
   - Name: Desktop
     Value: 4003872
@@ -281,6 +281,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-3465656820052067002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Character/ladderClimb
+  m_EditorClassIdentifier: 
+  Path: event:/Character/ladderClimb
+  Guid:
+    Data1: 842637644
+    Data2: 1076568064
+    Data3: 1679653538
+    Data4: -1454594615
+  Banks:
+  - {fileID: 32562135611507061}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3454834273344955169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,10 +323,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638843822286313021
+  lastModified: 638856254330170303
   FileSizes:
   - Name: Desktop
-    Value: 111776
+    Value: 129312
   Exists: 1
 --- !u!114 &-2696077309983655181
 MonoBehaviour:
@@ -397,7 +424,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638843822347932767
+  lastModified: 638856254333125200
   FileSizes:
   - Name: Desktop
     Value: 1127712
@@ -471,7 +498,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638843822294328785
+  lastModified: 638856254330915343
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -521,12 +548,14 @@ MonoBehaviour:
   - {fileID: 2338621308737970198}
   - {fileID: -6763538885667401015}
   - {fileID: -8902831560799369597}
+  - {fileID: 8129554337752511476}
+  - {fileID: -3465656820052067002}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638843822347932767
+  cacheTime: 638856254333125200
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -543,10 +572,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638843822340808708
+  lastModified: 638856254332587880
   FileSizes:
   - Name: Desktop
-    Value: 87616
+    Value: 107072
   Exists: 1
 --- !u!114 &408356832103984802
 MonoBehaviour:
@@ -644,10 +673,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638843822294363981
+  lastModified: 638856254330941323
   FileSizes:
   - Name: Desktop
-    Value: 2336
+    Value: 2416
   Exists: 1
 --- !u!114 &2338621308737970198
 MonoBehaviour:
@@ -965,3 +994,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 85
   Length: 420
+--- !u!114 &8129554337752511476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/monsterDeerFootstep
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/monsterDeerFootstep
+  Guid:
+    Data1: 879186241
+    Data2: 1158815159
+    Data3: -2137469290
+    Data4: -319745808
+  Banks:
+  - {fileID: -3454834273344955169}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 0
