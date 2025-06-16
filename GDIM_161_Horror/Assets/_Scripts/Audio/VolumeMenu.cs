@@ -37,7 +37,7 @@ public class VolumeMenu : MonoBehaviour
 
     private void Update()
     {
-        //ForceCursorState(); 
+        ForceCursorState(); 
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
