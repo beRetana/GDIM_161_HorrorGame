@@ -24,6 +24,7 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private StarterAssetsInputs _input;
+        private PlayerHeadBobbing _headBobbing;
         private const float _THRESHOLD = 0.01f;
         public bool isWalking { get; private set; }
 
@@ -65,6 +66,7 @@ namespace StarterAssets
             base.Start();
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            _headBobbing = GetComponent<PlayerHeadBobbing>();
 
             #if ENABLE_INPUT_SYSTEM
                 _playerInput = GetComponent<PlayerInput>();
@@ -166,16 +168,11 @@ namespace StarterAssets
             if (_input.move == Vector2.zero)
             {
                 targetSpeed = 0.0f;
-                isWalking = false; // Player is stopped
+                isWalking = false;
             }
             else
             {
-                isWalking = true; // Player is moving  
-                //if (_stepSoundTime >= _rate)
-                //{
-                //   // PlayFootstep();
-                //    _stepSoundTime = 0;
-                //}
+                isWalking = true; 
             }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -200,6 +197,7 @@ namespace StarterAssets
             if (_input.move != Vector2.zero)
                 inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 
+            _headBobbing.SetNoise(_speed / sprintSpeed);
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
 

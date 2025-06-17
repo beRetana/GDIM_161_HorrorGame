@@ -446,6 +446,7 @@ GameObject:
   - component: {fileID: 5074291976334431363}
   - component: {fileID: 8786011599035318099}
   - component: {fileID: 1650157976401792045}
+  - component: {fileID: 5228118343337500883}
   - component: {fileID: 5480692757662123069}
   - component: {fileID: 6685703048618153942}
   - component: {fileID: 3795071159714687488}
@@ -940,6 +941,22 @@ MonoBehaviour:
   syncInterval: 0
   _cameraBrain: {fileID: 8697592851519639027}
   _playerCamera: {fileID: 9070468886778292106}
+--- !u!114 &5228118343337500883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 770fc6f2c77c11d4c8cc10946bcbc9a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PerlinNoise: {fileID: 778523901297761141}
+  m_MaxFrequency: 10
+  m_MaxAmplitude: 10
+  m_debugger: 1
 --- !u!114 &5480692757662123069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2286,7 +2303,19 @@ PrefabInstance:
     - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: NoiseProfile
       value: 
-      objectReference: {fileID: 11400000, guid: 20e46be82478fa24b90f748044c06b4b, type: 2}
+      objectReference: {fileID: 11400000, guid: 72173d08cad616748ba8d66d84a03a3a, type: 2}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: AmplitudeGain
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: FrequencyGain
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: PivotOffset.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_NoiseOffsets.x
       value: -144.71115
@@ -2404,6 +2433,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+--- !u!114 &778523901297761141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+  m_PrefabInstance: {fileID: 84981438558050678}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8697592851519639027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8697592851519638540 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}

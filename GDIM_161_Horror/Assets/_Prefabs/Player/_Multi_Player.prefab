@@ -116,6 +116,22 @@ PrefabInstance:
       propertyPath: unlockedStats
       value: 
       objectReference: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
+    - target: {fileID: 5228118343337500883, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_PerlinNoise
+      value: 
+      objectReference: {fileID: 5447189171606931437}
+    - target: {fileID: 5228118343337500883, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_MaxAmplitude
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228118343337500883, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_MaxFrequency
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228118343337500883, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: m_enableHeadBobbing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5345982675721772152, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_WarningMessage
       value: 
@@ -274,9 +290,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8697592851519639027, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5447189171606931437}
-    - targetCorrespondingSourceObject: {fileID: 8697592851519639027, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 253885566330844100}
   m_SourcePrefab: {fileID: 100100000, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
 --- !u!1 &3373982209266735019 stripped
 GameObject:
@@ -427,31 +440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NoiseProfile: {fileID: 11400000, guid: 554b0ed52734c154eab51f6cedd3a7d7, type: 2}
-  PivotOffset: {x: 1, y: 1, z: 1}
-  AmplitudeGain: 0.2
-  FrequencyGain: 0.3
+  NoiseProfile: {fileID: 11400000, guid: 72173d08cad616748ba8d66d84a03a3a, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 1
+  FrequencyGain: 1
   m_NoiseOffsets: {x: 404.04672, y: -748.0488, z: -914.4125}
---- !u!114 &253885566330844100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9116085853155801148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplyAfter: 2
-  ChannelMask: 1
-  Gain: 1
-  Use2DDistance: 0
-  UseCameraSpace: 1
-  ReactionSettings:
-    m_SecondaryNoise: {fileID: 0}
-    AmplitudeGain: 1
-    FrequencyGain: 1
-    Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
