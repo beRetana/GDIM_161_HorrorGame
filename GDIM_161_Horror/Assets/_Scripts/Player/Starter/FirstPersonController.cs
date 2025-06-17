@@ -30,8 +30,8 @@ namespace StarterAssets
         float _stepSoundTime;
 
         [SerializeField] private string _buildScene = "BUILD_1";
-        [SerializeField] private EventReference _forestFootstep;
-        [SerializeField] private float _rate;
+        //[SerializeField] private EventReference _forestFootstep;
+        //[SerializeField] private float _rate;
 
         private bool _isSprinting;
         private InputAction _onJump;
@@ -85,7 +85,7 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != _buildScene) return;
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             StartCoroutine(FindSpawnPoint());
         }
 
@@ -152,10 +152,10 @@ namespace StarterAssets
             //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
 
-        public void PlayFootstep()
-        {
-            RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
-        }
+        //public void PlayFootstep()
+        //{
+        //    RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
+        //}
 
         private void Move()
         {
@@ -171,11 +171,11 @@ namespace StarterAssets
             else
             {
                 isWalking = true; // Player is moving  
-                if (_stepSoundTime >= _rate)
-                {
-                   // PlayFootstep();
-                    _stepSoundTime = 0;
-                }
+                //if (_stepSoundTime >= _rate)
+                //{
+                //   // PlayFootstep();
+                //    _stepSoundTime = 0;
+                //}
             }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
