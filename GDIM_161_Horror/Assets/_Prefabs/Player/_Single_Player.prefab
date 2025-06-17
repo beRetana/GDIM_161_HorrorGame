@@ -236,7 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5916810659875221816}
   m_Layer: 0
-  m_Name: Modifier
+  m_Name: CameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,13 +250,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675529859122886309}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.14839406, y: -0.054835632, z: 0.030936502, w: 0.98692214}
+  m_LocalPosition: {x: -0.027316004, y: 1.4939376, z: 0.0040721986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7354950563374537528}
-  m_Father: {fileID: 1950265189725586595}
+  m_Father: {fileID: 2571488355673585886}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
 --- !u!1 &1910066014320942404
 GameObject:
@@ -472,6 +472,7 @@ Transform:
   m_Children:
   - {fileID: 4706823857796436932}
   - {fileID: 8697592851519638540}
+  - {fileID: 5916810659875221816}
   - {fileID: 774340028634322563}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -877,14 +878,6 @@ MonoBehaviour:
   _arms: {fileID: 1385938723204227578}
   cinemachineCameraTarget: {fileID: 7354950563374537535}
   _buildScene: Brandon_Playground
-  _forestFootstep:
-    Guid:
-      Data1: 246199476
-      Data2: 1167086037
-      Data3: -580442201
-      Data4: -1092758943
-    Path: event:/Character/forestFootstep
-  _rate: 0.5
 --- !u!114 &3567417533735339568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1103,7 +1096,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5916810659875221816}
   - {fileID: 398159348708482666}
   m_Father: {fileID: 1613356455402742352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1834,7 +1826,7 @@ Transform:
   m_GameObject: {fileID: 7354950563374537535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.021000074, y: 0.10999999, z: 0.0059999567}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2291,6 +2283,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2571488355673585886}
     m_Modifications:
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: NoiseProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 20e46be82478fa24b90f748044c06b4b, type: 2}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: m_NoiseOffsets.x
+      value: -144.71115
+      objectReference: {fileID: 0}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: m_NoiseOffsets.y
+      value: -813.3252
+      objectReference: {fileID: 0}
+    - target: {fileID: 855742710185722371, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+      propertyPath: m_NoiseOffsets.z
+      value: 209.06363
+      objectReference: {fileID: 0}
     - target: {fileID: 6987141663447098903, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Priority.Enabled
       value: 1
