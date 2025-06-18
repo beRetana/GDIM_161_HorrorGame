@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using FMODUnity;
+using FMOD.Studio;
 using System;
 using Mirror;
 
@@ -123,6 +125,7 @@ namespace Interactions
         {
             if (pyrolysisTimer <= 0)
             {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchFlicker, this.transform.position);
                 WoodPyrolysis();
                 pyrolysisTimer = approxWoodLife_Minutes * SECONDS_PER_MINUTE / pyrolysisIncrements;
             }

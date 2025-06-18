@@ -39,6 +39,9 @@ public class FMODEvents : MonoBehaviour
     [field: Header("MonsterDeerCall")]
     [field: SerializeField] public EventReference MonsterDeerCall { get; private set; }
 
+    [field: Header("TorchFlicker")]
+    [field: SerializeField] public EventReference TorchFlicker { get; private set; }
+
 
     //Example for future one shot referrences
     //AudioManager.instance.PlayOneShot(FMODEvents.instance.sonarPing, this.transform.position);
