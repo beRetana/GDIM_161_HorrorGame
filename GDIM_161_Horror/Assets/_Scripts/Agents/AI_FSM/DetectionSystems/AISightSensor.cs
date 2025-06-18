@@ -12,9 +12,9 @@ namespace AI_FSM
         [SerializeField] private LayerMask _detectableLayers;
         [SerializeField] private LayerMask _obstructableLayers;
         [SerializeField] private float _range;
-        [SerializeField, Range(180, 10)] private float _angle;
+        [SerializeField, Range(10, 180)] private float _angle;
         [SerializeField] private float _height;
-        [SerializeField] private int _scanFrequency = 30;
+        [SerializeField, Range(1, 60)] private int _scanFrequency = 30;
         [SerializeField, Range(1,50)] private int _maxDetectables = 50;
         [SerializeField] private bool _enableDebugger;
 
@@ -42,7 +42,8 @@ namespace AI_FSM
         public float Range => _range;
         public float Angle => _angle;
 
-        private void Start(){
+        private void Start()
+        {
             //Initializing variables.
             _sightSensor = (_targetDetected) => { Debbuger($"The object dected value has been updated to {_targetDetected?.name}"); };
             _initialCenterPosition = new Vector3(_initialPosition.x, _initialPosition.y + _height/2, _initialPosition.z);
@@ -54,8 +55,9 @@ namespace AI_FSM
         void Update(){
             // Timer for frequency of scanning
             _scanTimer -= Time.deltaTime;
-            if (_scanTimer <= 0){
-                _scanTimer += _scanInterval;
+            if (_scanTimer <= 0)
+            {
+                _scanTimer = _scanInterval;
                 Scan();
             }
         }

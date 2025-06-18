@@ -778,9 +778,10 @@ GameObject:
   - component: {fileID: 1369710893841643461}
   - component: {fileID: 711085083035516619}
   - component: {fileID: 3060021676725567711}
+  - component: {fileID: 7624549636062358831}
   m_Layer: 6
   m_Name: Monster_Base
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -860,11 +861,11 @@ NavMeshAgent:
   m_GameObject: {fileID: 6314777827733659042}
   m_Enabled: 1
   m_AgentTypeID: -1372625422
-  m_Radius: 1
+  m_Radius: 0.7
   m_Speed: 4
   m_Acceleration: 3
   avoidancePriority: 20
-  m_AngularSpeed: 120
+  m_AngularSpeed: 200
   m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -973,7 +974,7 @@ MonoBehaviour:
           m_Value0: 3701359077516105444
           m_Value1: 748635645918276727
         Name: ChasePlayerLowerBound
-        m_Value: 180
+        m_Value: 20
     - rid: 6831410202846429270
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -981,7 +982,7 @@ MonoBehaviour:
           m_Value0: 15221098695166313177
           m_Value1: 13848867537724720497
         Name: ChasePlayerUpperBound
-        m_Value: 240
+        m_Value: 30
 --- !u!114 &1369710893841643461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,7 +1003,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 264
   _range: 10
-  _angle: 45
+  _angle: 60
   _height: 2
   _scanFrequency: 30
   _maxDetectables: 10
@@ -1011,7 +1012,7 @@ MonoBehaviour:
   _debugColorObjectDectected: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
   _debugSphereSizeDetectedObjects: 1
   _debugSegments: 10
-  _enableDebugVisuals: 0
+  _enableDebugVisuals: 1
 --- !u!114 &711085083035516619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1024,7 +1025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bced0f9349ae2574fa1ffe5cde9079e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debugger: 0
+  m_debugger: 1
 --- !u!114 &3060021676725567711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,6 +1039,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 8247961765527365976}
+--- !u!65 &7624549636062358831
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314777827733659042}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.75, y: 2, z: 1.3}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &6952360902458710909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,7 +1546,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8657545777587111654}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 624baa460d9897145a2011757b9402ed, type: 2}
   m_CullingMode: 2
