@@ -247,6 +247,7 @@ namespace Interactions
         {
             FlameFullExtinguish();
             NetworkDestroyTorch();
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchExtinguish, this.transform.position);
         }
 
 

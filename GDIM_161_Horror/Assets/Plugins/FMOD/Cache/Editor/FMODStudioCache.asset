@@ -166,6 +166,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 38842
+--- !u!114 &-6512126440193084054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Torch/torchExtinguish
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Torch/torchExtinguish
+  Guid:
+    Data1: -313226148
+    Data2: 1330980452
+    Data3: -2083291220
+    Data4: -202417076
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-6497715958798440725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,10 +262,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638857923465432912
+  lastModified: 638857931138175827
   FileSizes:
   - Name: Desktop
-    Value: 884928
+    Value: 895008
   Exists: 1
 --- !u!114 &-5367524864338901802
 MonoBehaviour:
@@ -552,7 +579,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638857917305265757
+  lastModified: 638857931138312370
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -605,12 +632,13 @@ MonoBehaviour:
   - {fileID: -5062076505125308038}
   - {fileID: -6098305500198496999}
   - {fileID: -4660871641468973938}
+  - {fileID: -6512126440193084054}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638857923465432912
+  cacheTime: 638857931138322625
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -728,10 +756,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638857917305291204
+  lastModified: 638857931138322625
   FileSizes:
   - Name: Desktop
-    Value: 2472
+    Value: 2524
   Exists: 1
 --- !u!114 &2338621308737970198
 MonoBehaviour:
