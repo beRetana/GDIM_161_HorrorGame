@@ -2,10 +2,21 @@ using UnityEngine;
 using Mirror;
 using Player;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+[RequireComponent(typeof(PlayerInput))]
+#endif
+
 public class PlayerBase : NetworkBehaviour
 {
     static private int _myID = 0; // 0, 1, 2, 3
     [SerializeField] protected bool _debugger;
+#if ENABLE_INPUT_SYSTEM
+    protected PlayerInput _playerInput;
+#endif
     protected PlayerAnimator _animator;
 
     private NewNetworkManager _networkmanager;
@@ -55,6 +66,14 @@ public class PlayerBase : NetworkBehaviour
     [Space(5)]
     [SerializeField] protected Arms _arms;
 
+    [Space(5)]
+    [SerializeField] protected const string DOWN_PLAYER_TAG = "DownPlayer";
+    [SerializeField] protected const string PLAYER_TAG = "Player";
+
+    protected HandInventory _handInventory;
+    protected LayerMask _interactLayer = 9;
+    protected LayerMask _playerLayer = 10;
+
     #endregion
     #region Useful Stats
     private SO_PlayerStats currentStats;
@@ -66,6 +85,8 @@ public class PlayerBase : NetworkBehaviour
 
     [SerializeField] protected GameObject cinemachineCameraTarget;
 
+    protected Vector3 downCamPosition;
+    protected Vector3 initialPosition;
     protected float moveSpeed;
     protected float sprintSpeed;
     protected float rotationSpeed;
@@ -104,6 +125,9 @@ public class PlayerBase : NetworkBehaviour
     protected virtual void Start()
     {
         _animator = GetComponent<PlayerAnimator>();
+        _handInventory = GetComponent<HandInventory>();
+        initialPosition = cinemachineCameraTarget.transform.localPosition;
+        downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
         EnterState(PlayerStateEnum.Unlocked);
         SetPlayerStats();
@@ -113,12 +137,19 @@ public class PlayerBase : NetworkBehaviour
     #region PlayerStateMachine
     public void LockPlayer()
     {
-        Debugger($"Unlocking Player{_myID}");
+        Debugger($"Locking Player{_myID}");
         EnterState(PlayerStateEnum.Locked);
     }
     public void UnlockPlayer()
     {
-        Debugger($"Locking Player{_myID}");
+        Debugger($"Unlocking Player{_myID}");
+
+        gameObject.layer = _playerLayer;
+        gameObject.tag = PLAYER_TAG;
+        _animator.SetAnimCrawl(false);
+        cinemachineCameraTarget.transform.localPosition = initialPosition;
+        SetInputState(true);
+
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
@@ -129,7 +160,14 @@ public class PlayerBase : NetworkBehaviour
     public void DownPlayer()
     {
         Debugger($"Locking Player{_myID}");
+
+        gameObject.layer = _interactLayer;
+        gameObject.tag = DOWN_PLAYER_TAG;
         _animator.SetAnimCrawl(true);
+        _handInventory.DropAllItems();
+        SetInputState(false);
+        cinemachineCameraTarget.transform.localPosition = downCamPosition;
+
         EnterState(PlayerStateEnum.Downed);
     }
     private void EnterState(PlayerStateEnum enterState)
@@ -220,6 +258,30 @@ public class PlayerBase : NetworkBehaviour
             Debugger($"ERROR: Could not add self {this} to PlayerList. Destoring self.");
             Destroy(this);
             return false;
+        }
+    }
+
+    public void SetInputState(bool active)
+    {
+        if (active)
+        {
+            _playerInput.actions["Swap"].Enable();
+            _playerInput.actions["Interact"].Enable();
+            _playerInput.actions["Drop"].Enable();
+            _playerInput.actions["Throw"].Enable();
+            _playerInput.actions["UseItem"].Enable();
+            _playerInput.actions["Sprint"].Enable();
+            _playerInput.actions["Jump"].Enable();
+        }
+        else
+        {
+            _playerInput.actions["Swap"].Disable();
+            _playerInput.actions["Interact"].Disable();
+            _playerInput.actions["Drop"].Disable();
+            _playerInput.actions["Throw"].Disable();
+            _playerInput.actions["UseItem"].Disable();
+            _playerInput.actions["Sprint"].Disable();
+            _playerInput.actions["Jump"].Disable();
         }
     }
 

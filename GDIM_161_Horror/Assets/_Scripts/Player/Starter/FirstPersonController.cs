@@ -5,7 +5,6 @@ using FMODUnity;
 using Dissonance;
 using Unity.VisualScripting;
 
-
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -13,15 +12,9 @@ using UnityEngine.InputSystem;
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
-    #if ENABLE_INPUT_SYSTEM
-        [RequireComponent(typeof(PlayerInput))]
-    #endif
+    
     public class FirstPersonController : PlayerBase
     {
-        #if ENABLE_INPUT_SYSTEM
-            private PlayerInput _playerInput;
-        #endif
-
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private PlayerHeadBobbing _headBobbing;
@@ -248,30 +241,6 @@ namespace StarterAssets
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
-        }
-
-        public void SetInputState(bool active)
-        {
-            if (active)
-            {
-                _playerInput.actions["Swap"].Enable();
-                _playerInput.actions["Interact"].Enable();
-                _playerInput.actions["Drop"].Enable();
-                _playerInput.actions["Throw"].Enable();
-                _playerInput.actions["UseItem"].Enable();
-                _playerInput.actions["Sprint"].Enable();
-                _playerInput.actions["Jump"].Enable();
-            }
-            else
-            {
-                _playerInput.actions["Swap"].Disable();
-                _playerInput.actions["Interact"].Disable();
-                _playerInput.actions["Drop"].Disable();
-                _playerInput.actions["Throw"].Disable();
-                _playerInput.actions["UseItem"].Disable();
-                _playerInput.actions["Sprint"].Disable();
-                _playerInput.actions["Jump"].Disable();
-            }
         }
     }
 }

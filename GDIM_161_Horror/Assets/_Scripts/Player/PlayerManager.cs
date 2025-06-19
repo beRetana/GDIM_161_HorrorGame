@@ -1,8 +1,11 @@
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : NetworkBehaviour
 {
+    [SerializeField] private const string MAIN_SCENE = "BUILD_MainMenu";
+
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
     protected static bool _debug;
@@ -27,6 +30,11 @@ public class PlayerManager : NetworkBehaviour
         _playerHolder = new();
     }
 
+    private void Start()
+    {
+        SceneManager.sceneLoaded += DestroyOnMainMenu;
+    }
+
     private void DeclareSingletonInstance()
     {
         if (Instance == null)
@@ -37,6 +45,14 @@ public class PlayerManager : NetworkBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+    private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == MAIN_SCENE && gameObject != null)
+        {
+            SceneManager.sceneLoaded -= DestroyOnMainMenu;
+            Destroy(this.gameObject);
         }
     }
 
@@ -74,6 +90,11 @@ public class PlayerManager : NetworkBehaviour
             return player.GetComponent<PlayerBase>();
         }
         throw new System.Exception($"NETWORK ERROR: Player {playerID} does not exist");
+    }
+
+    public void ClearPlayerManager()
+    {
+        _playerHolder.ClearPlayerHolder();
     }
 
     private static void Debugger(object log)
@@ -133,5 +154,13 @@ public class PlayerHolder
                 return true;
         }
         return false;
+    }
+
+    public void ClearPlayerHolder()
+    {
+        for (int i = 0; i < _MAX_PLAYER_COUNT; i++)
+            playerList[i] = null;
+
+        totalPlayers = 0;
     }
 }

@@ -245,8 +245,7 @@ public class HandInventory : NetworkBehaviour
 
     public void OnSwap(InputValue value) 
     {
-        if (isServer) RpcSwapDominance();
-        else CmdSwapDominance();
+        SwapAction();
     }
 
     [Command]
@@ -285,9 +284,7 @@ public class HandInventory : NetworkBehaviour
 
     public void OnThrow(InputValue value) 
     {
-        Debugger($"Throw-Is Player {_playerID} Server: {isServer}");
-        if (isServer) this._inventorySlots.RemoveItem(transform.forward * _throwForce, _playerID);
-        else CmdDropItem(_throwForce);
+        ThrowAction();
     }
 
     public void OnUseItem(InputValue value) { UseItem(); }
@@ -316,6 +313,24 @@ public class HandInventory : NetworkBehaviour
         Physics.IgnoreCollision(pickableItem.transform.parent.transform.GetComponent<Collider>(), GetComponent<Collider>(), true);
 
         return true;
+    }
+
+    public void DropAllItems()
+    {
+        StartCoroutine(ThrowAllItems());
+    }
+
+    private void ThrowAction()
+    {
+        Debugger($"Throw-Is Player {_playerID} Server: {isServer}");
+        if (isServer) this._inventorySlots.RemoveItem(transform.forward * _throwForce, _playerID);
+        else CmdDropItem(_throwForce);
+    }
+
+    private void SwapAction()
+    {
+        if (isServer) RpcSwapDominance();
+        else CmdSwapDominance();
     }
 
     private void InteractableSync()
@@ -414,5 +429,13 @@ public class HandInventory : NetworkBehaviour
     private NetworkIdentity GetPlayerIdentity()
     {
         return GetComponent<NetworkIdentity>();
+    }
+
+    IEnumerator ThrowAllItems()
+    {
+        ThrowAction();
+        SwapAction();
+        yield return null;
+        ThrowAction();
     }
 }

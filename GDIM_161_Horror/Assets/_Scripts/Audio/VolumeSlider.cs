@@ -60,7 +60,7 @@ public class VolumeSlider : MonoBehaviour
                 AudioManager.instance.masterVolume = volumeSlider.value;
                 break;
             case VolumeType.MUSIC:
-                AudioManager.instance.musicVolume = volumeSlider.value;
+                //AudioManager.instance.musicVolume = volumeSlider.value;
                 break;
             case VolumeType.AMBIANCE:
                 AudioManager.instance.ambianceVolume = volumeSlider.value;

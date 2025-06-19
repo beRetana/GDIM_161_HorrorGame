@@ -8,9 +8,9 @@ namespace Interactions
     {
         [Tooltip("Detection Radious for the Sonar")]
         [SerializeField, Range(1f, 100f)] private float _detectionRadius = 20f;
+        [SerializeField, Range(0f, 20f)] private float _verticalBuffer = 1f;
         [SerializeField] private LayerMask _sonarDetectable;
         [SerializeField] private SonarDisplay _sonarDisplay;
-        
 
         private List<Vector2> _objectsRelativeLocation;
         private List<Vector3> _objectsWorldLocation;
@@ -33,6 +33,9 @@ namespace Interactions
 
             foreach (Collider obj in listOfObjects)
             {
+                if (Mathf.Abs(obj.transform.position.y - player.position.y) >= _verticalBuffer)
+                    continue;
+
                 playerToObject = obj.transform.position - player.position;
                 playerToObject = Quaternion.AngleAxis(player.transform.rotation.eulerAngles.y, -Vector3.up) * playerToObject;
                 _objectsRelativeLocation.Add(new Vector2(playerToObject.x, playerToObject.z) / _detectionRadius);
@@ -41,7 +44,7 @@ namespace Interactions
                     if (playerController.PlayerIdNumber == playerId) continue;
                 
                 _objectsWorldLocation.Add(obj.transform.position);
-                Debugger($"Object Added To Workl Location List: {obj.transform.name}");
+                Debugger($"Object Added To Work Location List: {obj.transform.name}");
             }
         }
 
