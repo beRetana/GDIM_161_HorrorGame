@@ -123,14 +123,17 @@ namespace AI_FSM
             Vector3 targetDirection = (target.transform.position - transform.position);
             float dotProduct = Vector3.Dot(transform.forward, targetDirection.normalized);
 
+            Debbuger($"The Dot product is {dotProduct} and COS is {_angleCos} and sqrmag is {targetDirection.sqrMagnitude}");
+
             if (dotProduct >= _angleCos || (dotProduct >= 0 && targetDirection.sqrMagnitude <= 22f))
             {
-                if(_initialPosition.y <= target.transform.position.y && target.transform.position.y <= _initialPosition.y + _height)
+                Debbuger($"The target {target} is within angle.");
+                if ((transform.position.y + _initialPosition.y) <= target.transform.position.y && target.transform.position.y <= (transform.position.y + _initialPosition.y + _height))
                 {
+                    Debbuger($"The target {target} is within Y range.");
                     return !Physics.Raycast(transform.position + _initialCenterPosition, targetDirection, targetDirection.magnitude, _obstructableLayers);
                 }
             }
-            Debbuger($"The Dot product is {dotProduct} and COS is {_angleCos} and sqrmag is {targetDirection.sqrMagnitude}");
             return  false;
         }
 
@@ -226,7 +229,7 @@ namespace AI_FSM
 
         private void Debbuger(object log)
         {
-            if (_enableDebugger) Debug.Log(log);
+            if (_enableDebugger) Debug.Log($"[{this.GetType().Name}] {log}");
         }
 
         private void OnDrawGizmos(){
