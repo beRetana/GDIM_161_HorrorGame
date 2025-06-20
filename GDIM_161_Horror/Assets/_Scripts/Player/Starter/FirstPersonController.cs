@@ -11,11 +11,8 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-    [RequireComponent(typeof(CharacterController))]
-    
     public class FirstPersonController : PlayerBase
     {
-        private CharacterController _controller;
         private StarterAssetsInputs _input;
         private PlayerHeadBobbing _headBobbing;
         private const float _THRESHOLD = 0.01f;

@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
 #endif
-
+[RequireComponent(typeof(CharacterController))]
 public class PlayerBase : NetworkBehaviour
 {
     static private int _myID = 0; // 0, 1, 2, 3
@@ -65,11 +65,13 @@ public class PlayerBase : NetworkBehaviour
 
     [Space(5)]
     [SerializeField] protected Arms _arms;
+    [SerializeField] protected CapsuleCollider _capsuleCollider;
 
     [Space(5)]
     [SerializeField] protected const string DOWN_PLAYER_TAG = "DownPlayer";
     [SerializeField] protected const string PLAYER_TAG = "Player";
 
+    protected CharacterController _controller;
     protected HandInventory _handInventory;
     protected LayerMask _interactLayer = 9;
     protected LayerMask _playerLayer = 10;
@@ -144,6 +146,10 @@ public class PlayerBase : NetworkBehaviour
     {
         Debugger($"Unlocking Player{_myID}");
 
+        _controller.center = new Vector3(0f, .98f, 0f);
+        _controller.height = 2f;
+        _capsuleCollider.center = Vector3.up;
+        _capsuleCollider.direction = 1;
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
         _animator.SetAnimCrawl(false);
@@ -161,6 +167,10 @@ public class PlayerBase : NetworkBehaviour
     {
         Debugger($"Locking Player{_myID}");
 
+        _controller.center = Vector3.zero;
+        _controller.height = .5f;
+        _capsuleCollider.center = new Vector3(0f,0.5f,0f);
+        _capsuleCollider.direction = 2;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
         _animator.SetAnimCrawl(true);
