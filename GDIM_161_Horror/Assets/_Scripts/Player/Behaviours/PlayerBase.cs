@@ -66,6 +66,7 @@ public class PlayerBase : NetworkBehaviour
     [Space(5)]
     [SerializeField] protected Arms _arms;
     [SerializeField] protected CapsuleCollider _capsuleCollider;
+    [SerializeField] protected InteractablePlayer _interaction;
 
     [Space(5)]
     [SerializeField] protected const string DOWN_PLAYER_TAG = "DownPlayer";
@@ -146,6 +147,7 @@ public class PlayerBase : NetworkBehaviour
     {
         Debugger($"Unlocking Player{_myID}");
 
+        _interaction.gameObject.SetActive(false);
         _controller.center = new Vector3(0f, .98f, 0f);
         _controller.height = 2f;
         _capsuleCollider.center = Vector3.up;
@@ -167,6 +169,8 @@ public class PlayerBase : NetworkBehaviour
     {
         Debugger($"Locking Player{_myID}");
 
+        _interaction.gameObject.SetActive(true);
+        _interaction.SetPlayerInteraction(UnlockPlayer);
         _controller.center = Vector3.zero;
         _controller.height = .5f;
         _capsuleCollider.center = new Vector3(0f,0.5f,0f);

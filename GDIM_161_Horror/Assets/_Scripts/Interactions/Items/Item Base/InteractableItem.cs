@@ -8,11 +8,11 @@ using Mirror;
 /// </summary>
 public class InteractableItem : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected Animator _textAnimation;
+    [SerializeField] protected Animator _uiAnimator;
     [SerializeField] protected LookAtCamera _lookAtCamera;
     [SerializeField] protected NetworkIdentity _networkIdentity;
     [SerializeField] protected string _textName;
-    [SerializeField] protected string _fadeIn;
+    protected string FADE = "FADE";
 
     protected TextMeshProUGUI _textMesh;
 
@@ -58,12 +58,12 @@ public class InteractableItem : MonoBehaviour, IInteractable
     {
         if (!_isInteractable) return;
         _lookAtCamera.SetCamera(Camera.main);
-        _textAnimation.SetBool(_fadeIn, true);
+        _uiAnimator.SetBool(FADE, true);
     }
 
     public virtual void StoppedDetecting(int playerID)
     {
-        try { _textAnimation?.SetBool(_fadeIn, false); }
+        try { _uiAnimator?.SetBool(FADE, false); }
         finally{}
     }
 
