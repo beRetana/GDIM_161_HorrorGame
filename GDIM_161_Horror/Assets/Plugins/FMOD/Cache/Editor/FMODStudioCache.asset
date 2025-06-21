@@ -262,10 +262,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638857931138175827
+  lastModified: 638861167816709570
   FileSizes:
   - Name: Desktop
-    Value: 895008
+    Value: 1020960
   Exists: 1
 --- !u!114 &-5367524864338901802
 MonoBehaviour:
@@ -404,7 +404,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638857030530702804
+  lastModified: 638861167816406967
   FileSizes:
   - Name: Desktop
     Value: 129888
@@ -490,6 +490,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 382
+--- !u!114 &-1816447698328671742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Door/doorOpen
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Door/doorOpen
+  Guid:
+    Data1: 1747445673
+    Data2: 1132802292
+    Data3: -1312468819
+    Data4: -1486675040
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-1299140445480587344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,10 +532,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638857033847868501
+  lastModified: 638861180947393576
   FileSizes:
   - Name: Desktop
-    Value: 1127712
+    Value: 1177632
   Exists: 1
 --- !u!114 &-981276713472088124
 MonoBehaviour:
@@ -564,6 +591,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 7000
+--- !u!114 &-601776987393607856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Door/doorClose
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Door/doorClose
+  Guid:
+    Data1: 1245980466
+    Data2: 1081569021
+    Data3: 734054564
+    Data4: 1755509996
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-238223770636140962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,7 +633,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638857931138312370
+  lastModified: 638861180946193165
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -633,12 +687,15 @@ MonoBehaviour:
   - {fileID: -6098305500198496999}
   - {fileID: -4660871641468973938}
   - {fileID: -6512126440193084054}
+  - {fileID: -601776987393607856}
+  - {fileID: -1816447698328671742}
+  - {fileID: 5472157373840411100}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638857931138322625
+  cacheTime: 638861180947393576
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -655,7 +712,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638851684738580082
+  lastModified: 638861167817972553
   FileSizes:
   - Name: Desktop
     Value: 107072
@@ -756,10 +813,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638857931138322625
+  lastModified: 638861180946218325
   FileSizes:
   - Name: Desktop
-    Value: 2524
+    Value: 2680
   Exists: 1
 --- !u!114 &2338621308737970198
 MonoBehaviour:
@@ -969,6 +1026,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &5472157373840411100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PA system/hornWarning
+  m_EditorClassIdentifier: 
+  Path: event:/PA system/hornWarning
+  Guid:
+    Data1: -295672891
+    Data2: 1193487857
+    Data3: 993474995
+    Data4: -131944392
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 9600
+  Length: 0
 --- !u!114 &5886076861094356126
 MonoBehaviour:
   m_ObjectHideFlags: 0
