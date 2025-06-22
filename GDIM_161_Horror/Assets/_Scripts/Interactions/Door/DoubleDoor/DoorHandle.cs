@@ -117,11 +117,11 @@ namespace Interactions
                 _playerOpenTarget.position.z);
 
             float ratio = 0;
-            for (float timeElapsed = 0; ratio <= 1; timeElapsed += Time.deltaTime)
+            for (float timeElapsed = 0; ratio <= 1; ratio = timeElapsed / _doorsManager.DoorAnimTime)
             {
-                ratio = Mathf.Clamp01(timeElapsed / _doorsManager.DoorAnimTime);
                 playerTransform.position = Vector3.Lerp(playerOriginalPosition, playerTarget, ratio);
                 yield return null;
+                timeElapsed += Time.deltaTime;
             }
 
             PlayerGettingOffHandle(_playerUserID);

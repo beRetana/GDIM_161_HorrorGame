@@ -89,12 +89,13 @@ namespace Interactions
 
             Vector3 doorOriginalPosition = doorData.DoorTransform.position;
             float ratio = 0;
-            for (float timeElapsed = 0; ratio <= 1; timeElapsed += Time.deltaTime)
+            for (float timeElapsed = 0; ratio <= 1; ratio = timeElapsed / _openDoorAnimationTime)
             {
-                ratio = timeElapsed / _openDoorAnimationTime;
                 doorData.DoorTransform.position = Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio);
                 yield return null;
+                timeElapsed += Time.deltaTime;
             }
+            doorData.DoorTransform.position = doorData.DoorOpenTarget.position;
         }
 
         public void OnPlayerHandleInteraction(bool isPlayerOnHandler)
