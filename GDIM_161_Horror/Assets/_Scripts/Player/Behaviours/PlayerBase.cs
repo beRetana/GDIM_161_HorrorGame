@@ -150,7 +150,21 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void UnlockPlayer()
     {
         Debugger($"Unlocking Player{_myID}");
+        EnterState(PlayerStateEnum.Unlocked);
+    }
+    public void LimpPlayer()
+    {
+        Debugger($"Limping Player{_myID}");
+        EnterState(PlayerStateEnum.Limp);
+    }
+    public void DownPlayer()
+    {
+        Debugger($"Locking Player{_myID}");
+        EnterState(PlayerStateEnum.Downed);
+    }
 
+    private void UnlockPlayerSettings()
+    {
         _interaction.gameObject.SetActive(false);
         _interaction.SetInteractive(false);
         _controller.center = new Vector3(0f, .98f, 0f);
@@ -162,24 +176,16 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
-
-        EnterState(PlayerStateEnum.Unlocked);
     }
-    public void LimpPlayer()
-    {
-        Debugger($"Limping Player{_myID}");
-        EnterState(PlayerStateEnum.Limp);
-    }
-    public void DownPlayer()
-    {
-        Debugger($"Locking Player{_myID}");
 
+    private void DownPlayerSettings()
+    {
         _interaction.gameObject.SetActive(true);
         _interaction.SetInteractive(true);
         _interaction.SetPlayerInteraction(UnlockPlayer);
         _controller.center = Vector3.zero;
         _controller.height = .5f;
-        _capsuleCollider.center = new Vector3(0f,0.5f,0f);
+        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
         _capsuleCollider.direction = 2;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
@@ -187,8 +193,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory.DropAllItems();
         SetInputState(false);
         cinemachineCameraTarget.transform.localPosition = downCamPosition;
-
-        EnterState(PlayerStateEnum.Downed);
     }
     private void EnterState(PlayerStateEnum enterState)
     {
@@ -217,12 +221,14 @@ public class PlayerBase : NetworkBehaviour, IDebugger
                 currentStats = lockedStats;
                 break;
             case PlayerStateEnum.Unlocked:
+                UnlockPlayerSettings();
                 currentStats = unlockedStats;
                 break;
             case PlayerStateEnum.Limp:
                 currentStats = limpStats;
                 break;
             case PlayerStateEnum.Downed:
+                DownPlayerSettings();
                 currentStats = downedStats;
                 break;
         }

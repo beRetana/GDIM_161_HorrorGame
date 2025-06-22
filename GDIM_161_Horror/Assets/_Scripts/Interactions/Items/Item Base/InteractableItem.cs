@@ -48,8 +48,17 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     {
         _isInteractable = intactive;
     }
+    public virtual void StartedInteraction(int playerID)
+    {
+        Debugger($"Started Interacting with player {playerID}");
+    }
 
-    public virtual void Interact(int playerID)
+    public virtual void CanceledInteraction(int playerID)
+    {
+        Debugger($"Cancelled Interaction By Player {playerID}");
+    }
+
+    public virtual void PerformedInteraction(int playerID)
     {
         if (!_isInteractable) return;
         OnInteractAction(playerID);

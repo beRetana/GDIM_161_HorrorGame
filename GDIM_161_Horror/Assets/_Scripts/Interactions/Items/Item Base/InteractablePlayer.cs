@@ -21,40 +21,25 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_PlayerControls = new();
     }
 
-    private void OnDisable()
-    {
-        DisableInput();
-    }
-
-    protected void EnableInput()
-    {
-        Debugger("Enabled Input");
-        m_PlayerControls.Player.Enable();
-        m_PlayerControls.Player.Interact.canceled += RescueCancelled;
-        m_PlayerControls.Player.Interact.performed += OnLoaded;
-    }
-
-    protected void DisableInput()
-    {
-        Debugger("Disabled Input");
-        m_PlayerControls.Player.Interact.canceled -= RescueCancelled;
-        m_PlayerControls.Player.Interact.performed -= OnLoaded;
-        m_PlayerControls.Player.Disable();
-    }
-
-    public override void Interact(int playerID)
+    public override void StartedInteraction(int playerID)
     {
         if (!_isInteractable) return;
-        Debugger("Player interacted with me");
+        base.StartedInteraction(playerID);
         _uiAnimator.SetBool(LOADING, true);
-        EnableInput();
     }
 
-    public void RescueCancelled(InputAction.CallbackContext context)
+    public override void CanceledInteraction(int playerID)
     {
-        Debugger("Loading was Cacelled");
+        if (!_isInteractable) return;
+        base.CanceledInteraction(playerID);
         _uiAnimator.SetBool(LOADING, false);
-        DisableInput();
+    }
+
+    public override void PerformedInteraction(int playerID)
+    {
+        if (!_isInteractable) return;
+        Debugger("Performed");
+        Loaded();
     }
 
     public void SetPlayerInteraction(Action action)
@@ -63,10 +48,9 @@ public class InteractablePlayer : InteractableItem, IDebugger
         OnPlayerInteract = action;
     }
 
-    protected void OnLoaded(InputAction.CallbackContext context)
+    protected void Loaded()
     {
         Debugger("Player Succesfully Rescued");
         OnPlayerInteract?.Invoke();
-        DisableInput();
     }
 }
