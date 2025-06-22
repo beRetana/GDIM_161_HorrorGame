@@ -51,6 +51,7 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
 
     public virtual void Interact(int playerID)
     {
+        if (!_isInteractable) return;
         OnInteractAction(playerID);
     }
 

@@ -50,6 +50,7 @@ namespace Interactions
 
         private void PlayerGettingOffHandle(int playerID)
         {
+            Debugger($"Player {playerID} getting Off handle");
             _interactableItem.SetDisplayMessage(_grabDisplayMessage);
             PlayerManager.Instance.UnlockPlayerInput(playerID);
             DetachingFromPlayer();
