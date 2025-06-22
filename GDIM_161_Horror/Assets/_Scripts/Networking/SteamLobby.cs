@@ -1,7 +1,8 @@
-using UnityEngine;
 using Mirror;
 using Steamworks;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // DO NOT FUCKING TOUCH THIS SCRIPT UNLESS YOU KNOW WHAT YOU'RE DOING
 public class SteamLobby : MonoBehaviour
@@ -18,6 +19,7 @@ public class SteamLobby : MonoBehaviour
     private const string HostAddressKey = "HostAddress";
     private NewNetworkManager _manager;
 
+    [SerializeField] private const string MAIN_SCENE = "BUILD_MainMenu";
     [SerializeField] private bool _debugger;
 
     public ulong CurrentLobbyID { get => _currentLobbyID; set => _currentLobbyID = value; }
@@ -42,6 +44,18 @@ public class SteamLobby : MonoBehaviour
         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+
+        SceneManager.sceneLoaded += DestroyOnMainMenu;
+    }
+
+    private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == MAIN_SCENE)
+        {
+            LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+            JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
+            LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+        }
     }
 
     public void HostLobby() => SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, _manager.maxConnections);
