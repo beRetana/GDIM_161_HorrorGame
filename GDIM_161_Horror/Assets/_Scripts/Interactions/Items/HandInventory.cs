@@ -4,7 +4,6 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
-using UnityEngine.Windows;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -194,12 +193,18 @@ public class HandInventory : NetworkBehaviour
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        _playerControls = new();
         SetUpControls();
+    }
+
+    public void SetControlsActive(bool state)
+    {
+        if (state) SetUpControls();
+        else DisableControls();
     }
 
     private void SetUpControls()
     {
-        _playerControls = new();
         _playerControls.Enable();
         _playerControls.Player.Interact.started += OnInteraction;
         _playerControls.Player.Interact.canceled += OnInteraction;

@@ -296,6 +296,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     public void SetInputState(bool active)
     {
+        _handInventory.SetControlsActive(active);
         if (active)
         {
             _playerInput.actions["Swap"].Enable();
