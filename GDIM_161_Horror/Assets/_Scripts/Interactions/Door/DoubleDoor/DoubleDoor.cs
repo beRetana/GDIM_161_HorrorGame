@@ -92,7 +92,6 @@ namespace Interactions
             for (float timeElapsed = 0; ratio <= 1; timeElapsed += Time.deltaTime)
             {
                 ratio = timeElapsed / _openDoorAnimationTime;
-                Debugger($"Ratio: {ratio} lerp value: {Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio)}");
                 doorData.DoorTransform.position = Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio);
                 yield return null;
             }

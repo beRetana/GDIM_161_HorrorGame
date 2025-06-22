@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &526462349801947535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336376120906751700}
+  m_Layer: 0
+  m_Name: RightDoorTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &336376120906751700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526462349801947535}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6885474385128341961}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4440549725756912900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5922983208257878543}
+  m_Layer: 0
+  m_Name: LeftDoorTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5922983208257878543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4440549725756912900}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6885474385128341961}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4486008596400445310
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,6 +96,8 @@ Transform:
   m_Children:
   - {fileID: 8924794524385185193}
   - {fileID: 7227384843888557295}
+  - {fileID: 5922983208257878543}
+  - {fileID: 336376120906751700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7811484287015804871
@@ -76,10 +140,10 @@ MonoBehaviour:
   _grabHandlesAnimationTime: 3
   _rightDoor:
     DoorTransform: {fileID: 8924794524385185193}
-    DoorOpenTarget: {fileID: 4678537570084436507}
+    DoorOpenTarget: {fileID: 336376120906751700}
   _leftDoor:
     DoorTransform: {fileID: 7227384843888557295}
-    DoorOpenTarget: {fileID: 8175641694958376807}
+    DoorOpenTarget: {fileID: 5922983208257878543}
 --- !u!114 &7079154765239599895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,11 +659,6 @@ PrefabInstance:
       addedObject: {fileID: 8638359662048588828}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 179b67ba9e325ee41905317080c9b76a, type: 3}
---- !u!4 &4678537570084436507 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5991770952777993438, guid: 179b67ba9e325ee41905317080c9b76a, type: 3}
-  m_PrefabInstance: {fileID: 1426104850506430149}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8924794524385185193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7498976734481562476, guid: 179b67ba9e325ee41905317080c9b76a, type: 3}
@@ -685,10 +744,5 @@ PrefabInstance:
 --- !u!4 &7227384843888557295 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4605172111695598988, guid: 129b7c4a19805ce419b5308882830065, type: 3}
-  m_PrefabInstance: {fileID: 6603420115316910435}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8175641694958376807 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3085450998123068932, guid: 129b7c4a19805ce419b5308882830065, type: 3}
   m_PrefabInstance: {fileID: 6603420115316910435}
   m_PrefabAsset: {fileID: 0}
