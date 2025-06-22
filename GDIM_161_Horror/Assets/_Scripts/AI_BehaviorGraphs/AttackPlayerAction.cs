@@ -18,7 +18,6 @@ public partial class AttackPlayerAction : Action
         MonsterAnimator monsterAnimator = Self.Value.GetComponent<MonsterAnimator>();
         monsterAnimator.TriggerJump();
         firstPersonController.DownPlayer();
-        firstPersonController.SetInputState(false);
         return Status.Success;
     }
 }

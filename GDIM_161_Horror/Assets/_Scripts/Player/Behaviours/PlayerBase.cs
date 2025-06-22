@@ -152,6 +152,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         Debugger($"Unlocking Player{_myID}");
 
         _interaction.gameObject.SetActive(false);
+        _interaction.SetInteractive(false);
         _controller.center = new Vector3(0f, .98f, 0f);
         _controller.height = 2f;
         _capsuleCollider.center = Vector3.up;
@@ -174,6 +175,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         Debugger($"Locking Player{_myID}");
 
         _interaction.gameObject.SetActive(true);
+        _interaction.SetInteractive(true);
         _interaction.SetPlayerInteraction(UnlockPlayer);
         _controller.center = Vector3.zero;
         _controller.height = .5f;

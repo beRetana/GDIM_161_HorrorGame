@@ -124,6 +124,7 @@ namespace Interactions
                 timeElapsed += Time.deltaTime;
             }
 
+            playerTransform.position = playerTarget;
             PlayerGettingOffHandle(_playerUserID);
         }
 

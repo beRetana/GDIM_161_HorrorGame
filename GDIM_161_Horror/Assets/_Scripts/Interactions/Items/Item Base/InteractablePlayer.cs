@@ -44,6 +44,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
 
     public override void Interact(int playerID)
     {
+        if (!_isInteractable) return;
         Debugger("Player interacted with me");
         _uiAnimator.SetBool(LOADING, true);
         EnableInput();
