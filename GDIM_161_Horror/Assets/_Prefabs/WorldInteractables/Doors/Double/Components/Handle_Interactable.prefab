@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3871387167678880086}
   - component: {fileID: 3961325141968135999}
   - component: {fileID: 4475108195617463880}
+  - component: {fileID: 7705748235913505021}
   m_Layer: 3
   m_Name: Handle_Interactable
   m_TagString: Untagged
@@ -31,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7444954621175025991}
   m_Father: {fileID: 0}
@@ -88,18 +89,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _doorsManager: {fileID: 0}
-  _door: {fileID: 0}
   _playerGrabTarget: {fileID: 0}
   _playerOpenTarget: {fileID: 0}
-  _doorOpenTarget: {fileID: 0}
-  _doorRigidbody: {fileID: 0}
   _handleJoint: {fileID: 0}
   _grabDisplayMessage: GRAB
   _releaseDisplayMessage: RELEASE
-  _animTime: 4
-  _openDoorDelay: 2
-  _openingDoorsDuration: 5
-  _debugger: 1
 --- !u!114 &3961325141968135999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,11 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab09cb8cdb499094b8250e39e874e508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textAnimation: {fileID: 2879146200046705531}
-  _lookAtCamera: {fileID: 6579304603689076580}
   _networkIdentity: {fileID: 0}
   _textName: GRAB
-  _fadeIn: FadeIn
   _order: 0
 --- !u!114 &4475108195617463880
 MonoBehaviour:
@@ -135,6 +126,21 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &7705748235913505021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3231920130275785244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773ef212f061aef41b414ad65bc4700d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debuggers:
+  - debugScript: {fileID: 3871387167678880086}
+    enabled: 1
 --- !u!1 &4949426737683672676
 GameObject:
   m_ObjectHideFlags: 0

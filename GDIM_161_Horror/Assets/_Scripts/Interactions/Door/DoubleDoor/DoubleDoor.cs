@@ -1,15 +1,35 @@
 using Mirror;
 using System;
 using UnityEngine;
+using OtherUtils;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Interactions
 {
-    public class DoubleDoor : NetworkBehaviour
+    public class DoubleDoor : NetworkBehaviour, IDebugger
     {
         [Header("Door Settings/Components")]
-        [SerializeField] private DoorHandle _rightDoorHandle;
-        [SerializeField] private DoorHandle _leftDoorHandle;
-        [SerializeField] private bool _debugger;
+        [SerializeField] private List<DoorHandle> _doorHandles;
+        [SerializeField] private float _openDoorAnimationTime;
+        [SerializeField] private float _openDoorDelay = 2f;
+        [SerializeField] private float _grabHandlesAnimationTime;
+        [SerializeField] private DoorData _rightDoor;
+        [SerializeField] private DoorData _leftDoor;
+        
+        private bool _debugger;
+
+        public float DoorAnimTime => _openDoorAnimationTime;
+        public float DoorDelay => _openDoorDelay;
+        public float HandleGrabAnimTime => _grabHandlesAnimationTime;
+
+        [Serializable]
+        struct DoorData
+        {
+            public Transform DoorTransform;
+            public Transform DoorOpenTarget;
+            public Rigidbody DoorRigidbody;
+        }
 
         [SyncVar] private int _playersOnHandles;
 
@@ -57,8 +77,25 @@ namespace Interactions
 
         private void UnlockingDoors()
         {
-            _rightDoorHandle.DoorCanMove();
-            _leftDoorHandle.DoorCanMove();
+            foreach (DoorHandle handle in _doorHandles)
+                handle.MovePlayer();
+
+            StartCoroutine(OpenDoors(_rightDoor));
+            StartCoroutine(OpenDoors(_leftDoor));
+        }
+
+        IEnumerator OpenDoors(DoorData doorData)
+        {
+            yield return new WaitForSeconds(_openDoorDelay);
+
+            Vector3 doorOriginalPosition = doorData.DoorTransform.position;
+            float ratio = 0;
+            for (float timeElapsed = 0; ratio <= 1; timeElapsed += Time.deltaTime)
+            {
+                ratio = Mathf.Clamp01(timeElapsed / _openDoorAnimationTime);
+                doorData.DoorTransform.position = Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio);
+                yield return null;
+            }
         }
 
         public void OnPlayerHandleInteraction(bool isPlayerOnHandler)
@@ -66,12 +103,17 @@ namespace Interactions
             if (isPlayerOnHandler) ++_playersOnHandles; 
             else --_playersOnHandles;
             Debugger($"DOUBLE DOOR: There are {_playersOnHandles} players on the Handles");
-            if (_playersOnHandles >= 2 ) UpdateDoorState(DoorState.Unlocking);
+            if (_playersOnHandles >= _doorHandles.Count) UpdateDoorState(DoorState.Unlocking);
         }
 
-        private void Debugger(object log)
+        public void Debugger(object log)
         {
             if (_debugger) Debug.Log(log);
+        }
+
+        public void SetDebugActive(bool active)
+        {
+            _debugger = active;
         }
     }
 }

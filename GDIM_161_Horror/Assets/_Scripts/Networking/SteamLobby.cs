@@ -44,18 +44,6 @@ public class SteamLobby : MonoBehaviour
         LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-
-        SceneManager.sceneLoaded += DestroyOnMainMenu;
-    }
-
-    private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == MAIN_SCENE)
-        {
-            LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-            JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
-            LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
-        }
     }
 
     public void HostLobby() => SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, _manager.maxConnections);
