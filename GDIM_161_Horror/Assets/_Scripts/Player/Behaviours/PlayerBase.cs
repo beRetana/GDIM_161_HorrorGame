@@ -171,7 +171,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _capsuleCollider.direction = 1;
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
-        _animator.SetAnimCrawl(false);
+        _animator?.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
     }

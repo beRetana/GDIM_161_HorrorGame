@@ -16,7 +16,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void SetAnimSpeed(float speed)
     {
-        m_PlayerAnimator.SetFloat(SPEED, speed);
+        m_PlayerAnimator?.SetFloat(SPEED, speed);
     }
 
     public void SetAnimJump(bool jump)
@@ -25,10 +25,10 @@ public class PlayerAnimator : MonoBehaviour
     }
     public void SetAnimLadder(bool ladder)
     {
-        m_PlayerAnimator.SetBool(LADDER, ladder);
+        m_PlayerAnimator?.SetBool(LADDER, ladder);
     }
     public void SetAnimCrawl(bool crawl)
     {
-        m_PlayerAnimator.SetBool(CRAWL, crawl);
+        m_PlayerAnimator?.SetBool(CRAWL, crawl);
     }
 }
