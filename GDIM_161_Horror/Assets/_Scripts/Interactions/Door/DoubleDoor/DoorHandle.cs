@@ -123,9 +123,7 @@ namespace Interactions
                 yield return null;
             }
 
-            OnUnlockPlayer?.Invoke();
-            DetachingFromPlayer();
-            OnUnlockPlayer = null;
+            PlayerGettingOffHandle(_playerUserID);
         }
 
         IEnumerator GrabHandleAnimation(int playerId)
