@@ -124,6 +124,8 @@ namespace Interactions
             }
 
             OnUnlockPlayer?.Invoke();
+            DetachingFromPlayer();
+            OnUnlockPlayer = null;
         }
 
         IEnumerator GrabHandleAnimation(int playerId)
