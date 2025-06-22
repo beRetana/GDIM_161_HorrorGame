@@ -1,6 +1,8 @@
 using UnityEngine;
 using Mirror;
 using Player;
+using OtherUtils;
+
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -10,10 +12,10 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 #endif
 [RequireComponent(typeof(CharacterController))]
-public class PlayerBase : NetworkBehaviour
+public class PlayerBase : NetworkBehaviour, IDebugger
 {
     static private int _myID = 0; // 0, 1, 2, 3
-    [SerializeField] protected bool _debugger;
+
 #if ENABLE_INPUT_SYSTEM
     protected PlayerInput _playerInput;
 #endif
@@ -32,6 +34,8 @@ public class PlayerBase : NetworkBehaviour
             return _networkmanager = NewNetworkManager.singleton as NewNetworkManager;
         }
     }
+
+    protected bool _debugger;
 
     #region enums
     public enum PlayerStateEnum
@@ -299,8 +303,13 @@ public class PlayerBase : NetworkBehaviour
         }
     }
 
-    protected void Debugger(object log)
+    public void Debugger(object log)
     {
         if (_debugger) Debug.Log(log);
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        _debugger = active;
     }
 }

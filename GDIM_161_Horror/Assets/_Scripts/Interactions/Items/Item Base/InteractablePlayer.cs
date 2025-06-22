@@ -1,50 +1,71 @@
-using NUnit.Framework;
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using OtherUtils;
 
-public class InteractablePlayer : InteractableItem
+public class InteractablePlayer : InteractableItem, IDebugger
 {
     protected Action OnPlayerInteract;
     protected Coroutine m_Rescuing;
+    protected PlayerControls m_PlayerControls;
     protected const string LOADING = "LOADING";
-    protected bool m_IsRescuing;
-    protected bool m_IsPlayerInteracting;
 
     protected override void Awake()
     {
         OnPlayerInteract = () => {  };
     }
 
-    public override void Interact(int playerID)
+    protected override void Start()
     {
-        m_IsPlayerInteracting = true;
-        m_IsRescuing = true;
-        _uiAnimator.SetBool(LOADING, true);
+        base.Start();
+        m_PlayerControls = new();
     }
 
-    public void OnInteract(InputValue value)
+    private void OnDisable()
     {
-        if (!m_IsPlayerInteracting) return;
+        DisableInput();
+    }
 
-        if (!value.isPressed && m_IsRescuing)
-        {
-            m_IsRescuing = false;
-            _uiAnimator.SetBool(LOADING, false);
-            m_IsPlayerInteracting = false;
-        }
+    protected void EnableInput()
+    {
+        Debugger("Enabled Input");
+        m_PlayerControls.Player.Enable();
+        m_PlayerControls.Player.Interact.canceled += RescueCancelled;
+        m_PlayerControls.Player.Interact.performed += OnLoaded;
+    }
+
+    protected void DisableInput()
+    {
+        Debugger("Disabled Input");
+        m_PlayerControls.Player.Interact.canceled -= RescueCancelled;
+        m_PlayerControls.Player.Interact.performed -= OnLoaded;
+        m_PlayerControls.Player.Disable();
+    }
+
+    public override void Interact(int playerID)
+    {
+        Debugger("Player interacted with me");
+        _uiAnimator.SetBool(LOADING, true);
+        EnableInput();
+    }
+
+    public void RescueCancelled(InputAction.CallbackContext context)
+    {
+        Debugger("Loading was Cacelled");
+        _uiAnimator.SetBool(LOADING, false);
+        DisableInput();
     }
 
     public void SetPlayerInteraction(Action action)
     {
+        Debugger("Interaction was set");
         OnPlayerInteract = action;
     }
 
-    protected void OnLoaded()
+    protected void OnLoaded(InputAction.CallbackContext context)
     {
-        m_IsPlayerInteracting = false;
-        m_IsRescuing = false;
+        Debugger("Player Succesfully Rescued");
         OnPlayerInteract?.Invoke();
+        DisableInput();
     }
 }

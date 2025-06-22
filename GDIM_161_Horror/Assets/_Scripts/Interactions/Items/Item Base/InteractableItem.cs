@@ -2,23 +2,26 @@ using UnityEngine;
 using System;
 using TMPro;
 using Mirror;
+using OtherUtils;
 
 /// <summary>
 /// This class allows items to be interacted with a player.
 /// </summary>
-public class InteractableItem : MonoBehaviour, IInteractable
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(LookAtCamera))]
+public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
 {
-    [SerializeField] protected Animator _uiAnimator;
-    [SerializeField] protected LookAtCamera _lookAtCamera;
     [SerializeField] protected NetworkIdentity _networkIdentity;
     [SerializeField] protected string _textName;
-    protected string FADE = "FADE";
-
+    
+    protected Animator _uiAnimator;
     protected TextMeshProUGUI _textMesh;
+    protected LookAtCamera _lookAtCamera;
+    protected string FADE = "FADE";
+    protected bool _isInteractable;
+    protected bool m_DebugEnabled;
 
     protected Action<int> OnInteractAction;
-
-    protected bool _isInteractable;
 
     protected virtual void Awake()
     {
@@ -29,6 +32,8 @@ public class InteractableItem : MonoBehaviour, IInteractable
     protected virtual void Start()
     {
         _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
+        _uiAnimator = GetComponent<Animator>();
+        _lookAtCamera = GetComponent<LookAtCamera>();
         if (_networkIdentity == null) _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
         SetDisplayMessage(_textName);
     }
@@ -70,5 +75,15 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public NetworkIdentity GetNetworkID()
     {
         return _networkIdentity;
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_DebugEnabled) Debug.Log($"[{this.GetType().ToString()}] {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_DebugEnabled = active;
     }
 }
