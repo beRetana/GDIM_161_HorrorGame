@@ -1,16 +1,19 @@
+using Interactions;
 using UnityEngine;
 
-public class Brazier : MonoBehaviour
+public class Brazier : FireCollision
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Start()
+    {
+        
+    }
+    protected override void OnTriggerEnter(Collider col)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override bool IsLit()
     {
-        
+        return true;
     }
 }

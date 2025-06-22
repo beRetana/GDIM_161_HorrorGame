@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent (typeof(Animator))]
 public class PlayerAnimator : MonoBehaviour
 {
     private Animator m_PlayerAnimator;

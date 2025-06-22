@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 3795071159714687488}
   - component: {fileID: 7155060189504786965}
   - component: {fileID: 6946071939428340203}
+  - component: {fileID: 2594235973346940561}
   m_Layer: 10
   m_Name: _Single_Player
   m_TagString: Player
@@ -897,13 +898,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _debugger: 0
   lockedStats: {fileID: 11400000, guid: b71a63d45e071b94987d230893a2f2de, type: 2}
   unlockedStats: {fileID: 11400000, guid: adfe7d0ae92a9db41979dde7dc565b01, type: 2}
   limpStats: {fileID: 11400000, guid: a019c12b47b3e7f4f9ee6d873e8868d4, type: 2}
   downedStats: {fileID: 11400000, guid: 1c6503a4201293a49b72759163af0364, type: 2}
   _arms: {fileID: 1385938723204227578}
   _capsuleCollider: {fileID: 2659987346475250035}
+  _interaction: {fileID: 0}
   cinemachineCameraTarget: {fileID: 7354950563374537535}
   _buildScene: Brandon_Playground
 --- !u!114 &3567417533735339568
@@ -1078,6 +1079,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269196c4666f89c4b86cd93850e31d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2594235973346940561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946501653002084964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773ef212f061aef41b414ad65bc4700d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debuggers:
+  - debugScript: {fileID: 9019987585197839040}
+    enabled: 0
+  - debugScript: {fileID: 4848861366070383520}
+    enabled: 0
 --- !u!1 &2977323451867027649
 GameObject:
   m_ObjectHideFlags: 0

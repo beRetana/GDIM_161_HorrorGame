@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5805892794512141954}
   - component: {fileID: 3390137401255878559}
   - component: {fileID: 6690730418953068238}
+  - component: {fileID: 6005716703168587177}
   m_Layer: 9
   m_Name: Torch_Network
   m_TagString: Untagged
@@ -153,6 +154,21 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0.25, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &6005716703168587177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831233360205059484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773ef212f061aef41b414ad65bc4700d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debuggers:
+  - debugScript: {fileID: 6669948610441848201}
+    enabled: 1
 --- !u!1 &1522899249806462209
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,11 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   maybeFireable: {fileID: 6533591682246883934}
-  _debugger: 0
 --- !u!1 &6533591682246883934
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,8 +568,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a607149b4cc9ebd4ab705daa7b5142ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiAnimator: {fileID: 5874142033088813881}
-  _lookAtCamera: {fileID: 3260482526421632806}
   _networkIdentity: {fileID: 358601240143403709}
   _textName: Torch
 --- !u!95 &5874142033088813881
@@ -598,7 +608,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
-  _debugger: 0
+  _debugger: 1
   approxWoodLife_Minutes: 8
   maxTickVariance_WoodBurn: 0.192
   tickSpeedMultiplier_ByFloor: 1.0887
