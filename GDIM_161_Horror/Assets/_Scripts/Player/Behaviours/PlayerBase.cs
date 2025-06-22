@@ -19,7 +19,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 #if ENABLE_INPUT_SYSTEM
     protected PlayerInput _playerInput;
 #endif
-    protected PlayerAnimator _animator;
 
     private NewNetworkManager _networkmanager;
 
@@ -69,6 +68,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     [Space(5)]
     [SerializeField] protected Arms _arms;
+    [SerializeField] protected PlayerAnimator _animator;
     [SerializeField] protected CharacterController _controller;
     [SerializeField] protected CapsuleCollider _capsuleCollider;
     [SerializeField] protected InteractablePlayer _interaction;
@@ -131,7 +131,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     //Animator anim;
     protected virtual void Start()
     {
-        _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
