@@ -180,6 +180,12 @@ namespace Interactions
         }
         public void LightFlame()
         {
+            if (isServer) RpcLightingObject();
+        }
+
+        [ClientRpc]
+        private void RpcLightingObject()
+        {
             if (Lit) return;
             FlameFullExtinguish();
             Lit = true;
