@@ -433,7 +433,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.037657406
+  m_FillAmount: 0.9514074
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -447,6 +447,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6365615441880377754}
+  - component: {fileID: 8458971307069906561}
   - component: {fileID: 3355182332309314815}
   - component: {fileID: 5920731668447969504}
   - component: {fileID: 927248352466980537}
@@ -474,6 +475,23 @@ Transform:
   - {fileID: 1337473344945392348}
   m_Father: {fileID: 2709225641590689041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8458971307069906561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6414379447948534151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 1
+  animator: {fileID: 5920731668447969504}
 --- !u!114 &3355182332309314815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,6 +855,10 @@ PrefabInstance:
     - target: {fileID: 2571488355673585886, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2594235973346940561, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
+      propertyPath: debuggers.Array.data[1].enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2659987346475250035, guid: 87fd3f0bd9ba552489a0dbc038874f0a, type: 3}
       propertyPath: m_Enabled

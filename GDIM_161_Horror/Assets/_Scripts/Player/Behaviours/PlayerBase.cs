@@ -154,10 +154,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         Debugger($"Unlocking Player{_myID}");
 
-        _controller.center = new Vector3(0f, .98f, 0f);
-        _controller.height = 2f;
-        _capsuleCollider.center = Vector3.up;
-        _capsuleCollider.direction = 1;
         _animator?.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
@@ -173,10 +169,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         Debugger($"Locking Player{_myID}");
 
-        _controller.center = Vector3.zero;
-        _controller.height = .5f;
-        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
-        _capsuleCollider.direction = 2;
         _animator.SetAnimCrawl(true);
         _handInventory.DropAllItems();
         SetInputState(false);
@@ -191,6 +183,11 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _interaction.SetInteractive(false);
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
+
+        _controller.center = new Vector3(0f, .98f, 0f);
+        _controller.height = 2f;
+        _capsuleCollider.center = Vector3.up;
+        _capsuleCollider.direction = 1;
     }
 
     private void DownPlayerSettings()
@@ -200,6 +197,11 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _interaction.SetPlayerInteraction(UnlockPlayer);
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
+
+        _controller.center = Vector3.zero;
+        _controller.height = .5f;
+        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
+        _capsuleCollider.direction = 2;
     }
     private void EnterState(PlayerStateEnum enterState)
     {
