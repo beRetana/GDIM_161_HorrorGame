@@ -69,6 +69,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     [Space(5)]
     [SerializeField] protected Arms _arms;
+    [SerializeField] protected CharacterController _controller;
     [SerializeField] protected CapsuleCollider _capsuleCollider;
     [SerializeField] protected InteractablePlayer _interaction;
 
@@ -76,7 +77,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     [SerializeField] protected const string DOWN_PLAYER_TAG = "DownPlayer";
     [SerializeField] protected const string PLAYER_TAG = "Player";
 
-    protected CharacterController _controller;
     protected HandInventory _handInventory;
     protected LayerMask _interactLayer = 9;
     protected LayerMask _playerLayer = 10;
@@ -133,12 +133,10 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
-        _controller = GetComponent<CharacterController>();
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
         EnterState(PlayerStateEnum.Unlocked);
-        SetPlayerStats();
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
