@@ -133,6 +133,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
+        _controller = GetComponent<CharacterController>();
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();

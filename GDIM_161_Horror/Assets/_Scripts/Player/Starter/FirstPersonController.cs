@@ -54,7 +54,6 @@ namespace StarterAssets
         protected override void Start()
         {   
             base.Start();
-            _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
             _headBobbing = GetComponent<PlayerHeadBobbing>();
 
