@@ -68,8 +68,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     [Space(5)]
     [SerializeField] protected Arms _arms;
-    [SerializeField] protected PlayerAnimator _animator;
-    [SerializeField] protected CharacterController _controller;
     [SerializeField] protected CapsuleCollider _capsuleCollider;
     [SerializeField] protected InteractablePlayer _interaction;
 
@@ -78,6 +76,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     [SerializeField] protected const string PLAYER_TAG = "Player";
 
     protected HandInventory _handInventory;
+    protected PlayerAnimator _animator;
+    protected CharacterController _controller;
     protected LayerMask _interactLayer = 9;
     protected LayerMask _playerLayer = 10;
 
@@ -131,6 +131,11 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     //Animator anim;
     protected virtual void Start()
     {
+#if ENABLE_INPUT_SYSTEM
+        _playerInput = GetComponent<PlayerInput>();
+#endif
+        _controller = GetComponent<CharacterController>();
+        _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
@@ -148,6 +153,15 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void UnlockPlayer()
     {
         Debugger($"Unlocking Player{_myID}");
+
+        _controller.center = new Vector3(0f, .98f, 0f);
+        _controller.height = 2f;
+        _capsuleCollider.center = Vector3.up;
+        _capsuleCollider.direction = 1;
+        _animator?.SetAnimCrawl(false);
+        cinemachineCameraTarget.transform.localPosition = initialPosition;
+        SetInputState(true);
+
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
@@ -158,6 +172,16 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void DownPlayer()
     {
         Debugger($"Locking Player{_myID}");
+
+        _controller.center = Vector3.zero;
+        _controller.height = .5f;
+        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
+        _capsuleCollider.direction = 2;
+        _animator.SetAnimCrawl(true);
+        _handInventory.DropAllItems();
+        SetInputState(false);
+        cinemachineCameraTarget.transform.localPosition = downCamPosition;
+
         EnterState(PlayerStateEnum.Downed);
     }
 
@@ -165,15 +189,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         _interaction.gameObject.SetActive(false);
         _interaction.SetInteractive(false);
-        _controller.center = new Vector3(0f, .98f, 0f);
-        _controller.height = 2f;
-        _capsuleCollider.center = Vector3.up;
-        _capsuleCollider.direction = 1;
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
-        _animator?.SetAnimCrawl(false);
-        cinemachineCameraTarget.transform.localPosition = initialPosition;
-        SetInputState(true);
     }
 
     private void DownPlayerSettings()
@@ -181,16 +198,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _interaction.gameObject.SetActive(true);
         _interaction.SetInteractive(true);
         _interaction.SetPlayerInteraction(UnlockPlayer);
-        _controller.center = Vector3.zero;
-        _controller.height = .5f;
-        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
-        _capsuleCollider.direction = 2;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
-        _animator.SetAnimCrawl(true);
-        _handInventory.DropAllItems();
-        SetInputState(false);
-        cinemachineCameraTarget.transform.localPosition = downCamPosition;
     }
     private void EnterState(PlayerStateEnum enterState)
     {
