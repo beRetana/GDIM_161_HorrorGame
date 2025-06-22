@@ -78,8 +78,8 @@ MonoBehaviour:
     DoorTransform: {fileID: 8924794524385185193}
     DoorOpenTarget: {fileID: 4678537570084436507}
   _leftDoor:
-    DoorTransform: {fileID: 8924794524385185193}
-    DoorOpenTarget: {fileID: 4678537570084436507}
+    DoorTransform: {fileID: 7227384843888557295}
+    DoorOpenTarget: {fileID: 8175641694958376807}
 --- !u!114 &7079154765239599895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,6 +582,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7892253436699348527, guid: 179b67ba9e325ee41905317080c9b76a, type: 3}
+      propertyPath: m_Name
+      value: RightDoorTarget
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1319467785298215681, guid: 179b67ba9e325ee41905317080c9b76a, type: 3}
     m_RemovedGameObjects: []
@@ -613,6 +617,10 @@ PrefabInstance:
       propertyPath: _networkIdentity
       value: 
       objectReference: {fileID: 7811484287015804871}
+    - target: {fileID: 1869277455764865948, guid: 129b7c4a19805ce419b5308882830065, type: 3}
+      propertyPath: m_Name
+      value: LeftDoorTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 1894009472579814726, guid: 129b7c4a19805ce419b5308882830065, type: 3}
       propertyPath: _doorsManager
       value: 
@@ -677,5 +685,10 @@ PrefabInstance:
 --- !u!4 &7227384843888557295 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4605172111695598988, guid: 129b7c4a19805ce419b5308882830065, type: 3}
+  m_PrefabInstance: {fileID: 6603420115316910435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8175641694958376807 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3085450998123068932, guid: 129b7c4a19805ce419b5308882830065, type: 3}
   m_PrefabInstance: {fileID: 6603420115316910435}
   m_PrefabAsset: {fileID: 0}
