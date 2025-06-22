@@ -25,7 +25,6 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         if (!_isInteractable) return;
         base.StartedInteraction(playerID);
-        _uiAnimator.SetBool(FADE, false);
         _uiAnimator.SetBool(LOADING, true);
     }
 
