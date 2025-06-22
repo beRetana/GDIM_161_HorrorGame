@@ -28,7 +28,6 @@ namespace Interactions
         {
             public Transform DoorTransform;
             public Transform DoorOpenTarget;
-            public Rigidbody DoorRigidbody;
         }
 
         [SyncVar] private int _playersOnHandles;
@@ -92,7 +91,7 @@ namespace Interactions
             float ratio = 0;
             for (float timeElapsed = 0; ratio <= 1; timeElapsed += Time.deltaTime)
             {
-                ratio = Mathf.Clamp01(timeElapsed / _openDoorAnimationTime);
+                ratio = timeElapsed / _openDoorAnimationTime;
                 doorData.DoorTransform.position = Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio);
                 yield return null;
             }
