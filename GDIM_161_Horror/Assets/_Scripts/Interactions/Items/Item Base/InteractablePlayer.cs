@@ -88,6 +88,5 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         Debugger("Player Succesfully Rescued");
         OnPlayerInteract?.Invoke();
-        ResetAnimations();
     }
 }
