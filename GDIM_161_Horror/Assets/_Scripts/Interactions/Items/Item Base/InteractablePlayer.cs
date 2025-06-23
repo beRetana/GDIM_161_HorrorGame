@@ -11,8 +11,8 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected Action OnPlayerInteract;
     protected Coroutine m_Rescuing;
     protected PlayerControls m_PlayerControls;
-    protected const string LOADING = "LOADING";
-    protected const string RESET = "RESET";
+    protected const string LOADING = "START_LOADING";
+    protected const string CANCEL = "CANCEL_LOADING";
     protected bool m_loading;
 
     protected override void Awake()
@@ -31,14 +31,14 @@ public class InteractablePlayer : InteractableItem, IDebugger
         Debugger($"Started Rescuing");
         m_TextDisplay.SetActive(false);
         m_ProgressDisplay.SetActive(true);
-        _uiAnimator.SetBool(LOADING, true);
+        _uiAnimator.SetTrigger(LOADING);
         m_loading = true;
     }
 
     protected virtual void CanceledInteraction()
     {
         Debugger($"Canceled Rescuing");
-        _uiAnimator.SetBool(LOADING, false);
+        _uiAnimator.SetTrigger(CANCEL);
         m_loading = false;
     }
 
