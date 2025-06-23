@@ -13,6 +13,8 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected Coroutine m_Rescuing;
     protected PlayerControls m_PlayerControls;
     protected const string LOADING = "LOADING";
+    protected const string RESET = "RESET";
+    protected bool m_loading;
 
     protected override void Awake()
     {
@@ -28,15 +30,14 @@ public class InteractablePlayer : InteractableItem, IDebugger
 
     protected virtual void StartedInteraction()
     {
-        if (!_isInteractable) return;
         m_TextDisplay.SetActive(false);
         m_ProgressDisplay.SetActive(true);
         _uiAnimator.SetBool(LOADING, true);
+        m_loading = true;
     }
 
     protected virtual void CanceledInteraction()
     {
-        if (!_isInteractable) return;
         _uiAnimator.SetBool(LOADING, false);
     }
 
@@ -45,6 +46,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_TextDisplay.SetActive(true);
         m_ProgressDisplay.SetActive(false);
         m_ProgressDisplay.GetComponent<Slider>().value = 0;
+        _uiAnimator.SetTrigger(RESET);
         Loaded();
     }
 
@@ -60,6 +62,12 @@ public class InteractablePlayer : InteractableItem, IDebugger
                 if (context.interaction is not HoldInteraction) return;
                 CanceledInteraction(); break;
         }
+    }
+
+    public override void Detected(int playerID)
+    {
+        if (m_loading) return;
+        base.Detected(playerID);
     }
 
     public void SetPlayerInteraction(Action action)
