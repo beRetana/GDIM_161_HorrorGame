@@ -153,11 +153,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void UnlockPlayer()
     {
         Debugger($"Unlocking Player{_myID}");
-
-        _animator.SetAnimCrawl(false);
-        cinemachineCameraTarget.transform.localPosition = initialPosition;
-        SetInputState(true);
-
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
@@ -168,12 +163,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void DownPlayer()
     {
         Debugger($"Locking Player{_myID}");
-
-        _animator.SetAnimCrawl(true);
-        _handInventory.DropAllItems();
-        SetInputState(false);
-        cinemachineCameraTarget.transform.localPosition = downCamPosition;
-
         EnterState(PlayerStateEnum.Downed);
     }
 
@@ -187,6 +176,10 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _controller.height = 2f;
         _capsuleCollider.center = Vector3.up;
         _capsuleCollider.direction = 1;
+
+        _animator.SetAnimCrawl(false);
+        cinemachineCameraTarget.transform.localPosition = initialPosition;
+        SetInputState(true);
     }
 
     private void DownPlayerSettings()
@@ -200,6 +193,11 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _controller.height = .5f;
         _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
         _capsuleCollider.direction = 2;
+
+        _animator.SetAnimCrawl(true);
+        _handInventory.DropAllItems();
+        SetInputState(false);
+        cinemachineCameraTarget.transform.localPosition = downCamPosition;
     }
     private void EnterState(PlayerStateEnum enterState)
     {
