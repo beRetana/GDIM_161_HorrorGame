@@ -387,6 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8393649598902922293}
+  - component: {fileID: 2858549087681108599}
   - component: {fileID: 1814222937536579039}
   - component: {fileID: 3694775324650173385}
   - component: {fileID: 1712232636837814462}
@@ -417,6 +418,23 @@ Transform:
   - {fileID: 7058870043332577317}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2858549087681108599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037653246759746223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1893615316
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!136 &1814222937536579039
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -744,6 +762,10 @@ PrefabInstance:
       propertyPath: _playerOpenTarget
       value: 
       objectReference: {fileID: 2063784887979149306}
+    - target: {fileID: 3961325141968135999, guid: 35f0b1b25d7dce74aa388864c4b4d815, type: 3}
+      propertyPath: _networkIdentity
+      value: 
+      objectReference: {fileID: 2858549087681108599}
     - target: {fileID: 4475108195617463880, guid: 35f0b1b25d7dce74aa388864c4b4d815, type: 3}
       propertyPath: _assetId
       value: 1893615316
@@ -752,7 +774,8 @@ PrefabInstance:
       propertyPath: serverOnly
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4475108195617463880, guid: 35f0b1b25d7dce74aa388864c4b4d815, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
