@@ -3,7 +3,6 @@ using UnityEngine;
 using OtherUtils;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
@@ -49,7 +48,6 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_ProgressDisplay.SetActive(false);
         m_ProgressDisplay.GetComponent<Slider>().value = 0;
         m_loading = false;
-        Loaded();
     }
 
     public override void Interaction(int playerID, InputData context)
@@ -68,6 +66,21 @@ public class InteractablePlayer : InteractableItem, IDebugger
             case InputActionPhase.Canceled:
                 if (context.InputType != InteractionType.Hold) return;
                 CanceledInteraction(); 
+                break;
+            case InputActionPhase.Performed:
+
+                switch (context.InputType)
+                {
+                    case InteractionType.Hold:
+                        Loaded();
+                        break;
+                    case InteractionType.Tap:
+                        CanceledInteraction();
+                        break;
+                    case InteractionType.Other:
+                        CanceledInteraction();
+                        break;
+                }
                 break;
         }
     }
@@ -88,5 +101,6 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         Debugger("Player Succesfully Rescued");
         OnPlayerInteract?.Invoke();
+        OnPlayerInteract = null;
     }
 }
