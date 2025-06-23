@@ -54,6 +54,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
 
     public override void Interaction(int playerID, InputAction.CallbackContext context)
     {
+        Debugger($"Player {playerID} is trying to interact");
         if (!_isInteractable) return;
 
         switch (context.phase)
