@@ -52,18 +52,23 @@ public class InteractablePlayer : InteractableItem, IDebugger
         Loaded();
     }
 
-    public override void Interaction(int playerID, InputAction.CallbackContext context)
+    public override void Interaction(int playerID, InputData context)
     {
-        Debugger($"Player {playerID} is trying to interact: {_isInteractable}, phase: {context.phase}");
+        Debugger($"Player {playerID} is trying to interact: {_isInteractable}, " +
+                 $"Phase: {context.InputPhase}, " +
+                 $"Type: {context.InputType}");
+
         if (!_isInteractable) return;
 
-        switch (context.phase)
+        switch (context.InputPhase)
         {
             case InputActionPhase.Started:
-                StartedInteraction(); break;
+                StartedInteraction(); 
+                break;
             case InputActionPhase.Canceled:
-                if (context.interaction is not HoldInteraction) return;
-                CanceledInteraction(); break;
+                if (context.InputType != InteractionType.Hold) return;
+                CanceledInteraction(); 
+                break;
         }
     }
 

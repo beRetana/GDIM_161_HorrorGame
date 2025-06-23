@@ -50,7 +50,7 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
         _isInteractable = intactive;
     }
 
-    public virtual void Interaction(int playerID, InputAction.CallbackContext context)
+    public virtual void Interaction(int playerID, InputData context)
     {
         if (!_isInteractable) return;
         OnInteractAction(playerID);

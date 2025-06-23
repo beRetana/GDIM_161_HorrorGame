@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public interface IInteractable
 {
-    public void Interaction(int playerID, InputAction.CallbackContext context);
+    public void Interaction(int playerID, InputData context);
 
     public void Detected(int playerID);
 
