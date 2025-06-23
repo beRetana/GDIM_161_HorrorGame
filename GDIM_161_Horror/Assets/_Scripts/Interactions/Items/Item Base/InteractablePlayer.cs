@@ -2,9 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using OtherUtils;
+using Unity.AppUI.UI;
+using UnityEngine.UI;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
+    [SerializeField] protected GameObject m_TextDisplay;
+    [SerializeField] protected GameObject m_ProgressDisplay;
     protected Action OnPlayerInteract;
     protected Coroutine m_Rescuing;
     protected PlayerControls m_PlayerControls;
@@ -19,12 +23,15 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         base.Start();
         m_PlayerControls = new();
+        m_ProgressDisplay.SetActive(false);
     }
 
     public override void StartedInteraction(int playerID)
     {
         if (!_isInteractable) return;
         base.StartedInteraction(playerID);
+        m_TextDisplay.SetActive(false);
+        m_ProgressDisplay.SetActive(true);
         _uiAnimator.SetBool(LOADING, true);
     }
 
@@ -35,10 +42,16 @@ public class InteractablePlayer : InteractableItem, IDebugger
         _uiAnimator.SetBool(LOADING, false);
     }
 
+    public void ResetAnimations()
+    {
+        m_TextDisplay.SetActive(true);
+        m_ProgressDisplay.SetActive(false);
+        m_ProgressDisplay.GetComponent<Slider>().value = 0;
+    }
+
     public override void PerformedInteraction(int playerID)
     {
         if (!_isInteractable) return;
-        Debugger("Performed");
         Loaded();
     }
 

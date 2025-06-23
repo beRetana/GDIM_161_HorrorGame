@@ -154,7 +154,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     {
         Debugger($"Unlocking Player{_myID}");
 
-        _animator?.SetAnimCrawl(false);
+        _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
 
@@ -179,7 +179,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     private void UnlockPlayerSettings()
     {
-        _interaction.gameObject.SetActive(false);
         _interaction.SetInteractive(false);
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
@@ -192,13 +191,12 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     private void DownPlayerSettings()
     {
-        _interaction.gameObject.SetActive(true);
         _interaction.SetInteractive(true);
         _interaction.SetPlayerInteraction(UnlockPlayer);
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
 
-        _controller.center = Vector3.zero;
+        _controller.center = new Vector3(0f, .4f, 0f);
         _controller.height = .5f;
         _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
         _capsuleCollider.direction = 2;
