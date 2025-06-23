@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using OtherUtils;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
@@ -45,12 +45,12 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_TextDisplay.SetActive(true);
         m_ProgressDisplay.SetActive(false);
         m_ProgressDisplay.GetComponent<Slider>().value = 0;
+        Loaded();
     }
 
     public override void PerformedInteraction(int playerID)
     {
         if (!_isInteractable) return;
-        Loaded();
     }
 
     public void SetPlayerInteraction(Action action)

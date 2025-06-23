@@ -21,11 +21,6 @@ namespace StarterAssets
         float _stepSoundTime;
 
         [SerializeField] private string _buildScene = "BUILD_1";
-        //[SerializeField] private EventReference _forestFootstep;
-        //[SerializeField] private float _rate;
-
-        private bool _isSprinting;
-        private InputAction _onJump;
 
         public bool grounded { get; private set; }
 
