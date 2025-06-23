@@ -24,12 +24,12 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected override void Start()
     {
         base.Start();
-        m_PlayerControls = new();
         m_ProgressDisplay.SetActive(false);
     }
 
     protected virtual void StartedInteraction()
     {
+        Debugger($"Started Rescuing");
         m_TextDisplay.SetActive(false);
         m_ProgressDisplay.SetActive(true);
         _uiAnimator.SetBool(LOADING, true);
@@ -38,7 +38,9 @@ public class InteractablePlayer : InteractableItem, IDebugger
 
     protected virtual void CanceledInteraction()
     {
+        Debugger($"Canceled Rescuing");
         _uiAnimator.SetBool(LOADING, false);
+        m_loading = false;
     }
 
     public void ResetAnimations()
@@ -46,7 +48,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_TextDisplay.SetActive(true);
         m_ProgressDisplay.SetActive(false);
         m_ProgressDisplay.GetComponent<Slider>().value = 0;
-        _uiAnimator.SetTrigger(RESET);
+        m_loading = false;
         Loaded();
     }
 
@@ -80,5 +82,6 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         Debugger("Player Succesfully Rescued");
         OnPlayerInteract?.Invoke();
+        ResetAnimations();
     }
 }
