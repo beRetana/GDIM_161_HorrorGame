@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using OtherUtils;
-using Unity.AppUI.UI;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
