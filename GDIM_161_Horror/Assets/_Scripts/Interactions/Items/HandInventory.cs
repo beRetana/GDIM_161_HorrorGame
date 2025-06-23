@@ -299,8 +299,8 @@ public class HandInventory : NetworkBehaviour
         _interactable.StoppedDetecting(_playerID);
         _mouse.DefaultEffect();
 
-        if (_interactable is PolyInteractable) PolyInteractableSync(context.phase);
-        else InteractableSync(context.phase);
+        if (_interactable is PolyInteractable) PolyInteractableSync(context);
+        else InteractableSync(context);
     }
 
     public void OnDrop(InputValue value) 
@@ -361,14 +361,14 @@ public class HandInventory : NetworkBehaviour
         else CmdSwapDominance();
     }
 
-    private void InteractableSync(InputActionPhase actionPhase)
+    private void InteractableSync(InputAction.CallbackContext context)
     {
         Debugger($"Player {_playerID} Interacted with {_interactable.GetNetworkID().gameObject.name}");
         Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
-            if (isServer) ExecuteInteraction(_playerID, _interactable, actionPhase);
-            else CmdOnInteract(_interactable.GetNetworkID(), _playerID, actionPhase);
+            if (isServer) ExecuteInteraction(_playerID, _interactable, context);
+            else CmdOnInteract(_interactable.GetNetworkID(), _playerID, context);
             _interactable = null;
         }
         catch 
@@ -377,15 +377,15 @@ public class HandInventory : NetworkBehaviour
         }
     }
 
-    private void PolyInteractableSync(InputActionPhase actionPhase)
+    private void PolyInteractableSync(InputAction.CallbackContext context)
     {
         Debugger($"Player {_playerID} Interacted with {_interactable.GetNetworkID().gameObject.name}");
         Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
-            if (isServer) ExecuteInteraction(_playerID, _interactable, actionPhase);
+            if (isServer) ExecuteInteraction(_playerID, _interactable, context);
             else CmdOnPolyInteract(_interactable.GetNetworkID(), _playerID,
-                (_interactable as PolyInteractable).Order, actionPhase);
+                (_interactable as PolyInteractable).Order, context);
             _interactable = null;
         }
         catch
@@ -395,7 +395,8 @@ public class HandInventory : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order, InputActionPhase actionPhase)
+    private void RpcOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order,
+        InputAction.CallbackContext context)
     {
         Debugger($"RPC OnInteract being called");
         Debugger($"Interactable is: {interactableID.name}");
@@ -406,48 +407,38 @@ public class HandInventory : NetworkBehaviour
         {
             if (interactable.Order == order)
             {
-                ExecuteInteraction(_playerID, interactable, actionPhase);
+                ExecuteInteraction(_playerID, interactable, context);
                 return;
             }
         }
     }
 
     [Command]
-    private void CmdOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order, InputActionPhase actionPhase)
+    private void CmdOnPolyInteract(NetworkIdentity interactableID, int playerID, PolyInteractableOrder order,
+        InputAction.CallbackContext context)
     {
         Debugger($"CMD POLY: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
-        RpcOnPolyInteract(interactableID, playerID, order, actionPhase);
+        RpcOnPolyInteract(interactableID, playerID, order, context);
     }
 
     [ClientRpc]
-    private void RpcOnInteract(NetworkIdentity interactableID, int playerID, InputActionPhase actionPhase)
+    private void RpcOnInteract(NetworkIdentity interactableID, int playerID, InputAction.CallbackContext context)
     {
         Debugger($"RPC: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
         if (playerID != _playerID) return;
-        ExecuteInteraction(playerID, interactableID.GetComponentInChildren<IInteractable>(), actionPhase);
+        ExecuteInteraction(playerID, interactableID.GetComponentInChildren<IInteractable>(), context);
     }
 
     [Command]
-    private void CmdOnInteract(NetworkIdentity interactableID, int playerID, InputActionPhase actionPhase)
+    private void CmdOnInteract(NetworkIdentity interactableID, int playerID, InputAction.CallbackContext context)
     {
         Debugger($"CMD: Player {playerID} is Interacting with object {interactableID.gameObject.name}");
-        RpcOnInteract(interactableID, playerID, actionPhase);
+        RpcOnInteract(interactableID, playerID, context);
     }
 
-    private void ExecuteInteraction(int playerID, IInteractable interactable, InputActionPhase actionPhase)
+    private void ExecuteInteraction(int playerID, IInteractable interactable, InputAction.CallbackContext context)
     {
-        switch (actionPhase)
-        {
-            case InputActionPhase.Started:
-                interactable.StartedInteraction(playerID);
-                break;
-            case InputActionPhase.Canceled:
-                interactable.CanceledInteraction(playerID);
-                break;
-            case InputActionPhase.Performed:
-                interactable.PerformedInteraction(playerID);
-                break;
-        }
+        interactable.Interaction(playerID, context);
     }
 
     public bool IsInventoryFull()

@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using OtherUtils;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
@@ -24,19 +26,17 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_ProgressDisplay.SetActive(false);
     }
 
-    public override void StartedInteraction(int playerID)
+    protected virtual void StartedInteraction()
     {
         if (!_isInteractable) return;
-        base.StartedInteraction(playerID);
         m_TextDisplay.SetActive(false);
         m_ProgressDisplay.SetActive(true);
         _uiAnimator.SetBool(LOADING, true);
     }
 
-    public override void CanceledInteraction(int playerID)
+    protected virtual void CanceledInteraction()
     {
         if (!_isInteractable) return;
-        base.CanceledInteraction(playerID);
         _uiAnimator.SetBool(LOADING, false);
     }
 
@@ -48,9 +48,18 @@ public class InteractablePlayer : InteractableItem, IDebugger
         Loaded();
     }
 
-    public override void PerformedInteraction(int playerID)
+    public override void Interaction(int playerID, InputAction.CallbackContext context)
     {
         if (!_isInteractable) return;
+
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                StartedInteraction(); break;
+            case InputActionPhase.Canceled:
+                if (context.interaction is not HoldInteraction) return;
+                CanceledInteraction(); break;
+        }
     }
 
     public void SetPlayerInteraction(Action action)

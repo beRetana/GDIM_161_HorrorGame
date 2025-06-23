@@ -1,13 +1,10 @@
 using Mirror;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public interface IInteractable
 {
-    public void PerformedInteraction(int playerID);
-
-    public void StartedInteraction(int playerID);
-
-    public void CanceledInteraction(int playerID);
+    public void Interaction(int playerID, InputAction.CallbackContext context);
 
     public void Detected(int playerID);
 

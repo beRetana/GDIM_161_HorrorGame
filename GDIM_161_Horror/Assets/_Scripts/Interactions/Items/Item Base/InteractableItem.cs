@@ -3,6 +3,7 @@ using System;
 using TMPro;
 using Mirror;
 using OtherUtils;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// This class allows items to be interacted with a player.
@@ -48,17 +49,8 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     {
         _isInteractable = intactive;
     }
-    public virtual void StartedInteraction(int playerID)
-    {
-        Debugger($"Started Interacting with player {playerID}");
-    }
 
-    public virtual void CanceledInteraction(int playerID)
-    {
-        Debugger($"Cancelled Interaction By Player {playerID}");
-    }
-
-    public virtual void PerformedInteraction(int playerID)
+    public virtual void Interaction(int playerID, InputAction.CallbackContext context)
     {
         if (!_isInteractable) return;
         OnInteractAction(playerID);
