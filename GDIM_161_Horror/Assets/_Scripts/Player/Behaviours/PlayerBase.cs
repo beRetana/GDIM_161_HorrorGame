@@ -126,6 +126,10 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
+
+        if (cinemachineCameraTarget == null)
+            cinemachineCameraTarget = this.transform.Find("PlayerCameraRoot")?.gameObject;
+
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
@@ -250,12 +254,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         topClamp = currentStats.TopClamp;
         bottomClamp = currentStats.BottomClamp;
-
-
-        if (cinemachineCameraTarget == null)
-        {
-            cinemachineCameraTarget = this.transform.Find("PlayerCameraRoot")?.gameObject;
-        }
 
         return true;
     }
