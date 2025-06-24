@@ -16,7 +16,7 @@ public class LoadingBarUI : NetworkBehaviour
         else CmdResetAnimations();
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdResetAnimations()
     {
         RpcResetAnimations();
