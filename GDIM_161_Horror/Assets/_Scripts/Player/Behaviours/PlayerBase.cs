@@ -122,9 +122,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     //Animator anim;
     protected virtual void Start()
     {
-#if ENABLE_INPUT_SYSTEM
         _playerInput = GetComponent<PlayerInput>();
-#endif
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();

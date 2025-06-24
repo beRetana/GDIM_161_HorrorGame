@@ -23,11 +23,7 @@ namespace StarterAssets
         {
             get
             {
-                #if ENABLE_INPUT_SYSTEM
-                    return _playerInput.currentControlScheme == "KeyboardMouse";
-                #else
-                    return false;
-                #endif
+                return _playerInput.currentControlScheme == "KeyboardMouse";
             }
         }
         private bool _gravityOn = true;
@@ -45,12 +41,7 @@ namespace StarterAssets
             base.Start();
             _input = GetComponent<StarterAssetsInputs>();
             _headBobbing = GetComponent<PlayerHeadBobbing>();
-
-            #if ENABLE_INPUT_SYSTEM
-                _playerInput = GetComponent<PlayerInput>();
-            #else
-                Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-            #endif
+            _playerInput = GetComponent<PlayerInput>();
 
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
