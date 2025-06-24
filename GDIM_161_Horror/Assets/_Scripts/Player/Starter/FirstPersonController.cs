@@ -1,13 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using FMODUnity;
-using Dissonance;
-using Unity.VisualScripting;
-
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 namespace StarterAssets
 {

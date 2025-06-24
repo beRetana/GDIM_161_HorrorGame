@@ -2,23 +2,14 @@ using UnityEngine;
 using Mirror;
 using Player;
 using OtherUtils;
-
-
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
-#if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
-#endif
 [RequireComponent(typeof(CharacterController))]
 public class PlayerBase : NetworkBehaviour, IDebugger
 {
     static private int _myID = 0; // 0, 1, 2, 3
-
-#if ENABLE_INPUT_SYSTEM
     protected PlayerInput _playerInput;
-#endif
 
     private NewNetworkManager _networkmanager;
 
