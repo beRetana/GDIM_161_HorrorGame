@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
+    [SerializeField] protected Animator m_ProgressBarAnimator;
     [SerializeField] protected GameObject m_TextDisplay;
     [SerializeField] protected GameObject m_ProgressDisplay;
     protected Action OnPlayerInteract;
@@ -31,14 +32,14 @@ public class InteractablePlayer : InteractableItem, IDebugger
         Debugger($"Started Rescuing");
         m_TextDisplay.SetActive(false);
         m_ProgressDisplay.SetActive(true);
-        _uiAnimator.SetTrigger(LOADING);
+        m_ProgressBarAnimator.SetTrigger(LOADING);
         m_loading = true;
     }
 
     protected virtual void CanceledInteraction()
     {
         Debugger($"Canceled Rescuing");
-        _uiAnimator.SetTrigger(CANCEL);
+        m_ProgressBarAnimator.SetTrigger(CANCEL);
         m_loading = false;
     }
 
