@@ -13,7 +13,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected Coroutine m_Rescuing;
     protected PlayerControls m_PlayerControls;
     protected const string LOADING = "START_LOADING";
-    protected const string CANCEL = "CANCEL_LOADING";
+    protected const string STOP = "STOP_LOADING";
     protected bool m_loading;
 
     protected override void Awake()
@@ -39,7 +39,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected virtual void CanceledInteraction()
     {
         Debugger($"Canceled Rescuing");
-        m_ProgressBarAnimator.SetTrigger(CANCEL);
+        m_ProgressBarAnimator.SetTrigger(STOP);
         m_loading = false;
     }
 
