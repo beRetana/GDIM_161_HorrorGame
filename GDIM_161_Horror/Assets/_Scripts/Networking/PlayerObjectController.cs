@@ -76,7 +76,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     IEnumerator UpdatePlayerList()
     {
-        yield return new WaitUntil(() => NetworkServer.active);
+        yield return new WaitForSecondsRealtime(1f);
         LobbyController.Instance.UpdatePlayerList();
     }
 
