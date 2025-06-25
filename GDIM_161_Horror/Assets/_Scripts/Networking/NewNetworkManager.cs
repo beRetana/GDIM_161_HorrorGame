@@ -27,12 +27,13 @@ public class NewNetworkManager : NetworkManager
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
+            StartCoroutine(UpdatePlayerList());
         }
     }
 
-    public override void OnServerReady(NetworkConnectionToClient conn)
+    IEnumerator UpdatePlayerList()
     {
-        base.OnServerReady(conn);
+        yield return new WaitUntil(() => NetworkServer.active);
         LobbyController.Instance.UpdatePlayerList();
     }
 
