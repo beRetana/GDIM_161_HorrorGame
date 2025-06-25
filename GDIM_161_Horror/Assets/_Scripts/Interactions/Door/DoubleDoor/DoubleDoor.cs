@@ -45,6 +45,7 @@ namespace Interactions
         private void Start()
         {
             _doorState = DoorState.Locked;
+            m_PlayersOnDoor = new List<int>();
         }
 
         public void UpdateDoorState(DoorState state)
