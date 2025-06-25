@@ -34,6 +34,7 @@ public class NewNetworkManager : NetworkManager
     IEnumerator UpdatePlayerList()
     {
         yield return new WaitUntil(() => NetworkServer.active);
+        Debugger("SERVER READY");
         LobbyController.Instance.UpdatePlayerList();
     }
 
