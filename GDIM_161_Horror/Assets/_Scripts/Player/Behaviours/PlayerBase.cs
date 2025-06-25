@@ -128,12 +128,12 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory = GetComponent<HandInventory>();
 
         if (cinemachineCameraTarget == null)
-            cinemachineCameraTarget = this.transform.Find("PlayerCameraRoot")?.gameObject;
+            cinemachineCameraTarget = transform.Find("PlayerCameraRoot")?.gameObject;
 
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
-        UpdateState(PlayerStateEnum.Unlocked);
+        UpdateState(PlayerStateEnum.Unlocked); 
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
