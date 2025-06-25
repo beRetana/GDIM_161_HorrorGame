@@ -70,12 +70,6 @@ public class PlayerObjectController : NetworkBehaviour
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
-        StartCoroutine(UpdatePlayerList());
-    }
-
-    IEnumerator UpdatePlayerList()
-    {
-        yield return new WaitForSecondsRealtime(1f);
         CmdSetPlayerName(SteamFriends.GetPersonaName());
     }
 
