@@ -67,7 +67,6 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStartAuthority()
     {
         LocalInstance = this;
-        CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
@@ -77,7 +76,7 @@ public class PlayerObjectController : NetworkBehaviour
     IEnumerator UpdatePlayerList()
     {
         yield return new WaitForSecondsRealtime(1f);
-        LobbyController.Instance.UpdatePlayerList();
+        CmdSetPlayerName(SteamFriends.GetPersonaName());
     }
 
     public override void OnStartClient()
@@ -107,7 +106,7 @@ public class PlayerObjectController : NetworkBehaviour
 
         if (isClient)
         {
-            LobbyController.Instance.UpdatePlayerItem();
+            LobbyController.Instance.UpdatePlayerList();
         }
     }
 
