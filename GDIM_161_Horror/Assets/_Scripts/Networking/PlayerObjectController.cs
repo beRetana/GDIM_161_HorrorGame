@@ -4,6 +4,7 @@ using Mirror;
 using Steamworks;
 using Player;
 using StarterAssets;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class PlayerObjectController : NetworkBehaviour
@@ -70,6 +71,13 @@ public class PlayerObjectController : NetworkBehaviour
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
+        StartCoroutine(UpdatePlayerList());
+    }
+
+    IEnumerator UpdatePlayerList()
+    {
+        yield return new WaitUntil(() => NetworkServer.active);
+        LobbyController.Instance.UpdatePlayerList();
     }
 
     public override void OnStartClient()
