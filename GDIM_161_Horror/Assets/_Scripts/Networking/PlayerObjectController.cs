@@ -99,7 +99,7 @@ public class PlayerObjectController : NetworkBehaviour
 
         if (isClient)
         {
-            LobbyController.Instance.UpdatePlayerList();
+            LobbyController.Instance.UpdatePlayerItem();
         }
     }
 
