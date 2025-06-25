@@ -52,7 +52,40 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
 
     public virtual void Interaction(int playerID, InputData context)
     {
+        Debugger($"Player {playerID} is trying to interact" +
+                 $"Active: {_isInteractable}, " +
+                 $"Phase: {context.InputPhase}, " +
+                 $"Type: {context.InputType}");
+
         if (!_isInteractable) return;
+
+        switch (context.InputPhase)
+        {
+            case InputActionPhase.Started:
+                StartedInteraction(playerID, context);
+                break;
+            case InputActionPhase.Canceled:
+                CanceledInteraction(playerID, context);
+                break;
+            case InputActionPhase.Performed:
+                PerformedInteraction(playerID, context);
+                break;
+        }
+    }
+
+    public virtual void StartedInteraction(int playerID, InputData context)
+    {
+        Debugger($"Starting Interaction");
+    }
+
+    public virtual void CanceledInteraction(int playerID, InputData context)
+    {
+        Debugger($"Canceling Interaction");
+    }
+
+    public virtual void PerformedInteraction(int playerID, InputData context)
+    {
+        Debugger($"Performing Interaction");
         OnInteractAction(playerID);
     }
 

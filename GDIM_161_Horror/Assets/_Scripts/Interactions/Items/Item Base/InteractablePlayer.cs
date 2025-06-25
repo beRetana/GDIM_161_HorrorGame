@@ -27,7 +27,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_ProgressDisplay.SetActive(false);
     }
 
-    protected virtual void StartedInteraction()
+    public override void StartedInteraction(int playerID, InputData context)
     {
         Debugger($"Started Rescuing");
         m_TextDisplay.SetActive(false);
@@ -36,11 +36,30 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_loading = true;
     }
 
-    protected virtual void CanceledInteraction()
+    public override void CanceledInteraction(int playerID, InputData context)
     {
+        if (context.InputType != InteractionType.Hold) return;
         Debugger($"Canceled Rescuing");
         m_ProgressBarAnimator.SetTrigger(STOP);
         m_loading = false;
+    }
+
+    public override void PerformedInteraction(int playerID, InputData context)
+    {
+        switch (context.InputType)
+        {
+            case InteractionType.Hold:
+                Debugger("Player Succesfully Rescued");
+                OnPlayerInteract?.Invoke();
+                OnPlayerInteract = null;
+                break;
+            case InteractionType.Tap:
+                CanceledInteraction(playerID, context);
+                break;
+            case InteractionType.Other:
+                CanceledInteraction(playerID, context);
+                break;
+        }
     }
 
     public void ResetAnimations()
@@ -49,41 +68,6 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_ProgressDisplay.SetActive(false);
         m_ProgressDisplay.GetComponent<Slider>().value = 0;
         m_loading = false;
-    }
-
-    public override void Interaction(int playerID, InputData context)
-    {
-        Debugger($"Player {playerID} is trying to interact: {_isInteractable}, " +
-                 $"Phase: {context.InputPhase}, " +
-                 $"Type: {context.InputType}");
-
-        if (!_isInteractable) return;
-
-        switch (context.InputPhase)
-        {
-            case InputActionPhase.Started:
-                StartedInteraction(); 
-                break;
-            case InputActionPhase.Canceled:
-                if (context.InputType != InteractionType.Hold) return;
-                CanceledInteraction(); 
-                break;
-            case InputActionPhase.Performed:
-
-                switch (context.InputType)
-                {
-                    case InteractionType.Hold:
-                        Loaded();
-                        break;
-                    case InteractionType.Tap:
-                        CanceledInteraction();
-                        break;
-                    case InteractionType.Other:
-                        CanceledInteraction();
-                        break;
-                }
-                break;
-        }
     }
 
     public override void Detected(int playerID)
@@ -96,12 +80,5 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         Debugger("Interaction was set");
         OnPlayerInteract = action;
-    }
-
-    protected void Loaded()
-    {
-        Debugger("Player Succesfully Rescued");
-        OnPlayerInteract?.Invoke();
-        OnPlayerInteract = null;
     }
 }

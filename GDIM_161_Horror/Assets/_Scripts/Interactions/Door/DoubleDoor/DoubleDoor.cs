@@ -1,9 +1,10 @@
 using Mirror;
-using System;
-using UnityEngine;
 using OtherUtils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Interactions
 {
@@ -16,9 +17,9 @@ namespace Interactions
         [SerializeField] private float _grabHandlesAnimationTime;
         [SerializeField] private DoorData _rightDoor;
         [SerializeField] private DoorData _leftDoor;
-        
-        private bool _debugger;
 
+        private List<int> m_PlayersOnDoor;
+        private bool _debugger;
         public float DoorAnimTime => _openDoorAnimationTime;
         public float DoorDelay => _openDoorDelay;
         public float HandleGrabAnimTime => _grabHandlesAnimationTime;
@@ -104,6 +105,21 @@ namespace Interactions
             else --_playersOnHandles;
             Debugger($"DOUBLE DOOR: There are {_playersOnHandles} players on the Handles");
             if (_playersOnHandles >= _doorHandles.Count) UpdateDoorState(DoorState.Unlocking);
+        }
+
+        public void AddPlayerID(int playerID)
+        {
+            m_PlayersOnDoor.Add(playerID);
+        }
+
+        public void RemovePlayerID(int playerID)
+        {
+            m_PlayersOnDoor.Remove(playerID);
+        }
+
+        public bool IsPlayerOnDoor(int playerID)
+        {
+            return m_PlayersOnDoor.Contains(playerID);
         }
 
         public void Debugger(object log)
