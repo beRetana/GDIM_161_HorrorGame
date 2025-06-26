@@ -10,8 +10,8 @@ public class UIManager : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) SetScene(true);
-        else if (Input.GetKeyDown(KeyCode.Tab)) SetScene(false);
+        //if (Input.GetKeyDown(KeyCode.Escape)) SetScene(true);
+        //else if (Input.GetKeyDown(KeyCode.Tab)) SetScene(false);
     }
 
     public void SetScene(bool won)

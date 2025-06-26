@@ -22,7 +22,7 @@ public class ReturnToLobby : NetworkBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Y)) LoadLobby();
+        //if (Input.GetKeyUp(KeyCode.Y)) LoadLobby();
     }
 
     [Server]

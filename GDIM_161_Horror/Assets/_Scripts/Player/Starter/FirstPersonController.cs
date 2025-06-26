@@ -56,7 +56,6 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != _buildScene) return;
-            //Cursor.lockState = CursorLockMode.Locked;
             StartCoroutine(FindSpawnPoint());
         }
 

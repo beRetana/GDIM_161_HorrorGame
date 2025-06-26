@@ -33,7 +33,11 @@ namespace StarterAssets
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadingmode)
         {
-            if (SceneManager.GetActiveScene().name == "Floor0") SetCursorState(cursorLocked);
+			if (SceneManager.GetActiveScene().name == _buildScene)
+			{
+				SetCursorState(cursorLocked);
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+            }
         }
 
         public void OnMove(InputValue value)
@@ -79,16 +83,10 @@ namespace StarterAssets
 		{
 			sprint = !sprint;
 		}
-		
-		private void OnApplicationFocus(bool hasFocus)
-		{
-			if (SceneManager.GetActiveScene().name == _buildScene) SetCursorState(cursorLocked);
-		}
 
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
-	
 }
