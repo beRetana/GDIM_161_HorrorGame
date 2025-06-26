@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
+    [SerializeField] private Transform m_CheckPointPosition;
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private bool _debugger;
 
@@ -30,6 +31,7 @@ public class Elevator : MonoBehaviour
         {
             other.GetComponent<FirstPersonController>().GravityOn = true;
             other.GetComponent<PlayerAnimator>().SetAnimLadder(false);
+            other.GetComponent<PlayerDataTracker>().SavedPosition = m_CheckPointPosition.position;
             Debugger("Player Off the Ladder");
         }
     }

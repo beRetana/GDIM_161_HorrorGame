@@ -101,8 +101,8 @@ namespace Interactions
         }
         public override void UseItem(int playerId)
         {
-            Debug.Log("Using torch");
-            PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
+            //Debug.Log("Using torch");
+            //PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms()?.ToggleHandMoveOutOrIn(null);
         }
 
 

@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using OtherUtils;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class GameplayMenuUI : MonoBehaviour, IDebugger
 {
@@ -14,12 +15,20 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
 
     [Space(5f)]
     [SerializeField] private Button m_BtnReturnToGame;
-    [SerializeField] private Button m_BtnSettingReturnToPause;
-    [SerializeField] private Button m_BtnVolumeReturnToPause;
     [SerializeField] private Button m_BtnPauseToSettings;
     [SerializeField] private Button m_BtnPauseToVolume;
+    [SerializeField] private Button m_BtnUnstuckPlayer;
+
+    [Space(5f)]
+    [SerializeField] private Button m_BtnSettingReturnToPause;
+    [SerializeField] private Button m_BtnVolumeReturnToPause;
+
+    [Space(5f)]
+    [SerializeField] private PlayerDataTracker m_PlayerData;
 
     private PlayerControls m_PlayerControls;
+    private CharacterController m_CharacterController;
+    private NavMeshQueryFilter m_NavMeshQueryFilter;
 
     private bool m_IsPaused;
     private bool m_Debugger;
@@ -27,6 +36,10 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     private void Start()
     {
         m_PlayerControls = new();
+        m_NavMeshQueryFilter = new NavMeshQueryFilter();
+        m_NavMeshQueryFilter.agentTypeID = 0;
+        m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
+        m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
         EnableInput();
         SetMenuActive(false);
         SetButtons();
@@ -74,6 +87,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         m_BtnSettingReturnToPause.onClick.AddListener(CloseSettingsMenu);
         m_BtnVolumeReturnToPause.onClick.AddListener(CloseVolumeMenu);
         m_BtnReturnToGame.onClick.AddListener(ClosePauseMenu);
+        m_BtnUnstuckPlayer.onClick.AddListener(UnstuckPlayer);
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -140,6 +154,27 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     private void ClosePauseMenu()
     {
         ToggleVolumeMenu();
+    }
+
+    private void UnstuckPlayer()
+    {
+        Debugger($"Hitting Unstuck Player");
+        NavMeshHit point;
+        bool foundPoint = NavMesh.SamplePosition(m_PlayerData.transform.position, out point, 15f, m_NavMeshQueryFilter);
+        if (foundPoint)
+        {
+            Debugger($"Found Walkable Location at {point.position}");
+            m_CharacterController.enabled = false;
+            m_CharacterController.transform.position = point.position;
+            m_CharacterController.enabled = true;
+        }
+        else
+        {
+            Debugger($"Resetting to Lastest CheckPoint at {m_PlayerData.SavedPosition}");
+            m_CharacterController.enabled = false;
+            m_CharacterController.transform.position = m_PlayerData.SavedPosition;
+            m_CharacterController.enabled = true;
+        }
     }
 
     public void Debugger(object log)
