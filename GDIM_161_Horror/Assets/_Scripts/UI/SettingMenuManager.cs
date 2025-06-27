@@ -51,11 +51,6 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         SetUpFullScreen();
     }
 
-    private void Start()
-    {
-        OnEnable();
-    }
-
     private void LoadSettings()
     {
         m_IsFullScreen = PlayerPrefs.GetInt(FULL_SCREEN, 0) == 1 ? true : false;
