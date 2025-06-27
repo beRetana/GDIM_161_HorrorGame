@@ -188,7 +188,6 @@ public class HandInventory : NetworkBehaviour
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
-        _playerControls = new();
         SetUpControls();
     }
 
@@ -200,6 +199,7 @@ public class HandInventory : NetworkBehaviour
 
     private void SetUpControls()
     {
+        if (_playerControls == null) _playerControls = new();
         _playerControls.Enable();
         _playerControls.Player.Interact.started += OnInteraction;
         _playerControls.Player.Interact.canceled += OnInteraction;
