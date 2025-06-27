@@ -57,20 +57,9 @@ namespace SlimUI.ModernMenu{
 		
 
 		public void  Start (){
-			// check difficulty
-			/*
-			if(PlayerPrefs.GetInt("NormalDifficulty") == 1){
-				difficultynormaltextLINE.gameObject.SetActive(true);
-				difficultyhardcoretextLINE.gameObject.SetActive(false);
-			}
-			else
-			{
-				difficultyhardcoretextLINE.gameObject.SetActive(true);
-				difficultynormaltextLINE.gameObject.SetActive(false);
-			}*/
 
 			// check slider values
-			musicSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MusicVolume");
+			//musicSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MusicVolume");
 			sensitivityXSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("XSensitivity");
 			sensitivityYSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("YSensitivity");
 			//mouseSmoothSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MouseSmoothing");

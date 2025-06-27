@@ -55,6 +55,11 @@ public class NewNetworkManager : NetworkManager
         return name.Substring(folder, name.IndexOf('.') - folder);
     }
 
+    public string GetOnlineSceneName()
+    {
+        return GetSceneName(onlineScene);
+    }
+
     private void Debugger(object log)
     {
         if (m_Debugger) Debug.Log(log);
