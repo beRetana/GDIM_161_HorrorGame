@@ -15,9 +15,6 @@ public class HandInventory : NetworkBehaviour
     [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
 
-    [Header("Arms")]
-    [SerializeField] private Arms _arms;
-
     [Header("Interaction Physics Settings")]
     [SerializeField] private float _pickUpRange;
     [SerializeField] private float _pickUpForce;
@@ -38,8 +35,6 @@ public class HandInventory : NetworkBehaviour
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
-
-    public Arms GetArms() { return _arms; }
 
     private class InventorySlot
     {
@@ -289,7 +284,6 @@ public class HandInventory : NetworkBehaviour
     private void RpcSwapDominance()
     {
         bool isLHandDom = _inventorySlots.SwapDominance();
-        _arms.SetHandDominancePosition(isLHandDom, !isLHandDom);
     }
 
     public void OnInteraction(InputAction.CallbackContext context) 
