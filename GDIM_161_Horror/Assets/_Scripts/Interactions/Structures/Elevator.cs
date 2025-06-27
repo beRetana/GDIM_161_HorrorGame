@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] private Transform m_CheckPointPosition;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private bool _debugger;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<CharacterController>(out CharacterController character))
         {
             other.GetComponent<FirstPersonController>().GravityOn = false;
+            other.GetComponent<PlayerAnimator>().SetAnimLadder(true);
+            Debugger("Player Going Up the Ladder");
         }
     }
 
@@ -26,6 +30,14 @@ public class Elevator : MonoBehaviour
         if (other.TryGetComponent<CharacterController>(out CharacterController character))
         {
             other.GetComponent<FirstPersonController>().GravityOn = true;
+            other.GetComponent<PlayerAnimator>().SetAnimLadder(false);
+            other.GetComponent<PlayerDataTracker>().SavedPosition = m_CheckPointPosition.position;
+            Debugger("Player Off the Ladder");
         }
+    }
+
+    private void Debugger(object log)
+    {
+        if (_debugger) Debug.Log(log);
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 public class LobbyController : MonoBehaviour
 {
     public static LobbyController Instance;
+    [SerializeField] private bool debugger;
 
     //UI Elements
     public Text LobbyNameText;
@@ -216,5 +217,26 @@ public class LobbyController : MonoBehaviour
     public void StartGame(string SceneName)
     {
         LocalplayerController.CanStartGame(SceneName);
+    }
+
+    public void StopGame()
+    {
+        SteamLobby.Instance.LeaveServer();
+
+        if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            Debugger("HOST SHUTTING DOWN");
+            NetworkManager.singleton.StopHost();
+        }
+        else
+        {
+            Debugger("CLIENT DISCONNECTING");
+            NetworkManager.singleton.StopClient();
+        }
+    }
+
+    private void Debugger(object log)
+    {
+        if (debugger) Debug.Log(log);
     }
 }

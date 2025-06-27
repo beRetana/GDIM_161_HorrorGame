@@ -1,68 +1,80 @@
 using MessengerSystem;
 using Mirror;
+using OtherUtils;
 using System.Collections;
 using UnityEngine;
 
 namespace Interactions
 {
-    public class DoorHandle : NetworkBehaviour
+    public class DoorHandle : NetworkBehaviour, IDebugger
     {
-        [SerializeField] private DoubleDoor _doorsManager;
-        [SerializeField] private Transform _door;
+        [SerializeField] private DoubleDoor m_DoorsManager;
         [SerializeField] private Transform _playerGrabTarget;
         [SerializeField] private Transform _playerOpenTarget;
-        [SerializeField] private Transform _doorOpenTarget;
-        [SerializeField] private Rigidbody _doorRigidbody;
         [SerializeField] private FixedJoint _handleJoint;
         [SerializeField] private string _grabDisplayMessage;
         [SerializeField] private string _releaseDisplayMessage;
-        [SerializeField] private float _animTime;
-        [SerializeField] private float _openDoorDelay = 2f;
-        [SerializeField] private float _openingDoorsDuration;
-        [SerializeField] private bool _debugger;
-
-        private delegate void UnlockPlayer();
-        private UnlockPlayer OnUnlockPlayer;
-
-        private InteractableItem _interactableItem;
+        
+        private InteractableItem m_InteractableItem;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;
-        [SyncVar] private bool _isPlayerOnHandle;
-        [SyncVar] private int _playerUserID;
+        private bool _debugger;
+
+        [SyncVar] private bool _isHandleOnUse;
+        [SyncVar] private int m_PlayerUserID = -1;
 
         private void Start()
         {
-            _interactableItem = GetComponent<PolyInteractable>();
-            _interactableItem.SetInteractAction(OnInteracted);
+            m_InteractableItem = GetComponent<PolyInteractable>();
+            m_InteractableItem.SetInteractAction(OnInteracted);
             _targetRotation = _playerGrabTarget.rotation;
         }
 
-        public void OnInteracted(int playerId)
+        public void OnInteracted(int playerID)
         {
-            if (_isPlayerOnHandle && _playerUserID != playerId) return;
-            Debugger($"{transform.parent.parent.parent.name}: Player {playerId} is interacting");
-            if (!_isPlayerOnHandle) PlayerGettingOnHandle(playerId);
-            else PlayerGettingOffHandle(playerId);
+            bool isDifferentPlayerOrEmpty = m_PlayerUserID != playerID;
+
+            /*If the player is handling the door and it is a different player or the handle is empty
+              then, reject interaction: this means this player is interacting with another handle */
+            if (m_DoorsManager.IsPlayerOnDoor(playerID) & isDifferentPlayerOrEmpty) return;
+
+            /*If the handle is full (-1 means empty) and the player is different, reject interaction
+              this means another player is trying to interact*/
+            if (m_PlayerUserID != -1 & isDifferentPlayerOrEmpty) return;
+
+            Debugger($"{transform.parent.parent.parent.name}: Player {playerID} is interacting");
+
+            /*By elimination this bool only mean if the player interacting is different, then attach to handle*/
+            if (isDifferentPlayerOrEmpty) PlayerGettingOnHandle(playerID);
+
+            /*By elimination this mean, this player has not interacted with the door
+              but it is attached to the handle thus unattach them from the handle*/
+            else PlayerGettingOffHandle(playerID);
         }
 
         private void PlayerGettingOnHandle(int playerID)
         {
+            Debugger($"Player {playerID} getting ON handle");
+
+            m_DoorsManager.AddPlayerID(playerID);
             PlayerManager.Instance.LockPlayerInput(playerID);
-            StartCoroutine(MovePlayerAnimation(playerID));
+            StartCoroutine(GrabHandleAnimation(playerID));
         }
 
         private void PlayerGettingOffHandle(int playerID)
         {
-            _interactableItem.SetDisplayMessage(_grabDisplayMessage);
+            Debugger($"Player {playerID} getting OFF handle");
+
+            m_DoorsManager.RemovePlayerID(playerID);
+            m_InteractableItem.SetDisplayMessage(_grabDisplayMessage);
             PlayerManager.Instance.UnlockPlayerInput(playerID);
             DetachingFromPlayer();
-            OnUnlockPlayer = null;
             UpdateHandleState(playerID, false);
         }
 
         private void UpdateDoorManager(bool isPlayerOnHandler)
         {
-            this._doorsManager.OnPlayerHandleInteraction(isPlayerOnHandler);
+            m_DoorsManager.OnPlayerHandleInteraction(isPlayerOnHandler);
         }
 
         private void UpdateHandleState(int playerID, bool isPlayerOnHandle)
@@ -74,8 +86,8 @@ namespace Interactions
         [ClientRpc]
         private void RpcUpdateHandleState(int playerID, bool isPlayerOnHandle)
         {
-            this._playerUserID = playerID;
-            this._isPlayerOnHandle = isPlayerOnHandle;
+            this.m_PlayerUserID = playerID;
+            this._isHandleOnUse = isPlayerOnHandle;
             this.UpdateDoorManager(isPlayerOnHandle);
         }
 
@@ -88,56 +100,50 @@ namespace Interactions
         public void DetachingFromPlayer()
         {
             _handleJoint.connectedBody = null;
-            _doorRigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         private void AttachingToPlayer(int playerId)
         {
             PlayerArticulations playerArticulations = PlayerManager.Instance.GetPlayer(playerId).GetComponent<PlayerArticulations>();
             _handleJoint.connectedBody = playerArticulations.PlayerHandRigidbody;
-            _doorRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ;
-            OnUnlockPlayer = () => { PlayerManager.Instance.UnlockPlayerInput(playerId); };
         }
 
-        public void DoorCanMove()
+        public void MovePlayer()
         {
             SetInteractive(false);
-            StartCoroutine(OpenDoors(_playerUserID, _openingDoorsDuration, 
-                _playerOpenTarget.position, _doorOpenTarget.position));
+            StartCoroutine(MovePlayerOpeningDoor());
         }
 
         public void SetInteractive(bool isInteractive)
         {
-            _interactableItem.SetInteractive(isInteractive);
+            m_InteractableItem.SetInteractive(isInteractive);
         }
 
-        IEnumerator OpenDoors(int playerID, float duration, Vector3 playerTarget, Vector3 doorTarget)
+        IEnumerator MovePlayerOpeningDoor()
         { 
-            yield return new WaitForSeconds(_openDoorDelay);
+            yield return new WaitForSeconds(m_DoorsManager.DoorDelay);
 
-            Transform playerTransform = PlayerManager.Instance.GetPlayer(playerID).transform;
-            float timeElapsed = 0;
+            Transform playerTransform = PlayerManager.Instance.GetPlayer(m_PlayerUserID).transform;
 
             Vector3 playerOriginalPosition = playerTransform.position;
-            playerTarget = new Vector3(playerTarget.x, playerTransform.position.y, playerTarget.z);
+            Vector3 playerTarget = new Vector3(_playerOpenTarget.position.x, playerTransform.position.y,
+                _playerOpenTarget.position.z);
 
-            Vector3 doorOriginalPosition = _door.position;
             float ratio = 0;
-            for (; timeElapsed <= _animTime; timeElapsed += Time.deltaTime)
+            for (float timeElapsed = 0; ratio <= 1; ratio = timeElapsed / m_DoorsManager.DoorAnimTime)
             {
-                ratio = Mathf.Clamp01(timeElapsed / duration);
                 playerTransform.position = Vector3.Lerp(playerOriginalPosition, playerTarget, ratio);
-                _door.position = Vector3.Lerp(doorOriginalPosition, doorTarget, ratio);
                 yield return null;
+                timeElapsed += Time.deltaTime;
             }
 
-            OnUnlockPlayer?.Invoke();
+            playerTransform.position = playerTarget;
+            PlayerGettingOffHandle(m_PlayerUserID);
         }
 
-        IEnumerator MovePlayerAnimation(int playerId)
+        IEnumerator GrabHandleAnimation(int playerId)
         {
             PlayerBase player = PlayerManager.Instance.GetPlayer(playerId);
-            float time = 0;
 
             Transform playerTransform = player.transform;
 
@@ -146,23 +152,30 @@ namespace Interactions
 
             Quaternion playerOriginalRotation = player.transform.rotation;
 
-            while (time <= _animTime)
+            float ratio = 0;
+            for(float time = 0; ratio <= 1; time += Time.deltaTime)
             {
-                player.transform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, time / _animTime);
-                player.transform.rotation = Quaternion.Slerp(playerOriginalRotation, _targetRotation, time / _animTime);
+                ratio = time / m_DoorsManager.HandleGrabAnimTime;
+                player.transform.position = Vector3.Lerp(playerOriginalPosition, _targetPosition, ratio);
+                player.transform.rotation = Quaternion.Slerp(playerOriginalRotation, _targetRotation, ratio);
 
                 yield return null;
-                time += Time.deltaTime;
             }
+
             Debugger($"{transform.parent.parent.parent.name}: Is moving Player {playerId}");
             AttachingToPlayer(playerId);
-            _interactableItem.SetDisplayMessage(_releaseDisplayMessage);
+            m_InteractableItem.SetDisplayMessage(_releaseDisplayMessage);
             UpdateHandleState(playerId, true);
         }
 
-        private void Debugger(object log)
+        public void Debugger(object log)
         {
             if (_debugger) Debug.Log(log);
+        }
+
+        public void SetDebugActive(bool active)
+        {
+            _debugger = active;
         }
     }
 }

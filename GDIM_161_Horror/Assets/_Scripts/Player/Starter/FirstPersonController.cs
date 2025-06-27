@@ -1,39 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using FMODUnity;
-using Dissonance;
-
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 namespace StarterAssets
 {
-    [RequireComponent(typeof(CharacterController))]
-    #if ENABLE_INPUT_SYSTEM
-        [RequireComponent(typeof(PlayerInput))]
-    #endif
     public class FirstPersonController : PlayerBase
     {
-        #if ENABLE_INPUT_SYSTEM
-            private PlayerInput _playerInput;
-        #endif
-
-        private CharacterController _controller;
         private StarterAssetsInputs _input;
-        private Animator _animator;
+        private PlayerHeadBobbing _headBobbing;
         private const float _THRESHOLD = 0.01f;
         public bool isWalking { get; private set; }
 
         float _stepSoundTime;
 
         [SerializeField] private string _buildScene = "BUILD_1";
-        [SerializeField] private EventReference _forestFootstep;
-        [SerializeField] private float _rate;
-
-        private bool _isSprinting;
-        private InputAction _onJump;
 
         public bool grounded { get; private set; }
 
@@ -42,44 +23,29 @@ namespace StarterAssets
         {
             get
             {
-                #if ENABLE_INPUT_SYSTEM
-                    return _playerInput.currentControlScheme == "KeyboardMouse";
-                #else
-                    return false;
-                #endif
+                return _playerInput.currentControlScheme == "KeyboardMouse";
             }
         }
         private bool _gravityOn = true;
-
-        private const string SPEED = "Speed";
-        private const string JUMP = "Jump";
 
         public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
         {
-			DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         protected override void Start()
         {   
             base.Start();
-            _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
-
-            #if ENABLE_INPUT_SYSTEM
-                _playerInput = GetComponent<PlayerInput>();
-            #else
-                Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-            #endif
+            _headBobbing = GetComponent<PlayerHeadBobbing>();
+            _playerInput = GetComponent<PlayerInput>();
 
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-            _animator = GetComponent<Animator>();
-
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnDestroy()
@@ -90,7 +56,6 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != _buildScene) return;
-
             StartCoroutine(FindSpawnPoint());
         }
 
@@ -127,7 +92,7 @@ namespace StarterAssets
 
         private void UpdateSpeedAnimation()
         {
-            _animator.SetFloat(SPEED, new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
+            _animator.SetAnimSpeed(new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude);
         }
 
         private void GroundedCheck()
@@ -145,8 +110,10 @@ namespace StarterAssets
             _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
+            Debugger($"X Rotation Velovity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
+
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
 
             transform.Rotate(Vector3.up * _rotationVelocity);
 
@@ -155,10 +122,10 @@ namespace StarterAssets
             //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
 
-        public void PlayFootstep()
-        {
-            RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
-        }
+        //public void PlayFootstep()
+        //{
+        //    RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
+        //}
 
         private void Move()
         {
@@ -169,16 +136,11 @@ namespace StarterAssets
             if (_input.move == Vector2.zero)
             {
                 targetSpeed = 0.0f;
-                isWalking = false; // Player is stopped
+                isWalking = false;
             }
             else
             {
-                isWalking = true; // Player is moving  
-                if (_stepSoundTime >= _rate)
-                {
-                   // PlayFootstep();
-                    _stepSoundTime = 0;
-                }
+                isWalking = true; 
             }
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -203,6 +165,7 @@ namespace StarterAssets
             if (_input.move != Vector2.zero)
                 inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 
+            _headBobbing.SetNoise(_speed / sprintSpeed);
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
 
@@ -232,13 +195,13 @@ namespace StarterAssets
                     _fallTimeoutDelta -= Time.deltaTime;
 
                 _input.jump = false;
-                _animator.SetBool(JUMP, false);
+                _animator.SetAnimJump(false);
             }
 
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += gravity * Time.deltaTime;
-                _animator.SetBool(JUMP, true);
+                _animator.SetAnimJump(true);
             }
         }
 

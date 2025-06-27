@@ -8,11 +8,6 @@ public class MouseUI : MonoBehaviour
     [SerializeField] private Color interactedColor;
     [SerializeField] private Image mouseImage;
 
-    void Awake()
-    {
-        DataMessenger.SetGameObject(MessengerKeys.GameObjectKey.MouseUI, gameObject);
-    }
-
     void Start()
     {
         mouseImage = GetComponent<Image>();

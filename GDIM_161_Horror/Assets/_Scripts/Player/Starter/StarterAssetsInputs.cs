@@ -20,20 +20,24 @@ namespace StarterAssets
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
-		[SerializeField] private string _buildScene = "BUILD_1";
+		[SerializeField] private string _buildScene = "Floor0";
         public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM
 
-		private void OnStart()
+		private void Start()
 		{
 			SceneManager.sceneLoaded += OnSceneLoaded;
 		}
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadingmode)
         {
-            if (SceneManager.GetActiveScene().name == _buildScene) SetCursorState(cursorLocked);
+			if (SceneManager.GetActiveScene().name == _buildScene)
+			{
+				SetCursorState(cursorLocked);
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+            }
         }
 
         public void OnMove(InputValue value)
@@ -56,7 +60,7 @@ namespace StarterAssets
 
 		public void OnSprint(InputValue value)
 		{
-			SprintInput(value.isPressed);
+			ToggleSprint();
 		}
 #endif
 
@@ -75,20 +79,14 @@ namespace StarterAssets
 			jump = newJumpState;
 		}
 
-		public void SprintInput(bool newSprintState)
+		public void ToggleSprint()
 		{
-			sprint = newSprintState;
+			sprint = !sprint;
 		}
-		
-		/*private void OnApplicationFocus(bool hasFocus)
-		{
-			if (SceneManager.GetActiveScene().name != _buildScene) SetCursorState(cursorLocked);
-		}*/
 
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
-	
 }

@@ -43,7 +43,11 @@ namespace Interactions
                 return;
             }
 
-            bool success = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().PickUpItem(this);
+            HandInventory playerInventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
+            
+            if (playerInventory.IsInventoryFull()) return;
+
+            bool success = playerInventory.PickUpItem(this);
             if (!success) return;
 
             SetPossessed(true, playerID);

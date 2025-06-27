@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &89069486039572777
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6643431620407178065}
+  - component: {fileID: 6712810056392142283}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6643431620407178065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89069486039572777}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -107.4, y: -7.2, z: 11.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8100575946994462484}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6712810056392142283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89069486039572777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5552481d30ea241b8319ba5d08a47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterVolume: 1
+  musicVolume: 1
+  ambianceVolume: 1
+  SFXVolume: 1
+--- !u!1 &7655310400460847890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8100575946994462484}
+  - component: {fileID: 3968336915616479869}
+  m_Layer: 0
+  m_Name: FMODEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8100575946994462484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7655310400460847890}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6643431620407178065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3968336915616479869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7655310400460847890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bae050c7d04eec4caa19d40a1ecf282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <torchGrab>k__BackingField:
+    Guid:
+      Data1: -1611269432
+      Data2: 1273089934
+      Data3: -333983856
+      Data4: -383996526
+    Path: event:/Character/torchGrab
+  <backgroundAmbiance>k__BackingField:
+    Guid:
+      Data1: -1551080663
+      Data2: 1154017101
+      Data3: -522812263
+      Data4: -329901556
+    Path: event:/backgroundAmbiance
+  <deerWalk>k__BackingField:
+    Guid:
+      Data1: 2001809690
+      Data2: 1303923397
+      Data3: 851080102
+      Data4: 266263900
+    Path: event:/deerWalk
+  <deerRun>k__BackingField:
+    Guid:
+      Data1: -1146244257
+      Data2: 1251743540
+      Data3: -588042364
+      Data4: 1346346020
+    Path: event:/deerRun
+  <sonarPing>k__BackingField:
+    Guid:
+      Data1: 1595208341
+      Data2: 1087017112
+      Data3: -102317894
+      Data4: 710373934
+    Path: event:/Character/sonarPing
+  <walkieStart>k__BackingField:
+    Guid:
+      Data1: -1700751554
+      Data2: 1281518201
+      Data3: -1443920985
+      Data4: 1850952519
+    Path: event:/Character/walkieStart
+  <walkieEnd>k__BackingField:
+    Guid:
+      Data1: 2080201518
+      Data2: 1155188936
+      Data3: 452581563
+      Data4: 619651946
+    Path: event:/Character/walkieEnd
+  <radioStatic>k__BackingField:
+    Guid:
+      Data1: 1339631217
+      Data2: 1305724905
+      Data3: 228181680
+      Data4: 1598960762
+    Path: event:/Character/radioStatic
+  <doorsOpening>k__BackingField:
+    Guid:
+      Data1: 2007760865
+      Data2: 1213871412
+      Data3: -1328731008
+      Data4: 1364812034
+    Path: event:/Machines/PAVLOV/doorsOpening
+  <doorsClosing>k__BackingField:
+    Guid:
+      Data1: 95552639
+      Data2: 1175093713
+      Data3: -1014340710
+      Data4: 1692117390
+    Path: event:/Machines/PAVLOV/doorsClosing
+  <MonsterDeerCall>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

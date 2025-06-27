@@ -1,57 +1,47 @@
 using UnityEngine;
 using Mirror;
+using OtherUtils;
 
 namespace Interactions
 {
-    public class FireCollision : NetworkBehaviour
+    public class FireCollision : MonoBehaviour, IDebugger
     {
         [SerializeField, Tooltip("Torch / Hearth")] private GameObject maybeFireable;
-        [SerializeField, Tooltip("Enable Debuglogs")] private bool _debugger;
-        private IFireable fireableObject;
+        protected bool _debugger;
+        protected IFireable fireableObject;
 
-        private const string FIRE_TAG = "Fire";
-
-        private void Start()
+        protected virtual void Start()
         {
             fireableObject = maybeFireable.gameObject.GetComponent<IFireable>();
             if (fireableObject == null) Destroy(this);
         }
 
-        private void OnTriggerEnter(Collider col)
+        protected virtual void OnTriggerEnter(Collider col)
         {
-            if (!col.CompareTag(FIRE_TAG)) return; //check if other is fire
+            FireCollision colFire;
 
-            FireCollision colFire = col.gameObject.GetComponent<FireCollision>();
+            if (!col.gameObject.TryGetComponent<FireCollision>(out colFire)) return;
+
             Debugger($"COLLIDED FIRE {colFire.gameObject.name}, {this}");
 
             if (!colFire.IsLit()) return; //check if other fire is lit
 
-            if (isServer) RpcLightingObject();
-            else CmdLightingObject();
-        }
-
-        [ClientRpc]
-        private void RpcLightingObject()
-        {
             this.fireableObject.LightFlame();
-            
         }
 
-        [Command]
-        private void CmdLightingObject()
-        {
-            RpcLightingObject();
-        }
-
-        private bool IsLit()
+        public virtual bool IsLit()
         {
             return fireableObject.IsLit();
-            
         }
 
-        private void Debugger(string log)
+        public virtual void Debugger(object log)
         {
             if (_debugger) Debug.Log(log);
+        }
+
+        public virtual void SetDebugActive(bool active)
+        {
+            _debugger = active;
         }
     }
 }

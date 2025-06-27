@@ -4,6 +4,7 @@ using Mirror;
 using Steamworks;
 using Player;
 using StarterAssets;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class PlayerObjectController : NetworkBehaviour
@@ -66,23 +67,16 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStartAuthority()
     {
         LocalInstance = this;
-        CmdSetPlayerName(SteamFriends.GetPersonaName());
         gameObject.name = "LocalGamePlayer";
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
-        
-        if (LobbyController.Instance != null)
-        {
-            LobbyController.Instance.UpdatePlayerList();
-        }
+        CmdSetPlayerName(SteamFriends.GetPersonaName());
     }
 
     public override void OnStartClient()
     {
         Manager.GamePlayers.Add(this);
         PlayerManager.Instance.AttemptAddPlayer(GetComponent<FirstPersonController>());
-        LobbyController.Instance.UpdateLobbyName();
-        LobbyController.Instance.UpdatePlayerList();
     }
 
     public override void OnStopClient()

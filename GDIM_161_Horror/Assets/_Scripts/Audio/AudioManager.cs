@@ -11,78 +11,96 @@ using FMOD.Studio;
 public class AudioManager : MonoBehaviour
 {
     [Header("Volume")]
-    [Range(0,1)]
+    [Range(0,1)] private float masterVolume = 1;
+    [Range(0,1)] private float musicVolume = 1;
+    [Range(0,1)] private float ambianceVolume = 1;
+    [Range(0,1)] private float SFXVolume = 1;
 
-    public float masterVolume = 1;
-    [Range(0,1)]
-
-    public float musicVolume = 1;
-    [Range(0,1)]
-
-    public float ambianceVolume = 1;
-    [Range(0,1)]
-
-    public float SFXVolume= 1;
+    private const string MASTER_VOLUME = "MasterVolume";
+    private const string MUSIC_VOLUME = "MusicVolume";
+    private const string AMBIANCE_VOLUME = "AmbianceVolume";
+    private const string SFX_VOLUME = "SFX_Volume";
 
     private Bus masterBus;
-
     private Bus musicBus;
-
     private Bus ambianceBus;
-
     private Bus sfxBus;
 
+    public float MasterVolume {get { return masterVolume; } 
+        set 
+        { 
+            masterVolume = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(MASTER_VOLUME, masterVolume);
+            PlayerPrefs.Save();
+        } }
+    public float MusicVolume {get { return musicVolume; } 
+        set 
+        { 
+            musicVolume = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(MUSIC_VOLUME, musicVolume);
+            PlayerPrefs.Save();
+        } }
+    public float AmbianceVolume { get { return ambianceVolume; } 
+        set 
+        { 
+            ambianceVolume = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(AMBIANCE_VOLUME, ambianceVolume);
+            PlayerPrefs.Save();
+        } }
+    public float SFX_Volume { get { return SFXVolume; } 
+        set 
+        { 
+            SFXVolume = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(SFX_VOLUME, SFXVolume);
+            PlayerPrefs.Save();
+        } }
 
     private List<EventInstance> eventInstances;
-
     private List<StudioEventEmitter> eventEmitters;
 
     private EventInstance ambianceEventInstance;
     public static AudioManager instance {get; private set;}
-
-
-
-   
-   private void Start()
-   {
-       InitializeAmbience(FMODEvents.instance.backgroundAmbiance);
-   }
-
-    
-    // private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    //     {
-    //         if (scene.name == "BUILD_1") 
-    //             {
-    //                 InitializeAmbience(FMODEvents.instance.backgroundAmbiance);    
-    //             }
-    //     }
-    
 
     private void Awake()
     {
         if(instance != null)
         {
             Debug.LogError ("Found more than one Audio Manager in the scene");
+            Destroy(this.gameObject);
         }
-        instance = this;
+        else instance = this;
+
         eventInstances = new List<EventInstance>();
         eventEmitters = new List<StudioEventEmitter>();
 
-        masterBus= RuntimeManager.GetBus("bus:/");
-        musicBus= RuntimeManager.GetBus("bus:/Music");
-        ambianceBus= RuntimeManager.GetBus("bus:/Ambiance");
-        sfxBus= RuntimeManager.GetBus("bus:/SFX");
+        masterBus = RuntimeManager.GetBus("bus:/");
+        musicBus = RuntimeManager.GetBus("bus:/Music");
+        ambianceBus = RuntimeManager.GetBus("bus:/Ambiance");
+        sfxBus = RuntimeManager.GetBus("bus:/SFX");
+
+        LoadSettings();
     }
 
-    
-    private void Update()
+    private void Start()
     {
-        {
-            masterBus.setVolume(masterVolume);
-            musicBus.setVolume(musicVolume);
-            ambianceBus.setVolume(ambianceVolume);
-            sfxBus.setVolume(SFXVolume);
-        }
+        InitializeAmbience(FMODEvents.instance.backgroundAmbiance);
+        UpdateBuses();
+    }
+
+    private void LoadSettings()
+    {
+        masterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME, 1f);
+        musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME, 1f);
+        ambianceVolume = PlayerPrefs.GetFloat(AMBIANCE_VOLUME, 1f);
+        SFXVolume = PlayerPrefs.GetFloat(SFX_VOLUME, 1f);
+    }
+
+    public void UpdateBuses()
+    {
+        masterBus.setVolume(masterVolume);
+        musicBus.setVolume(musicVolume);
+        ambianceBus.setVolume(ambianceVolume);
+        sfxBus.setVolume(SFXVolume);
     }
 
     private void InitializeAmbience(EventReference ambianceEventReference )
@@ -90,7 +108,6 @@ public class AudioManager : MonoBehaviour
         ambianceEventInstance = CreateInstance(ambianceEventReference);
         ambianceEventInstance.start();
     }
-
 
     public void PlayOneShot(EventReference sound, Vector3 worldPos)
     {
@@ -130,7 +147,4 @@ public class AudioManager : MonoBehaviour
     {
         CleanUp();
     }
-    
-
-
 }

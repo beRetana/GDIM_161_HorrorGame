@@ -42,6 +42,7 @@ public class SingleDoor : NetworkBehaviour
         this._isOpen = true;
         _interactableItem.SetInteractive(false);
         StartCoroutine(OpenDoorAnim(pivot.rotation, pivot.rotation * _endingRotation, _openAnimDuration));
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.SingleDoorOpen, this.transform.position);
     }
 
     [Command]

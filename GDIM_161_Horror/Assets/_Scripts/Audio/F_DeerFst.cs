@@ -5,7 +5,7 @@ using FMOD.Studio;
 public class F_DeerFst : MonoBehaviour
 {
     private int MaterialType;
-    private RaycastHit rh;
+    private RaycastHit RH;
     private float distance = 0.3f;
     private string EventPath = "event:/deerFootsteps";
     private PARAMETER_ID ParamID;
@@ -91,21 +91,21 @@ public class F_DeerFst : MonoBehaviour
     void MaterialCheck()
     {
 
-        if (Physics.Raycast(transform.position, Vector3.down, out rh, distance, LM))
+        if (Physics.Raycast(transform.position, Vector3.down, out RH, distance, LM))
         {
-            //Debug.Log(rh.collider.tag + " " + MaterialValue);
-            switch (rh.collider.tag)
+            //Debug.Log(RH.collider.tag + " " + MaterialValue);
+            switch (RH.collider.tag)
             {
                 case "Grass":
                     MaterialType = 0; // Labeled parameters in FMOD
                     break;
-                case "Gravel":
+                case "Stone":
                     MaterialType = 1;
                     break;
                 case "Metal":
                     MaterialType = 2;
                     break;
-                case "Stone":
+                case "Gravel":
                     MaterialType = 3;
                     break;
                 case "Wood":

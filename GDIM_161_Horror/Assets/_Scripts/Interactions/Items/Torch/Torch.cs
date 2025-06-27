@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using FMODUnity;
+using FMOD.Studio;
 using System;
 using Mirror;
 
@@ -61,16 +63,15 @@ namespace Interactions
 
         private bool isDropping = false;
         private const float SMOTHER_RADIUS = 0.5f;
-
-        public bool Lit { get; private set; }
-        public bool IsLit() { return Lit; }
+        private bool isLit;
+        public bool IsLit() { return isLit; }
 
         protected override void Start()
         {
             base.Start();
             BurnTimer = SECONDS_PER_MINUTE * approxWoodLife_Minutes;
             pyrolysisTimer = BurnTimer / pyrolysisIncrements;
-            Lit = false;
+            isLit = false;
             maxTorchWoodScale = torchWood.localScale.y;
             maxFireLocalYPos = flameBase.localPosition.y;
             maxFlameSize = flameRed.localScale.y;
@@ -83,7 +84,7 @@ namespace Interactions
 
         protected void Update()
         {
-            if (!Lit) return;
+            if (!isLit) return;
             UpdateFlameOrientation();
             SmotherCheck();
         }
@@ -92,7 +93,7 @@ namespace Interactions
         {
             //Debug.Log(BurnTimer);
             //Debug.Log(pyrolysisTimer);
-            if (!Lit) return;
+            if (!isLit) return;
             UpdateTimers();
             Burn();
             UpdatePyrolysis();
@@ -100,14 +101,14 @@ namespace Interactions
         }
         public override void UseItem(int playerId)
         {
-            Debug.Log("Using torch");
-            PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms().ToggleHandMoveOutOrIn(null);
+            //Debug.Log("Using torch");
+            //PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms()?.ToggleHandMoveOutOrIn(null);
         }
 
 
         private void SmotherCheck()
         {
-            if (!Lit || !isDropping) return;
+            if (!isLit || !isDropping) return;
             if (GroundCheck()) SmotherFlame();
         }
 
@@ -123,6 +124,7 @@ namespace Interactions
         {
             if (pyrolysisTimer <= 0)
             {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchFlicker, this.transform.position);
                 WoodPyrolysis();
                 pyrolysisTimer = approxWoodLife_Minutes * SECONDS_PER_MINUTE / pyrolysisIncrements;
             }
@@ -170,25 +172,31 @@ namespace Interactions
 
         private void ToggleFlame(bool setOn)
         {
-            Lit = setOn;
+            isLit = setOn;
             flameVFX.gameObject.SetActive(setOn);
         }
         public void BlowOutFlame() // via wind
         {
-            if (!Lit) return;
+            if (!isLit) return;
             StartCoroutine(BurnOutFire(flameBurnOutTime, flameDecayRate, lightDecayRate));
         }
         public void LightFlame()
         {
-            if (Lit) return;
+            if (isServer) RpcLightingObject();
+        }
+
+        [ClientRpc]
+        private void RpcLightingObject()
+        {
+            if (isLit) return;
             FlameFullExtinguish();
-            Lit = true;
+            isLit = true;
             StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
         }
 
         public void SmotherFlame()
         {
-            if (!Lit) return;
+            if (!isLit) return;
             flameSize = 0f;
             lightIntensity = 0f;
             ScaleFlameScale(0);
@@ -216,7 +224,7 @@ namespace Interactions
         }
         private void FlameFullSize()
         {
-            Lit = true;
+            isLit = true;
             torchWoodScale = maxTorchWoodScale;
             flameSize = maxFlameSize;
             torchLight.intensity = maxLightIntensity;
@@ -224,7 +232,7 @@ namespace Interactions
         }
         private void FlameFullExtinguish()
         {
-            Lit = false;
+            isLit = false;
             torchWoodScale = 0f;
             flameSize = 0f;
             torchLight.intensity = 0f;
@@ -244,6 +252,7 @@ namespace Interactions
         {
             FlameFullExtinguish();
             NetworkDestroyTorch();
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchExtinguish, this.transform.position);
         }
 
 

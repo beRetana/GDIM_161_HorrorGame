@@ -9,12 +9,12 @@ namespace OtherUtils
         [SerializeField] private Transform _prefab;
         [SerializeField] private float _delay;
 
-        [Server]
         void Start() 
         { 
             if (isServer) StartCoroutine(SpawnPrefab()); 
         }
 
+        [Server]
         private IEnumerator SpawnPrefab()
         {
             yield return new WaitForSecondsRealtime(_delay);
