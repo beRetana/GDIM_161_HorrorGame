@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.InputSystem;
+using Mirror;
 
 namespace StarterAssets
 {
@@ -9,16 +10,18 @@ namespace StarterAssets
     {
         private StarterAssetsInputs _input;
         private PlayerHeadBobbing _headBobbing;
+
         private const float _THRESHOLD = 0.01f;
+
+        private string m_GameplaySceneName = "BUILD_1";
+        private float _stepSoundTime;
+        private bool _gravityOn = true;
+        [SyncVar] private bool m_HasKeyCard;
+
+        public bool HasKeyCard { get { return m_HasKeyCard; } set { CmdHasChip(value); } }
         public bool isWalking { get; private set; }
-
-        float _stepSoundTime;
-
-        [SerializeField] private string _buildScene = "BUILD_1";
-
         public bool grounded { get; private set; }
-
-        /// EDITOR ONLY!!!!
+        public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
         private bool IsCurrentDeviceMouse
         {
             get
@@ -26,9 +29,6 @@ namespace StarterAssets
                 return _playerInput.currentControlScheme == "KeyboardMouse";
             }
         }
-        private bool _gravityOn = true;
-
-        public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
 
         private void Awake()
         {
@@ -46,6 +46,7 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
+            m_GameplaySceneName = (NewNetworkManager.singleton as NewNetworkManager).GameplaySceneName;
         }
 
         private void OnDestroy()
@@ -55,7 +56,7 @@ namespace StarterAssets
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name != _buildScene) return;
+            if (scene.name != m_GameplaySceneName) return;
             StartCoroutine(FindSpawnPoint());
         }
 
@@ -121,11 +122,6 @@ namespace StarterAssets
             //float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
             //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
-
-        //public void PlayFootstep()
-        //{
-        //    RuntimeManager.PlayOneShot(_forestFootstep, transform.position);
-        //}
 
         private void Move()
         {
@@ -210,6 +206,12 @@ namespace StarterAssets
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+
+        [Command]
+        private void CmdHasChip(bool value)
+        {
+            this.m_HasKeyCard = value;
         }
 
         private void OnDrawGizmosSelected()

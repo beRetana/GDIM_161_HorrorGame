@@ -8,18 +8,12 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// This class allows items to be interacted with a player.
 /// </summary>
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(LookAtCamera))]
 public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
 {
     [SerializeField] protected NetworkIdentity _networkIdentity;
-    [SerializeField] protected string _textName;
+    [SerializeField] protected string m_DisplayText;
     
-    protected Animator _uiAnimator;
-    protected TextMeshProUGUI _textMesh;
-    protected LookAtCamera _lookAtCamera;
-    protected string FADE = "FADE";
-    protected bool _isInteractable;
+    protected bool m_IsInteractable;
     protected bool m_DebugEnabled;
 
     protected Action<int> OnInteractAction;
@@ -27,37 +21,33 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     protected virtual void Awake()
     {
         OnInteractAction = (int playerId) => Debug.Log($"Player: {playerId} Interacted");
-        _isInteractable = true;
+        m_IsInteractable = true;
     }
 
     protected virtual void Start()
     {
-        _textMesh = transform.GetComponentInChildren<TextMeshProUGUI>();
-        _uiAnimator = GetComponent<Animator>();
-        _lookAtCamera = GetComponent<LookAtCamera>();
-        if (_networkIdentity == null) _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
-        SetDisplayMessage(_textName);
-    }
-
-    public virtual void SetDisplayMessage(string message)
-    {
-        if (_textMesh == null) return;
-        _textMesh.text = message;
+        if (_networkIdentity == null) 
+            _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
     }
 
     public virtual void SetInteractive(bool intactive)
     {
-        _isInteractable = intactive;
+        m_IsInteractable = intactive;
+    }
+
+    public virtual void SetDisplayMessage(string text)
+    {
+        m_DisplayText = text;
     }
 
     public virtual void Interaction(int playerID, InputData context)
     {
         Debugger($"Player {playerID} is trying to interact" +
-                 $"Active: {_isInteractable}, " +
+                 $"Active: {m_IsInteractable}, " +
                  $"Phase: {context.InputPhase}, " +
                  $"Type: {context.InputType}");
 
-        if (!_isInteractable) return;
+        if (!m_IsInteractable) return;
 
         switch (context.InputPhase)
         {
@@ -96,15 +86,15 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
 
     public virtual void Detected(int playerID)
     {
-        if (!_isInteractable) return;
-        _lookAtCamera.SetCamera(Camera.main);
-        _uiAnimator.SetBool(FADE, true);
+        if (!m_IsInteractable) return;
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<PlayerInteractableUI>().DisplayInteractUI(m_DisplayText);
     }
 
     public virtual void StoppedDetecting(int playerID)
     {
-        try { _uiAnimator?.SetBool(FADE, false); }
-        finally{}
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<PlayerInteractableUI>().HideInteractUI();
     }
 
     public NetworkIdentity GetNetworkID()

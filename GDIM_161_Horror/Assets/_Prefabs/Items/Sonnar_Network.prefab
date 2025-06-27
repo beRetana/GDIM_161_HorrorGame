@@ -61,11 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a607149b4cc9ebd4ab705daa7b5142ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textAnimation: {fileID: 409505196352271945}
-  _lookAtCamera: {fileID: 8724721889429760598}
   _networkIdentity: {fileID: 5791794038038222547}
-  _textName: SONNAR
-  _fadeIn: FadeIn
+  m_DisplayText: SONNAR
 --- !u!95 &409505196352271945
 Animator:
   serializedVersion: 7
@@ -106,6 +103,7 @@ MonoBehaviour:
   _pickableItemSO: {fileID: 11400000, guid: 8ab43b6301a426c42b8c42d617cd2542, type: 2}
   _debugger: 0
   _detectionRadius: 20
+  _verticalBuffer: 1
   _sonarDetectable:
     serializedVersion: 2
     m_Bits: 64
