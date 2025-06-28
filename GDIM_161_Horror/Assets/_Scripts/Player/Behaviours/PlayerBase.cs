@@ -58,7 +58,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     [SerializeField] private SO_PlayerStats downedStats;
 
     [Space(5)]
-    [SerializeField] protected Arms _arms;
     [SerializeField] protected CapsuleCollider _capsuleCollider;
     [SerializeField] protected InteractablePlayer _interaction;
 

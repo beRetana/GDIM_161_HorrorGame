@@ -1,30 +1,11 @@
-using Mirror;
 using UnityEngine;
 
-public class LoadingBarUI : NetworkBehaviour
+public class LoadingBarUI : MonoBehaviour
 {
-    [SerializeField] private InteractablePlayer player;
+    [SerializeField] private PlayerInteractableUI m_InteractableUI;
 
-    private void Start()
+    private void ResetHoldingUI()
     {
-        if (player == null) Debug.LogWarning($"InteractablePlayer Not Set To An Instance.");
-    }
-
-    public void ResetAnimations()
-    {
-        if (isServer) RpcResetAnimations();
-        else CmdResetAnimations();
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdResetAnimations()
-    {
-        RpcResetAnimations();
-    }
-
-    [ClientRpc]
-    private void RpcResetAnimations()
-    {
-        player.ResetAnimations();
+        m_InteractableUI?.ResetHoldingUI();
     }
 }

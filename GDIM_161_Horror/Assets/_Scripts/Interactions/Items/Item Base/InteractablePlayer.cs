@@ -6,15 +6,8 @@ using UnityEngine.InputSystem;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
-    [SerializeField] protected Animator m_ProgressBarAnimator;
-    [SerializeField] protected GameObject m_TextDisplay;
-    [SerializeField] protected GameObject m_ProgressDisplay;
     protected Action OnPlayerInteract;
-    protected Coroutine m_Rescuing;
-    protected PlayerControls m_PlayerControls;
-    protected const string LOADING = "START_LOADING";
-    protected const string STOP = "STOP_LOADING";
-    protected bool m_loading;
+    protected bool m_Loading;
 
     protected override void Awake()
     {
@@ -24,56 +17,44 @@ public class InteractablePlayer : InteractableItem, IDebugger
     protected override void Start()
     {
         base.Start();
-        m_ProgressDisplay.SetActive(false);
     }
 
     public override void StartedInteraction(int playerID, InputData context)
     {
         Debugger($"Started Rescuing");
-        m_TextDisplay.SetActive(false);
-        m_ProgressDisplay.SetActive(true);
-        m_ProgressBarAnimator.SetTrigger(LOADING);
-        m_loading = true;
+        m_Loading = true;
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.StartHoldingUI();
     }
 
     public override void CanceledInteraction(int playerID, InputData context)
     {
         if (context.InputType != InteractionType.Hold) return;
         Debugger($"Canceled Rescuing");
-        m_ProgressBarAnimator.SetTrigger(STOP);
-        m_loading = false;
+        m_Loading = false;
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.CancelHoldingUI();
     }
 
     public override void PerformedInteraction(int playerID, InputData context)
     {
-        switch (context.InputType)
+        if (context.InputType != InteractionType.Hold)
         {
-            case InteractionType.Hold:
-                Debugger("Player Succesfully Rescued");
-                OnPlayerInteract?.Invoke();
-                OnPlayerInteract = null;
-                break;
-            case InteractionType.Tap:
-                CanceledInteraction(playerID, context);
-                break;
-            case InteractionType.Other:
-                CanceledInteraction(playerID, context);
-                break;
+            Debugger("Player Succesfully Rescued");
+            OnPlayerInteract?.Invoke();
+            OnPlayerInteract = null;
+        }
+        else
+        {
+            Debugger("Another Interaction was Succesful before Holding; Loading Cancelled");
+            CanceledInteraction(playerID, context);
         }
     }
 
-    public void ResetAnimations()
+    public override void StoppedDetecting(int playerID)
     {
-        m_TextDisplay.SetActive(true);
-        m_ProgressDisplay.SetActive(false);
-        m_ProgressDisplay.GetComponent<Slider>().value = 0;
-        m_loading = false;
-    }
-
-    public override void Detected(int playerID)
-    {
-        if (m_loading) return;
-        base.Detected(playerID);
+        base.StoppedDetecting(playerID);
+        if (!m_Loading) return;
+        m_Loading = false;
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.CancelHoldingUI();
     }
 
     public void SetPlayerInteraction(Action action)
