@@ -24,10 +24,18 @@ namespace AI
 
         private void Start()
         {
+            _controller = GetComponent<NavMeshAgent>();
+
+            if (!isServer)
+            {
+                GetComponent<AIController>().enabled = false;
+                _controller.enabled = false;
+                this.enabled = false;
+            }
             _wander = GetComponent<Wander>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
-            _controller = GetComponent<NavMeshAgent>();
+
             StartCoroutine(StartSequence());
         }
 

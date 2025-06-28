@@ -54,7 +54,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
         base.StoppedDetecting(playerID);
         if (!m_Loading) return;
         m_Loading = false;
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.CancelHoldingUI();
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>().CancelHoldingUI();
     }
 
     public void SetPlayerInteraction(Action action)

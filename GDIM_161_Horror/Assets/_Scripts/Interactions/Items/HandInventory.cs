@@ -290,7 +290,7 @@ public class HandInventory : NetworkBehaviour
     {
         if(_interactable == null) return;
 
-        _interactable.StoppedDetecting(_playerID);
+        _interactable.StopDetecting(_playerID);
         _mouse.DefaultEffect();
 
         InputData inputData = new(context);

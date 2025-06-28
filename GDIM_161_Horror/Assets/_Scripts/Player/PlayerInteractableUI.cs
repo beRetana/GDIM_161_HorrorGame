@@ -1,8 +1,9 @@
+using OtherUtils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInteractableUI : MonoBehaviour
+public class PlayerInteractableUI : MonoBehaviour, IDebugger
 {
     [Header("Interaction Display")]
     [SerializeField] private Animator m_InteractAnimator;
@@ -12,10 +13,10 @@ public class PlayerInteractableUI : MonoBehaviour
     [SerializeField] private Animator m_HoldingAnimator;
     [SerializeField] private Slider m_HoldingSlider;
 
-    private const string FADE = "FADE";
+    protected const string FADE = "FADE";
+    protected const string LOAD = "LOAD";
 
-    protected const string START = "START_LOADING";
-    protected const string STOP = "STOP_LOADING";
+    protected bool m_Debug;
 
     public void DisplayInteractUI(string name)
     {
@@ -36,19 +37,28 @@ public class PlayerInteractableUI : MonoBehaviour
 
     public void StartHoldingUI()
     {
-        m_HoldingAnimator.SetTrigger(START);
+        m_HoldingAnimator.SetBool(LOAD, true);
     }
 
     public void CancelHoldingUI()
     {
-        m_HoldingAnimator.SetTrigger(STOP);
+        m_HoldingAnimator.SetBool(LOAD, false);
         ResetHoldingUI();
     }
 
     public void ResetHoldingUI()
     {
-        m_HoldingAnimator.ResetTrigger(START);
-        m_HoldingAnimator.ResetTrigger(STOP);
+        Debugger($"Resetting Holding UI");
         m_HoldingSlider.value = 0;
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debug) Debug.Log($"[{this.GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debug = active;
     }
 }
