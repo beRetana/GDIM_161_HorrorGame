@@ -40,7 +40,7 @@ public class FinalDoor : MoveDoors
         else CmdUpdateState(state);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdUpdateState(DoorState state)
     {
         RpcUpdateState(state);
@@ -58,7 +58,7 @@ public class FinalDoor : MoveDoors
         else CmdUpdateCheckedInList(playerID);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdUpdateCheckedInList(int playerID)
     {
         RpcUpdateCheckedInList(playerID);
