@@ -11,6 +11,7 @@ public class NetworkPlayerUI : NetworkBehaviour, IDebugger
 
     private void Start()
     {
+        if (!isLocalPlayer) enabled = false;
         m_PlayerInteractUI = GetComponent<PlayerInteractableUI>();
     }
 

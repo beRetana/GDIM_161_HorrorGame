@@ -188,6 +188,7 @@ public class HandInventory : NetworkBehaviour
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        if (!isLocalPlayer) return;
         SetUpControls();
     }
 
