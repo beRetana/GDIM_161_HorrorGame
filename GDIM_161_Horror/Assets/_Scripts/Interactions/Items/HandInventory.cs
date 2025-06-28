@@ -194,6 +194,7 @@ public class HandInventory : NetworkBehaviour
 
     public void SetControlsActive(bool state)
     {
+        if (!isLocalPlayer) return;
         if (state) SetUpControls();
         else DisableControls();
     }

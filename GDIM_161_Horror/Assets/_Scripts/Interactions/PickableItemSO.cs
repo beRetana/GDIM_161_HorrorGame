@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptables/Pickables")]
+[CreateAssetMenu(menuName = "Scriptable Objects/Pickables")]
 public class PickableItemSO : ScriptableObject
 {
     [Header("Left Hand Socket Location and Rotation")]

@@ -104,8 +104,18 @@ public class FinalDoor : MoveDoors
     public void EnterAlertState(int playerID)
     {
         Debugger($"Player {playerID} successfully held; switching to {DoorState.Alert}");
-        // Crazy sequence
+        CrazySequence();
         UpdateState(DoorState.Alert);
+    }
+
+    private void CrazySequence()
+    {
+        MonsterData[] monsters = FindObjectsByType<MonsterData>(FindObjectsSortMode.None);
+        Debugger($"Found {monsters.Length} monsters");
+        foreach (MonsterData monster in monsters)
+        {
+            monster.SetAggressiveStats();
+        }
     }
 
     public bool TryUnlockDoor(int playerID)

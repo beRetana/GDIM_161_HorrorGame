@@ -5,7 +5,8 @@ namespace AI_FSM
 {
     //[ExecuteInEditMode]
 
-    public class AISightSensor : MonoBehaviour{
+    public class AISightSensor : MonoBehaviour
+    {
 
         [Header("Detection Settings")]
         [SerializeField] private Vector3 _initialPosition;
@@ -39,12 +40,15 @@ namespace AI_FSM
         [SerializeField] private bool _enableDebugVisuals;
         private Mesh _debugMesh;
 
-        public float Range => _range;
-        public float Angle => _angle;
+        public float Range { get { return _range; } set { _range = value; } }
+        public float Angle { get { return _angle; } 
+            set { 
+                _angle = value;
+                _angleCos = Mathf.Cos(_angle * .5f * Mathf.Deg2Rad);
+            } }
 
         private void Start()
         {
-            //Initializing variables.
             _sightSensor = (_targetDetected) => { Debbuger($"The object dected value has been updated to {_targetDetected?.name}"); };
             _initialCenterPosition = new Vector3(_initialPosition.x, _initialPosition.y + _height/2, _initialPosition.z);
             _scanInterval = 1/_scanFrequency;
