@@ -15,7 +15,7 @@ namespace Interactions
 
         protected InteractableItem _interactableItem;
         protected Transform _targetHand;
-        protected Collider _itemCollider;
+        [SerializeField] protected Collider _itemCollider;
         [SyncVar] protected bool _isPossessed;
         [SyncVar] protected int _ownerPlayerID;
 
@@ -27,7 +27,6 @@ namespace Interactions
         {
             _interactableItem = GetComponent<InteractableItem>();
             _interactableItem.SetInteractAction(PickItem);
-            _itemCollider = transform.parent.transform.GetComponent<Collider>();
         }
 
         public override string ToString()
