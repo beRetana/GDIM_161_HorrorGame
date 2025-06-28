@@ -210,6 +210,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DisableControls()
     {
+        if (!isLocalPlayer) return;
         _playerControls.Player.Interact.started -= OnInteraction;
         _playerControls.Player.Interact.canceled -= OnInteraction;
         _playerControls.Player.Interact.performed -= OnInteraction;
