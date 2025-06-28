@@ -121,7 +121,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     //Animator anim;
     protected virtual void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
+        if (isLocalPlayer)
+            _playerInput = GetComponent<PlayerInput>();
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
@@ -233,6 +234,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     }
     private bool SetPlayerStats()
     {
+        if (!isLocalPlayer) return false;
+
         if (currentStats == null) return false;
 
         moveSpeed = currentStats.MoveSpeed;
@@ -280,6 +283,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     public void SetInputState(bool active)
     {
+        if (!isLocalPlayer) return;
+
         _handInventory.SetControlsActive(active);
         if (active)
         {
