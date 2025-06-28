@@ -39,7 +39,13 @@ public class NewNetworkManager : NetworkManager
 
     public void StartGame(string SceneName)
     {
-        ServerChangeScene(SceneName);
+        ServerChangeScene(m_GameplaySceneName);
+    }
+
+
+    public void SetGameSceneName(string name)
+    {
+        m_GameplaySceneName = name;
     }
 
     public override void OnStopHost()
