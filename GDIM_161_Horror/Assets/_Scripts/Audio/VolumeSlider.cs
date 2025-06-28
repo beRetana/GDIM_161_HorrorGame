@@ -17,14 +17,23 @@ public class VolumeSlider : MonoBehaviour
 
     [Header("Type")]
     [SerializeField] private VolumeType volumeType;
-
-    private Slider volumeSlider;
+    [SerializeField] private Slider volumeSlider;
 
     private void Start()
     {
-        volumeSlider = GetComponentInChildren<Slider>();
-        volumeSlider.onValueChanged.AddListener(SetValues);
+        if (volumeSlider == null)
+            volumeSlider = GetComponentInChildren<Slider>();
         LoadSettings();
+    }
+
+    private void OnEnable()
+    {
+        volumeSlider.onValueChanged.AddListener(SetValues);
+    }
+
+    private void OnDisable()
+    {
+        volumeSlider.onValueChanged.RemoveListener(SetValues);
     }
 
     private void LoadSettings()

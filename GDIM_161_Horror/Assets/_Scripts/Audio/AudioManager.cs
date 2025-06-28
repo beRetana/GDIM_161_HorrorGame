@@ -29,7 +29,7 @@ public class AudioManager : MonoBehaviour
     public float MasterVolume {get { return masterVolume; } 
         set 
         { 
-            masterVolume = Mathf.Clamp01(value);
+            masterVolume = value;
             PlayerPrefs.SetFloat(MASTER_VOLUME, masterVolume);
             PlayerPrefs.Save();
         } }
@@ -65,10 +65,10 @@ public class AudioManager : MonoBehaviour
     {
         if(instance != null)
         {
-            Debug.LogError ("Found more than one Audio Manager in the scene");
             Destroy(this.gameObject);
         }
         else instance = this;
+        DontDestroyOnLoad(gameObject);
 
         eventInstances = new List<EventInstance>();
         eventEmitters = new List<StudioEventEmitter>();

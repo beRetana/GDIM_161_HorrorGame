@@ -53,7 +53,6 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
 
     private void OnDisable()
     {
-        if (m_PlayerControls == null) return;
         DisableInput();
     }
 
@@ -67,6 +66,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
 
     private void DisableInput()
     {
+        if (m_PlayerControls == null) return;
         m_PlayerControls.Player.Disable();
         m_PlayerControls.Player.Pause.started -= OnPause;
         m_PlayerControls.Player.Pause.canceled -= OnPause;

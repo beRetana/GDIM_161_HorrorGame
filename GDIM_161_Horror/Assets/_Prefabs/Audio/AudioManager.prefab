@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &89069486039572777
+--- !u!1 &953627487616192551
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,57 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6643431620407178065}
-  - component: {fileID: 6712810056392142283}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6643431620407178065
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 89069486039572777}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -107.4, y: -7.2, z: 11.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8100575946994462484}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6712810056392142283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 89069486039572777}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5552481d30ea241b8319ba5d08a47d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  masterVolume: 1
-  musicVolume: 1
-  ambianceVolume: 1
-  SFXVolume: 1
---- !u!1 &7655310400460847890
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8100575946994462484}
-  - component: {fileID: 3968336915616479869}
+  - component: {fileID: 6778183382686891441}
+  - component: {fileID: 1860471788107741774}
   m_Layer: 0
   m_Name: FMODEvents
   m_TagString: Untagged
@@ -66,28 +17,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8100575946994462484
+--- !u!4 &6778183382686891441
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7655310400460847890}
+  m_GameObject: {fileID: 953627487616192551}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6643431620407178065}
+  m_Father: {fileID: 4882480781703208675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3968336915616479869
+--- !u!114 &1860471788107741774
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7655310400460847890}
+  m_GameObject: {fileID: 953627487616192551}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bae050c7d04eec4caa19d40a1ecf282, type: 3}
@@ -165,8 +116,81 @@ MonoBehaviour:
     Path: event:/Machines/PAVLOV/doorsClosing
   <MonsterDeerCall>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -699425790
+      Data2: 1195178679
+      Data3: -204313430
+      Data4: -1419827319
+    Path: event:/Monsters/monsterDeerCall
+  <TorchFlicker>k__BackingField:
+    Guid:
+      Data1: 620138334
+      Data2: 1243192428
+      Data3: 1009528254
+      Data4: -847792368
+    Path: event:/Items/Torch/torchFlicker
+  <TorchExtinguish>k__BackingField:
+    Guid:
+      Data1: -313226148
+      Data2: 1330980452
+      Data3: -2083291220
+      Data4: -202417076
+    Path: event:/Items/Torch/torchExtinguish
+  <SingleDoorOpen>k__BackingField:
+    Guid:
+      Data1: 1747445673
+      Data2: 1132802292
+      Data3: -1312468819
+      Data4: -1486675040
+    Path: event:/Items/Door/doorOpen
+  <SingleDoorClose>k__BackingField:
+    Guid:
+      Data1: 1245980466
+      Data2: 1081569021
+      Data3: 734054564
+      Data4: 1755509996
+    Path: event:/Items/Door/doorClose
+--- !u!1 &2150303808461656265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4882480781703208675}
+  - component: {fileID: 3326460534644636591}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4882480781703208675
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150303808461656265}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -107.4, y: -7.2, z: 11.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6778183382686891441}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3326460534644636591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150303808461656265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5552481d30ea241b8319ba5d08a47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

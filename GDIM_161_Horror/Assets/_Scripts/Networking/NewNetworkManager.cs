@@ -7,10 +7,16 @@ using Steamworks;
 
 public class NewNetworkManager : NetworkManager
 {
+    [Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private bool m_Debugger;
     [SerializeField] private Transform[] _spawnPoints;
+    [Space(5f)]
+    [SerializeField] private string m_GameplaySceneName = "BUILD_1";
+
     private int _spawnCount = 0;
+    private bool m_Debugger;
+
+    public string GameplaySceneName => m_GameplaySceneName;
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
