@@ -36,7 +36,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
 
     public override void PerformedInteraction(int playerID, InputData context)
     {
-        if (context.InputType != InteractionType.Hold)
+        if (context.InputType == InteractionType.Hold)
         {
             Debugger("Player Succesfully Rescued");
             OnPlayerInteract?.Invoke();
