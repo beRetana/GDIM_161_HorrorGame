@@ -23,7 +23,8 @@ public class InteractablePlayer : InteractableItem, IDebugger
     {
         Debugger($"Started Rescuing");
         m_Loading = true;
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.StartHoldingUI();
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<NetworkPlayerUI>().StartHoldingUI();
     }
 
     public override void CanceledInteraction(int playerID, InputData context)
@@ -31,7 +32,8 @@ public class InteractablePlayer : InteractableItem, IDebugger
         if (context.InputType != InteractionType.Hold) return;
         Debugger($"Canceled Rescuing");
         m_Loading = false;
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>()?.CancelHoldingUI();
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<NetworkPlayerUI>().CancelHoldingUI();
     }
 
     public override void PerformedInteraction(int playerID, InputData context)
@@ -40,12 +42,15 @@ public class InteractablePlayer : InteractableItem, IDebugger
         {
             Debugger("Player Succesfully Rescued");
             OnPlayerInteract?.Invoke();
+            m_Loading = false;
             OnPlayerInteract = null;
         }
         else
         {
             Debugger("Another Interaction was Succesful before Holding; Loading Cancelled");
-            CanceledInteraction(playerID, context);
+            m_Loading = false;
+            PlayerManager.Instance.GetPlayer(playerID).
+                GetComponent<NetworkPlayerUI>().CancelHoldingUI();
         }
     }
 
@@ -54,7 +59,8 @@ public class InteractablePlayer : InteractableItem, IDebugger
         base.StoppedDetecting(playerID);
         if (!m_Loading) return;
         m_Loading = false;
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>().CancelHoldingUI();
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<NetworkPlayerUI>().CancelHoldingUI();
     }
 
     public void SetPlayerInteraction(Action action)

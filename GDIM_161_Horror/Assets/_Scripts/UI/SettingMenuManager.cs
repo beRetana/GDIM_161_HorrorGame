@@ -7,6 +7,7 @@ using TMPro;
 using Unity.Cinemachine;
 using OtherUtils;
 using UnityEngine.SceneManagement;
+using StarterAssets;
 
 public class SettingMenuManager : MonoBehaviour, IDebugger
 {
@@ -18,6 +19,8 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
     [SerializeField] private TMP_Dropdown m_FPSDropDown;
     [SerializeField] private Toggle m_FullScreenToggle;
     [SerializeField] private Button m_BtnSaveChanges;
+    [SerializeField] private Slider m_RotationSpeedSlider;
+    [SerializeField] private TextMeshProUGUI m_RotationSpeedText;
 
     [Space(5f)]
     [SerializeField] private List<int> m_fpsSettings = 
@@ -31,13 +34,14 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
     private const string RESOLUTION = "Resolution";
     private const string FPS = "FPS";
     private const string FOV = "FOV";
+    private const string ROTATION_SPEED = "Rotation_Speed";
 
-    private string m_GameScene;
-    private bool m_IsFullScreen;
-    private bool m_Debugger;
+    private float m_RotationSpeed;
     private int m_IndexFOV;
     private int m_IndexResolution;
     private int m_IndexFPS;
+    private bool m_IsFullScreen;
+    private bool m_Debugger;
 
     private void Awake()
     {
@@ -49,6 +53,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         SetUpFOVDropDown();
         SetUpFPSDropDown();
         SetUpFullScreen();
+        SetUpRotationSpeed();
     }
 
     private void LoadSettings()
@@ -57,6 +62,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         m_IndexFOV = PlayerPrefs.GetInt(FOV, 0);
         ChangeFPS(PlayerPrefs.GetInt(FPS, 0));
         m_IndexResolution = PlayerPrefs.GetInt(RESOLUTION, 0);
+        m_RotationSpeed = PlayerPrefs.GetFloat(ROTATION_SPEED, 1);
     }
 
     private void SetUpFullScreen()
@@ -122,6 +128,20 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         else m_IndexFPS = value;
     }
 
+    private void ChangeRotationSpeed(float value)
+    {
+        m_RotationSpeed = value;
+        m_RotationSpeedText.text = (Mathf.Round(m_RotationSpeed * 1000) / 10).ToString();
+    }
+
+    private void SetUpRotationSpeed()
+    {
+        m_RotationSpeedSlider.value = m_RotationSpeed;
+        m_RotationSpeedText.text = (Mathf.Round(m_RotationSpeed * 1000)/10).ToString();
+        if (!transform.root.TryGetComponent<FirstPersonController>(out var player)) return;
+        player.SetCameraRotationSpeed(m_RotationSpeed);
+    }
+
     public void ApplyChangeResolution()
     {
         Debugger($"Changing Resolution to " +
@@ -166,12 +186,19 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         PlayerPrefs.SetInt(FPS, m_IndexFPS);
     }
 
+    private void ApplyChangeRotationSpeed()
+    {
+        SetUpRotationSpeed();
+        PlayerPrefs.SetFloat(ROTATION_SPEED, m_RotationSpeed);
+    }
+
     private void SaveSettings()
     {
         ApplyChangeFullScreen();
         ApplyChangeFOV();
         ApplyChangeResolution();
         ApplyChangeFPS();
+        ApplyChangeRotationSpeed();
         PlayerPrefs.Save();
     }
 
@@ -182,6 +209,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         m_FOVDropDown.onValueChanged.AddListener((int value) => { m_IndexFOV = value; });
         m_FullScreenToggle.onValueChanged.AddListener((bool value) => { m_IsFullScreen = value; });
         m_FPSDropDown.onValueChanged.AddListener(ChangeFPS);
+        m_RotationSpeedSlider.onValueChanged.AddListener(ChangeRotationSpeed);
     }
 
     private void OnDisable()
@@ -191,6 +219,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         m_FPSDropDown.onValueChanged.RemoveAllListeners();
         m_FullScreenToggle.onValueChanged.RemoveAllListeners();
         m_BtnSaveChanges.onClick.RemoveAllListeners();
+        m_RotationSpeedSlider.onValueChanged.RemoveListener(ChangeRotationSpeed);
     }
 
     public void Debugger(object log)

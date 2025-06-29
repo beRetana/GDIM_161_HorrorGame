@@ -308,6 +308,11 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         }
     }
 
+    public void SetCameraRotationSpeed(float value)
+    {
+        rotationSpeed = value;
+    }
+
     public void Debugger(object log)
     {
         if (_debugger) Debug.Log(log);
