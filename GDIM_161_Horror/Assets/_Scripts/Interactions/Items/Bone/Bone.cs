@@ -49,7 +49,11 @@ public class Bone : NetworkPickableItem
         {
             Debugger("Dropping");
             if (!isServer) CmdDropPiece(playerID);
-            else RpcDropPiece(playerID);
+            else
+            {
+                ++m_CurrentUses;
+                RpcDropPiece(playerID);
+            }
         } 
     }
 
@@ -77,6 +81,7 @@ public class Bone : NetworkPickableItem
     protected void CmdDropPiece(int playerID)
     {
         Debugger("CMD: Dropping");
+        ++m_CurrentUses;
         RpcDropPiece(playerID);
     }
 
@@ -85,7 +90,7 @@ public class Bone : NetworkPickableItem
     {
         Debugger("RPC: Dropping");
         BonePiece bone = m_BonePieces.Pop();
-        ++m_CurrentUses;
+        if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
         bone.gameObject.SetActive(true);
         StartCoroutine(bone.DisableTimer(m_LifeTime));
