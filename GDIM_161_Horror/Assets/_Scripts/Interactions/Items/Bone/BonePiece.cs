@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class BonePiece : NetworkBehaviour
 {
-    [SyncVar(hook = nameof(SetOff))] private bool m_State;
-
-    private void SetOff(bool newValue, bool oldValue)
+    [ClientRpc]
+    private void RpcSetOff(bool newValue)
     {
-        m_State = newValue;
         gameObject.SetActive(newValue);
     }
 
@@ -27,7 +25,7 @@ public class BonePiece : NetworkBehaviour
     [Server]
     private void DisablePiece()
     {
-        m_State = false;
+        RpcSetOff(false);
         NetworkServer.UnSpawn(gameObject);
     }
 }

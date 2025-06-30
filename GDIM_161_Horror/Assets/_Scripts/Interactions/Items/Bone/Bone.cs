@@ -40,11 +40,9 @@ public class Bone : NetworkPickableItem
     {
         base.UseItem(playerID);
         Debugger("Pressed Use!");
-        if (m_CurrentUses >= m_MaxUses)
+        if (m_CurrentUses >= m_MaxUses-1)
         {
             if (!isServer) return;
-            PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().DropAction();
-            gameObject.SetActive(false);
             RpcDropPiece(playerID);
             DisableBone(playerID);
         }
