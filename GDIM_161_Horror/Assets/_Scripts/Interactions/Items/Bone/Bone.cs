@@ -42,14 +42,15 @@ public class Bone : NetworkPickableItem
         Debugger("Pressed Use!");
         if (m_CurrentUses >= m_MaxUses)
         {
-            if (!isServer) CmdDisableBone(playerID);
-            else DisableBone(playerID);
+            //if (!isServer) CmdDisableBone(playerID);
+            //else DisableBone(playerID);
+            DisableBone(playerID);
         }
         else
         {
             Debugger("Dropping");
-            if (!isServer) CmdDropPiece(playerID);
-            else
+            //if (!isServer) CmdDropPiece(playerID);
+            //else
             {
                 ++m_CurrentUses;
                 RpcDropPiece(playerID);
