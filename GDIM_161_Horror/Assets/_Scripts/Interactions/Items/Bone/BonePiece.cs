@@ -1,15 +1,10 @@
 using Mirror;
 using System.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class BonePiece : NetworkBehaviour
 {
-    [ClientRpc]
-    private void RpcSetOff(bool newValue)
-    {
-        gameObject.SetActive(newValue);
-    }
-
     public void StartLifeTimer(float lifeTime)
     {
         StartCoroutine(DisableTimer(lifeTime));
@@ -20,12 +15,12 @@ public class BonePiece : NetworkBehaviour
         yield return new WaitForSeconds(lifeTime);
         Debug.Log("Time To DeSpawn");
         if (isServer) DisablePiece();
+        gameObject.SetActive(false);
     }
 
     [Server]
     private void DisablePiece()
     {
-        RpcSetOff(false);
         NetworkServer.UnSpawn(gameObject);
     }
 }
