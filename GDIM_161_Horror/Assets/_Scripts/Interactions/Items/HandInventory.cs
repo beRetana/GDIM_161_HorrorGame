@@ -304,9 +304,7 @@ public class HandInventory : NetworkBehaviour
 
     public void OnDrop(InputValue value) 
     {
-        Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
-        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
-        else CmdDropItem(0f);
+        DropAction();
     }
 
     public void OnThrow(InputValue value) 
@@ -318,11 +316,8 @@ public class HandInventory : NetworkBehaviour
 
     public void UseItem()
     {
-        InventorySlot inventorySlotToUse = _inventorySlots.GetDominantHand();
-        NetworkPickableItem itemToUse = inventorySlotToUse?.Item;
-        if (itemToUse == null) return;
-
-        itemToUse.UseItem(_playerID);
+        if (!isServer) CmdUseItem();
+        else RpcUseItem();
     }
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
@@ -345,6 +340,13 @@ public class HandInventory : NetworkBehaviour
     public void DropAllItems()
     {
         StartCoroutine(ThrowAllItems());
+    }
+
+    public void DropAction()
+    {
+        Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
+        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
+        else CmdDropItem(0f);
     }
 
     private void ThrowAction()
@@ -459,6 +461,20 @@ public class HandInventory : NetworkBehaviour
         RpcDropItem(throwForce);
     }
 
+    [Command]
+    private void CmdUseItem()
+    {
+        RpcUseItem();
+    }
+
+    [ClientRpc]
+    private void RpcUseItem()
+    {
+        NetworkPickableItem itemToUse = _inventorySlots.GetDominantHand().Item;
+        if (itemToUse == null) return;
+        itemToUse.UseItem(_playerID);
+    }
+
     private static void Debugger(object log)
     {
         if (_staticDebugging) Debug.Log(log);
@@ -470,7 +486,7 @@ public class HandInventory : NetworkBehaviour
         return GetComponent<NetworkIdentity>();
     }
 
-    IEnumerator ThrowAllItems()
+    public IEnumerator ThrowAllItems()
     {
         ThrowAction();
         SwapAction();
