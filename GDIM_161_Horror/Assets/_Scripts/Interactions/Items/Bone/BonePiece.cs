@@ -4,29 +4,30 @@ using UnityEngine;
 
 public class BonePiece : NetworkBehaviour
 {
-    public IEnumerator DisableTimer(float lifeTime)
+    [SyncVar(hook = nameof(SetOff))] private bool m_State;
+
+    private void SetOff(bool newValue, bool oldValue)
     {
-        yield return new WaitForSeconds(lifeTime);
-        if (!isServer) CmdDisablePiece();
-        else DisablePiece();
+        m_State = newValue;
+        gameObject.SetActive(newValue);
     }
 
-    [Command(requiresAuthority = false)]
-    private void CmdDisablePiece()
+    public void StartLifeTimer(float lifeTime)
     {
-        DisablePiece();
+        StartCoroutine(DisableTimer(lifeTime));
+    }
+
+    private IEnumerator DisableTimer(float lifeTime)
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Debug.Log("Time To DeSpawn");
+        if (isServer) DisablePiece();
     }
 
     [Server]
     private void DisablePiece()
     {
+        m_State = false;
         NetworkServer.UnSpawn(gameObject);
-        RpcDisablePiece();
-    }
-
-    [ClientRpc]
-    private void RpcDisablePiece()
-    {
-        gameObject.SetActive(false);
     }
 }

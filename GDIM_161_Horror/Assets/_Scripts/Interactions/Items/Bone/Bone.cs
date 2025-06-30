@@ -40,9 +40,11 @@ public class Bone : NetworkPickableItem
     {
         base.UseItem(playerID);
         Debugger("Pressed Use!");
-        if (m_CurrentUses >= m_MaxUses-1)
+        if (m_CurrentUses >= m_MaxUses)
         {
             if (!isServer) return;
+            PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().DropAction();
+            gameObject.SetActive(false);
             RpcDropPiece(playerID);
             DisableBone(playerID);
         }
@@ -77,6 +79,6 @@ public class Bone : NetworkPickableItem
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
         bone.gameObject.SetActive(true);
-        StartCoroutine(bone.DisableTimer(m_LifeTime));
+        bone.StartLifeTimer(m_LifeTime);
     }
 }
