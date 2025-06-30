@@ -40,9 +40,10 @@ public class Bone : NetworkPickableItem
     {
         base.UseItem(playerID);
         Debugger("Pressed Use!");
-        if (m_CurrentUses >= m_MaxUses)
+        if (m_CurrentUses >= m_MaxUses-1)
         {
             if (!isServer) return;
+            RpcDropPiece(playerID);
             DisableBone(playerID);
         }
         else
@@ -52,12 +53,6 @@ public class Bone : NetworkPickableItem
             ++m_CurrentUses;
             RpcDropPiece(playerID);
         } 
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdDisableBone(int playerID)
-    {
-        DisableBone(playerID);
     }
 
     [Server]
@@ -72,14 +67,6 @@ public class Bone : NetworkPickableItem
     {
         PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().DropAction();
         gameObject.SetActive(false);
-    }
-
-    [Command(requiresAuthority = false)]
-    protected void CmdDropPiece(int playerID)
-    {
-        Debugger("CMD: Dropping");
-        ++m_CurrentUses;
-        RpcDropPiece(playerID);
     }
 
     [ClientRpc]
