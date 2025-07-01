@@ -4,7 +4,7 @@ using UnityEngine;
 public class CheckPointer : MonoBehaviour
 {
     [SerializeField] private Transform m_CheckPointPosition;
-    [SerializeField] private LadderManager m_LadderManager;
+    [SerializeField] private ElevatorManager m_LadderManager;
 
     private void OnTriggerEntered(Collider other)
     {

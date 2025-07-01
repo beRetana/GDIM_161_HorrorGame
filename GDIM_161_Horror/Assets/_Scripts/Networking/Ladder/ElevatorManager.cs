@@ -3,7 +3,7 @@ using OtherUtils;
 using System;
 using UnityEngine;
 
-public class LadderManager : NetworkBehaviour, IDebugger
+public class ElevatorManager : NetworkBehaviour, IDebugger
 {
     [SerializeField] private Transform[] m_Ladders;
     [SerializeField, Range(0f, 1f), Tooltip("Highest probability of choosing the closest ladder")]
