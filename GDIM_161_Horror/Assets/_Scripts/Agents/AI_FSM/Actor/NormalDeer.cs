@@ -24,9 +24,9 @@ namespace AI
 
         private void Start()
         {
-            _controller = GetComponent<NavMeshAgent>();
-
             if (!isServer) return;
+
+            _controller = GetComponent<NavMeshAgent>();
 
             GetComponent<AIController>().enabled = false;
             _controller.enabled = false;
@@ -40,6 +40,7 @@ namespace AI
 
         void Update()
         {
+            if (!isServer) return;
             // Get normalized speed (0 to 1)
             float currentSpeed = Mathf.Clamp01(_controller.velocity.magnitude / _controller.speed);
 
@@ -106,11 +107,13 @@ namespace AI
 
         private void EnableWander()
         {
+            if (!isServer) return;
             _wander.Enable();
         }
 
         public override void AbortBehaviors()
         {
+            if (!isServer) return;
             _wander.Disable();
         }
 
