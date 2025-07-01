@@ -33,12 +33,12 @@ public class LadderManager : NetworkBehaviour, IDebugger
         else ActivateLadders(playerPosition);
     }
 
+    [Command]
     private void CmdActivateLadders(Vector3 playerPosition)
     {
         ActivateLadders(playerPosition);
     }
 
-    [Server]
     private void ActivateLadders(Vector3 playerPosition)
     {
         GetClosestLadder(playerPosition);
