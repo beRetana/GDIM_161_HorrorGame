@@ -26,12 +26,11 @@ namespace AI
         {
             _controller = GetComponent<NavMeshAgent>();
 
-            if (!isServer)
-            {
-                GetComponent<AIController>().enabled = false;
-                _controller.enabled = false;
-                this.enabled = false;
-            }
+            if (!isServer) return;
+
+            GetComponent<AIController>().enabled = false;
+            _controller.enabled = false;
+            this.enabled = false;
             _wander = GetComponent<Wander>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
