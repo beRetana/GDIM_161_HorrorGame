@@ -24,12 +24,13 @@ public class LadderManager : NetworkBehaviour, IDebugger
     {
         DeactivateLadders();
 
-        //if (!isServer) return;
+        if (!isServer) return;
 
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
 
         ActivateLadders(Vector3.zero);
+        RpcTesting();
     }
 
     public void PlayerCheckedIn(Vector3 playerPosition)
@@ -71,6 +72,12 @@ public class LadderManager : NetworkBehaviour, IDebugger
         Debugger("Setting Ladder active in Server");
         m_Ladders[index].gameObject.SetActive(true);
         SetLadderActive(index);
+    }
+
+    [ClientRpc]
+    private void RpcTesting()
+    {
+        Debugger("RPC this should be called.");
     }
 
     [ClientRpc]
