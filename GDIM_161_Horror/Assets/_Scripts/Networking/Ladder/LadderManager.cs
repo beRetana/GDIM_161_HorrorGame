@@ -15,11 +15,16 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private bool m_OnlyOneLadder;
     private bool m_Debug = true;
 
+    public override void OnStartClient()
+    {
+        Debug.Log($"[LadderManager] OnStartClient called on client - netId: {netId}");
+    }
+
     private void Start()
     {
         DeactivateLadders();
 
-        if (!isServer) return;
+        //if (!isServer) return;
 
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
