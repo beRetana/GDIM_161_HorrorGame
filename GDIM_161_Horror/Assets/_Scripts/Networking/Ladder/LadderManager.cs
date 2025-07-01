@@ -13,7 +13,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private Transform m_ClosestLadder;
     private float m_ClosestProbability;
     private bool m_OnlyOneLadder;
-    private bool m_Debug;
+    private bool m_Debug = true;
 
     private void Start()
     {
