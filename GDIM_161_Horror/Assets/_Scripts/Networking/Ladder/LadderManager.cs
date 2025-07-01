@@ -34,7 +34,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
     }
 
     [Command]
-    private void CmdActivateLadders(Vector3 playerPosition)
+    public void CmdActivateLadders(Vector3 playerPosition)
     {
         ActivateLadders(playerPosition);
     }
@@ -69,7 +69,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
     }
 
     [ClientRpc]
-    private void SetLadderActive(int index)
+    public void SetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Client");
         m_Ladders[index].gameObject.SetActive(true);
