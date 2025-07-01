@@ -102,7 +102,7 @@ namespace AI
         private IEnumerator StartSequence()
         {
             yield return new WaitForSecondsRealtime(1f);
-            EnableWander();
+            if (isServer) EnableWander();
         }
 
         private void EnableWander()
