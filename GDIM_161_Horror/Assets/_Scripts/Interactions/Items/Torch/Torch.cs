@@ -99,7 +99,7 @@ namespace Interactions
             UpdatePyrolysis();
             LightFlame();
         }
-        public override void UseItem(int playerId)
+        public override void UseItem(int playerId, InputData context)
         {
             //Debug.Log("Using torch");
             //PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms()?.ToggleHandMoveOutOrIn(null);

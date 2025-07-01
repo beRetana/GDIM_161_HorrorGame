@@ -1,7 +1,7 @@
 using StarterAssets;
 using UnityEngine;
 
-public class Elevator : MonoBehaviour
+public class Ladder : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private bool _debugger;

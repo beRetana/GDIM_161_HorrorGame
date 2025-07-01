@@ -81,6 +81,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     #region Player Stats
 
     [SerializeField] protected GameObject cinemachineCameraTarget;
+    public Transform CameraTransform => cinemachineCameraTarget.transform;
 
     protected Vector3 downCamPosition;
     protected Vector3 initialPosition;

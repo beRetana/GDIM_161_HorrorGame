@@ -67,7 +67,14 @@ MonoBehaviour:
   _itemCollider: {fileID: 1616682103446223155}
   m_BonePiece: {fileID: 137042067999712953, guid: 393b52f9e4b7a3949b3edc50da205b5f, type: 3}
   m_SpawnPoint: {fileID: 3860761671145419397}
-  m_LifeTime: 15
+  m_CrushableLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ObstructableLayers:
+    serializedVersion: 2
+    m_Bits: 3677
+  m_CrushingText: Hold To Crush Bone
+  m_CrushingDistance: 1.2
   m_MaxUses: 5
 --- !u!1 &3585951655307553149
 GameObject:

@@ -72,9 +72,9 @@ namespace Interactions
             AudioManager.instance.PlayOneShot(FMODEvents.instance.sonarPing, this.transform.position);
         }
 
-        public override void UseItem(int playerId)
+        public override void UseItem(int playerId, InputData context)
         {
-            base.UseItem(playerId);
+            base.UseItem(playerId, context);
             ScanArea(playerId);
         }
     }

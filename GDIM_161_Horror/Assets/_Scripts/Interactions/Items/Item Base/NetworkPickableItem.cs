@@ -70,7 +70,7 @@ namespace Interactions
             _interactableItem.SetInteractive(!toPossess);
         }
 
-        public virtual void UseItem(int playerID) { }
+        public virtual void UseItem(int playerID, InputData context) { }
 
         protected virtual void LateUpdate()
         {

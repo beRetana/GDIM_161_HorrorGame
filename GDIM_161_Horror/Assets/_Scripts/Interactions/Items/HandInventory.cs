@@ -4,6 +4,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using System;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -25,6 +26,8 @@ public class HandInventory : NetworkBehaviour
 
     [Header("Debugging")]
     [SerializeField] private bool _enableDebugging;
+
+    public event Action<NetworkPickableItem> OnSwapingHands;
     
     private static bool _staticDebugging;
 
@@ -161,6 +164,11 @@ public class HandInventory : NetworkBehaviour
             return holder;
         }
 
+
+        /// <summary>
+        /// Switched dominance and returns if in the new state the left hand is dominant.
+        /// </summary>
+        /// <returns></returns>
         public bool SwapDominance()
         {
             SetLeftHandDominant(!IsLHandDom);
@@ -184,7 +192,8 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) _playerID = playerController.PlayerIdNumber;
+        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
+            _playerID = playerController.PlayerIdNumber;
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
@@ -206,6 +215,9 @@ public class HandInventory : NetworkBehaviour
         _playerControls.Player.Interact.started += OnInteraction;
         _playerControls.Player.Interact.canceled += OnInteraction;
         _playerControls.Player.Interact.performed += OnInteraction;
+        _playerControls.Player.UseItem.started += OnUsePickable;
+        _playerControls.Player.UseItem.canceled += OnUsePickable;
+        _playerControls.Player.UseItem.performed += OnUsePickable;
     }
 
     private void DisableControls()
@@ -214,6 +226,9 @@ public class HandInventory : NetworkBehaviour
         _playerControls.Player.Interact.started -= OnInteraction;
         _playerControls.Player.Interact.canceled -= OnInteraction;
         _playerControls.Player.Interact.performed -= OnInteraction;
+        _playerControls.Player.UseItem.started -= OnUsePickable;
+        _playerControls.Player.UseItem.canceled -= OnUsePickable;
+        _playerControls.Player.UseItem.performed -= OnUsePickable;
         _playerControls.Disable();
     }
 
@@ -286,7 +301,8 @@ public class HandInventory : NetworkBehaviour
     [ClientRpc]
     private void RpcSwapDominance()
     {
-        bool isLHandDom = _inventorySlots.SwapDominance();
+        _inventorySlots.SwapDominance();
+        OnSwapingHands?.Invoke(PeekAtDominant());
     }
 
     public void OnInteraction(InputAction.CallbackContext context) 
@@ -312,12 +328,15 @@ public class HandInventory : NetworkBehaviour
         ThrowAction();
     }
 
-    public void OnUseItem(InputValue value) { UseItem(); }
-
-    public void UseItem()
+    public void OnUsePickable(InputAction.CallbackContext context) 
     {
-        if (!isServer) CmdUseItem();
-        else RpcUseItem();
+        UseItem(new InputData(context)); 
+    }
+
+    public void UseItem(InputData context)
+    {
+        if (!isServer) CmdUseItem(context);
+        else RpcUseItem(context);
     }
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
@@ -462,17 +481,26 @@ public class HandInventory : NetworkBehaviour
     }
 
     [Command]
-    private void CmdUseItem()
+    private void CmdUseItem(InputData context)
     {
-        RpcUseItem();
+        RpcUseItem(context);
     }
 
     [ClientRpc]
-    private void RpcUseItem()
+    private void RpcUseItem(InputData context)
     {
         NetworkPickableItem itemToUse = _inventorySlots.GetDominantHand().Item;
         if (itemToUse == null) return;
-        itemToUse.UseItem(_playerID);
+        itemToUse.UseItem(_playerID, context);
+    }
+
+    /// <summary>
+    /// Returns the current dominant item or null if there is none.
+    /// </summary>
+    /// <returns></returns>
+    public NetworkPickableItem PeekAtDominant()
+    {
+        return _inventorySlots.GetDominantHand().Item;
     }
 
     private static void Debugger(object log)
