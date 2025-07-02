@@ -204,7 +204,7 @@ public class Bone : NetworkPickableItem
         gameObject.SetActive(false);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     protected void CmdDropPiece(int playerID)
     {
         Debugger("CMD: Dropping");
@@ -228,7 +228,7 @@ public class Bone : NetworkPickableItem
         else CmdChangeBoneState(state);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     protected void CmdChangeBoneState(BoneState state)
     {
         Debugger($"CMD - Old State: {m_State}, New State: {state}");
