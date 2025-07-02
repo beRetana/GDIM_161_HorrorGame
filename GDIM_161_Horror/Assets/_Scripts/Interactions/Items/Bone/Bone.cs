@@ -20,7 +20,7 @@ public class Bone : NetworkPickableItem
     protected PlayerInteractionsHUD m_PlayerHUD;
     [SyncVar] protected int m_CurrentUses;
     protected bool m_IsOnDominantHand;
-    protected BoneState m_State;
+    [SyncVar] protected BoneState m_State;
 
     public enum BoneState
     {
@@ -39,13 +39,14 @@ public class Bone : NetworkPickableItem
         SpawnPooledObject();
     }
 
+    [Server]
     private void SpawnPooledObject()
     {
         for (int i = 0; i < m_MaxUses; ++i)
         {
             BonePiece piece = Instantiate(m_BonePiece).GetComponent<BonePiece>();
-            if (isServer) NetworkServer.Spawn(piece.transform.root.gameObject);
             piece.gameObject.SetActive(false);
+            NetworkServer.Spawn(piece.transform.root.gameObject);
             m_BonePieces.Push(piece);
         }
     }
@@ -182,9 +183,7 @@ public class Bone : NetworkPickableItem
         else
         {
             Debugger("Dropping");
-
-            if (!isServer) CmdDropPiece(playerID);
-            else DropPiece(playerID);
+            if (isServer) DropPiece(playerID);
         }
     }
 
@@ -204,13 +203,6 @@ public class Bone : NetworkPickableItem
         gameObject.SetActive(false);
     }
 
-    [Command(requiresAuthority = false)]
-    protected void CmdDropPiece(int playerID)
-    {
-        Debugger("CMD: Dropping");
-        DropPiece(playerID);
-    }
-
     [Server]
     protected void DropPiece(int playerID)
     {
@@ -228,7 +220,7 @@ public class Bone : NetworkPickableItem
         else CmdChangeBoneState(state);
     }
 
-    [Command(requiresAuthority = false)]
+    [Command]
     protected void CmdChangeBoneState(BoneState state)
     {
         Debugger($"CMD - Old State: {m_State}, New State: {state}");
