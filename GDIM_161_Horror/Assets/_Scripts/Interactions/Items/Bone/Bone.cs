@@ -34,8 +34,9 @@ public class Bone : NetworkPickableItem
     {
         base.Start();
         m_BonePieces = new Stack<BonePiece>();
-        SpawnPooledObject();
         m_State = BoneState.Uncrushed;
+        if (!isServer) return;
+        SpawnPooledObject();
     }
 
     private void SpawnPooledObject()
@@ -173,9 +174,9 @@ public class Bone : NetworkPickableItem
     {
         if (m_CurrentUses >= m_MaxUses - 1)
         {
-            Debugger("Last use: Will auto-destroy");
             if (!isServer) return;
-            RpcDropPiece(playerID);
+            Debugger("Last use: Will auto-destroy");
+            DropPiece(playerID);
             DisableBone(playerID);
         }
         else
@@ -183,11 +184,7 @@ public class Bone : NetworkPickableItem
             Debugger("Dropping");
 
             if (!isServer) CmdDropPiece(playerID);
-            else 
-            {
-                ++m_CurrentUses;
-                RpcDropPiece(playerID);
-            }
+            else DropPiece(playerID);
         }
     }
 
@@ -201,7 +198,9 @@ public class Bone : NetworkPickableItem
     [ClientRpc]
     private void RpcDisableBone(int playerID)
     {
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().DropAction();
+        HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
+        inventory.DropAction();
+        inventory.OnSwapingHands -= OnSwappedHands;
         gameObject.SetActive(false);
     }
 
@@ -209,14 +208,13 @@ public class Bone : NetworkPickableItem
     protected void CmdDropPiece(int playerID)
     {
         Debugger("CMD: Dropping");
-        ++m_CurrentUses;
-        RpcDropPiece(playerID);
+        DropPiece(playerID);
     }
 
-    [ClientRpc]
-    protected void RpcDropPiece(int playerID)
+    [Server]
+    protected void DropPiece(int playerID)
     {
-        Debugger("RPC: Dropping");
+        ++m_CurrentUses;
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
