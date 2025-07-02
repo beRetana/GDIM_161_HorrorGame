@@ -45,7 +45,6 @@ public class Bone : NetworkPickableItem
         for (int i = 0; i < m_MaxUses; ++i)
         {
             BonePiece piece = Instantiate(m_BonePiece).GetComponent<BonePiece>();
-            piece.gameObject.SetActive(false);
             NetworkServer.Spawn(piece.transform.root.gameObject);
             m_BonePieces.Push(piece);
         }

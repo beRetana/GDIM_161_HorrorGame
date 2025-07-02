@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class BonePiece : NetworkBehaviour
 {
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void StartLifeTimer(float lifeTime)
     {
         StartCoroutine(DisableTimer(lifeTime));
