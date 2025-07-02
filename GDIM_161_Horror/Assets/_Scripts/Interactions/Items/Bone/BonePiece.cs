@@ -16,15 +16,10 @@ public class BonePiece : NetworkBehaviour
         gameObject.SetActive(value);
     }
 
-    public void StartLifeTimer(float lifeTime)
+    private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(DisableTimer(lifeTime));
-    }
+        if (other.gameObject.tag != "Monster") return;
 
-    private IEnumerator DisableTimer(float lifeTime)
-    {
-        yield return new WaitForSeconds(lifeTime);
-        Debug.Log("Time To DeSpawn");
         if (isServer) DisablePiece();
         gameObject.SetActive(false);
     }

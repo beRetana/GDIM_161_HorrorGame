@@ -210,7 +210,6 @@ public class Bone : NetworkPickableItem
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
         bone.RpcSetObjectActive(true);
-        bone.StartLifeTimer(5f);
     }
 
     protected void ChangeBoneState(BoneState state)
