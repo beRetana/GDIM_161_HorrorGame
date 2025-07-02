@@ -209,7 +209,7 @@ public class Bone : NetworkPickableItem
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
-        bone.gameObject.SetActive(true);
+        bone.RpcSetObjectActive(true);
         bone.StartLifeTimer(5f);
     }
 

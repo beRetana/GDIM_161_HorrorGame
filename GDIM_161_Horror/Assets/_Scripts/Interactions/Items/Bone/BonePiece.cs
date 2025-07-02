@@ -10,6 +10,12 @@ public class BonePiece : NetworkBehaviour
         gameObject.SetActive(false);
     }
 
+    [ClientRpc]
+    public void RpcSetObjectActive(bool value)
+    {
+        gameObject.SetActive(value);
+    }
+
     public void StartLifeTimer(float lifeTime)
     {
         StartCoroutine(DisableTimer(lifeTime));
