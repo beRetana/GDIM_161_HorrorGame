@@ -1,10 +1,8 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using OtherUtils;
 using UnityEngine.UI;
 using UnityEngine.AI;
-using StarterAssets;
 
 public class GameplayMenuUI : MonoBehaviour, IDebugger
 {
@@ -125,6 +123,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         else SetMenuActive(false);
         m_MouseDot.SetActive(m_IsPaused);
         transform.root.GetComponent<PlayerInput>().enabled = m_IsPaused;
+        transform.root.GetComponent<HandInventory>().SetControlsActive(m_IsPaused);
         m_IsPaused = !m_IsPaused;
         ChangeCursorState();
     }

@@ -20,6 +20,8 @@ namespace OtherUtils
             yield return new WaitForSecondsRealtime(_delay);
             Transform prefab = Instantiate(_prefab, transform.position, transform.rotation);
             NetworkServer.Spawn(prefab.gameObject);
+            yield return null;
+            gameObject.SetActive(false);
         }
     }
 }
