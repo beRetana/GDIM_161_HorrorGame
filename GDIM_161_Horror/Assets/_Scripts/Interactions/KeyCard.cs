@@ -16,7 +16,7 @@ public class KeyCard : InteractableItem
     {
         if (!m_IsInteractable) return;
         FirstPersonController controller = (PlayerManager.Instance.GetPlayer(playerID) as FirstPersonController);
-        PlayerInteractableUI interactable = controller.GetComponent<PlayerInteractableUI>();
+        PlayerInteractionsHUD interactable = controller.GetComponent<PlayerInteractionsHUD>();
         if (controller.HasKeyCard) interactable.DisplayInteractUI(m_WarningMessage);
         else interactable.DisplayInteractUI(m_DisplayText);
     }

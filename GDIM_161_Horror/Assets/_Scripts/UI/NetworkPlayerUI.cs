@@ -2,17 +2,17 @@ using Mirror;
 using OtherUtils;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerInteractableUI))]
+[RequireComponent(typeof(PlayerInteractionsHUD))]
 public class NetworkPlayerUI : NetworkBehaviour, IDebugger
 {
-    private PlayerInteractableUI m_PlayerInteractUI;
+    private PlayerInteractionsHUD m_PlayerInteractUI;
 
     private bool m_Debugger;
 
     private void Start()
     {
         if (!isLocalPlayer) enabled = false;
-        m_PlayerInteractUI = GetComponent<PlayerInteractableUI>();
+        m_PlayerInteractUI = GetComponent<PlayerInteractionsHUD>();
     }
 
     public void DisplayInteractUI(string text)

@@ -3,36 +3,63 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInteractableUI : MonoBehaviour, IDebugger
+public class PlayerInteractionsHUD : MonoBehaviour, IDebugger
 {
-    [Header("Interaction Display")]
+    [Header("Tap Interaction")]
     [SerializeField] private Animator m_InteractAnimator;
-    [SerializeField] private TextMeshProUGUI m_DisplayText;
+    [SerializeField] private Image m_InteractionIcon;
+    [SerializeField] private TextMeshProUGUI m_InteractionText;
 
-    [Space(5f), Header("Hold Interaction Display")]
+    [Space(5f), Header("Hold Interaction")]
     [SerializeField] private Animator m_HoldingAnimator;
     [SerializeField] private Slider m_HoldingSlider;
+    [SerializeField] private Image m_HoldingIcon;
+
+    [Space(5f), Header("Interaction Icons")]
+    [SerializeField] private Sprite m_KeyboardE;
+    [SerializeField] private Sprite m_LeftClick;
 
     protected const string FADE = "FADE";
     protected const string LOAD = "LOAD";
 
     protected bool m_Debug;
 
+    private void Start()
+    {
+        SetIconKeyboardE();
+    }
+
     public void DisplayInteractUI(string name)
     {
         m_InteractAnimator.SetBool(FADE, true);
-        m_DisplayText.text = name;
+        m_InteractionText.text = name;
     }
 
     public void HideInteractUI()
     {
         m_InteractAnimator.SetBool(FADE, false);
-        m_DisplayText.text = "";
+        m_InteractionText.text = "";
     }
 
     public void SetInteractDisplayText(string name)
     {
-        m_DisplayText.text = name;
+        m_InteractionText.text = name;
+    }
+
+    public void SetIconKeyboardE()
+    {
+        SetIcons(m_KeyboardE);
+    }
+
+    public void SetIconLeftClick()
+    {
+        SetIcons(m_LeftClick);
+    }
+
+    private void SetIcons(Sprite icon)
+    {
+        m_InteractionIcon.sprite = icon;
+        m_HoldingIcon.sprite = icon;
     }
 
     public void StartHoldingUI()

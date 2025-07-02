@@ -17,7 +17,7 @@ public class Bone : NetworkPickableItem
 
     protected Stack<BonePiece> m_BonePieces;
     protected Transform m_PlayerCameraTransform;
-    protected PlayerInteractableUI m_InteractableUI;
+    protected PlayerInteractionsHUD m_PlayerHUD;
     [SyncVar] protected int m_CurrentUses;
     protected bool m_IsOnDominantHand;
     protected BoneState m_State;
@@ -59,7 +59,7 @@ public class Bone : NetworkPickableItem
                 GetComponent<HandInventory>();
 
             m_PlayerCameraTransform = inventory.GetComponent<PlayerBase>().CameraTransform;
-            m_InteractableUI = inventory.GetComponent<PlayerInteractableUI>();
+            m_PlayerHUD = inventory.GetComponent<PlayerInteractionsHUD>();
             inventory.OnSwapingHands += OnSwappedHands;
             OnSwappedHands(inventory.PeekAtDominant());
         }
@@ -68,8 +68,8 @@ public class Bone : NetworkPickableItem
             PlayerManager.Instance.GetPlayer(playerID).
                 GetComponent<HandInventory>().OnSwapingHands -= OnSwappedHands;
             m_PlayerCameraTransform = null;
-            m_InteractableUI = null;
-        }   
+            m_PlayerHUD = null;
+        }
     }
 
     private void OnSwappedHands(NetworkPickableItem item)
@@ -84,37 +84,43 @@ public class Bone : NetworkPickableItem
         else if (m_IsOnDominantHand)
         {
             m_IsOnDominantHand = false;
+            ChangeBoneState(BoneState.Uncrushed);
+            m_PlayerHUD.CancelHoldingUI();
+            m_PlayerHUD.HideInteractUI();
         }
     }
 
     private void Update()
     {
+        if (!_isPossessed) return;
         CheckForWalls();
     }
 
     private void CheckForWalls()
     {
-        if (m_State == BoneState.Crushed || !m_IsOnDominantHand) return;
+        if (!m_IsOnDominantHand || m_State == BoneState.Crushed) return;
 
         bool hasWallInFront = Physics.Raycast(m_PlayerCameraTransform.position, m_PlayerCameraTransform.forward, 4f, m_CrushableLayers);
         bool isObstructed = Physics.Raycast(m_PlayerCameraTransform.position, m_PlayerCameraTransform.forward, 4f, m_ObstructableLayers);
         bool canCrushBone = hasWallInFront && !isObstructed;
 
-        Debugger($"Bone State is: {m_State} and can crush bune: {canCrushBone}");
+        //Debugger($"Bone State is: {m_State} and can crush bune: {canCrushBone}");
 
         switch (m_State)
         {
             case BoneState.Uncrushed:
                 if (!canCrushBone) return;
-                m_InteractableUI.DisplayInteractUI(m_CrushingText);
-                m_State = BoneState.CanCrush;
+                m_PlayerHUD.SetIconLeftClick();
+                m_PlayerHUD.DisplayInteractUI(m_CrushingText);
+                ChangeBoneState(BoneState.CanCrush);
                 break;
             case BoneState.CanCrush:
             case BoneState.Crushing:
                 if (canCrushBone) return;
-                m_InteractableUI.CancelHoldingUI();
-                m_InteractableUI.HideInteractUI();
-                m_State = BoneState.Uncrushed;
+                m_PlayerHUD.CancelHoldingUI();
+                m_PlayerHUD.HideInteractUI();
+                m_PlayerHUD.SetIconKeyboardE();
+                ChangeBoneState(BoneState.Uncrushed);
                 break;
         }
     }
@@ -130,13 +136,12 @@ public class Bone : NetworkPickableItem
                 Debugger("Player used Item in Uncrushed state: Nothing to do");
                 break;
             case BoneState.CanCrush:
-                if (InputActionPhase.Started != context.InputPhase) return;
-                m_InteractableUI.StartHoldingUI();
-                m_State = BoneState.Crushing;
-                Debugger($"Bone's previous state: {BoneState.CanCrush}," +
-                         $"new state: {m_State}");
+                if (InteractionType.Tap == context.InputType) return;
+                m_PlayerHUD.StartHoldingUI();
+                ChangeBoneState(BoneState.Crushing);
                 break;
             case BoneState.Crushing:
+                if (InteractionType.Tap == context.InputType) return;
                 CrushingInput(context);
                 break;
             case BoneState.Crushed:
@@ -149,20 +154,19 @@ public class Bone : NetworkPickableItem
 
     private void CrushingInput(InputData context)
     {
-        bool isPerformed = context.InputPhase == InputActionPhase.Performed;
-        bool isHoldAction = context.InputType == InteractionType.Hold;
-
-        if (isPerformed && isHoldAction)
+        switch (context.InputPhase)
         {
-            // change model?
-            m_State = BoneState.Crushed;
+            case InputActionPhase.Canceled:
+                m_PlayerHUD.CancelHoldingUI();
+                ChangeBoneState(BoneState.CanCrush);
+                break;
+            case InputActionPhase.Performed:
+                m_PlayerHUD.CancelHoldingUI();
+                m_PlayerHUD.HideInteractUI();
+                m_PlayerHUD.SetIconKeyboardE();
+                ChangeBoneState(BoneState.Crushed);
+                break;
         }
-        else
-        {
-            m_State = BoneState.CanCrush;
-        }
-        m_InteractableUI.HideInteractUI();
-        m_InteractableUI.CancelHoldingUI();
     }
 
     private void TrialDropping(int playerID)
@@ -177,9 +181,13 @@ public class Bone : NetworkPickableItem
         else
         {
             Debugger("Dropping");
-            if (!isServer) return;
-            ++m_CurrentUses;
-            RpcDropPiece(playerID);
+
+            if (!isServer) CmdDropPiece(playerID);
+            else 
+            {
+                ++m_CurrentUses;
+                RpcDropPiece(playerID);
+            }
         }
     }
 
@@ -197,6 +205,14 @@ public class Bone : NetworkPickableItem
         gameObject.SetActive(false);
     }
 
+    [Command]
+    protected void CmdDropPiece(int playerID)
+    {
+        Debugger("CMD: Dropping");
+        ++m_CurrentUses;
+        RpcDropPiece(playerID);
+    }
+
     [ClientRpc]
     protected void RpcDropPiece(int playerID)
     {
@@ -206,5 +222,25 @@ public class Bone : NetworkPickableItem
         bone.transform.position = m_SpawnPoint.position;
         bone.gameObject.SetActive(true);
         bone.StartLifeTimer(5f);
+    }
+
+    protected void ChangeBoneState(BoneState state)
+    {
+        if (isServer) RpcChangeBoneState(state);
+        else CmdChangeBoneState(state);
+    }
+
+    [Command]
+    protected void CmdChangeBoneState(BoneState state)
+    {
+        Debugger($"CMD - Old State: {m_State}, New State: {state}");
+        RpcChangeBoneState(state);
+    }
+
+    [ClientRpc]
+    protected void RpcChangeBoneState(BoneState state)
+    {
+        Debugger($"RPC - Old State: {m_State}, New State: {state}");
+        m_State = state;
     }
 }
