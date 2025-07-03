@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using OtherUtils;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using TMPro;
+using StarterAssets;
 
 public class GameplayMenuUI : MonoBehaviour, IDebugger
 {
@@ -17,6 +19,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     [SerializeField] private Button m_BtnPauseToSettings;
     [SerializeField] private Button m_BtnPauseToVolume;
     [SerializeField] private Button m_BtnUnstuckPlayer;
+    [SerializeField] private Button m_BtnSurrenderPlayer;
 
     [Space(5f)]
     [SerializeField] private Button m_BtnSettingReturnToPause;
@@ -26,6 +29,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     [SerializeField] private PlayerDataTracker m_PlayerData;
 
     private PlayerControls m_PlayerControls;
+    private FirstPersonController m_FirstPersonController;
     private CharacterController m_CharacterController;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
@@ -39,6 +43,8 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         m_NavMeshQueryFilter.agentTypeID = 0;
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
         m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
+        m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
+
         EnableInput();
         SetMenuActive(false);
         SetButtons();
@@ -48,6 +54,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     private void OnDestroy()
     {
         DisableInput();
+        m_FirstPersonController.OnPlayerUp -= SurrenderState;
     }
 
     private void OnDisable()
@@ -87,6 +94,9 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         m_BtnVolumeReturnToPause.onClick.AddListener(CloseVolumeMenu);
         m_BtnReturnToGame.onClick.AddListener(ClosePauseMenu);
         m_BtnUnstuckPlayer.onClick.AddListener(UnstuckPlayer);
+        m_BtnSurrenderPlayer.onClick.AddListener(Surrender);
+        m_BtnSurrenderPlayer.gameObject.SetActive(false);
+        m_FirstPersonController.OnPlayerUp += SurrenderState;
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -99,7 +109,6 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
             default:
                 Debugger($"Action Phase with not purpose {context.phase}");
                 break;
-
         }
     }
 
@@ -126,6 +135,32 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         transform.root.GetComponent<HandInventory>().SetControlsActive(m_IsPaused);
         m_IsPaused = !m_IsPaused;
         ChangeCursorState();
+    }
+
+    private void SurrenderState(bool isPlayerUp)
+    {
+        m_BtnSurrenderPlayer.gameObject.SetActive(!isPlayerUp);
+        if (!isPlayerUp) EnableSurrenderBtn();
+    }
+
+    private void EnableSurrenderBtn()
+    {
+        if (m_PlayerData.isServer)
+        {
+            m_BtnSurrenderPlayer.enabled = true;
+        }
+        else
+        {
+            m_BtnSurrenderPlayer.
+                GetComponentInChildren<TextMeshProUGUI>().text = "Surrender (Waiting for Host)";
+        }   
+    }
+
+    private void Surrender()
+    {
+        if (!m_PlayerData.isServer) return;
+
+        (NewNetworkManager.singleton as NewNetworkManager).LoadLobbyScene();
     }
 
     private void OpenSettingsMenu()

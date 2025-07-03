@@ -45,10 +45,12 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     private void Awake()
     {
+        // Loading saved settings
         LoadSettings();
 
         QualitySettings.vSyncCount = 0;
 
+        // Setting up UI with saved settings and applying them
         SetUpResolutionsDropDown();
         SetUpFOVDropDown();
         SetUpFPSDropDown();
@@ -58,6 +60,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     private void LoadSettings()
     {
+        Debugger("Loading Saved Settings");
         m_IsFullScreen = PlayerPrefs.GetInt(FULL_SCREEN, 0) == 1 ? true : false;
         m_IndexFOV = PlayerPrefs.GetInt(FOV, 0);
         ChangeFPS(PlayerPrefs.GetInt(FPS, 0));
@@ -67,15 +70,13 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     private void SetUpFullScreen()
     {
-        Screen.SetResolution(m_ResolutionSettings[m_IndexResolution].width,
-            m_ResolutionSettings[m_IndexResolution].height,
-            m_IsFullScreen);
-
-        m_FullScreenToggle.isOn = m_IsFullScreen;
+        ApplyChangeFullScreen(); // Apply saved Changes
+        m_FullScreenToggle.isOn = m_IsFullScreen; // Update UI with saved changes
     }
 
     private void SetUpFPSDropDown()
     {
+        // Load in dropdown with resolution options
         List<string> options = new List<string>();
 
         foreach (int fps in m_fpsSettings)
@@ -85,8 +86,8 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         }
 
         m_FPSDropDown.AddOptions(options);
-        m_FPSDropDown.value = m_IndexFPS;
-        Application.targetFrameRate = m_fpsSettings[m_IndexFPS];
+        m_FPSDropDown.value = m_IndexFPS; // Set saved choice.
+        Application.targetFrameRate = m_fpsSettings[m_IndexFPS]; // Apply choice.
     }
 
     private void SetUpResolutionsDropDown()
@@ -136,15 +137,12 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     private void SetUpRotationSpeed()
     {
-        m_RotationSpeedSlider.value = m_RotationSpeed;
-        m_RotationSpeedText.text = (Mathf.Round(m_RotationSpeed * 1000)/10).ToString();
-        if (!transform.root.TryGetComponent<FirstPersonController>(out var player)) return;
-        player.SetCameraRotationSpeed(m_RotationSpeed);
+        ApplyChangeRotationSpeed();
     }
 
     public void ApplyChangeResolution()
     {
-        Debugger($"Changing Resolution to " +
+        Debugger($"Applying changes of Resolution to " +
                  $"{m_ResolutionSettings[m_IndexResolution].width} x " +
                  $"{m_ResolutionSettings[m_IndexResolution].height}; " +
                  $"{(m_IsFullScreen ? "Full Screen" : "Windowed")}");
@@ -158,7 +156,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     public void ApplyChangeFullScreen()
     {
-        Debugger($"Changing to {(m_IsFullScreen ? "Full Screen" : "Windowed")}");
+        Debugger($"Applying Changing to {(m_IsFullScreen ? "Full Screen" : "Windowed")}");
         Screen.SetResolution(m_ResolutionSettings[m_IndexResolution].width,
             m_ResolutionSettings[m_IndexResolution].height,
             m_IsFullScreen);
@@ -188,7 +186,13 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
 
     private void ApplyChangeRotationSpeed()
     {
-        SetUpRotationSpeed();
+        Debugger($"Applying Changes to Rotation Speed ");
+
+        m_RotationSpeedSlider.value = m_RotationSpeed;
+        m_RotationSpeedText.text = (Mathf.Round(m_RotationSpeed * 1000) / 10).ToString();
+        if (!transform.root.TryGetComponent<FirstPersonController>(out var player)) return;
+        player.SetCameraRotationSpeed(m_RotationSpeed);
+
         PlayerPrefs.SetFloat(ROTATION_SPEED, m_RotationSpeed);
     }
 

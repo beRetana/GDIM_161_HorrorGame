@@ -9,6 +9,7 @@ public class EndGameUI : MonoBehaviour
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
 
+    private PlayerObjectController m_PlayerController;
     private void Start()
     {
         foreach (var item in m_StatsBoardUI)

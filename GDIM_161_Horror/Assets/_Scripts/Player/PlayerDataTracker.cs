@@ -1,10 +1,16 @@
 using Mirror;
+using UnityEngine.SceneManagement;
 using System;
 using UnityEngine;
+using StarterAssets;
 
 public class PlayerDataTracker : NetworkBehaviour
 {
+    private PlayerObjectController m_PlayerController;
+    private FirstPersonController m_FirstPersonController;
+
     private Vector3 m_SavedPosition;
+
     private int[] m_TimePerFloor = new int[5];
     private float m_StartTime;
     private ulong m_PlayerSteamID;
@@ -28,12 +34,28 @@ public class PlayerDataTracker : NetworkBehaviour
     private void Start()
     {
         m_SavedPosition = Vector3.zero;
+        m_PlayerController = GetComponent<PlayerObjectController>();
+        m_FirstPersonController = GetComponent<FirstPersonController>();
+        m_FirstPersonController.OnPlayerUp += OnPlayerKnocked;
+        SceneManager.sceneLoaded += OnLoadedGameScene;
+    }
+
+    private void OnDisable()
+    {
+        m_FirstPersonController.OnPlayerUp -= OnPlayerKnocked;
+    }
+
+    private void OnLoadedGameScene(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != NewNetworkManager.NewSingleton.GameplaySceneName) return;
+
         m_StartTime = Time.time;
-        PlayerObjectController playerController = GetComponent<PlayerObjectController>();
-        m_PlayerSteamID = playerController.PlayerSteamID;
-        m_PlayerName = playerController.PlayerName;
+        m_PlayerSteamID = m_PlayerController.PlayerSteamID;
+        m_PlayerName = m_PlayerController.PlayerName;
         if (!isServer) return;
         m_TrialNumber = UnityEngine.Random.Range(1000, 10000);
+
+        SceneManager.sceneLoaded -= OnLoadedGameScene;
     }
 
     public void OnReachedNewFloor(byte floorNum)
@@ -69,8 +91,9 @@ public class PlayerDataTracker : NetworkBehaviour
         m_TotalTime = timeStamp;
     }
 
-    public void OnPlayerKnocked()
+    private void OnPlayerKnocked(bool isPlayerUp)
     {
+        if (isPlayerUp) return;
         if (!isServer) CmdOnPlayerKnocked();
         else ++m_KnockedDownCount;
     }

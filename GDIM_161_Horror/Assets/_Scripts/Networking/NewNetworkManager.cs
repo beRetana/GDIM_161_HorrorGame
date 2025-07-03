@@ -17,6 +17,7 @@ public class NewNetworkManager : NetworkManager
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
+    public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
@@ -40,6 +41,11 @@ public class NewNetworkManager : NetworkManager
     public void StartGame(string SceneName)
     {
         ServerChangeScene(m_GameplaySceneName);
+    }
+
+    public void LoadLobbyScene()
+    {
+        ServerChangeScene(GetSceneName(onlineScene));
     }
 
     public void SetGameSceneName(string name)

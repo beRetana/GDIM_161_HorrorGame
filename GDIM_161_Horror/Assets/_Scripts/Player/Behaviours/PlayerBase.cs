@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using Mirror;
 using Player;
 using OtherUtils;
@@ -10,8 +11,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 {
     static private int _myID = 0; // 0, 1, 2, 3
     protected PlayerInput _playerInput;
-
     private NewNetworkManager _networkmanager;
+    public event Action<bool> OnPlayerUp;
 
     public NewNetworkManager NetworkManager
     {
@@ -162,6 +163,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     private void UnlockPlayerSettings()
     {
+        _interaction.OnPlayerRecued -= UnlockPlayer;
         _interaction.SetInteractive(false);
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
@@ -174,12 +176,13 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
+        OnPlayerUp?.Invoke(true);
     }
 
     private void DownPlayerSettings()
     {
         _interaction.SetInteractive(true);
-        _interaction.SetPlayerInteraction(UnlockPlayer);
+        _interaction.OnPlayerRecued += UnlockPlayer;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
 
@@ -192,6 +195,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory.DropAllItems();
         SetInputState(false);
         cinemachineCameraTarget.transform.localPosition = downCamPosition;
+        OnPlayerUp?.Invoke(false);
     }
     private void EnterState(PlayerStateEnum enterState)
     {
