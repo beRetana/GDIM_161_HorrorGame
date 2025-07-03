@@ -13,24 +13,11 @@ namespace AI
         private Rigidbody _rigidbody;
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
-
-        //[SerializeField] private EventReference _deerWalkFootstep;
-        //[SerializeField] private EventReference _deerRunFootstep;
-        //private bool isWalking = false;
-        //private bool isRunning = false;
-
-        // private const float WalkThreshold = 0.1f; // Adjust for when to start playing walking sound
-        // private const float RunThreshold = 0.5f;  // Adjust for when to start playing running sound
-
         private void Start()
         {
             if (!isServer) return;
 
             _controller = GetComponent<NavMeshAgent>();
-
-            GetComponent<AIController>().enabled = false;
-            _controller.enabled = false;
-            this.enabled = false;
             _wander = GetComponent<Wander>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
@@ -56,48 +43,6 @@ namespace AI
                 _animator.OnJump();
             }
         }
-
-        // private void HandleFootstepSounds(float currentSpeed)
-        // {
-        //     // Handle walking sound
-        //     if (!isWalking && currentSpeed >= WalkThreshold && currentSpeed < RunThreshold)
-        //     {
-        //         PlayDeerwalkFootstep();
-        //         isWalking = true;
-        //         isRunning = false;
-        //     }
-        //     else if (isWalking && (currentSpeed < WalkThreshold || currentSpeed >= RunThreshold))
-        //     {
-               
-                
-        //         isWalking = false;
-        //     }
-
-        //     // Handle running sound
-        //     if (!isRunning && currentSpeed >= RunThreshold)
-        //     {
-        //         // Start running sound
-                
-        //         PlayDeerrunFootstep();
-        //         isRunning = true;
-        //     }
-        //     else if (isRunning && currentSpeed < RunThreshold)
-        //     {
-                
-                
-        //         isRunning = false;
-        //     }
-        // }
-        
-        // public void PlayDeerwalkFootstep()
-        // {
-        //     RuntimeManager.PlayOneShot(_deerWalkFootstep, transform.position);
-        // }
-
-        // public void PlayDeerrunFootstep()
-        // {
-        //     RuntimeManager.PlayOneShot(_deerRunFootstep, transform.position);
-        // }
 
         private IEnumerator StartSequence()
         {
