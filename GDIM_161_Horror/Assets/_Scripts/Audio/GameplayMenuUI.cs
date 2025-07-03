@@ -147,10 +147,11 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     {
         if (m_PlayerData.isServer)
         {
-            m_BtnSurrenderPlayer.enabled = true;
+            m_BtnSurrenderPlayer.interactable = true;
         }
         else
         {
+            m_BtnSurrenderPlayer.interactable = false;
             m_BtnSurrenderPlayer.
                 GetComponentInChildren<TextMeshProUGUI>().text = "Surrender (Waiting for Host)";
         }   
@@ -160,7 +161,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     {
         if (!m_PlayerData.isServer) return;
 
-        (NewNetworkManager.singleton as NewNetworkManager).LoadLobbyScene();
+        transform.parent.GetComponent<PlayerManagerHUD>().SetEndGame(false);
     }
 
     private void OpenSettingsMenu()

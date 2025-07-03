@@ -9,7 +9,6 @@ public class EndGameUI : MonoBehaviour
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
 
-    private PlayerObjectController m_PlayerController;
     private void Start()
     {
         foreach (var item in m_StatsBoardUI)
@@ -18,7 +17,7 @@ public class EndGameUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetScene(bool won)
+    public void SetEndGameUI(bool won)
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -29,7 +28,7 @@ public class EndGameUI : MonoBehaviour
 
     private void SetEndGameTittle(bool success)
     {
-        int trialNum = GetComponent<PlayerDataTracker>().TrialNumber;
+        int trialNum = transform.root.GetComponent<PlayerDataTracker>().TrialNumber;
         m_EndGameTitle.text = $"Trial #{trialNum}: {(success ? "Successful" : "Failed")}";
     }
 
