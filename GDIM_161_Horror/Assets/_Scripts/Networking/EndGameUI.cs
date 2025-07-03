@@ -1,24 +1,45 @@
 using UnityEngine;
 using Mirror;
+using UnityEngine.InputSystem;
+using System;
+using TMPro;
 
 public class EndGameUI : MonoBehaviour
 {
-    [SerializeField] private GameObject m_EndScreen;
-    [SerializeField] private ReturnToLobby m_StartScreen;
-    [SerializeField] private string m_WinTitle;
-    [SerializeField] private string m_LoseTitle;
-    
-    private void Update()
+    [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
+    [SerializeField] private TextMeshProUGUI m_EndGameTitle;
+
+    private void Start()
     {
-        //if (Input.GetKeyDown(KeyCode.Escape)) SetScene(true);
-        //else if (Input.GetKeyDown(KeyCode.Tab)) SetScene(false);
+        foreach (var item in m_StatsBoardUI)
+            item.gameObject.SetActive(false);
+
+        gameObject.SetActive(false);
     }
 
     public void SetScene(bool won)
     {
         Cursor.lockState = CursorLockMode.None;
-        m_EndScreen.SetActive(true);
-        if (won) m_StartScreen.SetText(m_WinTitle);
-        else m_StartScreen.SetText(m_LoseTitle);
+        Cursor.visible = true;
+        SetEndGameTittle(won);
+        SetStatsBoard();
+        gameObject.SetActive(true);
+    }
+
+    private void SetEndGameTittle(bool success)
+    {
+        int trialNum = GetComponent<PlayerDataTracker>().TrialNumber;
+        m_EndGameTitle.text = $"Trial #{trialNum}: {(success ? "Successful" : "Failed")}";
+    }
+
+    private void SetStatsBoard()
+    {
+        PlayerDataTracker[] playersInGame = FindObjectsByType<PlayerDataTracker>(FindObjectsSortMode.None);
+
+        for (byte i = 0; i < playersInGame.Length; ++i)
+        {
+            m_StatsBoardUI[i].SetPlayerStats(playersInGame[i]);
+            m_StatsBoardUI[i].gameObject.SetActive(true);
+        }
     }
 }
