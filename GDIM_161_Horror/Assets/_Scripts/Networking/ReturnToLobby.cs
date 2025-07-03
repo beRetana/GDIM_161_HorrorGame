@@ -7,11 +7,8 @@ public class ReturnToLobby : NetworkBehaviour
 {
     [SerializeField] private Button m_ReturnToLobby;
 
-    private string m_LobbyName;
-
     private void Start()
     {
-        m_LobbyName = (NewNetworkManager.singleton as NewNetworkManager).GetOnlineScene();
         if (!isServer) m_ReturnToLobby.gameObject.SetActive(false);
         m_ReturnToLobby.onClick.AddListener(LoadLobby);
     }
@@ -19,7 +16,23 @@ public class ReturnToLobby : NetworkBehaviour
     [Server]
     private void LoadLobby()
     {
-        // Do all clean up here
-        NewNetworkManager.singleton.ServerChangeScene(m_LobbyName);
+        CleanUpScene();
+        NewNetworkManager.NewSingleton.LoadLobbyScene();
+    }
+
+    [ClientRpc]
+    private void CleanUpScene()
+    {
+
+    }
+
+    private void ResetPlayers()
+    {
+
+    }
+
+    private void ResetUI()
+    {
+
     }
 }

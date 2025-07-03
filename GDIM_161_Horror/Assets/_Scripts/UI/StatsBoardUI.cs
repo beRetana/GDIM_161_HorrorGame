@@ -18,25 +18,31 @@ public class StatsBoardUI : MonoBehaviour
 
     public void SetPlayerStats(PlayerDataTracker playerData)
     {
+        playerData.EndGame();
         m_UserNameText.text = $"{playerData.PlayerName}";
         m_KnockedDownCountText.text = $"{playerData.KnockedDownCount}";
         m_RezzedUpCountText.text = $"{playerData.RezzedUpCount}";
         SetPlayerIcon(playerData.PlayerSteamID);
-        SetTimeStamps(playerData.TimesPerFloor);
+        SetTimeStamps(playerData.TimesPerFloor, playerData.TotalTime);
     }
 
-    private void SetTimeStamps(int[] timeStamps)
+    private void SetTimeStamps(ulong[] timeStamps, ulong totalTime)
     {
-        for (int i = 0; i < timeStamps.Length; i++)
-            m_TimeStampsText[i].text = $"{m_FloorNames[i]} {FormatTime(timeStamps[i])}";
+        m_TimeStampsText[0].text = $"{m_FloorNames[0]} {FormatTime(totalTime)}";
+
+        for (int i = 1; i < m_TimeStampsText.Length; ++i)
+        {
+            m_TimeStampsText[i].text = $"{m_FloorNames[i]} " +
+                $"{FormatTime((i == 0) ? totalTime : timeStamps[i - 1])}";
+        }
     }
 
-    private static string FormatTime(int time)
+    private static string FormatTime(ulong time)
     {
         return $"{(time / 3600)}:{DoubleDigit((time/60) % 60)}:{DoubleDigit(time % 60)}";
     }
 
-    private static string DoubleDigit(int time)
+    private static string DoubleDigit(ulong time)
     {
         return (time < 10) ? $"0{time}" : $"{time}";
     }
@@ -45,11 +51,27 @@ public class StatsBoardUI : MonoBehaviour
     {
         int ImageID = SteamFriends.GetLargeFriendAvatar((CSteamID)playerSteamID);
         if (ImageID == -1) return;
-        Texture2D texture = GetSteamImageAsTexture(ImageID);
+        Texture2D texture = FlipTexture2D(GetSteamImageAsTexture(ImageID));
         Sprite image = Sprite.Create(texture,
                                      new Rect(0, 0, texture.width, texture.height),
                                      new Vector2(0.5f, 0.5f));
         m_ProfileImage.sprite = image;
+    }
+
+    private static Texture2D FlipTexture2D(Texture2D old)
+    {
+        int width = old.width;
+        int height = old.height;
+
+        Texture2D newTexture = new(width, height, old.format, false);
+
+        for (int y = 0; y < height; ++y)
+        {
+            newTexture.SetPixels(0, y, width, 1,
+                                 old.GetPixels(0, height - y - 1, width, 1));
+        }
+        newTexture.Apply();
+        return newTexture;
     }
 
     private static Texture2D GetSteamImageAsTexture(int iImage)

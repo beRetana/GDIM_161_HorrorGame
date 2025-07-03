@@ -9,14 +9,6 @@ public class EndGameUI : MonoBehaviour
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
 
-    private void Start()
-    {
-        foreach (var item in m_StatsBoardUI)
-            item.gameObject.SetActive(false);
-
-        gameObject.SetActive(false);
-    }
-
     public void SetEndGameUI(bool won)
     {
         Cursor.lockState = CursorLockMode.None;
