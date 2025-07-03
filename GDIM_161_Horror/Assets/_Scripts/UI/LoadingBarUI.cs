@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LoadingBarUI : MonoBehaviour
 {
-    [SerializeField] private PlayerInteractableUI m_InteractableUI;
+    [SerializeField] private PlayerInteractionsHUD m_InteractableUI;
 
     private void ResetHoldingUI()
     {

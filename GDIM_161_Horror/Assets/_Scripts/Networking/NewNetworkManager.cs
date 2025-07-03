@@ -39,7 +39,22 @@ public class NewNetworkManager : NetworkManager
 
     public void StartGame(string SceneName)
     {
-        ServerChangeScene(SceneName);
+        ServerChangeScene(m_GameplaySceneName);
+    }
+
+    public void SetGameSceneName(string name)
+    {
+        m_GameplaySceneName = name;
+    }
+
+    public string GetOnlineScene()
+    {
+        return GetSceneName(onlineScene);
+    }
+
+    public string GetOfflineScene()
+    {
+        return GetSceneName(offlineScene);
     }
 
     public override void OnStopHost()
@@ -55,7 +70,7 @@ public class NewNetworkManager : NetworkManager
     /*
         Parse the name file-route of a scene to only get the name then return that.
     */
-    private string GetSceneName(string name)
+    private static string GetSceneName(string name)
     {
         int folder = name.LastIndexOf('/') + 1;
         return name.Substring(folder, name.IndexOf('.') - folder);

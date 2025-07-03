@@ -66,9 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ada3561826d6ab4db5bfa2cfe42a0ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   m_LeftDoorTransform: {fileID: 3580651191268655520}
   m_RightDoorTransform: {fileID: 7416070902058846642}
-  speed: 1
+  m_Speed: 1
 --- !u!1 &5306821821885742029
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +406,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4476933837113832890}
+  - component: {fileID: 5197580231789048063}
   m_Layer: 0
   m_Name: subnet_scifi_door3
   m_TagString: Untagged
@@ -429,3 +433,20 @@ Transform:
   - {fileID: 8341594252173169000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5197580231789048063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8588162697123593301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 4116400801
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0

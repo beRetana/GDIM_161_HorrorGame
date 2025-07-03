@@ -19,6 +19,11 @@ public class Pavlov : NetworkBehaviour
 
     private void Start()
     {
+        if (!isLocalPlayer)
+        {
+            enabled = false;
+            return;
+        }
         m_RangeSquared = m_RangeToOpen * m_RangeToOpen;
     }
 

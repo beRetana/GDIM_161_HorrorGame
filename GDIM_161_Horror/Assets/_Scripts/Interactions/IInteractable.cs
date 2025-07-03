@@ -16,6 +16,8 @@ public interface IInteractable
 
     public void StoppedDetecting(int playerID);
 
+    public void StopDetecting(int playerID);
+
     public void SetInteractive(bool intactive);
 
     public NetworkIdentity GetNetworkID();

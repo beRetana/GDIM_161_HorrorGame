@@ -18,7 +18,7 @@ namespace StarterAssets
         private bool _gravityOn = true;
         [SyncVar] private bool m_HasKeyCard;
 
-        public bool HasKeyCard { get { return m_HasKeyCard; } set { CmdHasChip(value); } }
+        public bool HasKeyCard { get { return m_HasKeyCard; } set { SetHasKeycard(value); } }
         public bool isWalking { get; private set; }
         public bool grounded { get; private set; }
         public bool GravityOn { get => _gravityOn; set => _gravityOn = value; }
@@ -33,6 +33,7 @@ namespace StarterAssets
         private void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
+            if (!isLocalPlayer) return;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -51,11 +52,13 @@ namespace StarterAssets
 
         private void OnDestroy()
         {
+            if (!isLocalPlayer) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            if (!isLocalPlayer) return;
             if (scene.name != m_GameplaySceneName) return;
             StartCoroutine(FindSpawnPoint());
         }
@@ -75,7 +78,8 @@ namespace StarterAssets
         }
 
         private void Update()
-        {   
+        {
+            if (!isLocalPlayer) return;
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -83,11 +87,13 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
+            if (!isLocalPlayer) return;
             UpdateSpeedAnimation();
         }
 
         private void LateUpdate()
         {
+            if (!isLocalPlayer) return;
             CameraRotation();
         }
 
@@ -105,22 +111,17 @@ namespace StarterAssets
         private void CameraRotation()
         {
             if (_input.look.sqrMagnitude < _THRESHOLD) return;
-
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
             _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
-            Debugger($"X Rotation Velovity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
+            Debugger($"X Rotation Velocity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
 
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
 
             transform.Rotate(Vector3.up * _rotationVelocity);
-
-            //Vector3 currentArmRotation = _arms.transform.localRotation.eulerAngles;
-            //float armPitch = Mathf.LerpAngle(currentArmRotation.x, _cinemachineTargetPitch * 0.8f, Time.deltaTime * 10f);
-            //_arms.transform.localRotation = Quaternion.Euler(armPitch, currentArmRotation.y, currentArmRotation.z);
         }
 
         private void Move()
@@ -208,12 +209,18 @@ namespace StarterAssets
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
+        private void SetHasKeycard(bool value)
+        {
+            if (!isLocalPlayer) return;
+            if (isServer) m_HasKeyCard = value;
+            else CmdHasKeycard(value);
+        }
+
         [Command]
-        private void CmdHasChip(bool value)
+        private void CmdHasKeycard(bool value)
         {
             this.m_HasKeyCard = value;
         }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);

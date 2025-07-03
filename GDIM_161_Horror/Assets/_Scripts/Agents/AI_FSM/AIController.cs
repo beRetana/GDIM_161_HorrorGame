@@ -5,7 +5,8 @@ using UnityEngine.AI;
 namespace AI_FSM{
 
     [RequireComponent(typeof(NavMeshAgent))]
-    public class AIController : MonoBehaviour{
+    public class AIController : MonoBehaviour
+    {
 
         /// <summary>
         /// The state of the AI.

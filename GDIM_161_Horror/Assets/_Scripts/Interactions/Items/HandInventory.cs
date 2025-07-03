@@ -4,6 +4,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using System;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
@@ -25,6 +26,8 @@ public class HandInventory : NetworkBehaviour
 
     [Header("Debugging")]
     [SerializeField] private bool _enableDebugging;
+
+    public event Action<NetworkPickableItem> OnSwapingHands;
     
     private static bool _staticDebugging;
 
@@ -161,6 +164,11 @@ public class HandInventory : NetworkBehaviour
             return holder;
         }
 
+
+        /// <summary>
+        /// Switched dominance and returns if in the new state the left hand is dominant.
+        /// </summary>
+        /// <returns></returns>
         public bool SwapDominance()
         {
             SetLeftHandDominant(!IsLHandDom);
@@ -184,15 +192,18 @@ public class HandInventory : NetworkBehaviour
 
     void Start()
     {
-        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) _playerID = playerController.PlayerIdNumber;
+        if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
+            _playerID = playerController.PlayerIdNumber;
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        if (!isLocalPlayer) return;
         SetUpControls();
     }
 
     public void SetControlsActive(bool state)
     {
+        if (!isLocalPlayer) return;
         if (state) SetUpControls();
         else DisableControls();
     }
@@ -204,13 +215,20 @@ public class HandInventory : NetworkBehaviour
         _playerControls.Player.Interact.started += OnInteraction;
         _playerControls.Player.Interact.canceled += OnInteraction;
         _playerControls.Player.Interact.performed += OnInteraction;
+        _playerControls.Player.UseItem.started += OnUsePickable;
+        _playerControls.Player.UseItem.canceled += OnUsePickable;
+        _playerControls.Player.UseItem.performed += OnUsePickable;
     }
 
     private void DisableControls()
     {
+        if (!isLocalPlayer) return;
         _playerControls.Player.Interact.started -= OnInteraction;
         _playerControls.Player.Interact.canceled -= OnInteraction;
         _playerControls.Player.Interact.performed -= OnInteraction;
+        _playerControls.Player.UseItem.started -= OnUsePickable;
+        _playerControls.Player.UseItem.canceled -= OnUsePickable;
+        _playerControls.Player.UseItem.performed -= OnUsePickable;
         _playerControls.Disable();
     }
 
@@ -283,14 +301,15 @@ public class HandInventory : NetworkBehaviour
     [ClientRpc]
     private void RpcSwapDominance()
     {
-        bool isLHandDom = _inventorySlots.SwapDominance();
+        _inventorySlots.SwapDominance();
+        OnSwapingHands?.Invoke(PeekAtDominant());
     }
 
     public void OnInteraction(InputAction.CallbackContext context) 
     {
         if(_interactable == null) return;
 
-        _interactable.StoppedDetecting(_playerID);
+        _interactable.StopDetecting(_playerID);
         _mouse.DefaultEffect();
 
         InputData inputData = new(context);
@@ -301,9 +320,7 @@ public class HandInventory : NetworkBehaviour
 
     public void OnDrop(InputValue value) 
     {
-        Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
-        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
-        else CmdDropItem(0f);
+        DropAction();
     }
 
     public void OnThrow(InputValue value) 
@@ -311,15 +328,15 @@ public class HandInventory : NetworkBehaviour
         ThrowAction();
     }
 
-    public void OnUseItem(InputValue value) { UseItem(); }
-
-    public void UseItem()
+    public void OnUsePickable(InputAction.CallbackContext context) 
     {
-        InventorySlot inventorySlotToUse = _inventorySlots.GetDominantHand();
-        NetworkPickableItem itemToUse = inventorySlotToUse?.Item;
-        if (itemToUse == null) return;
+        UseItem(new InputData(context)); 
+    }
 
-        itemToUse.UseItem(_playerID);
+    public void UseItem(InputData context)
+    {
+        if (!isServer) CmdUseItem(context);
+        else RpcUseItem(context);
     }
 
     public bool PickUpItem(NetworkPickableItem pickableItem)
@@ -342,6 +359,13 @@ public class HandInventory : NetworkBehaviour
     public void DropAllItems()
     {
         StartCoroutine(ThrowAllItems());
+    }
+
+    public void DropAction()
+    {
+        Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
+        if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
+        else CmdDropItem(0f);
     }
 
     private void ThrowAction()
@@ -456,6 +480,29 @@ public class HandInventory : NetworkBehaviour
         RpcDropItem(throwForce);
     }
 
+    [Command]
+    private void CmdUseItem(InputData context)
+    {
+        RpcUseItem(context);
+    }
+
+    [ClientRpc]
+    private void RpcUseItem(InputData context)
+    {
+        NetworkPickableItem itemToUse = _inventorySlots.GetDominantHand().Item;
+        if (itemToUse == null) return;
+        itemToUse.UseItem(_playerID, context);
+    }
+
+    /// <summary>
+    /// Returns the current dominant item or null if there is none.
+    /// </summary>
+    /// <returns></returns>
+    public NetworkPickableItem PeekAtDominant()
+    {
+        return _inventorySlots.GetDominantHand().Item;
+    }
+
     private static void Debugger(object log)
     {
         if (_staticDebugging) Debug.Log(log);
@@ -467,7 +514,7 @@ public class HandInventory : NetworkBehaviour
         return GetComponent<NetworkIdentity>();
     }
 
-    IEnumerator ThrowAllItems()
+    public IEnumerator ThrowAllItems()
     {
         ThrowAction();
         SwapAction();

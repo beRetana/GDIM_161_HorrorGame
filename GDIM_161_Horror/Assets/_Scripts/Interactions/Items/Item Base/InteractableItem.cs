@@ -88,13 +88,21 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     {
         if (!m_IsInteractable) return;
         PlayerManager.Instance.GetPlayer(playerID).
-            GetComponent<PlayerInteractableUI>().DisplayInteractUI(m_DisplayText);
+            GetComponent<NetworkPlayerUI>().DisplayInteractUI(m_DisplayText);
     }
 
     public virtual void StoppedDetecting(int playerID)
     {
+        Debugger($"Player {playerID} stopped detecting");
         PlayerManager.Instance.GetPlayer(playerID).
-            GetComponent<PlayerInteractableUI>().HideInteractUI();
+            GetComponent<NetworkPlayerUI>().HideInteractUI();
+    }
+
+    public virtual void StopDetecting(int playerID)
+    {
+        Debugger($"Player {playerID} wants to stop detecting");
+        PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<NetworkPlayerUI>().HideInteractUI();
     }
 
     public NetworkIdentity GetNetworkID()
