@@ -13,7 +13,6 @@ public class CameraController : NetworkBehaviour
     private PlayerInput m_PlayerInput;
     private CharacterController m_CharacterController;
 
-    private FirstPersonController m_FirstPersonController;
     private HandInventory m_HandInventory;
 
     override public void OnStartAuthority()
@@ -33,7 +32,6 @@ public class CameraController : NetworkBehaviour
         m_CharacterController = GetComponent<CharacterController>();
         m_PlayerInput = GetComponent<PlayerInput>();
 
-        m_FirstPersonController = GetComponent<FirstPersonController>();
         m_HandInventory = GetComponent<HandInventory>();
 
         ToggleObjects(false);
@@ -48,7 +46,6 @@ public class CameraController : NetworkBehaviour
         m_CharacterController.enabled = active;
         m_PlayerInput.enabled = active;
         
-        m_FirstPersonController.enabled = active;
         m_HandInventory.enabled = active;
         m_HandInventory.EnablePickingUp = active;
     }

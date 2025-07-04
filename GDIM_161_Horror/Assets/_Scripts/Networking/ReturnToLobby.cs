@@ -40,13 +40,6 @@ public class ReturnToLobby : NetworkBehaviour
     [ClientRpc]
     private void CleanUpScene()
     {
-        ResetPlayers();
-    }
-
-    private void ResetPlayers()
-    {
         m_PlayerManagerHUD.ResetGameUI();
-        m_HandInventory.DropAllItems();
-        m_FirstPersonController.UnlockPlayer();
     }
 }

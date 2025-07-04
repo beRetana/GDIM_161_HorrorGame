@@ -112,10 +112,13 @@ public class Bone : NetworkPickableItem
 
     private void CheckForWalls()
     {
-        if (!m_IsOnDominantHand || m_State == BoneState.Crushed) return;
+        if (!m_IsOnDominantHand || m_State == BoneState.Crushed || m_PlayerCameraTransform == null) return;
 
-        bool hasWallInFront = Physics.Raycast(m_PlayerCameraTransform.position, m_PlayerCameraTransform.forward, 4f, m_CrushableLayers);
-        bool isObstructed = Physics.Raycast(m_PlayerCameraTransform.position, m_PlayerCameraTransform.forward, 4f, m_ObstructableLayers);
+        bool hasWallInFront = Physics.Raycast(m_PlayerCameraTransform.position, 
+            m_PlayerCameraTransform.forward, m_CrushingDistance, m_CrushableLayers);
+        bool isObstructed = Physics.Raycast(m_PlayerCameraTransform.position, 
+            m_PlayerCameraTransform.forward, m_CrushingDistance, m_ObstructableLayers);
+        
         bool canCrushBone = hasWallInFront && !isObstructed;
 
         //Debugger($"Bone State is: {m_State} and can crush bune: {canCrushBone}");

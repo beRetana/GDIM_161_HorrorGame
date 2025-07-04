@@ -95,7 +95,6 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     public virtual void StoppedDetecting(int playerID)
     {
         Debugger($"Player {playerID} stopped detecting");
-        if (!m_IsInteractable) return;
         PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<NetworkPlayerUI>().HideInteractUI();
     }
@@ -103,7 +102,6 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     public virtual void StopDetecting(int playerID)
     {
         Debugger($"Player {playerID} wants to stop detecting");
-        if (!m_IsInteractable) return;
         PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<NetworkPlayerUI>().HideInteractUI();
     }

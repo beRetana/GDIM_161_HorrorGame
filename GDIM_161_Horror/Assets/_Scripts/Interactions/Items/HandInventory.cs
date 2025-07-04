@@ -209,6 +209,7 @@ public class HandInventory : NetworkBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         m_EnablePickingUp = scene.name == NewNetworkManager.NewSingleton.GameplaySceneName;
+        SetControlsActive(m_EnablePickingUp);
     }
 
     public void SetControlsActive(bool state)

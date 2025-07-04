@@ -214,6 +214,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     private void ClosePauseMenu()
     {
+        Debugger("CLOSING PAUSE MENU");
         ToggleVolumeMenu();
     }
 

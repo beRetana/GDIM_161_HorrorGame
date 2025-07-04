@@ -4,6 +4,7 @@ using Mirror;
 using Player;
 using OtherUtils;
 using UnityEngine.InputSystem;
+using Mono.CSharp;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -26,6 +27,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         }
     }
 
+    //protected float m_
+    protected bool m_EnableFunctionality;
     protected bool _debugger;
 
     #region enums
@@ -147,7 +150,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     }
     public void UnlockPlayer()
     {
-        Debugger($"Unlocking Player{_myID}");
+        Debugger($"Unlocking Player {_myID}");
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
@@ -213,10 +216,9 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     private void RpcChangeState(PlayerStateEnum enterState)
     {
         Debugger($"{name} entering {enterState}");
-        playerStateEnum = enterState;
         UpdateState(enterState);
     }
-    private void UpdateState(PlayerStateEnum enterState)
+    protected void UpdateState(PlayerStateEnum enterState)
     {
         switch (enterState)
         {
@@ -235,7 +237,10 @@ public class PlayerBase : NetworkBehaviour, IDebugger
                 currentStats = downedStats;
                 break;
         }
+        
         SetPlayerStats();
+        ApplyFetchedValues();
+        playerStateEnum = enterState;
     }
     private bool SetPlayerStats()
     {
@@ -263,6 +268,16 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         bottomClamp = currentStats.BottomClamp;
 
         return true;
+    }
+
+    private void ApplyFetchedValues()
+    {
+        switch (playerStateEnum)
+        {
+            case PlayerStateEnum.Unlocked:
+                //moveSpeed = 
+                break;
+        }
     }
 
     #endregion PlayerState
