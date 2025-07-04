@@ -12,8 +12,8 @@ namespace StarterAssets
         private PlayerHeadBobbing _headBobbing;
 
         private const float _THRESHOLD = 0.01f;
+        private float _moveSpeed;
 
-        private string m_GameplaySceneName = "BUILD_1";
         private float _stepSoundTime;
         private bool _gravityOn = true;
         [SyncVar] private bool m_HasKeyCard;
@@ -47,7 +47,6 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-            m_GameplaySceneName = (NewNetworkManager.singleton as NewNetworkManager).GameplaySceneName;
         }
 
         private void OnDestroy()
@@ -59,7 +58,7 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (!isLocalPlayer) return;
-            if (scene.name != m_GameplaySceneName) return;
+            if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
             StartCoroutine(FindSpawnPoint());
         }
 
@@ -207,6 +206,11 @@ namespace StarterAssets
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+
+        public void SpeedMultiplier(float value)
+        {
+            moveSpeed *= value;
         }
 
         private void SetHasKeycard(bool value)

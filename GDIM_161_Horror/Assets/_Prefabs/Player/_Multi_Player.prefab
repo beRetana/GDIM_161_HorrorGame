@@ -8687,6 +8687,7 @@ GameObject:
   - component: {fileID: 3646812105325223887}
   - component: {fileID: 7373446976919168036}
   - component: {fileID: 2465239804317328222}
+  - component: {fileID: 3370307584871920486}
   m_Layer: 10
   m_Name: _Multi_Player
   m_TagString: Player
@@ -9339,6 +9340,26 @@ MonoBehaviour:
     enabled: 0
   - debugScript: {fileID: 1129435193302970825}
     enabled: 0
+--- !u!114 &3370307584871920486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373982209266735019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bf9f859d29bf22408e2ffacb93138cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FloorHeights:
+  - 0
+  - 8
+  - 24
+  - 40
+  m_Multiplier: 1.3
+  m_BufferDistance: 3
+  m_Frequency: 4
 --- !u!1 &3384116487435058924
 GameObject:
   m_ObjectHideFlags: 0
