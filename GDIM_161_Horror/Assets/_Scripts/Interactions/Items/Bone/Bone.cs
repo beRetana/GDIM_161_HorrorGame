@@ -76,19 +76,32 @@ public class Bone : NetworkPickableItem
     private void OnSwappedHands(NetworkPickableItem item)
     {
         if (m_State == BoneState.Crushed) return;
+        
+        if (item != null)
+        {
+            uint itemID = item.transform.root.GetComponent<NetworkIdentity>().netId;
+            if (_interactableItem.GetNetworkID().netId == itemID)
+            {
+                m_IsOnDominantHand = true;
+            }
+            else if (m_IsOnDominantHand)
+            {
+                NotDominanteState();
+            }
+        }
+        else
+        {
+            NotDominanteState();
+        }
+    }
 
-        uint itemID = item.transform.root.GetComponent<NetworkIdentity>().netId;
-        if (_interactableItem.GetNetworkID().netId == itemID)
-        {
-            m_IsOnDominantHand = true;
-        }
-        else if (m_IsOnDominantHand)
-        {
-            m_IsOnDominantHand = false;
-            ChangeBoneState(BoneState.Uncrushed);
-            m_PlayerHUD.CancelHoldingUI();
-            m_PlayerHUD.HideInteractUI();
-        }
+    private void NotDominanteState()
+    {
+        m_IsOnDominantHand = false;
+        ChangeBoneState(BoneState.Uncrushed);
+        m_PlayerHUD.CancelHoldingUI();
+        m_PlayerHUD.HideInteractUI();
+        m_PlayerHUD.SetIconKeyboardE();
     }
 
     private void Update()

@@ -13,6 +13,5 @@ public class LIGHTBOUNCE : MonoBehaviour
         {
             pointLight.intensity = Mathf.Lerp(minIntensity, maxIntensity, Mathf.PingPong(Time.time * bounceSpeed, 1));
         }
-
     }
 }

@@ -3,10 +3,11 @@ using UnityEngine.InputSystem;
 using OtherUtils;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using StarterAssets;
 
-public class GameplayMenuUI : MonoBehaviour, IDebugger
+public class GameplayMenuHUD : MonoBehaviour, IDebugger
 {
     [Header("Components")]
     [SerializeField] private GameObject m_MouseDot;
@@ -31,6 +32,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     private PlayerControls m_PlayerControls;
     private FirstPersonController m_FirstPersonController;
     private CharacterController m_CharacterController;
+    private HandInventory m_HandInventory;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
     private bool m_IsPaused;
@@ -44,22 +46,39 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
         m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
         m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
+        m_HandInventory = m_PlayerData.GetComponent<HandInventory>();
 
-        EnableInput();
-        SetMenuActive(false);
-        SetButtons();
-        ChangeCursorState();
+        SetFunctionality();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == NewNetworkManager.NewSingleton.GetLobbyScene())
+        {
+            DisableInput();
+            SetMenuActive(false);
+        }
+        else if (scene.name == NewNetworkManager.NewSingleton.GameplaySceneName)
+        {
+            SetFunctionality();
+        }
     }
 
     private void OnDestroy()
     {
         DisableInput();
         m_FirstPersonController.OnPlayerUp -= SurrenderState;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnDisable()
+    private void SetFunctionality()
     {
-        DisableInput();
+        EnableInput();
+        SetMenuActive(false);
+        SetButtons();
+        ChangeCursorState();
     }
 
     private void EnableInput()
@@ -79,7 +98,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         m_PlayerControls.Player.Pause.performed -= OnPause;
     }
 
-    private void SetMenuActive(bool active)
+    public void SetMenuActive(bool active)
     {
         m_PauseMenu.SetActive(active);
         m_SettingsMenu.SetActive(active);
@@ -126,13 +145,19 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
         }
     }
 
-    private void ToggleVolumeMenu()
+    public void ResetMenu()
     {
-        if (!m_IsPaused) m_PauseMenu.SetActive(true);
+        ToggleVolumeMenu();
+    }
+
+    public void ToggleVolumeMenu()
+    {
+        if (!m_IsPaused) m_PauseMenu.SetActive(!m_IsPaused);
         else SetMenuActive(false);
         m_MouseDot.SetActive(m_IsPaused);
         transform.root.GetComponent<PlayerInput>().enabled = m_IsPaused;
-        transform.root.GetComponent<HandInventory>().SetControlsActive(m_IsPaused);
+        m_HandInventory.EnablePickingUp = m_IsPaused;
+        m_HandInventory.SetControlsActive(m_IsPaused);
         m_IsPaused = !m_IsPaused;
         ChangeCursorState();
     }
@@ -160,8 +185,7 @@ public class GameplayMenuUI : MonoBehaviour, IDebugger
     private void Surrender()
     {
         if (!m_PlayerData.isServer) return;
-
-        transform.parent.GetComponent<PlayerManagerHUD>().SetEndGame(false);
+        transform.root.GetComponent<PlayerManagerHUD>().SetEndGame(false);
     }
 
     private void OpenSettingsMenu()

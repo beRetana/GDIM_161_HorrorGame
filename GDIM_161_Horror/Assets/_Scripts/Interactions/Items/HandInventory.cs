@@ -1,6 +1,6 @@
 using System.Collections;
 using Interactions;
-using Player;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
@@ -12,19 +12,20 @@ using System;
 public class HandInventory : NetworkBehaviour
 {
     [Header("General Settings")]
-    [SerializeField] private LayerMask _interactableLayer;
+    [SerializeField] private LayerMask m_InteractableLayers;
+    [SerializeField] private LayerMask m_Obstructables;
     [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
 
-    [Header("Interaction Physics Settings")]
-    [SerializeField] private float _pickUpRange;
+    [Space(5f), Header("Interaction Physics Settings")]
+    [SerializeField] private float m_PickUpRange;
     [SerializeField] private float _pickUpForce;
     [SerializeField] private float _linearDrag;
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
 
-    [Header("Debugging")]
+    [Space(5f), Header("Debugging")]
     [SerializeField] private bool _enableDebugging;
 
     public event Action<NetworkPickableItem> OnSwapingHands;
@@ -35,22 +36,25 @@ public class HandInventory : NetworkBehaviour
     private PlayerControls _playerControls;
     private IInteractable _interactable;
     private int _playerID;
+    private bool m_EnablePickingUp;
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
+    public bool EnablePickingUp { get { return m_EnablePickingUp; } set { m_EnablePickingUp = value; } }
+
     private class InventorySlot
     {
-        private NetworkPickableItem _pickableItem;
+        private NetworkPickableItem m_Item;
         private Rigidbody _itemRigidBody;
-        private Transform _itemTransform;
+        private Transform m_HandTransform;
         private bool _isDominant;
 
-        public NetworkPickableItem Item { get { return _pickableItem; } set { _pickableItem = value; } }
+        public NetworkPickableItem Item { get { return m_Item; } set { m_Item = value; } }
 
         public Rigidbody ItemRigidBody { get { return _itemRigidBody; } set { _itemRigidBody = value; } }
 
-        public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
+        public Transform ItemTransform { get { return m_HandTransform; } set { m_HandTransform = value; } }
         public bool IsDominant { get { return _isDominant; } set { _isDominant = value; } }
 
         public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
@@ -65,7 +69,7 @@ public class HandInventory : NetworkBehaviour
         public Rigidbody RemoveRigidBody()
         {
             Rigidbody rigidBodyToDrop = ItemRigidBody;
-
+            if (rigidBodyToDrop == null) return null;
             // Re-eanble physics
             ItemRigidBody.isKinematic = false;
             ItemRigidBody.useGravity = true;
@@ -197,8 +201,14 @@ public class HandInventory : NetworkBehaviour
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        SceneManager.sceneLoaded += OnSceneLoaded;
         if (!isLocalPlayer) return;
         SetUpControls();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        m_EnablePickingUp = scene.name == NewNetworkManager.NewSingleton.GameplaySceneName;
     }
 
     public void SetControlsActive(bool state)
@@ -222,7 +232,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DisableControls()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || _playerControls == null) return;
         _playerControls.Player.Interact.started -= OnInteraction;
         _playerControls.Player.Interact.canceled -= OnInteraction;
         _playerControls.Player.Interact.performed -= OnInteraction;
@@ -230,6 +240,11 @@ public class HandInventory : NetworkBehaviour
         _playerControls.Player.UseItem.canceled -= OnUsePickable;
         _playerControls.Player.UseItem.performed -= OnUsePickable;
         _playerControls.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void OnDisable()
@@ -245,6 +260,7 @@ public class HandInventory : NetworkBehaviour
 
     private void Update()
     {
+        if (!m_EnablePickingUp) return;
         CheckForRaycastInteractables();
     }
 
@@ -254,12 +270,12 @@ public class HandInventory : NetworkBehaviour
     private void CheckForRaycastInteractables()
     {
         Ray rayToInteract = _playerCamera.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
-
-        // If we hit something in the layer.
-        if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
+        bool wasSomethingHit = Physics.Raycast(rayToInteract, out RaycastHit hitInfo, m_PickUpRange, m_InteractableLayers | m_Obstructables);
+        
+        // Did we hit something and is this something in the interactable layer?
+        if (wasSomethingHit && (((1 << hitInfo.collider.gameObject.layer) & m_InteractableLayers) != 0))
         {
-
-            IInteractable newInteractable = hitInfo.transform.GetComponentInChildren<IInteractable>();
+            IInteractable newInteractable = hitInfo.transform.root.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something in the previous frame.
             if (_interactable == null && newInteractable != null)

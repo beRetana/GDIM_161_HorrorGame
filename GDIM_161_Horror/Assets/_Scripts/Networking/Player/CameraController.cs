@@ -6,15 +6,15 @@ using UnityEngine.InputSystem;
 
 public class CameraController : NetworkBehaviour
 {
-    [SerializeField] private GameObject _cameraBrain;
-    [SerializeField] private GameObject _playerCamera;
+    [SerializeField] private GameObject m_PlayerFollowCamera;
+    [SerializeField] private GameObject m_PlayerCamera;
+    [SerializeField] private GameObject m_CameraHolder;
 
-    private FirstPersonController _playerController;
-    private StarterAssetsInputs _playerStarterInput;
-    private BasicRigidBodyPush _basicRigidBodyPush;
-    private PlayerArticulations _playerArticulations;
-    private HandInventory _handInventory;
-    private PlayerInput _playerInput;
+    private PlayerInput m_PlayerInput;
+    private CharacterController m_CharacterController;
+
+    private FirstPersonController m_FirstPersonController;
+    private HandInventory m_HandInventory;
 
     override public void OnStartAuthority()
     {
@@ -23,31 +23,40 @@ public class CameraController : NetworkBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        if (isLocalPlayer) ToggleObjects(true);
+        if (!isLocalPlayer) return;
+        bool isGameplayScene = scene.name == NewNetworkManager.NewSingleton.GameplaySceneName;
+        ToggleObjects(isGameplayScene);
     }
 
     private void Start()
     {
-        _playerController = GetComponent<FirstPersonController>();
-        _playerStarterInput = GetComponent<StarterAssetsInputs>();
-        _basicRigidBodyPush = GetComponent<BasicRigidBodyPush>();
-        _playerArticulations = GetComponent<PlayerArticulations>();
-        _handInventory = GetComponent<HandInventory>();
-        _playerInput = GetComponent<PlayerInput>();
+        m_CharacterController = GetComponent<CharacterController>();
+        m_PlayerInput = GetComponent<PlayerInput>();
+
+        m_FirstPersonController = GetComponent<FirstPersonController>();
+        m_HandInventory = GetComponent<HandInventory>();
 
         ToggleObjects(false);
     }
 
     void ToggleObjects(bool active)
     {
-        _playerController.enabled = active;
-        _playerStarterInput.enabled = active;
-        _playerInput.enabled = active;
-        _basicRigidBodyPush.enabled = active;
-        _playerArticulations.enabled = active;
-        //_handInventory.enabled = active;
-        _cameraBrain.SetActive(active);
-        _playerCamera.SetActive(active);
+        m_PlayerFollowCamera.SetActive(active);
+        m_PlayerCamera.SetActive(active);
+        m_CameraHolder.SetActive(active);
+
+        m_CharacterController.enabled = active;
+        m_PlayerInput.enabled = active;
+        
+        m_FirstPersonController.enabled = active;
+        m_HandInventory.enabled = active;
+        m_HandInventory.EnablePickingUp = active;
+    }
+
+    private void ResetPlayerState()
+    {
+        
+
     }
 
     private void OnDestroy()

@@ -13,12 +13,10 @@ public class PlayerAnimator : MonoBehaviour
     {
         m_PlayerAnimator = GetComponent<Animator>();
     }
-
     public void SetAnimSpeed(float speed)
     {
         m_PlayerAnimator?.SetFloat(SPEED, speed);
     }
-
     public void SetAnimJump(bool jump)
     {
         m_PlayerAnimator?.SetBool(JUMP, jump);

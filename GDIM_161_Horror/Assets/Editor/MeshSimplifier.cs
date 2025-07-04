@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine;
 using UnityMeshSimplifier; // Make sure the library is imported
 
 public class SimplifyMeshEditor : EditorWindow

@@ -4,10 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerManager : NetworkBehaviour
 {
-    [SerializeField] private const string MAIN_SCENE = "BUILD_MainMenu";
-
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
+    private string m_MainSceneName;
     protected static bool _debug;
 
     private NewNetworkManager _networkmanager;
@@ -32,6 +31,7 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
+        m_MainSceneName = NewNetworkManager.NewSingleton.GetMainMenuScene();
         SceneManager.sceneLoaded += DestroyOnMainMenu;
     }
 
@@ -49,7 +49,7 @@ public class PlayerManager : NetworkBehaviour
     }
     private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == MAIN_SCENE && gameObject != null)
+        if (scene.name == m_MainSceneName && gameObject != null)
         {
             SceneManager.sceneLoaded -= DestroyOnMainMenu;
             Destroy(this.gameObject);

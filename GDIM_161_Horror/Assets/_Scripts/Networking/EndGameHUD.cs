@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using System;
 using TMPro;
 
-public class EndGameUI : MonoBehaviour
+public class EndGameHUD : MonoBehaviour
 {
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;

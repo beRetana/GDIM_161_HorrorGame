@@ -33,16 +33,18 @@ public class PlayerDataTracker : NetworkBehaviour
 
     private void Start()
     {
-        m_SavedPosition = Vector3.zero;
         m_PlayerController = GetComponent<PlayerObjectController>();
         m_FirstPersonController = GetComponent<FirstPersonController>();
         m_FirstPersonController.OnPlayerUp += OnPlayerKnocked;
         SceneManager.sceneLoaded += OnLoadedGameScene;
+        SceneManager.sceneLoaded += OnReturnToLobby;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         m_FirstPersonController.OnPlayerUp -= OnPlayerKnocked;
+        SceneManager.sceneLoaded -= OnReturnToLobby;
+        SceneManager.sceneLoaded -= OnLoadedGameScene;
     }
 
     private void OnLoadedGameScene(Scene scene, LoadSceneMode mode)
@@ -52,10 +54,24 @@ public class PlayerDataTracker : NetworkBehaviour
         m_StartTime = (ulong) Time.time;
         m_PlayerSteamID = m_PlayerController.PlayerSteamID;
         m_PlayerName = m_PlayerController.PlayerName;
+        m_SavedPosition = Vector3.zero;
         if (!isServer) return;
         m_TrialNumber = UnityEngine.Random.Range(1000, 10000);
+    }
 
-        SceneManager.sceneLoaded -= OnLoadedGameScene;
+    private void OnReturnToLobby(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != NewNetworkManager.NewSingleton.GetLobbyScene()) return;
+
+        m_StartTime = 0;
+        m_RezzedUpCount = 0;
+        m_TotalTime = 0;
+        m_TrialNumber = 0;
+        
+        for (byte i = 0; i < m_TimePerFloor.Length; ++i)
+        {
+            m_TimePerFloor[i] = 0;
+        }
     }
 
     public void OnReachedNewFloor(byte floorNum)

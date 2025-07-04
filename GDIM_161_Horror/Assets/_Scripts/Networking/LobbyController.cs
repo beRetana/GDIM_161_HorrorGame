@@ -50,6 +50,15 @@ public class LobbyController : MonoBehaviour
         if(Instance == null) {Instance = this;}
     }
 
+    private void Start()
+    {
+        LocalPlayerObject = GameObject.Find("LocalGamePlayer");
+        if (LocalPlayerObject == null) return;
+        LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
+        UpdatePlayerList();
+        UpdateLobbyName();
+    }
+
     public void ReadyPlayer()
     {
         LocalplayerController.ChangeReady();
@@ -118,7 +127,7 @@ public class LobbyController : MonoBehaviour
     public void FindLocalPlayer()
     {
         LocalPlayerObject = GameObject.Find("LocalGamePlayer");
-        LocalplayerController= LocalPlayerObject.GetComponent<PlayerObjectController>();
+        LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
     }
 
     public void CreateHostPlayerItem()

@@ -2,9 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 namespace StarterAssets
 {
@@ -20,11 +18,8 @@ namespace StarterAssets
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
-		[SerializeField] private string _buildScene = "Floor0";
         public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
-
-#if ENABLE_INPUT_SYSTEM
 
 		private void Start()
 		{
@@ -33,11 +28,19 @@ namespace StarterAssets
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadingmode)
         {
-			if (SceneManager.GetActiveScene().name == _buildScene)
+			if (scene.name == NewNetworkManager.NewSingleton.GameplaySceneName)
 			{
-				SetCursorState(cursorLocked);
-                SceneManager.sceneLoaded -= OnSceneLoaded;
+				SetCursorLocked(true);
             }
+			else
+			{
+                SetCursorLocked(false);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         public void OnMove(InputValue value)
@@ -62,7 +65,6 @@ namespace StarterAssets
 		{
 			ToggleSprint();
 		}
-#endif
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
@@ -84,7 +86,7 @@ namespace StarterAssets
 			sprint = !sprint;
 		}
 
-		private void SetCursorState(bool newState)
+		private void SetCursorLocked(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}

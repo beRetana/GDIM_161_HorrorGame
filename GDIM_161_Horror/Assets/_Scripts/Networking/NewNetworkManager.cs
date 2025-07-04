@@ -21,6 +21,11 @@ public class NewNetworkManager : NetworkManager
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
+    public override void Start()
+    {
+        base.Start();
+        SceneManager.sceneLoaded += SetPlayersPosition;
+    }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
@@ -35,6 +40,18 @@ public class NewNetworkManager : NetworkManager
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
             LobbyController.Instance.UpdatePlayerList();
+        }
+    }
+
+    private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != GetSceneName(onlineScene)) return;
+        
+        for (int i = 0; i < _spawnCount; i++)
+        {
+            PlayerBase player = PlayerManager.Instance.GetPlayer(i);
+            player.transform.position = _spawnPoints[i].position;
+            player.transform.rotation = _spawnPoints[i].rotation;
         }
     }
 
@@ -53,14 +70,19 @@ public class NewNetworkManager : NetworkManager
         m_GameplaySceneName = name;
     }
 
-    public string GetOnlineScene()
+    public string GetLobbyScene()
     {
         return GetSceneName(onlineScene);
     }
 
-    public string GetOfflineScene()
+    public string GetMainMenuScene()
     {
         return GetSceneName(offlineScene);
+    }
+
+    public bool IsGameplayScene(string sceneName)
+    {
+        return sceneName == m_GameplaySceneName;
     }
 
     public override void OnStopHost()

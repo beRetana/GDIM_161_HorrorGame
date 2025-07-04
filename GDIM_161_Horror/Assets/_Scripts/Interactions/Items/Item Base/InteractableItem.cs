@@ -4,6 +4,7 @@ using TMPro;
 using Mirror;
 using OtherUtils;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class allows items to be interacted with a player.
@@ -94,6 +95,7 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     public virtual void StoppedDetecting(int playerID)
     {
         Debugger($"Player {playerID} stopped detecting");
+        if (!m_IsInteractable) return;
         PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<NetworkPlayerUI>().HideInteractUI();
     }
@@ -101,6 +103,7 @@ public class InteractableItem : MonoBehaviour, IInteractable, IDebugger
     public virtual void StopDetecting(int playerID)
     {
         Debugger($"Player {playerID} wants to stop detecting");
+        if (!m_IsInteractable) return;
         PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<NetworkPlayerUI>().HideInteractUI();
     }
