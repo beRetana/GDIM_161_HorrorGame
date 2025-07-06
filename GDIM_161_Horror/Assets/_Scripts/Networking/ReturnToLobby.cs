@@ -36,6 +36,7 @@ public class ReturnToLobby : NetworkBehaviour
     [ClientRpc]
     private void CleanUpScene()
     {
+        if (!isLocalPlayer) return;
         m_PlayerManagerHUD.ResetGameUI();
     }
 }
