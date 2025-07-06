@@ -35,25 +35,27 @@ public class Bone : NetworkPickableItem
         base.Start();
         m_BonePieces = new Stack<BonePiece>();
         m_State = BoneState.Uncrushed;
-        if (!isServer) return;
         SpawnPooledObject();
     }
 
-    [Server]
     private void SpawnPooledObject()
     {
         for (int i = 0; i < m_MaxUses; ++i)
         {
             BonePiece piece = Instantiate(m_BonePiece).GetComponent<BonePiece>();
-            NetworkServer.Spawn(piece.transform.root.gameObject);
+            if (isServer) NetworkServer.Spawn(piece.transform.root.gameObject);
             m_BonePieces.Push(piece);
+            piece.gameObject.SetActive(false);
         }
     }
 
     [ClientRpc]
     public override void RpcSetPossessed(bool toPossess, int playerID)
     {
-        base.RpcSetPossessed(toPossess, playerID);
+        Debugger($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
+        _isPossessed = toPossess;
+        _ownerPlayerID = toPossess ? playerID : -1;
+        _interactableItem.SetInteractive(!toPossess);
 
         if (toPossess)
         {
