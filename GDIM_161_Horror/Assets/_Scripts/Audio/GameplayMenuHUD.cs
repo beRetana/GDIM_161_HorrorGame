@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using StarterAssets;
+using System.Collections;
 
 public class GameplayMenuHUD : MonoBehaviour, IDebugger
 {
@@ -185,7 +186,13 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     private void Surrender()
     {
         if (!m_PlayerData.isServer) return;
+        StartCoroutine(SurrenderSetUp());
+    }
+
+    private IEnumerator SurrenderSetUp()
+    {
         m_PlayerData.EndGame();
+        yield return new WaitForSecondsRealtime(.2f);
         PlayerManagerHUD[] playerManagerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
         for (int i = 0; i < playerManagerHUDs.Length; ++i)
         {
