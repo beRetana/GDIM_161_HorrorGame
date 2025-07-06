@@ -5,7 +5,7 @@ using System;
 using TMPro;
 using OtherUtils;
 
-public class EndGameHUD : MonoBehaviour, IDebugger
+public class EndGameHUD : NetworkBehaviour, IDebugger
 {
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
@@ -22,10 +22,11 @@ public class EndGameHUD : MonoBehaviour, IDebugger
 
     public void SetEndGameUI(bool won)
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
         SetEndGameTittle(won);
         SetStatsBoard();
+        if (!isLocalPlayer) return;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         gameObject.SetActive(true);
     }
 

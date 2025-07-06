@@ -108,7 +108,7 @@ public class PlayerDataTracker : NetworkBehaviour
         else CmdOnEndGame((ulong)Time.time - m_StartTime);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnEndGame(ulong timeStamp)
     {
         m_TotalTime = timeStamp;

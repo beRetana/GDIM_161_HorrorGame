@@ -14,7 +14,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private Transform m_ClosestLadder;
     private float m_ClosestProbability;
     private bool m_OnlyOneLadder;
-    private bool m_Debug = true;
+    private bool m_Debug;
 
     public override void OnStartClient()
     {
