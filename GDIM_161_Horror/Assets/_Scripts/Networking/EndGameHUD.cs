@@ -24,7 +24,6 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
     {
         SetEndGameTittle(won);
         SetStatsBoard();
-        if (!isLocalPlayer) return;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         gameObject.SetActive(true);

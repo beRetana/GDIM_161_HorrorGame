@@ -45,6 +45,7 @@ public class PlayerManagerHUD : NetworkBehaviour
     [ClientRpc]
     private void RpcSetEndGame(bool won)
     {
+        if (!isLocalPlayer) return;
         SetGameUIObjects(false);
         m_EndGameHUD.SetEndGameUI(won);
     }
