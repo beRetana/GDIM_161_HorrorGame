@@ -49,7 +49,7 @@ namespace Interactions
             bool success = playerInventory.PickUpItem(this);
             if (!success) return;
 
-            RpcSetPossessed(true, playerID);
+            SetPossessed(true, playerID);
             AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
         }
 

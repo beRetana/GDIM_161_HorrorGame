@@ -52,10 +52,7 @@ public class Bone : NetworkPickableItem
     [ClientRpc]
     public override void RpcSetPossessed(bool toPossess, int playerID)
     {
-        Debugger($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
-        _isPossessed = toPossess;
-        _ownerPlayerID = toPossess ? playerID : -1;
-        _interactableItem.SetInteractive(!toPossess);
+        base.RpcSetPossessed(toPossess, playerID);
 
         if (toPossess)
         {
@@ -237,7 +234,7 @@ public class Bone : NetworkPickableItem
         else CmdChangeBoneState(state);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     protected void CmdChangeBoneState(BoneState state)
     {
         Debugger($"CMD - Old State: {m_State}, New State: {state}");
