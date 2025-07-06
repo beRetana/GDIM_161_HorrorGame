@@ -188,50 +188,36 @@ public class Bone : NetworkPickableItem
 
     private void TrialDropping(int playerID)
     {
-        if (m_CurrentUses >= m_MaxUses - 1)
-        {
-            if (!isServer) return;
-            Debugger("Last use: Will auto-destroy");
-            DropPiece(playerID);
-            DisableBone(playerID);
-        }
-        else
-        {
-            Debugger("Dropping");
-            if (isServer) DropPiece(playerID);
-        }
+        if (!isServer) return;
+        DropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
     }
 
     [Server]
-    private void DisableBone(int playerID)
+    protected void DropPiece(int playerID, bool isLast)
     {
-        RpcDisableBone(playerID);
-        NetworkServer.UnSpawn(transform.root.gameObject);
+        RpcDropPiece(playerID, isLast);
     }
 
     [ClientRpc]
-    private void RpcDisableBone(int playerID)
+    protected void RpcDropPiece(int playerID, bool isLast)
     {
-        HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
-        inventory.DropAction();
-        inventory.OnSwapingHands -= OnSwappedHands;
-        gameObject.SetActive(false);
-    }
-
-    [Server]
-    protected void DropPiece(int playerID)
-    {
-        RpcDropPiece(playerID);
-    }
-
-    [ClientRpc]
-    protected void RpcDropPiece(int playerID)
-    {
+        Debugger($"Dropping bone piece");
         ++m_CurrentUses;
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
         bone.gameObject.SetActive(true);
+
+        if (!isLast) return;
+
+        Debugger("Last use: Will auto-destroy");
+
+        HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
+        inventory.DropAction();
+        inventory.OnSwapingHands -= OnSwappedHands;
+        gameObject.SetActive(false);
+
+        if (isServer) NetworkServer.UnSpawn(transform.root.gameObject);
     }
 
     protected void ChangeBoneState(BoneState state)
