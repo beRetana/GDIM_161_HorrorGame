@@ -18,7 +18,6 @@ public class StatsBoardUI : MonoBehaviour
 
     public void SetPlayerStats(PlayerDataTracker playerData)
     {
-        playerData.EndGame();
         m_UserNameText.text = $"{playerData.PlayerName}";
         m_KnockedDownCountText.text = $"{playerData.KnockedDownCount}";
         m_RezzedUpCountText.text = $"{playerData.RezzedUpCount}";

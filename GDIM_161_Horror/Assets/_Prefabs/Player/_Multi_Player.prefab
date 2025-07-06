@@ -9240,6 +9240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b623a7d28f9ba49938824ede35037f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   m_InteractionGameObject: {fileID: 5421320409027960836}
   m_InGameMenuGameObject: {fileID: 1907361313888023829}
   m_EndGameGameObject: {fileID: 702159887220238433}
@@ -9349,7 +9352,7 @@ MonoBehaviour:
   - debugScript: {fileID: 8433622899165605845}
     enabled: 0
   - debugScript: {fileID: 8870885918357595919}
-    enabled: 1
+    enabled: 0
   - debugScript: {fileID: 5006952673801610863}
     enabled: 0
   - debugScript: {fileID: 8642461380901432829}
@@ -9358,6 +9361,8 @@ MonoBehaviour:
     enabled: 0
   - debugScript: {fileID: 1129435193302970825}
     enabled: 0
+  - debugScript: {fileID: 8642461380901432829}
+    enabled: 1
 --- !u!1 &3384116487435058924
 GameObject:
   m_ObjectHideFlags: 0
