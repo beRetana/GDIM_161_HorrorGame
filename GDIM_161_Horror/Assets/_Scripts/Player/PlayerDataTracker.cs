@@ -27,7 +27,7 @@ public class PlayerDataTracker : NetworkBehaviour
     public string PlayerName => m_PlayerName;   
     public ulong[] TimesPerFloor => m_TimePerFloor;
     public ulong TotalTime => m_TotalTime;
-    public int TrialNumber => m_TrialNumber;
+    public ushort TrialNumber => m_TrialNumber;
     public ushort KnockedDownCount => m_KnockedDownCount;
     public ushort RezzedUpCount => m_RezzedUpCount;
 

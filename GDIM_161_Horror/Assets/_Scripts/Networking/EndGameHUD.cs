@@ -20,7 +20,7 @@ public class EndGameHUD : MonoBehaviour
 
     private void SetEndGameTittle(bool success)
     {
-        int trialNum = transform.root.GetComponent<PlayerDataTracker>().TrialNumber;
+        ushort trialNum = transform.root.GetComponent<PlayerDataTracker>().TrialNumber;
         m_EndGameTitle.text = $"Trial #{trialNum}: {(success ? "Successful" : "Failed")}";
     }
 
