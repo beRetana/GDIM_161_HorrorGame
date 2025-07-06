@@ -70,11 +70,11 @@ public class LadderManager : NetworkBehaviour, IDebugger
     {
         Debugger("Setting Ladder active in Server");
         //m_Ladders[index].gameObject.SetActive(true);
-        SetLadderActive(index);
+        RpcSetLadderActive(index);
     }
 
     [ClientRpc]
-    public void SetLadderActive(int index)
+    public void RpcSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Client");
         m_Ladders[index].gameObject.SetActive(true);
