@@ -4,6 +4,8 @@ using FMODUnity;
 using FMOD.Studio;
 using System;
 using Mirror;
+using Unity.VisualScripting;
+using UnityEngine.Splines.Interpolators;
 
 
 namespace Interactions
@@ -13,7 +15,7 @@ namespace Interactions
         private const int SECONDS_PER_MINUTE = 60;
 
         [Header("Gameplay Stuff")]
-        [SerializeField, Range(1f, 20f)] float approxWoodLife_Minutes;
+        [SerializeField, Range(1f, 20f)] float APROX_WOOD_LIFE_MINUTES = 8f;
         [SerializeField, Range(0f, 1f)] float maxTickVariance_WoodBurn;
         [SerializeField, Range(1f, 1.2f)] float tickSpeedMultiplier_ByFloor;
         [Tooltip("Pyrolysis is the process of thermal decomposition of materials at elevated temperatures, often in an inert atmosphere without access to oxygen.")]
@@ -22,6 +24,7 @@ namespace Interactions
         [Header("Model Stuff")]
         [SerializeField] Transform torchAnchor;
         [SerializeField] Transform torchWood;
+        [SerializeField] private Transform m_CartoonFireTransform;
         [SerializeField] FireCollision torchFireCollider;
 
         [Header("Fire Stuff")]
@@ -40,6 +43,8 @@ namespace Interactions
             , Range(1.1f, 10f)] float flameGrowCurveB = 5f;
 
         [SerializeField] Light torchLight;
+        [SerializeField] private float m_StartTemp;
+        [SerializeField] private float m_EndTemp;
 
 
         [SerializeField] LayerMask groundLayers;
@@ -69,17 +74,15 @@ namespace Interactions
         protected override void Start()
         {
             base.Start();
-            BurnTimer = SECONDS_PER_MINUTE * approxWoodLife_Minutes;
+            BurnTimer = SECONDS_PER_MINUTE * APROX_WOOD_LIFE_MINUTES;
             pyrolysisTimer = BurnTimer / pyrolysisIncrements;
             isLit = false;
             maxTorchWoodScale = torchWood.localScale.y;
             maxFireLocalYPos = flameBase.localPosition.y;
             maxFlameSize = flameRed.localScale.y;
             maxLightIntensity = torchLight.intensity;
-            //torchFireCollider.enabled = false;
 
             ToggleFlame(false);
-            //LightFlame();
         }
 
         protected void Update()
@@ -126,17 +129,21 @@ namespace Interactions
             {
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchFlicker, this.transform.position);
                 WoodPyrolysis();
-                pyrolysisTimer = approxWoodLife_Minutes * SECONDS_PER_MINUTE / pyrolysisIncrements;
+                pyrolysisTimer = APROX_WOOD_LIFE_MINUTES * SECONDS_PER_MINUTE / pyrolysisIncrements;
             }
         }
 
         private void WoodPyrolysis()
         {
-            torchWoodScale = maxTorchWoodScale * BurnTimer / SECONDS_PER_MINUTE / approxWoodLife_Minutes;
+            float burntRatio = ((BurnTimer / SECONDS_PER_MINUTE) / APROX_WOOD_LIFE_MINUTES);
+            torchWoodScale = maxTorchWoodScale * burntRatio;
             torchWood.localScale = new Vector3(torchWood.localScale.x, torchWoodScale, torchWood.localScale.z);
 
-            float flameBaseNewLocalPosY = maxFireLocalYPos * BurnTimer / SECONDS_PER_MINUTE / approxWoodLife_Minutes;
+            float flameBaseNewLocalPosY = maxFireLocalYPos * burntRatio;
             flameBase.localPosition = new Vector3(flameBase.localPosition.x, flameBaseNewLocalPosY, flameBase.localPosition.z);
+
+            m_CartoonFireTransform.localScale = Vector3.one * burntRatio;
+            torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * burntRatio; // Lerping starting temperature to ending temperature.
         }
 
         private void UpdateTimers()
@@ -298,18 +305,6 @@ namespace Interactions
             FlameFullSize();
         }
         #endregion flame_animations
-
-        /*public override void UnPossessItem()
-        {
-            isDropping = true;
-            base.UnPossessItem();
-        }*/
-
-
-        //public void BurnOutFlame() // via end of wood
-        //public void SmotherFlame() // via dropping
-
-        //watch velocity (and air pressure) or burn out
 
     }
 }

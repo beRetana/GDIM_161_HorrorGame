@@ -334,12 +334,13 @@ MonoBehaviour:
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
   _debugger: 1
   _itemCollider: {fileID: 5805892794512141954}
-  approxWoodLife_Minutes: 8
+  APROX_WOOD_LIFE_MINUTES: 3
   maxTickVariance_WoodBurn: 0.192
   tickSpeedMultiplier_ByFloor: 1.0887
   pyrolysisIncrements: 36
   torchAnchor: {fileID: 6588639178972943521}
   torchWood: {fileID: 3971938011049401888}
+  m_CartoonFireTransform: {fileID: 3537192805417338143}
   torchFireCollider: {fileID: 6669948610441848201}
   flameVFX: {fileID: 8722598697619703172}
   flameBase: {fileID: 8335155052713882908}
@@ -348,10 +349,12 @@ MonoBehaviour:
   flameYellow: {fileID: 6988247757481889620}
   flameDecayRate: -1.5
   lightDecayRate: -0.5
-  flameBurnOutTime: 8
+  flameBurnOutTime: 3
   flameGrowRate: 1.5
   flameGrowCurveB: 5
   torchLight: {fileID: 4174040731823340474}
+  m_StartTemp: 3500
+  m_EndTemp: 1500
   groundLayers:
     serializedVersion: 2
     m_Bits: 8
@@ -373,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Intensity
-      value: 230
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Lightmapping
@@ -386,6 +389,14 @@ PrefabInstance:
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_BounceIntensity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_ColorTemperature
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Shadows.m_Strength
@@ -402,6 +413,26 @@ PrefabInstance:
     - target: {fileID: 1874209195362438417, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084189660293849149, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084189660293849149, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084189660293849149, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084189660293849149, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084189660293849149, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 2158269377861748766, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_LocalScale.x
@@ -459,6 +490,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4480690481743180300, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4480690481743180300, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4480690481743180300, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5147642221356811096, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_CustomShadowLayers
       value: 0
@@ -491,13 +534,41 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 6422255582709531840, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422255582709531840, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422255582709531840, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422255582709531840, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422255582709531840, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 7413278225236474829, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7636870637107533376, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8314990025205526422, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8314990025205526422, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640300082861648025, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Layer
