@@ -1,6 +1,7 @@
 using Mirror;
 using OtherUtils;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class LadderManager : NetworkBehaviour, IDebugger
@@ -29,6 +30,12 @@ public class LadderManager : NetworkBehaviour, IDebugger
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
 
+        StartCoroutine(LaddersOnStart());
+    }
+
+    private IEnumerator LaddersOnStart()
+    {
+        yield return new WaitForSecondsRealtime(1f);
         ActivateLadders(Vector3.zero);
     }
 
