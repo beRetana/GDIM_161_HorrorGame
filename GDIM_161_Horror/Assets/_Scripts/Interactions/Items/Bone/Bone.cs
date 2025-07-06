@@ -50,7 +50,8 @@ public class Bone : NetworkPickableItem
         }
     }
 
-    public override void RpcSetPossessed(bool toPossess, int playerID = 0)
+    [ClientRpc]
+    public override void RpcSetPossessed(bool toPossess, int playerID)
     {
         base.RpcSetPossessed(toPossess, playerID);
 

@@ -68,7 +68,7 @@ namespace Interactions
             else CmdSetPossessed(isPossessed, playerID);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         public virtual void CmdSetPossessed(bool toPossess, int playerID)
         {
             RpcSetPossessed(toPossess, playerID);
