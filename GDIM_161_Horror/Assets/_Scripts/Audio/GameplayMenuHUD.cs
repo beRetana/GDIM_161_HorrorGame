@@ -179,13 +179,17 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
             m_BtnSurrenderPlayer.interactable = false;
             m_BtnSurrenderPlayer.
                 GetComponentInChildren<TextMeshProUGUI>().text = "Surrender (Waiting for Host)";
-        }   
+        }
     }
 
     private void Surrender()
     {
         if (!m_PlayerData.isServer) return;
-        transform.root.GetComponent<PlayerManagerHUD>().SetEndGame(false);
+        PlayerManagerHUD[] playerManagerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
+        for (int i = 0; i < playerManagerHUDs.Length; ++i)
+        {
+            playerManagerHUDs[i].SetEndGame(false);
+        }
     }
 
     private void OpenSettingsMenu()

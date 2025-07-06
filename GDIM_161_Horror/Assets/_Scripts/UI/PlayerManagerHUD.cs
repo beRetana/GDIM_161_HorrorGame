@@ -1,7 +1,8 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerManagerHUD : MonoBehaviour
+public class PlayerManagerHUD : NetworkBehaviour
 {
     [SerializeField] private GameObject m_InteractionGameObject;
     [SerializeField] private GameObject m_InGameMenuGameObject;
@@ -37,6 +38,19 @@ public class PlayerManagerHUD : MonoBehaviour
     }
 
     public void SetEndGame(bool won)
+    {
+        if (isServer) RpcSetEndGame(won);
+        else CmdSetEndGame(won);
+    }
+
+    [Command]
+    private void CmdSetEndGame(bool won)
+    {
+        RpcSetEndGame(won);
+    }
+
+    [ClientRpc]
+    private void RpcSetEndGame(bool won)
     {
         SetGameUIObjects(false);
         m_EndGameHUD.SetEndGameUI(won);
