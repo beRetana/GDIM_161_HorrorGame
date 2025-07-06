@@ -17,7 +17,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
 
     public override void OnStartClient()
     {
-        Debug.Log($"[LadderManager] OnStartClient called on client - netId: {netId}");
+        Debugger($"[LadderManager] OnStartClient called on client - netId: {netId}");
     }
 
     private void Start()
@@ -30,7 +30,6 @@ public class LadderManager : NetworkBehaviour, IDebugger
         if (!m_SpawnAtStart) return;
 
         ActivateLadders(Vector3.zero);
-        RpcTesting();
     }
 
     public void PlayerCheckedIn(Vector3 playerPosition)
@@ -70,14 +69,8 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private void ServerSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Server");
-        m_Ladders[index].gameObject.SetActive(true);
+        //m_Ladders[index].gameObject.SetActive(true);
         SetLadderActive(index);
-    }
-
-    [ClientRpc]
-    private void RpcTesting()
-    {
-        Debugger("RPC this should be called.");
     }
 
     [ClientRpc]
