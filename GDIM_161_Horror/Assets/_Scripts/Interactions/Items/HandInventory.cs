@@ -5,11 +5,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
 using System;
+using OtherUtils;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
 /// </summary>
-public class HandInventory : NetworkBehaviour
+public class HandInventory : NetworkBehaviour, IDebugger
 {
     [Header("General Settings")]
     [SerializeField] private LayerMask m_InteractableLayers;
@@ -110,7 +111,7 @@ public class HandInventory : NetworkBehaviour
             L_HandSlot.SetDominant(isLHandDom);
             R_HandSlot.SetDominant(!isLHandDom);
             IsLHandDom = isLHandDom;
-            Debugger(this);
+            StaticDebugger(this.ToString());
         }
 
         // Indexing
@@ -143,14 +144,14 @@ public class HandInventory : NetworkBehaviour
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
+                StaticDebugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
+                StaticDebugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
@@ -181,13 +182,13 @@ public class HandInventory : NetworkBehaviour
 
         public InventorySlot GetDominantHand()
         {
-            Debugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
+            StaticDebugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
             return this[IsLHandDom ? 0 : 1];
         }
 
         public InventorySlot GetOffHand()
         {
-            Debugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
+            StaticDebugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
             return this[IsLHandDom ? 1 : 0];
         }
 
@@ -276,7 +277,7 @@ public class HandInventory : NetworkBehaviour
         // Did we hit something and is this something in the interactable layer?
         if (wasSomethingHit && (((1 << hitInfo.collider.gameObject.layer) & m_InteractableLayers) != 0))
         {
-            IInteractable newInteractable = hitInfo.transform.root.GetComponentInChildren<IInteractable>();
+            IInteractable newInteractable = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something in the previous frame.
             if (_interactable == null && newInteractable != null)
@@ -420,7 +421,12 @@ public class HandInventory : NetworkBehaviour
         Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
-            if (isServer) ExecuteInteraction(_playerID, _interactable, context);
+            if (isServer)
+            {
+                Debugger($"The item {(_interactable as PolyInteractable).transform.parent.gameObject.name} has order: {(_interactable as PolyInteractable).Order}");
+                RpcOnPolyInteract(_interactable.GetNetworkID(), _playerID,
+                (_interactable as PolyInteractable).Order, context);
+            }
             else CmdOnPolyInteract(_interactable.GetNetworkID(), _playerID,
                 (_interactable as PolyInteractable).Order, context);
             _interactable = null;
@@ -437,11 +443,13 @@ public class HandInventory : NetworkBehaviour
     {
         Debugger($"RPC OnInteract being called");
         Debugger($"Interactable is: {interactableID.name}");
+        Debugger($"Poly Interactable of order: {order}");
         if (playerID != _playerID) return;
 
         PolyInteractable[] interactables = interactableID.GetComponentsInChildren<PolyInteractable>();
         foreach(PolyInteractable interactable in interactables)
         {
+            Debugger($"The item is {interactable.name} with order: {interactable.Order}");
             if (interactable.Order == order)
             {
                 ExecuteInteraction(_playerID, interactable, inputData);
@@ -520,9 +528,13 @@ public class HandInventory : NetworkBehaviour
         return _inventorySlots.GetDominantHand().Item;
     }
 
-    private static void Debugger(object log)
+    public static void StaticDebugger(string log)
     {
         if (_staticDebugging) Debug.Log(log);
+    }
+    public void Debugger(object log)
+    {
+        if (_enableDebugging) Debug.Log(log);
     }
 
     // This is to get references to the players through the network but player manager does this already.
@@ -537,5 +549,10 @@ public class HandInventory : NetworkBehaviour
         SwapAction();
         yield return null;
         ThrowAction();
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        _enableDebugging = active;
     }
 }
