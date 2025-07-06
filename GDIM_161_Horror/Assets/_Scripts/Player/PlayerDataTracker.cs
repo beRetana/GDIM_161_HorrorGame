@@ -19,7 +19,7 @@ public class PlayerDataTracker : NetworkBehaviour
     [SyncVar] private ulong m_TotalTime;
     [SyncVar] private ushort m_KnockedDownCount;
     [SyncVar] private ushort m_RezzedUpCount;
-    [SyncVar] private int m_TrialNumber;
+    private static ushort m_TrialNumber;
 
     public Vector3 SavedPosition { get { return m_SavedPosition; } 
                                    set { m_SavedPosition = value; } }
@@ -55,8 +55,15 @@ public class PlayerDataTracker : NetworkBehaviour
         m_PlayerSteamID = m_PlayerController.PlayerSteamID;
         m_PlayerName = m_PlayerController.PlayerName;
         m_SavedPosition = Vector3.zero;
-        if (!isServer) return;
-        m_TrialNumber = UnityEngine.Random.Range(1000, 10000);
+        if (!isServer || !isLocalPlayer) return;
+        m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
+        RpcSetTrialNumber(m_TrialNumber);
+    }
+
+    [ClientRpc]
+    private void RpcSetTrialNumber(ushort number)
+    {
+        m_TrialNumber = number;
     }
 
     private void OnReturnToLobby(Scene scene, LoadSceneMode mode)
