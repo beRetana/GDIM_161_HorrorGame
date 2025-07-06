@@ -18,7 +18,7 @@ public class Bone : NetworkPickableItem
     protected Stack<BonePiece> m_BonePieces;
     protected Transform m_PlayerCameraTransform;
     protected PlayerInteractionsHUD m_PlayerHUD;
-    [SyncVar] protected int m_CurrentUses;
+    protected int m_CurrentUses;
     protected bool m_IsOnDominantHand;
     [SyncVar] protected BoneState m_State;
 
