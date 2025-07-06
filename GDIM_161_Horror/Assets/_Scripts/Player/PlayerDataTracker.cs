@@ -109,16 +109,16 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         m_TimePerFloor[floorNum] = timeStamp;
     }
 
+    [Server]
     public void EndGame()
     {
-        if (isServer) m_TotalTime = (ulong)Time.time - m_StartTime;
-        else CmdOnEndGame((ulong)Time.time - m_StartTime);
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdOnEndGame(ulong timeStamp)
-    {
-        m_TotalTime = timeStamp;
+        m_TotalTime = (ulong)Time.time - m_StartTime;
+        PlayerDataTracker[] playerDataTrackers = FindObjectsByType<PlayerDataTracker>(FindObjectsSortMode.None);
+        
+        foreach (PlayerDataTracker player in playerDataTrackers)
+        {
+            player.m_TotalTime = m_TotalTime;
+        }
     }
 
     private void OnPlayerKnocked(bool isPlayerUp)

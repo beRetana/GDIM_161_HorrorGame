@@ -43,7 +43,6 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
         for (byte i = 0; i < playersInGame.Length; ++i)
         {
             Debugger($"Player {playersInGame[i].gameObject.name} for stats");
-            playersInGame[i].EndGame();
             m_StatsBoardUI[i].SetPlayerStats(playersInGame[i]);
             m_StatsBoardUI[i].gameObject.SetActive(true);
         }

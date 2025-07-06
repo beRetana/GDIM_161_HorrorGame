@@ -185,6 +185,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     private void Surrender()
     {
         if (!m_PlayerData.isServer) return;
+        m_PlayerData.EndGame();
         PlayerManagerHUD[] playerManagerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
         for (int i = 0; i < playerManagerHUDs.Length; ++i)
         {
