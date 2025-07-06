@@ -19,7 +19,7 @@ public class PlayerDataTracker : NetworkBehaviour
     [SyncVar] private ulong m_TotalTime;
     [SyncVar] private ushort m_KnockedDownCount;
     [SyncVar] private ushort m_RezzedUpCount;
-    private static ushort m_TrialNumber;
+    [SyncVar] private ushort m_TrialNumber;
 
     public Vector3 SavedPosition { get { return m_SavedPosition; } 
                                    set { m_SavedPosition = value; } }
@@ -27,7 +27,7 @@ public class PlayerDataTracker : NetworkBehaviour
     public string PlayerName => m_PlayerName;   
     public ulong[] TimesPerFloor => m_TimePerFloor;
     public ulong TotalTime => m_TotalTime;
-    public ushort TrialNumber => m_TrialNumber;
+    public ushort TrialNumber { get { return m_TrialNumber; } set { m_TrialNumber = value; } };
     public ushort KnockedDownCount => m_KnockedDownCount;
     public ushort RezzedUpCount => m_RezzedUpCount;
 
@@ -63,7 +63,11 @@ public class PlayerDataTracker : NetworkBehaviour
     [ClientRpc]
     private void RpcSetTrialNumber(ushort number)
     {
-        m_TrialNumber = number;
+        PlayerDataTracker[] playersInGame = FindObjectsByType<PlayerDataTracker>(FindObjectsSortMode.None);
+        foreach(PlayerDataTracker p in playersInGame)
+        {
+            p.TrialNumber = number;
+        }
     }
 
     private void OnReturnToLobby(Scene scene, LoadSceneMode mode)
