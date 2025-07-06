@@ -221,6 +221,12 @@ public class Bone : NetworkPickableItem
     [Server]
     protected void DropPiece(int playerID)
     {
+        RpcDropPiece(playerID);
+    }
+
+    [ClientRpc]
+    protected void RpcDropPiece(int playerID)
+    {
         ++m_CurrentUses;
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;

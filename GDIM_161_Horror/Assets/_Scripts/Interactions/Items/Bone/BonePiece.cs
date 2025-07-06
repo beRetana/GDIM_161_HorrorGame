@@ -10,6 +10,18 @@ public class BonePiece : NetworkBehaviour
         gameObject.SetActive(false);
     }
 
+    public void SetObjectActive(bool active)
+    {
+        if (isServer) RpcSetObjectActive(active);
+        else CmdSetObjectActive(active);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdSetObjectActive(bool active)
+    {
+        RpcSetObjectActive(active);
+    }
+
     [ClientRpc]
     public void RpcSetObjectActive(bool value)
     {
