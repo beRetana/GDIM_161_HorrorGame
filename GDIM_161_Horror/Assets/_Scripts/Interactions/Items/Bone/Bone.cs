@@ -231,7 +231,7 @@ public class Bone : NetworkPickableItem
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
         bone.transform.position = m_SpawnPoint.position;
-        bone.SetObjectActive(true);
+        bone.gameObject.SetActive(true);
     }
 
     protected void ChangeBoneState(BoneState state)
