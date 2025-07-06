@@ -3,8 +3,9 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine;
 using StarterAssets;
+using OtherUtils;
 
-public class PlayerDataTracker : NetworkBehaviour
+public class PlayerDataTracker : NetworkBehaviour, IDebugger
 {
     private PlayerObjectController m_PlayerController;
     private FirstPersonController m_FirstPersonController;
@@ -20,6 +21,8 @@ public class PlayerDataTracker : NetworkBehaviour
     [SyncVar] private ushort m_KnockedDownCount;
     [SyncVar] private ushort m_RezzedUpCount;
     [SyncVar] private ushort m_TrialNumber;
+
+    private bool m_Debugger;
 
     public Vector3 SavedPosition { get { return m_SavedPosition; } 
                                    set { m_SavedPosition = value; } }
@@ -57,15 +60,15 @@ public class PlayerDataTracker : NetworkBehaviour
         m_SavedPosition = Vector3.zero;
         if (!isServer || !isLocalPlayer) return;
         m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
-        RpcSetTrialNumber(m_TrialNumber);
+        SetTrialNumber(m_TrialNumber);
     }
 
-    [ClientRpc]
-    private void RpcSetTrialNumber(ushort number)
+    private void SetTrialNumber(ushort number)
     {
         PlayerDataTracker[] playersInGame = FindObjectsByType<PlayerDataTracker>(FindObjectsSortMode.None);
         foreach(PlayerDataTracker p in playersInGame)
         {
+            Debugger($"Setting trial number to {p.gameObject.name}");
             p.TrialNumber = number;
         }
     }
@@ -141,5 +144,15 @@ public class PlayerDataTracker : NetworkBehaviour
     private void CmdOnPlayerRezzed()
     {
         ++m_RezzedUpCount;
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log($"[{this.GetType().ToString()}] {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }
