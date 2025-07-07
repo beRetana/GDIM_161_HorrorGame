@@ -157,7 +157,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
         if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
 
-        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(2));
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
 
     public void FindLocalPlayer()
