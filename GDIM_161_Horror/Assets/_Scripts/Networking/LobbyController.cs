@@ -157,7 +157,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
         if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
 
-        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(2));
     }
 
     public void FindLocalPlayer()
@@ -267,9 +267,6 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     private void StopGame()
     {
-        if (IsLobbyEmpty(1)) 
-            SetLeaveLobby();
-        
         SteamLobby.Instance.LeaveServer();
 
         if (NetworkServer.active && NetworkClient.isConnected)
@@ -280,6 +277,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
         else
         {
             Debugger("CLIENT DISCONNECTING");
+            if (IsLobbyEmpty(1)) SetLeaveLobby();
             NetworkManager.singleton.StopClient();
         }
     }
