@@ -82,8 +82,8 @@ public class PlayerManagerHUD : NetworkBehaviour
 
     private void SetGameObjectsUI(bool active)
     {
-        m_InGameMenuGameObject.SetActive(active);
-        m_InteractionGameObject.SetActive(active);
-        m_EndGameGameObject.SetActive(!active);
+        m_InGameMenuGameObject?.SetActive(active);
+        m_InteractionGameObject?.SetActive(active);
+        m_EndGameGameObject?.SetActive(!active);
     }
 }

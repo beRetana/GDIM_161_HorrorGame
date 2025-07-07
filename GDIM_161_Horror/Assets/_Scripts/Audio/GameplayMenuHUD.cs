@@ -49,8 +49,6 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
         m_HandInventory = m_PlayerData.GetComponent<HandInventory>();
         m_PlayerInput = m_PlayerData.GetComponent<PlayerInput>();
-
-        EnableMenuUI();
     }
 
     private void OnDestroy()
