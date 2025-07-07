@@ -59,7 +59,8 @@ namespace StarterAssets
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             m_EnableFunctionality = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
-            UpdateState(PlayerStateEnum.Unlocked);
+            if (NewNetworkManager.NewSingleton.GetLobbyScene() == scene.name)
+                UpdateState(PlayerStateEnum.Unlocked);
         }
 
         private void Update()

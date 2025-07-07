@@ -5,11 +5,13 @@ using Mirror;
 using Steamworks;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
+using OtherUtils;
 
-public class LobbyController : MonoBehaviour
+public class LobbyController : NetworkBehaviour, IDebugger
 {
     public static LobbyController Instance;
-    [SerializeField] private bool debugger;
+    private bool debugger;
 
     //UI Elements
     public Text LobbyNameText;
@@ -25,8 +27,11 @@ public class LobbyController : MonoBehaviour
     private List<PlayerListItem> PlayerListItems = new List<PlayerListItem>();
     public PlayerObjectController LocalplayerController;
 
-    //Ready
-    public Button StartGameButton;
+    [Header("Buttons Functionality")]
+    [SerializeField] private Button m_BtnStartGame;
+    [SerializeField] private Button m_BtnReadyUp;
+    [SerializeField] private Button m_BtnExitLobby;
+    [SerializeField] private TextMeshProUGUI m_TxtStartGame;
     public Text ReadyButtonText;
 
     //Manager
@@ -52,14 +57,40 @@ public class LobbyController : MonoBehaviour
 
     private void Start()
     {
+        m_BtnStartGame.onClick.AddListener(StartGame);
+        m_BtnReadyUp.onClick.AddListener(ReadyPlayer);
+        m_BtnExitLobby.onClick.AddListener(StopGame);
+
+        if (IsLobbyEmpty()) m_BtnExitLobby.gameObject.SetActive(true);
+        else if (isServer) m_BtnExitLobby.gameObject.SetActive(false); 
+        else m_BtnStartGame.gameObject.SetActive(false);
+
+        StartCoroutine(SetUpLobby());
+    }
+
+    private IEnumerator SetUpLobby()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+
         LocalPlayerObject = GameObject.Find("LocalGamePlayer");
-        if (LocalPlayerObject == null) return;
-        LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
+
+        if (LocalPlayerObject != null)
+        {
+            LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
+        }
+
         UpdatePlayerList();
         UpdateLobbyName();
     }
 
-    public void ReadyPlayer()
+    private void OnDestroy()
+    {
+        m_BtnExitLobby.onClick.RemoveListener(StopGame);
+        m_BtnReadyUp.onClick.RemoveListener(ReadyPlayer);
+        m_BtnStartGame.onClick.RemoveListener(StartGame);
+    }
+
+    private void ReadyPlayer()
     {
         LocalplayerController.ChangeReady();
     }
@@ -97,16 +128,19 @@ public class LobbyController : MonoBehaviour
         {
             if(LocalplayerController.PlayerIdNumber == 0)
             {
-                StartGameButton.interactable = true;
+                m_BtnStartGame.interactable = true;
+                m_TxtStartGame.text = "Start!";
+
             }
             else
             {
-                StartGameButton.interactable = false;
+                m_BtnStartGame.interactable = false;
             }
         }
         else
         {
-            StartGameButton.interactable = false;
+            m_BtnStartGame.interactable = false;
+            m_TxtStartGame.text = "Waiting For Others";
         }
     }
 
@@ -223,13 +257,17 @@ public class LobbyController : MonoBehaviour
         }
     }
  
-    public void StartGame(string SceneName)
+    private void StartGame()
     {
-        LocalplayerController.CanStartGame(SceneName);
+        LocalplayerController.
+            CanStartGame(NewNetworkManager.NewSingleton.GameplaySceneName);
     }
 
-    public void StopGame()
+    private void StopGame()
     {
+        if (IsLobbyEmpty()) 
+            SetLeaveLobby();
+        
         SteamLobby.Instance.LeaveServer();
 
         if (NetworkServer.active && NetworkClient.isConnected)
@@ -244,8 +282,31 @@ public class LobbyController : MonoBehaviour
         }
     }
 
+    private bool IsLobbyEmpty()
+    {
+        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+
+        return (players.Length <= 2);
+    }
+
+    [Command]
+    private void SetLeaveLobby()
+    {
+        m_BtnExitLobby.gameObject.SetActive(true);
+    }
+
     private void Debugger(object log)
     {
         if (debugger) Debug.Log(log);
+    }
+
+    void IDebugger.Debugger(object log)
+    {
+        Debugger(log);
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -37,6 +37,11 @@ public class PlayerManagerHUD : NetworkBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void OnGameSceneSetUp()
     {
         SetGameObjectsUI(true);

@@ -42,6 +42,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
+    public int PlayerID => _playerID;
     public bool EnablePickingUp { get { return m_EnablePickingUp; } set { m_EnablePickingUp = value; } }
 
     private class InventorySlot

@@ -82,6 +82,7 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStopClient()
     {
         Manager.GamePlayers.Remove(this);
+        PlayerManager.Instance.RemovePlayer(GetComponent<HandInventory>().PlayerID);
         LobbyController.Instance.UpdatePlayerList();
     }
 

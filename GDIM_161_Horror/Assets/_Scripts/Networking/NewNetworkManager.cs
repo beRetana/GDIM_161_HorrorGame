@@ -4,8 +4,9 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 using Steamworks;
+using OtherUtils;
 
-public class NewNetworkManager : NetworkManager
+public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
@@ -46,10 +47,12 @@ public class NewNetworkManager : NetworkManager
     private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
     {
         if (!IsGameplayScene(scene.name)) return;
-        
-        for (int i = 0; i < _spawnCount; i++)
+
+        Debugger($"Spawning {_spawnCount} Players");
+        for (int i = 0; i < _spawnCount; ++i)
         {
             PlayerBase player = PlayerManager.Instance.GetPlayer(i);
+            Debugger($"Spawing player: {player.gameObject.name} at location: {_spawnPoints[i].position}");
             player.transform.position = _spawnPoints[i].position;
             player.transform.rotation = _spawnPoints[i].rotation;
         }
@@ -104,8 +107,13 @@ public class NewNetworkManager : NetworkManager
         return name.Substring(folder, name.IndexOf('.') - folder);
     }
 
-    private void Debugger(object log)
+    public void Debugger(object log)
     {
-        if (m_Debugger) Debug.Log(log);
+        if (m_Debugger) Debug.Log($"[{this.GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }

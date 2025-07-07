@@ -6,7 +6,6 @@ public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance {  get; private set; }
     private PlayerHolder _playerHolder;
-    private string m_MainSceneName;
     protected static bool _debug;
 
     private NewNetworkManager _networkmanager;
@@ -31,7 +30,6 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
-        m_MainSceneName = NewNetworkManager.NewSingleton.GetMainMenuScene();
         SceneManager.sceneLoaded += DestroyOnMainMenu;
     }
 
@@ -49,7 +47,7 @@ public class PlayerManager : NetworkBehaviour
     }
     private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == m_MainSceneName && gameObject != null)
+        if (scene.name == NewNetworkManager.NewSingleton.GetMainMenuScene() && gameObject != null)
         {
             SceneManager.sceneLoaded -= DestroyOnMainMenu;
             Destroy(this.gameObject);
@@ -97,6 +95,11 @@ public class PlayerManager : NetworkBehaviour
         _playerHolder.ClearPlayerHolder();
     }
 
+    public void RemovePlayer(int playerID)
+    {
+        _playerHolder.RemovePlayer(playerID);
+    }
+
     private static void Debugger(object log)
     {
         if (_debug) Debug.Log(log);
@@ -125,6 +128,23 @@ public class PlayerHolder
         playerList[totalPlayers] = player;
         //Debug.Log($"List size: {totalPlayers}");
         return totalPlayers++;
+    }
+
+    public PlayerBase RemovePlayer(int playerID)
+    {
+        if (totalPlayers <= 0)
+        {
+            Debug.LogError("ERROR: Max player count reached");
+            return null;
+        }
+        if (playerID < 0 || playerID > 4)
+        {
+            Debug.LogError("ERROR: Index Not Found");
+            return null;
+        }
+        PlayerBase toReturn = playerList[playerID];
+        playerList[playerID] = null;
+        return toReturn;
     }
 
     public PlayerBase this[int index] // index: get and set
