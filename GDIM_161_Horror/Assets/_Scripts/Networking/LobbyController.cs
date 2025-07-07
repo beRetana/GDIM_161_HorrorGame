@@ -152,10 +152,11 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     public void UpdatePlayerList()
     {
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty());
         if (!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
-        if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
-        if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
-        if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
+        if (PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
+        if (PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
+        if (PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
     }
 
     public void FindLocalPlayer()
@@ -257,8 +258,6 @@ public class LobbyController : NetworkBehaviour, IDebugger
                 ObjectToRemove = null;
             }
         }
-
-        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
  
     private void StartGame()
@@ -279,16 +278,14 @@ public class LobbyController : NetworkBehaviour, IDebugger
         else
         {
             Debugger("CLIENT DISCONNECTING");
-            if (IsLobbyEmpty(1)) SetLeaveLobby();
+            if (IsLobbyEmpty()) SetLeaveLobby();
             NetworkManager.singleton.StopClient();
         }
     }
 
-    private bool IsLobbyEmpty(int minPlayers)
+    private bool IsLobbyEmpty()
     {
-        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
-
-        return (players.Length <= minPlayers);
+        return (Manager.GamePlayers.Count <= 1);
     }
 
     [Command]
