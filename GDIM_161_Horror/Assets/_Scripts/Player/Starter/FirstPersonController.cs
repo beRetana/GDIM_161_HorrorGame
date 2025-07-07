@@ -52,7 +52,6 @@ namespace StarterAssets
 
         private void OnDestroy()
         {
-            if (!isLocalPlayer) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
