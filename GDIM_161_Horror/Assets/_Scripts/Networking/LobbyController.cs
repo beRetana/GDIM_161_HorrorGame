@@ -156,8 +156,6 @@ public class LobbyController : NetworkBehaviour, IDebugger
         if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
         if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
-
-        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
 
     public void FindLocalPlayer()
@@ -209,6 +207,8 @@ public class LobbyController : NetworkBehaviour, IDebugger
                 NetworkServer.Spawn(NewPlayerItem);
             }
         }
+
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
 
     public void UpdatePlayerItem()
@@ -257,6 +257,8 @@ public class LobbyController : NetworkBehaviour, IDebugger
                 ObjectToRemove = null;
             }
         }
+
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
  
     private void StartGame()
