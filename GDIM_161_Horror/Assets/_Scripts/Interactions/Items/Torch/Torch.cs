@@ -1,11 +1,7 @@
 using UnityEngine;
 using System.Collections;
-using FMODUnity;
-using FMOD.Studio;
 using System;
 using Mirror;
-using Unity.VisualScripting;
-using UnityEngine.Splines.Interpolators;
 
 
 namespace Interactions
@@ -61,7 +57,7 @@ namespace Interactions
 
         private float maxFireLocalYPos;
 
-        private float maxFlameSize;
+        private float minFlameSize;
         private float flameSize;
         private float maxLightIntensity;
         private float lightIntensity = -1f;
@@ -79,7 +75,7 @@ namespace Interactions
             isLit = false;
             maxTorchWoodScale = torchWood.localScale.y;
             maxFireLocalYPos = flameBase.localPosition.y;
-            maxFlameSize = flameRed.localScale.y;
+            minFlameSize = 0.2f;
             maxLightIntensity = torchLight.intensity;
 
             ToggleFlame(false);
@@ -142,8 +138,7 @@ namespace Interactions
             float flameBaseNewLocalPosY = maxFireLocalYPos * burntRatio;
             flameBase.localPosition = new Vector3(flameBase.localPosition.x, flameBaseNewLocalPosY, flameBase.localPosition.z);
 
-            m_CartoonFireTransform.localScale = Vector3.one * burntRatio;
-            torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * burntRatio; // Lerping starting temperature to ending temperature.
+            ScaleFlameScale(Mathf.Max(burntRatio, minFlameSize));
         }
 
         private void UpdateTimers()
@@ -223,6 +218,8 @@ namespace Interactions
             flameRed.localScale = newFlameScale;
             flameOrange.localScale = newFlameScale;
             flameYellow.localScale = newFlameScale;
+            torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * scalar; // Lerping starting temperature to ending temperature.
+
         }
         private void SetVisualLightIntensity(float intensePercent)
         {
@@ -233,7 +230,7 @@ namespace Interactions
         {
             isLit = true;
             torchWoodScale = maxTorchWoodScale;
-            flameSize = maxFlameSize;
+            flameSize = minFlameSize;
             torchLight.intensity = maxLightIntensity;
             ScaleFlameScale(1f);
         }
@@ -269,13 +266,12 @@ namespace Interactions
             //exponential decay
             for (float delta = 0f;  delta < burnOutTime; delta += Time.deltaTime)
             {
-                flameSize = maxFlameSize * Mathf.Exp(flameExpDecayRate * delta);
+                flameSize = minFlameSize * Mathf.Exp(flameExpDecayRate * delta);
                 lightIntensity = maxLightIntensity * Mathf.Exp(lightExpDecayRate * delta);
 
-                ScaleFlameScale(flameSize / maxFlameSize);
+                ScaleFlameScale(flameSize);
 
                 SetVisualLightIntensity(lightIntensity);
-
 
                 yield return null;
             }
