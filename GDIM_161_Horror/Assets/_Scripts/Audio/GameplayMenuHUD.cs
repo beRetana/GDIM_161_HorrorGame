@@ -45,10 +45,6 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         m_NavMeshQueryFilter = new NavMeshQueryFilter();
         m_NavMeshQueryFilter.agentTypeID = 0;
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
-        m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
-        m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
-        m_HandInventory = m_PlayerData.GetComponent<HandInventory>();
-        m_PlayerInput = m_PlayerData.GetComponent<PlayerInput>();
     }
 
     private void OnDestroy()
@@ -69,6 +65,11 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     public void EnableMenuUI()
     {
+        m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
+        m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
+        m_HandInventory = m_PlayerData.GetComponent<HandInventory>();
+        m_PlayerInput = m_PlayerData.GetComponent<PlayerInput>();
+
         gameObject.SetActive(true);
         m_MouseDot.SetActive(true);
         ChangeCursorState(false);

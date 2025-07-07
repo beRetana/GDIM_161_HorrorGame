@@ -61,7 +61,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
         m_BtnReadyUp.onClick.AddListener(ReadyPlayer);
         m_BtnExitLobby.onClick.AddListener(StopGame);
 
-        if (IsLobbyEmpty()) m_BtnExitLobby.gameObject.SetActive(true);
+        if (IsLobbyEmpty(2)) m_BtnExitLobby.gameObject.SetActive(true);
         else if (isServer) m_BtnExitLobby.gameObject.SetActive(false); 
         else m_BtnStartGame.gameObject.SetActive(false);
 
@@ -152,7 +152,8 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     public void UpdatePlayerList()
     {
-        if(!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
+        if(!IsLobbyEmpty(1)) m_BtnExitLobby.gameObject.SetActive(true);
+        if (!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
         if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
         if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
@@ -265,7 +266,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     private void StopGame()
     {
-        if (IsLobbyEmpty()) 
+        if (IsLobbyEmpty(2)) 
             SetLeaveLobby();
         
         SteamLobby.Instance.LeaveServer();
@@ -282,11 +283,11 @@ public class LobbyController : NetworkBehaviour, IDebugger
         }
     }
 
-    private bool IsLobbyEmpty()
+    private bool IsLobbyEmpty(int minPlayers)
     {
         PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
 
-        return (players.Length <= 2);
+        return (players.Length <= minPlayers);
     }
 
     [Command]

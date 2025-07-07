@@ -46,8 +46,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
     {
-        if (!IsGameplayScene(scene.name)) return;
-
         Debugger($"Spawning {_spawnCount} Players");
         for (int i = 0; i < _spawnCount; ++i)
         {
