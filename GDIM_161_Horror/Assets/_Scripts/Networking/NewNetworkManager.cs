@@ -52,6 +52,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         for (int i = 0; i < _spawnCount; ++i)
         {
             PlayerBase player = PlayerManager.Instance.GetPlayer(i);
+            Debugger($"List size is: {_spawnPoints.Length}");
             Debugger($"Spawing player: {player.gameObject.name} at location: {_spawnPoints[i].position}");
             player.transform.position = _spawnPoints[i].position;
             player.transform.rotation = _spawnPoints[i].rotation;
@@ -91,6 +92,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void OnStopHost()
     {
         SceneManager.LoadScene(offlineScene);
+        SceneManager.sceneLoaded -= SetPlayersPosition;
     }
 
     public override void OnStopClient()
