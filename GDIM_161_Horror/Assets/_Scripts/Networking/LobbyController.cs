@@ -61,9 +61,9 @@ public class LobbyController : NetworkBehaviour, IDebugger
         m_BtnReadyUp.onClick.AddListener(ReadyPlayer);
         m_BtnExitLobby.onClick.AddListener(StopGame);
 
-        if (IsLobbyEmpty(2)) m_BtnExitLobby.gameObject.SetActive(true);
-        else if (isServer) m_BtnExitLobby.gameObject.SetActive(false); 
-        else m_BtnStartGame.gameObject.SetActive(false);
+        m_BtnStartGame.gameObject.SetActive(isServer);
+
+        m_BtnExitLobby.gameObject.SetActive(!isServer || IsLobbyEmpty(1));
 
         StartCoroutine(SetUpLobby());
     }
@@ -266,7 +266,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     private void StopGame()
     {
-        if (IsLobbyEmpty(2)) 
+        if (IsLobbyEmpty(1)) 
             SetLeaveLobby();
         
         SteamLobby.Instance.LeaveServer();

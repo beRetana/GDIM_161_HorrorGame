@@ -47,13 +47,14 @@ public class NewNetworkManager : NetworkManager, IDebugger
     private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
     {
         Debugger($"Spawning {_spawnCount} Players");
-        for (int i = 0; i < _spawnCount; ++i)
+        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+        for (int i = 0; i < players.Length; ++i)
         {
-            PlayerBase player = PlayerManager.Instance.GetPlayer(i);
+            
             Debugger($"List size is: {_spawnPoints.Length}");
-            Debugger($"Spawing player: {player.gameObject.name} at location: {_spawnPoints[i].position}");
-            player.transform.position = _spawnPoints[i].position;
-            player.transform.rotation = _spawnPoints[i].rotation;
+            Debugger($"Spawing player: {players[i].gameObject.name} at location: {_spawnPoints[i].position}");
+            players[i].transform.position = _spawnPoints[i].position;
+            players[i].transform.rotation = _spawnPoints[i].rotation;
         }
     }
 

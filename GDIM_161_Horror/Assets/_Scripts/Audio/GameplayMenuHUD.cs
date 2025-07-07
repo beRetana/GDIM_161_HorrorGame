@@ -157,6 +157,8 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     public void ToggleVolumeMenu()
     {
+        if (!m_PlayerData.isLocalPlayer) return;
+
         Debugger($"The current state is paused: {m_IsPaused} the new state is pause: {!m_IsPaused}");
         if (!m_IsPaused) m_PauseMenu.SetActive(true);
         else SetMenuActive(false);
