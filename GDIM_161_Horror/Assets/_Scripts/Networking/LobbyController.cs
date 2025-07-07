@@ -152,7 +152,8 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
     public void UpdatePlayerList()
     {
-        m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
+
         if (!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
         if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
         if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
