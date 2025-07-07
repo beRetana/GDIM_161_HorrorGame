@@ -63,7 +63,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
         m_BtnStartGame.gameObject.SetActive(isServer);
 
-        m_BtnExitLobby.gameObject.SetActive(!isServer || IsLobbyEmpty(1));
+        m_BtnExitLobby.gameObject.SetActive(!isServer || IsLobbyEmpty());
 
         StartCoroutine(SetUpLobby());
     }
@@ -208,8 +208,6 @@ public class LobbyController : NetworkBehaviour, IDebugger
                 NetworkServer.Spawn(NewPlayerItem);
             }
         }
-
-        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty(1));
     }
 
     public void UpdatePlayerItem()
