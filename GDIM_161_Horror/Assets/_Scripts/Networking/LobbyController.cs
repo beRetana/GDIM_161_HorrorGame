@@ -140,7 +140,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
         else
         {
             m_BtnStartGame.interactable = false;
-            m_TxtStartGame.text = "Waiting For Others";
+            m_TxtStartGame.text = "Waiting For Players";
         }
     }
 
