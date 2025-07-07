@@ -30,7 +30,6 @@ public class ReturnToLobby : NetworkBehaviour
     private void LoadLobby()
     {
         CleanUpScene();
-        NewNetworkManager.NewSingleton.LoadLobbyScene();
     }
 
     [ClientRpc]
@@ -38,5 +37,6 @@ public class ReturnToLobby : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         m_PlayerManagerHUD.ResetGameUI();
+        NewNetworkManager.NewSingleton.LoadLobbyScene();
     }
 }
