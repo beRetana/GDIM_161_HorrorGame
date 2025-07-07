@@ -37,6 +37,6 @@ public class ReturnToLobby : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         m_PlayerManagerHUD.ResetGameUI();
-        NewNetworkManager.NewSingleton.LoadLobbyScene();
+        if (isServer) NewNetworkManager.NewSingleton.LoadLobbyScene();
     }
 }
