@@ -1,7 +1,6 @@
 using UnityEngine;
 using Mirror;
-using UnityEngine.InputSystem;
-using System;
+using UnityEngine.SceneManagement;
 using TMPro;
 using OtherUtils;
 
@@ -10,6 +9,19 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
     [SerializeField] private StatsBoardUI[] m_StatsBoardUI;
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
     private bool m_Debugger;
+
+    private void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+
+        gameObject.SetActive(false);
+    }
+
     public void Debugger(object log)
     {
         if (m_Debugger) Debug.Log(log);
