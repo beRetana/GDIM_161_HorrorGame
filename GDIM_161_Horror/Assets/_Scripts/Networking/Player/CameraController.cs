@@ -23,8 +23,7 @@ public class CameraController : NetworkBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
         if (!isLocalPlayer) return;
-        bool isGameplayScene = scene.name == NewNetworkManager.NewSingleton.GameplaySceneName;
-        ToggleObjects(isGameplayScene);
+        ToggleObjects(NewNetworkManager.NewSingleton.IsGameplayScene(scene.name));
     }
 
     private void Start()
@@ -37,7 +36,7 @@ public class CameraController : NetworkBehaviour
         ToggleObjects(false);
     }
 
-    void ToggleObjects(bool active)
+    private void ToggleObjects(bool active)
     {
         m_PlayerFollowCamera.SetActive(active);
         m_PlayerCamera.SetActive(active);
@@ -48,12 +47,6 @@ public class CameraController : NetworkBehaviour
         
         m_HandInventory.enabled = active;
         m_HandInventory.EnablePickingUp = active;
-    }
-
-    private void ResetPlayerState()
-    {
-        
-
     }
 
     private void OnDestroy()

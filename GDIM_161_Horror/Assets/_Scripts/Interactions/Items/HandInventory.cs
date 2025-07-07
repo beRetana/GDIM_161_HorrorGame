@@ -195,7 +195,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
         public int GetDominantIndex() { return IsLHandDom ? 0 : 1; }
     }
 
-    void Start()
+    private void Start()
     {
         if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
             _playerID = playerController.PlayerIdNumber;
@@ -209,7 +209,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        m_EnablePickingUp = scene.name == NewNetworkManager.NewSingleton.GameplaySceneName;
+        m_EnablePickingUp = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
         SetControlsActive(m_EnablePickingUp);
     }
 
@@ -247,6 +247,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        DisableControls();
     }
 
     public void OnDisable()

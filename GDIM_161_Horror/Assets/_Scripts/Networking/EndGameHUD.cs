@@ -10,18 +10,6 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
     private bool m_Debugger;
 
-    private void Start()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
-
-        gameObject.SetActive(false);
-    }
-
     public void Debugger(object log)
     {
         if (m_Debugger) Debug.Log(log);

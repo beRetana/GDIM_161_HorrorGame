@@ -45,7 +45,7 @@ public class NewNetworkManager : NetworkManager
 
     private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name != GetSceneName(onlineScene)) return;
+        if (!IsGameplayScene(scene.name)) return;
         
         for (int i = 0; i < _spawnCount; i++)
         {

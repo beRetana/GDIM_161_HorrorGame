@@ -31,6 +31,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     [SerializeField] private PlayerDataTracker m_PlayerData;
 
     private PlayerControls m_PlayerControls;
+    private PlayerInput m_PlayerInput;
     private FirstPersonController m_FirstPersonController;
     private CharacterController m_CharacterController;
     private HandInventory m_HandInventory;
@@ -41,49 +42,46 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     private void Start()
     {
-        m_PlayerControls = new();
         m_NavMeshQueryFilter = new NavMeshQueryFilter();
         m_NavMeshQueryFilter.agentTypeID = 0;
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
         m_CharacterController = m_PlayerData.GetComponent<CharacterController>();
         m_FirstPersonController = m_PlayerData.GetComponent<FirstPersonController>();
         m_HandInventory = m_PlayerData.GetComponent<HandInventory>();
+        m_PlayerInput = m_PlayerData.GetComponent<PlayerInput>();
 
-        SetFunctionality();
-
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == NewNetworkManager.NewSingleton.GetLobbyScene())
-        {
-            DisableInput();
-            SetMenuActive(false);
-        }
-        else if (scene.name == NewNetworkManager.NewSingleton.GameplaySceneName)
-        {
-            SetFunctionality();
-        }
+        EnableMenuUI();
     }
 
     private void OnDestroy()
     {
         DisableInput();
-        m_FirstPersonController.OnPlayerUp -= SurrenderState;
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        DisableButtons();
     }
 
-    private void SetFunctionality()
+    public void DisableMenuUI()
     {
-        EnableInput();
+        DisableInput();
         SetMenuActive(false);
-        SetButtons();
-        ChangeCursorState();
+        DisableButtons();
+        ChangeCursorState(true);
+        m_MouseDot.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    public void EnableMenuUI()
+    {
+        gameObject.SetActive(true);
+        m_MouseDot.SetActive(true);
+        ChangeCursorState(false);
+        EnableButtons();
+        SetMenuActive(false);
+        EnableInput();
     }
 
     private void EnableInput()
     {
+        if (m_PlayerControls == null) m_PlayerControls = new();
         m_PlayerControls.Player.Enable();
         m_PlayerControls.Player.Pause.started += OnPause;
         m_PlayerControls.Player.Pause.canceled += OnPause;
@@ -106,7 +104,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         m_VolumeMenu.SetActive(active);
     }
 
-    private void SetButtons()
+    private void EnableButtons()
     {
         m_BtnPauseToSettings.onClick.AddListener(OpenSettingsMenu);
         m_BtnPauseToVolume.onClick.AddListener(OpenVolumeMenu);
@@ -116,7 +114,22 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         m_BtnUnstuckPlayer.onClick.AddListener(UnstuckPlayer);
         m_BtnSurrenderPlayer.onClick.AddListener(Surrender);
         m_BtnSurrenderPlayer.gameObject.SetActive(false);
+        if (m_FirstPersonController == null) 
+            m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
         m_FirstPersonController.OnPlayerUp += SurrenderState;
+    }
+
+    private void DisableButtons()
+    {
+        m_BtnPauseToSettings.onClick.RemoveListener(OpenSettingsMenu);
+        m_BtnPauseToVolume.onClick.RemoveListener(OpenVolumeMenu);
+        m_BtnSettingReturnToPause.onClick.RemoveListener(CloseSettingsMenu);
+        m_BtnVolumeReturnToPause.onClick.RemoveListener(CloseVolumeMenu);
+        m_BtnReturnToGame.onClick.RemoveListener(ClosePauseMenu);
+        m_BtnUnstuckPlayer.onClick.RemoveListener(UnstuckPlayer);
+        m_BtnSurrenderPlayer.onClick.RemoveListener(Surrender);
+        m_BtnSurrenderPlayer.gameObject.SetActive(false);
+        m_FirstPersonController.OnPlayerUp -= SurrenderState;
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -132,18 +145,10 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         }
     }
 
-    private void ChangeCursorState()
+    private void ChangeCursorState(bool freeMouse)
     {
-        if (m_IsPaused)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        Cursor.lockState = (freeMouse) ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = freeMouse;
     }
 
     public void ResetMenu()
@@ -153,14 +158,15 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     public void ToggleVolumeMenu()
     {
-        if (!m_IsPaused) m_PauseMenu.SetActive(!m_IsPaused);
+        Debugger($"The current state is paused: {m_IsPaused} the new state is pause: {!m_IsPaused}");
+        if (!m_IsPaused) m_PauseMenu.SetActive(true);
         else SetMenuActive(false);
         m_MouseDot.SetActive(m_IsPaused);
-        transform.root.GetComponent<PlayerInput>().enabled = m_IsPaused;
+        m_PlayerInput.enabled = m_IsPaused;
         m_HandInventory.EnablePickingUp = m_IsPaused;
         m_HandInventory.SetControlsActive(m_IsPaused);
         m_IsPaused = !m_IsPaused;
-        ChangeCursorState();
+        ChangeCursorState(m_IsPaused);
     }
 
     private void SurrenderState(bool isPlayerUp)
