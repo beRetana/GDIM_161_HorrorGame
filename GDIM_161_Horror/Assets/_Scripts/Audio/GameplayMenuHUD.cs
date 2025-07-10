@@ -241,7 +241,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     {
         Debugger($"Hitting Unstuck Player");
         NavMeshHit point;
-        bool foundPoint = NavMesh.SamplePosition(m_PlayerData.transform.position, out point, 15f, m_NavMeshQueryFilter);
+        bool foundPoint = NavMesh.SamplePosition(m_PlayerData.transform.position, out point, 7f, m_NavMeshQueryFilter);
         if (foundPoint)
         {
             Debugger($"Found Walkable Location at {point.position}");
