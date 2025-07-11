@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4926971572235655397, guid: d1a74ad491667be489d53dcea0004838, type: 3}
+      propertyPath: _assetId
+      value: 3344765191
+      objectReference: {fileID: 0}
     - target: {fileID: 6160561131305900150, guid: d1a74ad491667be489d53dcea0004838, type: 3}
       propertyPath: m_Name
       value: FourHandle_DoubleDoor
@@ -71,7 +75,11 @@ PrefabInstance:
     - target: {fileID: 7310167512303589037, guid: d1a74ad491667be489d53dcea0004838, type: 3}
       propertyPath: '_doorHandles.Array.data[3]'
       value: 
-      objectReference: {fileID: 2439129827414360197}
+      objectReference: {fileID: 0}
+    - target: {fileID: 8860337469952381155, guid: d1a74ad491667be489d53dcea0004838, type: 3}
+      propertyPath: _assetId
+      value: 1004189192
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -326,7 +334,7 @@ PrefabInstance:
     - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: _handleJoint
       value: 
-      objectReference: {fileID: 8594859975010707852}
+      objectReference: {fileID: 0}
     - target: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
       propertyPath: _doorsManager
       value: 
@@ -365,24 +373,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
---- !u!114 &2439129827414360197 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8645881593545540256, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
-  m_PrefabInstance: {fileID: 6207596530766512677}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d6ad2b5638e1c4ba614a9e6acd5dce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2475268892599807504 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8393649598902922293, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
-  m_PrefabInstance: {fileID: 6207596530766512677}
-  m_PrefabAsset: {fileID: 0}
---- !u!138 &8594859975010707852 stripped
-FixedJoint:
-  m_CorrespondingSourceObject: {fileID: 2405700362485197737, guid: 6e7f994c65ae2a04b8765ece8eccfbfa, type: 3}
   m_PrefabInstance: {fileID: 6207596530766512677}
   m_PrefabAsset: {fileID: 0}

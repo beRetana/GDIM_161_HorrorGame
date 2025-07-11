@@ -11,6 +11,7 @@ namespace Interactions
     public class DoorButton : NetworkBehaviour, IDebugger
     {
         [SerializeField] private DoubleDoor m_DoorsManager;
+        [SerializeField] private Transform m_ButtonModel;
         [SerializeField] private MeshRenderer m_MeshRenderer;
         [SerializeField] private Material m_OffMaterial;
         [SerializeField] private Material m_OnMaterial;
@@ -29,7 +30,7 @@ namespace Interactions
         {
             m_InteractableItem = GetComponent<PolyInteractable>();
             m_InteractableItem.SetInteractAction(OnInteracted);
-            m_InitialScale = transform.localScale;
+            m_InitialScale = m_ButtonModel.localScale;
             m_PressedScale = new Vector3(m_NewButtonScale, 1f,1f); 
             m_MeshRenderer.material = m_OffMaterial;
         }
@@ -47,7 +48,7 @@ namespace Interactions
             UpdateButtonState(true);
             SetInteractive(false);
             m_DoorsManager.AddPlayer(playerID);
-            StartCoroutine(ButtonScaleAnimation(playerID, true, transform.localScale,
+            StartCoroutine(ButtonScaleAnimation(playerID, true, m_InitialScale,
                 m_PressedScale, m_OnMaterial));
             Debugger($"{transform.parent.parent.parent.name}: Has been pressed by Player {playerID}");
         }
@@ -68,7 +69,7 @@ namespace Interactions
             for (float time = 0; ratio <= 1; time += Time.deltaTime)
             {
                 ratio = time / m_AnimTime;
-                transform.localScale = Vector3.Lerp(initial, final, ratio);
+                m_ButtonModel.localScale = Vector3.Lerp(initial, final, ratio);
                 yield return null;
             }
             m_MeshRenderer.material = newMaterial;
