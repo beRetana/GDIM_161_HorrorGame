@@ -31,7 +31,7 @@ namespace Interactions
             m_InteractableItem = GetComponent<PolyInteractable>();
             m_InteractableItem.SetInteractAction(OnInteracted);
             m_InitialScale = m_ButtonModel.localScale;
-            m_PressedScale = new Vector3(m_NewButtonScale, 1f,1f); 
+            m_PressedScale = new Vector3(1f, m_NewButtonScale, 1f); 
             m_MeshRenderer.material = m_OffMaterial;
         }
 
