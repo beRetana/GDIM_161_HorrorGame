@@ -275,7 +275,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     {
         Ray rayToInteract = _playerCamera.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
         bool wasSomethingHit = Physics.Raycast(rayToInteract, out RaycastHit hitInfo, m_PickUpRange, m_InteractableLayers | m_Obstructables);
-        
+        Debugger($"{(wasSomethingHit ? $"{hitInfo.collider.gameObject.name} was hit!" : "Nothing was Hit")}");
         // Did we hit something and is this something in the interactable layer?
         if (wasSomethingHit && (((1 << hitInfo.collider.gameObject.layer) & m_InteractableLayers) != 0))
         {

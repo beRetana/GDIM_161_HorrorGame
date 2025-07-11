@@ -6,45 +6,59 @@ using System;
 public class SectionManager : NetworkBehaviour
 {
     [SerializeField] private ObjectActivator[] m_Activators;
+    [SerializeField, Tooltip("Sort: 0 = Lowest, 3 = Highest")]
+    private float[] m_FloorHeights;
     [SerializeField] private float m_ChecksPerSecond;
 
-    private Transform[] m_PlayerTransforms;
+    private Transform m_PlayerTransform;
     private float m_Frequency;
     private float m_Timer;
 
-    public Transform[] PlayerTransforms => m_PlayerTransforms;
-
     private void Start()
     {
+        GetPlayer();
         if (!isServer) return;
         m_Frequency = 1f / m_ChecksPerSecond;
-        GetPlayers();
     }
 
-    private void GetPlayers()
+    private void GetPlayer()
     {
-        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
-        m_PlayerTransforms = new Transform[players.Length];
-        for (int i = 0; i < players.Length; ++i)
+        PlayerObjectController[] players = FindObjectsByType<PlayerObjectController>(FindObjectsSortMode.None);
+        
+        foreach(PlayerObjectController player in players)
         {
-            m_PlayerTransforms[i] = players[i].transform;
+            if (!player.isLocalPlayer) continue;
+            m_PlayerTransform = player.transform;
         }
     }
 
     private void Update()
     {
+        if (!isServer) return;
         if (m_Timer >= m_Frequency)
         {
             m_Timer = 0f;
+            UpdateActivators();
         }
-        m_Timer -= Time.deltaTime;
+        m_Timer += Time.deltaTime;
     }
 
+    [ClientRpc]
     private void UpdateActivators()
     {
+        byte newFloor = 0;
+        for (byte i = 0; i < m_FloorHeights.Length; ++i)
+        {
+            if (m_FloorHeights[i] > m_PlayerTransform.position.y)
+            {
+                break;
+            }
+            newFloor = i;
+        }
+
         foreach (ObjectActivator activator in m_Activators)
         {
-            //activator.
+            activator.UpdateObjectsState(newFloor, m_PlayerTransform.position);
         }
     }
 

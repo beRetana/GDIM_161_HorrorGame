@@ -11,36 +11,41 @@ namespace OtherUtils
         readonly T[] m_Pool;
         private int m_Index;
 
-        public ObjectPool(T template, int size, Transform parent = null)
+        public ObjectPool(T template, int size)
         {
             m_Template = template;
             m_Pool = new T[size];
-            m_ParentTransform = parent;
-            PopulatePool();
         }
 
-        private void PopulatePool()
+        public T GetObject()
         {
-            for (int i = 0; i < m_Pool.Length; i++)
-            {
-                T newObject = GameObject.Instantiate(m_Template, m_ParentTransform);
-                newObject.gameObject.SetActive(false);
-                m_Pool[i] =  newObject;
-            }
-        }
-
-        public T PoolObject()
-        {
-            if (m_Pool.Length - 1 == m_Index) return null;
+            if (m_Pool.Length <= m_Index) return null;
 
             T pooledObject = m_Pool[m_Index++];
-            pooledObject.gameObject.SetActive(true);
             return pooledObject;
+        }
+
+        public void AddObject(T newObject)
+        {
+            if (m_Pool.Length <= m_Index)
+            {
+                Debug.LogWarning($"[{this.GetType().ToString()}]:" +
+                    $"Tried to add a new Object beyond pool capacity of {m_Pool.Length}");
+                m_Index = m_Pool.Length - 1; // Added as safety guard.
+                return;
+            }
+            m_Pool[m_Index++] = newObject;
         }
 
         public void ReturnObject(T returnedObject)
         {
-            returnedObject.gameObject.SetActive(false);
+            if (m_Index <= 0)
+            {
+                Debug.LogWarning($"[{this.GetType().ToString()}]:" +
+                    $"Tried to Return an Object beyond pool capacity of {m_Pool.Length}");
+                m_Index = 0; // Reset to zero as safety guard.
+                return;
+            }
             --m_Index;
         }
     }
