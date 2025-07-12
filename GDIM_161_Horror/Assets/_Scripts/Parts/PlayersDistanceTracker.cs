@@ -1,11 +1,10 @@
 using Mirror;
 using UnityEngine;
-using System.Collections.Generic;
 using System;
 
-public class SectionManager : NetworkBehaviour
+public class PlayersDistanceTracker : NetworkBehaviour
 {
-    [SerializeField] private ObjectActivator[] m_Activators;
+    [SerializeField] private Activator[] m_Activators;
     [SerializeField] private float m_ChecksPerSecond;
 
     private Transform[] m_PlayerTransforms;
@@ -51,7 +50,7 @@ public class SectionManager : NetworkBehaviour
             positions[i] = m_PlayerTransforms[i].position;
         }
 
-        foreach (ObjectActivator activator in m_Activators)
+        foreach (Activator activator in m_Activators)
         {
             activator.UpdateObjectsState(positions);
         }

@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class ObjectActivator : NetworkBehaviour, IDebugger
+public class ObjectActivator : Activator
 {
     [SerializeField] private Transform m_ObjectModel;
     [SerializeField] private Transform[] m_SpawnLocations;
@@ -13,7 +13,6 @@ public class ObjectActivator : NetworkBehaviour, IDebugger
     private const float HEIGHT_BUFFER = 2f;
 
     private float m_SqrProxRange;
-    private bool m_Debugger;
 
     private void Start()
     {
@@ -39,7 +38,7 @@ public class ObjectActivator : NetworkBehaviour, IDebugger
     }
 
     [Server]
-    public void UpdateObjectsState(Vector3[] playerLocations)
+    public override void UpdateObjectsState(Vector3[] playerLocations)
     {
         Debugger($"Server: Updating Player location: {playerLocations}");
         foreach (Transform pooledObject in m_SpawnLocations)
@@ -91,15 +90,5 @@ public class ObjectActivator : NetworkBehaviour, IDebugger
     {
         Debugger($"Client: Setting object of ID {networkID} to active:{active}");
         NetworkClient.spawned[networkID]?.gameObject.SetActive(active);
-    }
-
-    public void Debugger(object log)
-    {
-        if (m_Debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
-    }
-
-    public void SetDebugActive(bool active)
-    {
-        m_Debugger = active;
     }
 }
