@@ -246,8 +246,33 @@ namespace Interactions
 
         private void NetworkDestroyTorch()
         {
-            Debug.Log("Destrying Torch");
-            Destroy(transform.parent.gameObject);
+            Debug.Log("Ending Torch");
+            HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
+            
+            if (inventory.PeekAtDominant() != this)
+            {
+                inventory.SwapAction();
+            }
+            
+            inventory.DropAction();
+            transform.root.gameObject.SetActive(false);
+
+            if (isServer) RpcTurnOff();
+            else CmdTurnOff();
+        }
+
+        [Command]
+        private void CmdTurnOff()
+        {
+            RpcTurnOff();
+        }
+
+        [ClientRpc]
+        private void RpcTurnOff()
+        {
+            transform.root.gameObject.SetActive(false);
+            _interactableItem.SetInteractive(false);
+            gameObject.SetActive(false);
         }
 
         #endregion flame_helpers

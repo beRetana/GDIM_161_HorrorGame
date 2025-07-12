@@ -395,7 +395,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
         else CmdDropItem(_throwForce);
     }
 
-    private void SwapAction()
+    public void SwapAction()
     {
         if (isServer) RpcSwapDominance();
         else CmdSwapDominance();

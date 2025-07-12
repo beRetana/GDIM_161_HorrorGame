@@ -2,17 +2,17 @@ using Mirror;
 using OtherUtils;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectActivator : NetworkBehaviour, IDebugger
 {
     [SerializeField] private Transform m_ObjectModel;
-    [SerializeField] private FloorPool[] m_LocationPools;
+    [SerializeField] private Transform[] m_SpawnLocations;
     [SerializeField] private float m_ProximityRange;
 
+    private const float HEIGHT_BUFFER = 2f;
+
     private float m_SqrProxRange;
-    private byte m_CurrentFloor;
     private bool m_Debugger;
 
     private void Start()
@@ -22,83 +22,52 @@ public class ObjectActivator : NetworkBehaviour, IDebugger
         StartCoroutine(PopulateServerPool());
     }
 
-    [Serializable]
-    private enum Floor
-    {
-        Forest,
-        First,
-        Second,
-        Third
-    }
-
-    [Serializable]
-    private struct FloorPool
-    {
-        public Floor Floor;
-        public Transform[] Locations;
-    }
-
     [Server]
     private IEnumerator PopulateServerPool()
     {
         Debugger($"Server: Populating Server Pools");
-        foreach(FloorPool floorPool in m_LocationPools)
+        for(int i = 0; i < m_SpawnLocations.Length; ++i)
         {
-            Transform[] pool = floorPool.Locations;
-            for (int i = 0; i < pool.Length; ++i)
-            {
-                GameObject newObject = Instantiate(m_ObjectModel, pool[i].position,
-                                       pool[i].rotation).gameObject;
-                NetworkServer.Spawn(newObject);
-                ServerSetActiveObject(newObject, false);
-                pool[i] = newObject.transform;
-                yield return null; // Spawn one per frame to avoid FPS drop
-            }
+            GameObject newObject = Instantiate(m_ObjectModel, m_SpawnLocations[i].position,
+                                       m_SpawnLocations[i].rotation).gameObject;
+            NetworkServer.Spawn(newObject);
+            ServerSetActiveObject(newObject, false);
+            m_SpawnLocations[i] = newObject.transform;
+            yield return null; // Spawn one per frame to avoid FPS drop
         }
         Debugger($"Server: Finished Populating Server Pools");
     }
 
-    public void UpdateObjectsState(byte newFloor, Vector2 playerLocation)
+    [Server]
+    public void UpdateObjectsState(Vector3[] playerLocations)
     {
-        Debugger($"Client: Updating to floor: {newFloor} and location: {playerLocation}");
-        if (newFloor != m_CurrentFloor)
+        Debugger($"Server: Updating Player location: {playerLocations}");
+        foreach (Transform pooledObject in m_SpawnLocations)
         {
-            DeactivateAllObjects(m_CurrentFloor);
-            ActivateNearObjects(newFloor, playerLocation);
-            m_CurrentFloor = newFloor;
-        }
-        else
-        {
-            ActivateNearObjects(m_CurrentFloor, playerLocation);
-        }
-    }
+            if (pooledObject == null) continue;
 
-    [Command(requiresAuthority =false)]
-    private void DeactivateAllObjects(byte floor)
-    {
-        Debugger($"Server: Deactivating all Objects in floor #{floor}");
-        foreach (Transform objectPooled in m_LocationPools[floor].Locations)
-        {
-            ServerSetActiveObject(objectPooled.gameObject, false);
-        }
-    }
+            bool isObjectInRange = false;
 
-    [Command(requiresAuthority =false)]
-    private void ActivateNearObjects(byte floor, Vector2 playerLocation)
-    {
-        Debugger($"Server: Activating Near Objects");
-        foreach(Transform pooledObject in m_LocationPools[floor].Locations)
-        {
-            float playerToObjectDistance = ((Vector2)pooledObject.position - playerLocation).sqrMagnitude;
-            bool isObjectInRange = m_SqrProxRange >= playerToObjectDistance;
+            foreach (Vector3 position in playerLocations)
+            {
+                if (HEIGHT_BUFFER < Mathf.Abs(pooledObject.position.y - position.y)) continue;
+                
+                Vector3 distance = pooledObject.position - position;
+                if (m_SqrProxRange < (distance.x * distance.x) + (distance.z * distance.z)) continue;
+
+                isObjectInRange = true;
+                break;
+            }
+
             bool isObjectActive = pooledObject.gameObject.activeSelf;
+
             if (isObjectInRange && !isObjectActive)
             {
-                ServerSetActiveObject(pooledObject.gameObject, active:true);
+                ServerSetActiveObject(pooledObject.gameObject, active: true);
             }
             else if (!isObjectInRange && isObjectActive)
             {
-                ServerSetActiveObject(pooledObject.gameObject, active:false);
+                ServerSetActiveObject(pooledObject.gameObject, active: false);
             }
         }
     }

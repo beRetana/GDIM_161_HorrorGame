@@ -6,29 +6,27 @@ using System;
 public class SectionManager : NetworkBehaviour
 {
     [SerializeField] private ObjectActivator[] m_Activators;
-    [SerializeField, Tooltip("Sort: 0 = Lowest, 3 = Highest")]
-    private float[] m_FloorHeights;
     [SerializeField] private float m_ChecksPerSecond;
 
-    private Transform m_PlayerTransform;
+    private Transform[] m_PlayerTransforms;
     private float m_Frequency;
     private float m_Timer;
 
     private void Start()
     {
-        GetPlayer();
         if (!isServer) return;
+        GetPlayers();
         m_Frequency = 1f / m_ChecksPerSecond;
     }
 
-    private void GetPlayer()
+    [Server]
+    private void GetPlayers()
     {
         PlayerObjectController[] players = FindObjectsByType<PlayerObjectController>(FindObjectsSortMode.None);
-        
-        foreach(PlayerObjectController player in players)
+        m_PlayerTransforms = new Transform[players.Length];
+        for (int i = 0; i < players.Length; ++i)
         {
-            if (!player.isLocalPlayer) continue;
-            m_PlayerTransform = player.transform;
+            m_PlayerTransforms[i] = players[i].transform;
         }
     }
 
@@ -43,24 +41,19 @@ public class SectionManager : NetworkBehaviour
         m_Timer += Time.deltaTime;
     }
 
-    [ClientRpc]
+    [Server]
     private void UpdateActivators()
     {
-        byte newFloor = 0;
-        for (byte i = 0; i < m_FloorHeights.Length; ++i)
+        Vector3[] positions = new Vector3[m_PlayerTransforms.Length];
+
+        for (int i = 0; i < positions.Length; ++i)
         {
-            if (m_FloorHeights[i] > m_PlayerTransform.position.y)
-            {
-                break;
-            }
-            newFloor = i;
+            positions[i] = m_PlayerTransforms[i].position;
         }
 
         foreach (ObjectActivator activator in m_Activators)
         {
-            activator.UpdateObjectsState(newFloor, m_PlayerTransform.position);
+            activator.UpdateObjectsState(positions);
         }
     }
-
-
 }
