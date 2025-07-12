@@ -25,7 +25,7 @@ public class ObjectActivator : Activator
     [Server]
     private IEnumerator PopulateServerPool()
     {
-        yield return null;
+        yield return new WaitForSecondsRealtime(0.1f);
         Debugger($"Server: Populating Server Pools");
         for(int i = 0; i < m_SpawnLocations.Length; ++i)
         {
