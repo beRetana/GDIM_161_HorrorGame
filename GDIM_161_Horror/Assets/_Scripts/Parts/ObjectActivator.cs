@@ -18,7 +18,16 @@ public class ObjectActivator : Activator
     {
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
         if (!isServer) return;
-        StartCoroutine(PopulateServerPool());
+
+        for (int i = 0; i < m_SpawnLocations.Length; ++i)
+        {
+            GameObject newObject = Instantiate(m_ObjectModel, m_SpawnLocations[i].position,
+                                       m_SpawnLocations[i].rotation).gameObject;
+            NetworkServer.Spawn(newObject);
+            ServerSetActiveObject(newObject, false);
+            m_SpawnLocations[i] = newObject.transform;
+            //yield return null; // Spawn one per frame to avoid FPS drop
+        }
     }
 
     [Server]

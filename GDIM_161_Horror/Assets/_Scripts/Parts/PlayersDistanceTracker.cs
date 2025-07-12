@@ -47,6 +47,7 @@ public class PlayersDistanceTracker : NetworkBehaviour
 
         for (int i = 0; i < positions.Length; ++i)
         {
+            if (m_PlayerTransforms[i] == null) continue; 
             positions[i] = m_PlayerTransforms[i].position;
         }
 
