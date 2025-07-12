@@ -17,14 +17,14 @@ namespace AI_FSM{
         public Action OnSearchLocation;
 
         //SEARCH BEHAVIOR
-        public override void Enable()
+        public override void StartBehaviour()
         {
             _aiController.ChangeSpeed(_searchSpeed);
             _aiController.onTaskCompleted += UpdateHasReachedLocation;
             StartCoroutine(SearchSequence());
         }
 
-        public override void Disable()
+        public override void StopBehaviour()
         {
             _aiController.onTaskCompleted -= UpdateHasReachedLocation;
             _aiController.DefaultSpeed();

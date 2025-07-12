@@ -12,13 +12,13 @@ namespace AI_FSM
         [SerializeField] private float patrolWaitTime = 3f;
         private int currentPatrolIndex = -1;
         
-        public override void Enable(){
+        public override void StartBehaviour(){
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
             _aiController.MoveTo(patrolPoints[currentPatrolIndex].position);
             _aiController.onTaskCompleted += OnPatrolPointReached;
         }
 
-        public override void Disable(){
+        public override void StopBehaviour(){
             _aiController.onTaskCompleted -= OnPatrolPointReached;
         }
 

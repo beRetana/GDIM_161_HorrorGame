@@ -21,13 +21,13 @@ namespace AI_FSM{
 
         private bool _reachedLocation = false;
 
-        public override void Enable()
+        public override void StartBehaviour()
         {
             _aiController.onTaskCompleted += UpdateReachedLocation;
             StartCoroutine(MoveThroughPath());
         }
 
-        public override void Disable()
+        public override void StopBehaviour()
         {
             StopCoroutine(MoveThroughPath());
             _aiController.onTaskCompleted -= UpdateReachedLocation;

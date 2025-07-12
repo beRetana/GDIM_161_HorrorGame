@@ -27,9 +27,9 @@ namespace AI_FSM{
             _aiController = newAIController;
         }
 
-        public virtual void Enable(){}
+        public virtual void StartBehaviour(){}
 
-        public virtual void Disable(){}
+        public virtual void StopBehaviour(){}
 
         protected void SendNotification(bool successful)
         {

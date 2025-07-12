@@ -21,8 +21,6 @@ namespace AI
             _wander = GetComponent<Wander>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
-
-            StartCoroutine(StartSequence());
         }
 
         void Update()
@@ -44,6 +42,16 @@ namespace AI
             }
         }
 
+        private void OnEnable()
+        {
+            EnableWander();
+        }
+
+        private void OnDisable()
+        {
+            AbortBehaviors();
+        }
+
         private IEnumerator StartSequence()
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -53,13 +61,13 @@ namespace AI
         private void EnableWander()
         {
             if (!isServer) return;
-            _wander.Enable();
+            _wander.StartBehaviour();
         }
 
         public override void AbortBehaviors()
         {
             if (!isServer) return;
-            _wander.Disable();
+            _wander.StopBehaviour();
         }
 
         public override void TransitionOfBehaviors()

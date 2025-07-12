@@ -13,13 +13,13 @@ namespace AI_FSM{
         public Action OnReachedLocation;
 
         //WANDERING BEHAVIOR
-        public override void Enable()
+        public override void StartBehaviour()
         {
             _aiController.MoveToRandomLocation(_wanderRadius);
             _aiController.onTaskCompleted += UpdateReachedLocation;
         }
 
-        public override void Disable()
+        public override void StopBehaviour()
         {
             StopCoroutine(MoveRandomly());
             _aiController.onTaskCompleted -= UpdateReachedLocation;
