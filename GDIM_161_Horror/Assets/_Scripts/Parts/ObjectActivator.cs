@@ -19,13 +19,23 @@ public class ObjectActivator : Activator
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
         if (!isServer) return;
 
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
+    }
+
+    private void OnDisable()
+    {
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= StartPopulatingScene;
+    }
+
+    private void StartPopulatingScene()
+    {
+        if (!isServer) return;
         StartCoroutine(PopulateServerPool());
     }
 
     [Server]
     private IEnumerator PopulateServerPool()
     {
-        yield return new WaitForSecondsRealtime(2f);
         Debugger($"Server: Populating Server Pools");
         for(int i = 0; i < m_SpawnLocations.Length; ++i)
         {

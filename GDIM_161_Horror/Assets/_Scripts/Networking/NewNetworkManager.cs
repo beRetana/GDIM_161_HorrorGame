@@ -5,6 +5,7 @@ using Mirror;
 using UnityEngine.SceneManagement;
 using Steamworks;
 using OtherUtils;
+using System;
 
 public class NewNetworkManager : NetworkManager, IDebugger
 {
@@ -13,8 +14,9 @@ public class NewNetworkManager : NetworkManager, IDebugger
     [SerializeField] private Transform[] _spawnPoints;
     [Space(5f)]
     [SerializeField] private string m_GameplaySceneName = "BUILD_1";
-
+    public event Action OnPlayersLoadedScene;
     private int _spawnCount = 0;
+    private int m_LoadedScenePlayerCount = 0;
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
@@ -26,6 +28,17 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.Start();
         SceneManager.sceneLoaded += SetPlayersPosition;
+    }
+
+    public override void OnServerReady(NetworkConnectionToClient conn)
+    {
+        base.OnServerReady(conn);
+        if (m_LoadedScenePlayerCount == maxConnections)
+        {
+            OnPlayersLoadedScene.Invoke();
+            m_LoadedScenePlayerCount = 0;
+        }
+        else ++m_LoadedScenePlayerCount;
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
