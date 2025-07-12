@@ -45,7 +45,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         else ActivateLadders(playerPosition);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void CmdActivateLadders(Vector3 playerPosition)
     {
         ActivateLadders(playerPosition);
