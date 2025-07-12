@@ -18,10 +18,8 @@ public class ObjectActivator : Activator
     {
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
         if (!isServer) return;
-        Debugger("SUBSCRIBING");
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
 
-        Debugger($"PLAYERS ARE READY?: {NewNetworkManager.NewSingleton.PlayersReady}");
         if (NewNetworkManager.NewSingleton.PlayersReady) 
             StartPopulatingScene();
     }

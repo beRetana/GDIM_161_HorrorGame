@@ -36,15 +36,16 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
+        base.OnServerReady(conn);
+
         if (!IsGameplayScene(SceneManager.GetActiveScene().name)) return;
-        Debug.Log("CALLED!!!!!!!!");
+
         ++m_LoadedScenePlayerCount;
         m_PlayersReady = false;
-        base.OnServerReady(conn);
+
         if (m_LoadedScenePlayerCount == _spawnCount)
         {
             OnPlayersLoadedScene?.Invoke();
-            Debug.Log("INVOKED!!!!!!!!");
             m_LoadedScenePlayerCount = 0;
             m_PlayersReady = true;
         }
