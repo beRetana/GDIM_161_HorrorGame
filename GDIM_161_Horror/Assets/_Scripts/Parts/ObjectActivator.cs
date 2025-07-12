@@ -14,12 +14,18 @@ public class ObjectActivator : Activator
 
     private float m_SqrProxRange;
 
-    private void Start()
+    private void Awake()
     {
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
         if (!isServer) return;
 
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
+    }
+
+    private void Start()
+    {
+        if (NewNetworkManager.NewSingleton.PlayersReady) 
+            StartPopulatingScene();
     }
 
     private void OnDisable()

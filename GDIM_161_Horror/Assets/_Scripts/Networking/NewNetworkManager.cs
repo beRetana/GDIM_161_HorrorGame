@@ -14,12 +14,16 @@ public class NewNetworkManager : NetworkManager, IDebugger
     [SerializeField] private Transform[] _spawnPoints;
     [Space(5f)]
     [SerializeField] private string m_GameplaySceneName = "BUILD_1";
+
     public event Action OnPlayersLoadedScene;
+
     private int _spawnCount = 0;
     private int m_LoadedScenePlayerCount = 0;
+    private bool m_PlayersReady;
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
+    public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -32,13 +36,18 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
+        if (!IsGameplayScene(SceneManager.GetActiveScene().name)) return;
+        Debug.Log("CALLED!!!!!!!!");
+        ++m_LoadedScenePlayerCount;
+        m_PlayersReady = false;
         base.OnServerReady(conn);
         if (m_LoadedScenePlayerCount == _spawnCount)
         {
-            OnPlayersLoadedScene.Invoke();
+            OnPlayersLoadedScene?.Invoke();
+            Debug.Log("INVOKED!!!!!!!!");
             m_LoadedScenePlayerCount = 0;
+            m_PlayersReady = true;
         }
-        else ++m_LoadedScenePlayerCount;
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
