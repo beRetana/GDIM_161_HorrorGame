@@ -81,14 +81,20 @@ public class ObjectActivator : Activator
     }
 
     /*
-        Check for null because depending on the client/host specs
+        Try statement because depending on the client/host specs
         some of the objects might not be fully spawned by the time 
-        the function gets called.
+        the function gets called. This will cause the NetworkClient to
+        throw an error if it doesn't find the object in the dictionary in
+        the beginning frames after loading the scene.
     */
     [ClientRpc]
     private void ClientSetActiveObject(uint networkID, bool active)
     {
         Debugger($"Client: Setting object of ID {networkID} to active:{active}");
-        NetworkClient.spawned[networkID]?.gameObject.SetActive(active);
+        try
+        {
+            NetworkClient.spawned[networkID].gameObject.SetActive(active);
+        }
+        catch { Debugger($"Object of netID: {networkID} was not found"); }
     }
 }
