@@ -33,7 +33,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
-        if (m_LoadedScenePlayerCount == maxConnections)
+        if (m_LoadedScenePlayerCount == _spawnCount)
         {
             OnPlayersLoadedScene.Invoke();
             m_LoadedScenePlayerCount = 0;
