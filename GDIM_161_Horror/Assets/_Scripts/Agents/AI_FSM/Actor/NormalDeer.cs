@@ -61,13 +61,13 @@ namespace AI
         private void EnableWander()
         {
             if (!isServer) return;
-            _wander.StartBehaviour();
+            _wander?.StartBehaviour();
         }
 
         public override void AbortBehaviors()
         {
             if (!isServer) return;
-            _wander.StopBehaviour();
+            _wander?.StopBehaviour();
         }
 
         public override void TransitionOfBehaviors()

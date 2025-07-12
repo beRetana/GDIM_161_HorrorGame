@@ -11,19 +11,17 @@ public class ObjectActivator : Activator
     [SerializeField] private float m_ProximityRange;
 
     private const float HEIGHT_BUFFER = 2f;
-
     private float m_SqrProxRange;
-
-    private void Awake()
-    {
-        m_SqrProxRange = m_ProximityRange * m_ProximityRange;
-        if (!isServer) return;
-
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
-    }
+    private bool m_SpawnedObjects;
 
     private void Start()
     {
+        m_SqrProxRange = m_ProximityRange * m_ProximityRange;
+        if (!isServer) return;
+        Debugger("SUBSCRIBING");
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
+
+        Debugger($"PLAYERS ARE READY?: {NewNetworkManager.NewSingleton.PlayersReady}");
         if (NewNetworkManager.NewSingleton.PlayersReady) 
             StartPopulatingScene();
     }
@@ -35,7 +33,8 @@ public class ObjectActivator : Activator
 
     private void StartPopulatingScene()
     {
-        if (!isServer) return;
+        if (!isServer || m_SpawnedObjects) return;
+        m_SpawnedObjects = true;
         StartCoroutine(PopulateServerPool());
     }
 
@@ -58,7 +57,7 @@ public class ObjectActivator : Activator
     [Server]
     public override void UpdateObjectsState(Vector3[] playerLocations)
     {
-        Debugger($"Server: Updating Player location: {playerLocations}");
+        //Debugger($"Server: Updating Player location: {playerLocations}");
         foreach (Transform pooledObject in m_SpawnLocations)
         {
             if (pooledObject == null) continue;
@@ -92,7 +91,7 @@ public class ObjectActivator : Activator
     [Server]
     private void ServerSetActiveObject(GameObject objectToSet, bool active)
     {
-        Debugger($"Server: Setting {objectToSet.name} to active:{active}");
+        //Debugger($"Server: Setting {objectToSet.name} to active:{active}");
         NetworkIdentity networkIdentity;
         if (!objectToSet.TryGetComponent<NetworkIdentity>(out networkIdentity)) return;
         ClientSetActiveObject(networkIdentity.netId, active);
@@ -108,7 +107,7 @@ public class ObjectActivator : Activator
     [ClientRpc]
     private void ClientSetActiveObject(uint networkID, bool active)
     {
-        Debugger($"Client: Setting object of ID {networkID} to active:{active}");
+        //Debugger($"Client: Setting object of ID {networkID} to active:{active}");
         try
         {
             NetworkClient.spawned[networkID].gameObject.SetActive(active);
