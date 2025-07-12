@@ -81,11 +81,16 @@ public class ObjectActivator : NetworkBehaviour, IDebugger
         ClientSetActiveObject(networkIdentity.netId, active);
     }
 
+    /*
+        Check for null because depending on the client/host specs
+        some of the objects might not be fully spawned by the time 
+        the function gets called.
+    */
     [ClientRpc]
     private void ClientSetActiveObject(uint networkID, bool active)
     {
         Debugger($"Client: Setting object of ID {networkID} to active:{active}");
-        NetworkClient.spawned[networkID].gameObject.SetActive(active);
+        NetworkClient.spawned[networkID]?.gameObject.SetActive(active);
     }
 
     public void Debugger(object log)
