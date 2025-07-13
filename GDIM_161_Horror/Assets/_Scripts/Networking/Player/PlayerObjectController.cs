@@ -36,6 +36,7 @@ public class PlayerObjectController : NetworkBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += SetPlayerLocation;
     }
 
     private void OnEnable()
@@ -66,6 +67,11 @@ public class PlayerObjectController : NetworkBehaviour
         {
             LobbyController.Instance.UpdatePlayerList();
         }
+    }
+
+    private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
+    {
+        SetPlayerLocation();
     }
 
     public void SetPlayerLocation()

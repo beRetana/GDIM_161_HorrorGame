@@ -84,12 +84,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (scene.name != GetLobbyScene()) return;
 
         m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
-        PlayerObjectController[] players = FindObjectsByType<PlayerObjectController>(FindObjectsSortMode.InstanceID);
-        
-        for (int i = 0; i < players.Length; ++i)
-        {
-            players[i].SetPlayerLocation();
-        }
     }
 
     public void StartGame(string SceneName)
