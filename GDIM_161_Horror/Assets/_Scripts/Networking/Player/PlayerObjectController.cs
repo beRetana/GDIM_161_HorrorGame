@@ -71,6 +71,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
         SetPlayerLocation();
     }
 
