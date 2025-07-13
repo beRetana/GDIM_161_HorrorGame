@@ -73,11 +73,6 @@ public class PlayerObjectController : NetworkBehaviour
         Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
         Debug.Log($"Setting Player location to {location.position} {location.rotation}");
 
-        transform.position = location.position;
-        transform.rotation = location.rotation;
-
-        return;
-
         if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
         else RpcPlayerLocation(location.position, location.rotation);
     }
