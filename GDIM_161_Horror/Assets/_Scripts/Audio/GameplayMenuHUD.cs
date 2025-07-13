@@ -192,6 +192,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isLocalPlayer) return;
 
+        m_Surrended = !isPlayerUp;
         if (isServer) RpcPlayersDownCount(isPlayerUp);
         else          CmdPlayersDownCount(isPlayerUp);
     }
@@ -209,15 +210,16 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
-            if (isPlayerUp) ++gameplayMenuHUD.PlayersDown;
+            if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
         }
 
         m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
-        if (m_PlayersDown < m_TotalPlayers || !isLocalPlayer) return;
-        
-        m_PlayersDown = 0;
+        if (!UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
+
+        m_GameEnded = true;
+        m_SurrenderCount = 0;
 
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
@@ -225,27 +227,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void Surrender()
     {
-        if (!isLocalPlayer || m_Surrended) return;
-        if (isServer) RpcUpdateSurrenderCount();
-        else          CmdUpdateSurrenderCount();
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdUpdateSurrenderCount()
-    {
-        RpcUpdateSurrenderCount();
-    }
-
-    [ClientRpc]
-    private void RpcUpdateSurrenderCount()
-    {
-        ++m_SurrenderCount;
-        m_Surrended = true;
-        if (!UpdateSurrenderText() || m_GameEnded) return;
-        m_GameEnded = true;
-        m_SurrenderCount = 0;
-        if (isServer) StartSurrenderSetUp();
-        else          CmdStartSurrenderSetUp();
+        GameState(m_Surrended);
     }
 
     private bool UpdateSurrenderText()
