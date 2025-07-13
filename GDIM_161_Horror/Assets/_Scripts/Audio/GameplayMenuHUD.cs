@@ -8,6 +8,7 @@ using TMPro;
 using StarterAssets;
 using System.Collections;
 using Mirror;
+using Unity.VisualScripting;
 
 public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
@@ -39,7 +40,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private HandInventory m_HandInventory;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
-    private int m_SurrenderCount;
+    [SyncVar] private byte m_SurrenderCount;
+    [SyncVar] private byte m_PlayersDown;
     private bool m_GameEnded;
     private bool m_IsPaused;
     private bool m_Debugger;
@@ -119,7 +121,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         UpdateSurrenderText();
         if (m_FirstPersonController == null) 
             m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
-        //m_FirstPersonController.OnPlayerUp += SurrenderState;
+        m_FirstPersonController.OnPlayerUp += GameState;
     }
 
     private void DisableButtons()
@@ -131,7 +133,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_BtnReturnToGame.onClick.RemoveListener(ClosePauseMenu);
         m_BtnUnstuckPlayer.onClick.RemoveListener(UnstuckPlayer);
         m_BtnSurrenderPlayer.onClick.RemoveListener(Surrender);
-        m_FirstPersonController.OnPlayerUp -= SurrenderState;
+        m_FirstPersonController.OnPlayerUp -= GameState;
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -173,24 +175,30 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         ChangeCursorState(m_IsPaused);
     }
 
-    private void SurrenderState(bool isPlayerUp)
+    private void GameState(bool isPlayerUp)
     {
-        m_BtnSurrenderPlayer.gameObject.SetActive(!isPlayerUp);
-        if (!isPlayerUp) EnableSurrenderBtn();
+        if (!isLocalPlayer) return;
+
+        if (isServer) RpcPlayersDownCount(isPlayerUp);
+        else          CmdPlayersDownCount(isPlayerUp);
     }
 
-    private void EnableSurrenderBtn()
+    [Command]
+    private void CmdPlayersDownCount(bool isPlayerUp)
     {
-        if (m_PlayerData.isServer)
-        {
-            m_BtnSurrenderPlayer.interactable = true;
-        }
-        else
-        {
-            m_BtnSurrenderPlayer.interactable = false;
-            m_BtnSurrenderPlayer.
-                GetComponentInChildren<TextMeshProUGUI>().text = "Surrender (Waiting for Host)";
-        }
+        RpcPlayersDownCount(isPlayerUp);
+    }
+
+    [ClientRpc]
+    private void RpcPlayersDownCount(bool isPlayerUp)
+    {
+        if (isPlayerUp) ++m_PlayersDown;
+        else            --m_PlayersDown;
+
+        if (m_PlayersDown < NewNetworkManager.NewSingleton.numPlayers) return;
+        m_PlayersDown = 0;
+        if (isServer) StartSurrenderSetUp();
+        else          CmdStartSurrenderSetUp();
     }
 
     private void Surrender()
@@ -198,7 +206,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (!isLocalPlayer) return;
 
         if (isServer) RpcUpdateSurrenderCount();
-        else CmdUpdateSurrenderCount();
+        else          CmdUpdateSurrenderCount();
     }
 
     [Command]
@@ -212,9 +220,9 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         ++m_SurrenderCount;
         if (!UpdateSurrenderText()) return;
-
+        m_SurrenderCount = 0;
         if (isServer) StartSurrenderSetUp();
-        else CmdStartSurrenderSetUp();
+        else          CmdStartSurrenderSetUp();
     }
 
     private bool UpdateSurrenderText()
@@ -243,12 +251,17 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private IEnumerator SurrenderSetUp()
     {
         m_PlayerData.EndGame();
+        
         yield return new WaitForSecondsRealtime(.2f);
+        
         PlayerManagerHUD[] playerManagerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
-        for (int i = 0; i < playerManagerHUDs.Length; ++i)
+        
+        for (byte i = 0; i < playerManagerHUDs.Length; ++i)
         {
             playerManagerHUDs[i].SetEndGame(false);
         }
+
+        m_GameEnded = false;
     }
 
     private void OpenSettingsMenu()

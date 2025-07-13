@@ -17,22 +17,26 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public event Action OnPlayersLoadedScene;
 
-    private int _spawnCount = 0;
+    private int m_PlayersCount = 0;
     private int m_LoadedScenePlayerCount = 0;
     private bool m_PlayersReady;
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
-    public int SpawnCount => _spawnCount;
+    public int SpawnCount => m_PlayersCount;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
-    public override void Start()
+    private void OnEnable()
     {
-        base.Start();
         SceneManager.sceneLoaded += SetPlayersPosition;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= SetPlayersPosition;
     }
 
     public override void OnServerReady(NetworkConnectionToClient conn)
@@ -44,7 +48,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         ++m_LoadedScenePlayerCount;
         m_PlayersReady = false;
 
-        if (m_LoadedScenePlayerCount == _spawnCount)
+        if (m_LoadedScenePlayerCount == m_PlayersCount)
         {
             OnPlayersLoadedScene?.Invoke();
             m_LoadedScenePlayerCount = 0;
@@ -56,8 +60,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
         {
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController, 
-                                    _spawnPoints[_spawnCount].position, _spawnPoints[_spawnCount].rotation);
-            ++_spawnCount;
+                                    _spawnPoints[m_PlayersCount].position, _spawnPoints[m_PlayersCount].rotation);
+            ++m_PlayersCount;
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerIdNumber = GamePlayers.Count;
@@ -70,15 +74,22 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
     {
-        Debugger($"Spawning {_spawnCount} Players");
+        if (scene.name == GetMainMenuScene()) return;
+
         PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+        NetworkStartPosition[] startingPositions = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
+        m_PlayersCount = players.Length;
+
+        Debugger($"Spawning {m_PlayersCount} Players");
         for (int i = 0; i < players.Length; ++i)
         {
             
             Debugger($"List size is: {_spawnPoints.Length}");
-            Debugger($"Spawing player: {players[i].gameObject.name} at location: {_spawnPoints[i].position}");
-            players[i].transform.position = _spawnPoints[i].position;
-            players[i].transform.rotation = _spawnPoints[i].rotation;
+            Debugger($"Spawing player: {players[i].gameObject.name} " +
+                     $"at location: {startingPositions[i].transform.position}");
+
+            players[i].transform.position = startingPositions[i].transform.position;
+            players[i].transform.rotation = startingPositions[i].transform.rotation;
         }
     }
 
