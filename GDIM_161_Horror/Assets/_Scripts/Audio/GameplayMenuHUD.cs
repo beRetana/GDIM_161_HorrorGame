@@ -7,8 +7,9 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using StarterAssets;
 using System.Collections;
+using Mirror;
 
-public class GameplayMenuHUD : MonoBehaviour, IDebugger
+public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
     [Header("Components")]
     [SerializeField] private GameObject m_MouseDot;
@@ -22,6 +23,7 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     [SerializeField] private Button m_BtnPauseToVolume;
     [SerializeField] private Button m_BtnUnstuckPlayer;
     [SerializeField] private Button m_BtnSurrenderPlayer;
+    [SerializeField] private TextMeshProUGUI m_TxtSurrenderPlayer;
 
     [Space(5f)]
     [SerializeField] private Button m_BtnSettingReturnToPause;
@@ -37,6 +39,8 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
     private HandInventory m_HandInventory;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
+    private int m_SurrenderCount;
+    private bool m_GameEnded;
     private bool m_IsPaused;
     private bool m_Debugger;
 
@@ -112,10 +116,10 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
         m_BtnReturnToGame.onClick.AddListener(ClosePauseMenu);
         m_BtnUnstuckPlayer.onClick.AddListener(UnstuckPlayer);
         m_BtnSurrenderPlayer.onClick.AddListener(Surrender);
-        m_BtnSurrenderPlayer.gameObject.SetActive(false);
+        UpdateSurrenderText();
         if (m_FirstPersonController == null) 
             m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
-        m_FirstPersonController.OnPlayerUp += SurrenderState;
+        //m_FirstPersonController.OnPlayerUp += SurrenderState;
     }
 
     private void DisableButtons()
@@ -192,7 +196,48 @@ public class GameplayMenuHUD : MonoBehaviour, IDebugger
 
     private void Surrender()
     {
-        if (!m_PlayerData.isServer) return;
+        if (!isLocalPlayer) return;
+
+        if (isServer) RpcUpdateSurrenderCount();
+        else CmdUpdateSurrenderCount();
+    }
+
+    [Command]
+    private void CmdUpdateSurrenderCount()
+    {
+        RpcUpdateSurrenderCount();
+    }
+
+    [ClientRpc]
+    private void RpcUpdateSurrenderCount()
+    {
+        ++m_SurrenderCount;
+        if (!UpdateSurrenderText()) return;
+
+        if (isServer) StartSurrenderSetUp();
+        else CmdStartSurrenderSetUp();
+    }
+
+    private bool UpdateSurrenderText()
+    {
+        int totalPlayers = NewNetworkManager.NewSingleton.numPlayers;
+        bool isMajority = m_SurrenderCount > NewNetworkManager.NewSingleton.numPlayers / 2;
+        m_TxtSurrenderPlayer.text = $"Surrender ({m_SurrenderCount}/{totalPlayers})";
+        m_TxtSurrenderPlayer.color = (isMajority) ? Color.green : Color.red;
+        return isMajority;
+    }
+
+    [Command]
+    private void CmdStartSurrenderSetUp()
+    {
+        StartSurrenderSetUp();
+    }
+
+    [Server]
+    private void StartSurrenderSetUp()
+    {
+        if (m_GameEnded) return;
+        m_GameEnded = true;
         StartCoroutine(SurrenderSetUp());
     }
 

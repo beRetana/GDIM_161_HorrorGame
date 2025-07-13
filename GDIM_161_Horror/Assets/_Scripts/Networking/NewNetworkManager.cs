@@ -23,6 +23,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
+    public int SpawnCount => _spawnCount;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
 
@@ -83,12 +84,17 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public void StartGame(string SceneName)
     {
-        ServerChangeScene(m_GameplaySceneName);
+        ChangeScene(m_GameplaySceneName);
     }
 
     public void LoadLobbyScene()
     {
-        ServerChangeScene(GetSceneName(onlineScene));
+        ChangeScene(GetSceneName(onlineScene));
+    }
+
+    private void ChangeScene(string sceneName)
+    {
+        ServerChangeScene(sceneName);
     }
 
     public void SetGameSceneName(string name)
