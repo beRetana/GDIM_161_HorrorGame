@@ -211,6 +211,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         {
             if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
+
+            gameplayMenuHUD.UpdateSurrenderText();
         }
 
         m_Surrended = !isPlayerUp;

@@ -76,8 +76,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         if (scene.name == GetMainMenuScene()) return;
 
-        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsInactive.Include,FindObjectsSortMode.None);
-        NetworkStartPosition[] startingPositions = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
+        PlayerObjectController[] players = FindObjectsByType<PlayerObjectController>(FindObjectsInactive.Include,FindObjectsSortMode.None);
+        NetworkStartPosition[] startingPositions = FindObjectsByType<NetworkStartPosition>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         m_PlayersCount = players.Length;
 
         Debugger($"Spawning {m_PlayersCount} Players");
@@ -88,8 +88,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
             Debugger($"Spawing player: {players[i].gameObject.name} " +
                      $"at location: {startingPositions[i].transform.position}");
 
-            players[i].transform.position = startingPositions[i].transform.position;
-            players[i].transform.rotation = startingPositions[i].transform.rotation;
+            players[i].SetPlayerPosition(startingPositions[i].transform.position,
+                                         startingPositions[i].transform.rotation);
         }
     }
 

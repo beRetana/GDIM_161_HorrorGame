@@ -50,6 +50,25 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
+    public void SetPlayerPosition(Vector3 position, Quaternion rotation)
+    {
+        if (!isServer) CmdSetPlayerLocation(position, rotation);
+        else RpcPlayerLocation(position, rotation);
+    }
+
+    [Command]
+    private void CmdSetPlayerLocation(Vector3 position, Quaternion rotation)
+    {
+        RpcPlayerLocation(position, rotation);
+    }
+
+    [ClientRpc]
+    private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+
     [Command]
     private void CmdSetPlayerReady()
     {
