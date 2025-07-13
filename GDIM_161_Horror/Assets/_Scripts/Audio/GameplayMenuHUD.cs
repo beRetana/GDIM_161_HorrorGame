@@ -42,11 +42,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     [SyncVar] private byte m_SurrenderCount;
     [SyncVar] private byte m_PlayersDown;
+    [SyncVar] private bool m_Surrended;
+    [SyncVar] private bool m_GameEnded;
+    
     private byte m_TotalPlayers;
-    private bool m_Surrended;
-    private bool m_GameEnded;
     private bool m_IsPaused;
     private bool m_Debugger;
+
+    public byte PlayersDown { get { return m_PlayersDown; } set {  m_PlayersDown = value; } }
 
     private void Start()
     {
@@ -120,11 +123,12 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_BtnReturnToGame.onClick.AddListener(ClosePauseMenu);
         m_BtnUnstuckPlayer.onClick.AddListener(UnstuckPlayer);
         m_BtnSurrenderPlayer.onClick.AddListener(Surrender);
-        UpdateSurrenderText();
+        
         if (m_FirstPersonController == null) 
             m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
         m_FirstPersonController.OnPlayerUp += GameState;
         GetTotalPlayers();
+        UpdateSurrenderText();
     }
 
     private void GetTotalPlayers()
@@ -188,7 +192,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isLocalPlayer) return;
 
-        GetTotalPlayers();
         if (isServer) RpcPlayersDownCount(isPlayerUp);
         else          CmdPlayersDownCount(isPlayerUp);
     }
@@ -202,11 +205,20 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcPlayersDownCount(bool isPlayerUp)
     {
-        if (isPlayerUp) ++m_PlayersDown;
-        else            --m_PlayersDown;
+        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsSortMode.None);
+        
+        foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
+        {
+            if (isPlayerUp) ++gameplayMenuHUD.PlayersDown;
+            else --gameplayMenuHUD.PlayersDown;
+        }
 
-        if (m_PlayersDown < m_TotalPlayers) return;
+        m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
+
+        if (m_PlayersDown < m_TotalPlayers || !isLocalPlayer) return;
+        
         m_PlayersDown = 0;
+
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
     }
@@ -228,7 +240,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private void RpcUpdateSurrenderCount()
     {
         ++m_SurrenderCount;
-        if (!UpdateSurrenderText()) return;
+        if (!UpdateSurrenderText() || m_GameEnded) return;
+        m_GameEnded = true;
         m_SurrenderCount = 0;
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
@@ -251,8 +264,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [Server]
     private void StartSurrenderSetUp()
     {
-        if (m_GameEnded) return;
-        m_GameEnded = true;
+        if (!isLocalPlayer) return;
         StartCoroutine(SurrenderSetUp());
     }
 
