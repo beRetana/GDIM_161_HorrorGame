@@ -131,7 +131,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_BtnReturnToGame.onClick.RemoveListener(ClosePauseMenu);
         m_BtnUnstuckPlayer.onClick.RemoveListener(UnstuckPlayer);
         m_BtnSurrenderPlayer.onClick.RemoveListener(Surrender);
-        m_BtnSurrenderPlayer.gameObject.SetActive(false);
         m_FirstPersonController.OnPlayerUp -= SurrenderState;
     }
 
