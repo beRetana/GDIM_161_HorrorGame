@@ -86,8 +86,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         for (int i = 0; i < GamePlayers.Count; ++i)
         {
-            GamePlayers[i].transform.position = m_SpawnPoints[i].transform.position;
-            GamePlayers[i].transform.rotation = m_SpawnPoints[i].transform.rotation;
+            GamePlayers[i].SetPlayerLocation();
         }
     }
 

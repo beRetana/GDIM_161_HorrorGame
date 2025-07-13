@@ -1,11 +1,12 @@
 
-using UnityEngine;
 using Mirror;
-using Steamworks;
 using Player;
 using StarterAssets;
+using Steamworks;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -67,10 +68,16 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
-    private void SetPlayerLocation()
+    public void SetPlayerLocation()
     {
         Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-        
+        Debug.Log($"Setting Player location to {location.position} {location.rotation}");
+
+        transform.position = location.position;
+        transform.rotation = location.rotation;
+
+        return;
+
         if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
         else RpcPlayerLocation(location.position, location.rotation);
     }
@@ -84,6 +91,8 @@ public class PlayerObjectController : NetworkBehaviour
     [ClientRpc]
     private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
     {
+        Debug.Log($"Setting Player location to {position} {rotation}");
+
         transform.position = position;
         transform.rotation = rotation;
     }

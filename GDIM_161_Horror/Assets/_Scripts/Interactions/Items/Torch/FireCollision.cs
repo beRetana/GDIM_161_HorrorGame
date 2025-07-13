@@ -31,6 +31,7 @@ namespace Interactions
 
         public virtual bool IsLit()
         {
+            if (fireableObject == null) return false;
             return fireableObject.IsLit();
         }
 
