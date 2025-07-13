@@ -192,9 +192,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isLocalPlayer) return;
 
-        m_Surrended = !isPlayerUp;
-        if (isServer) RpcPlayersDownCount(isPlayerUp);
-        else          CmdPlayersDownCount(isPlayerUp);
+        if (isServer) RpcPlayersDownCount(m_Surrended);
+        else          CmdPlayersDownCount(m_Surrended);
     }
 
     [Command(requiresAuthority = false)]
@@ -206,13 +205,15 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcPlayersDownCount(bool isPlayerUp)
     {
-        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsSortMode.None);
+        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
             if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
         }
+
+        m_Surrended = !isPlayerUp;
 
         m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 

@@ -76,7 +76,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         if (scene.name == GetMainMenuScene()) return;
 
-        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsInactive.Include,FindObjectsSortMode.None);
         NetworkStartPosition[] startingPositions = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
         m_PlayersCount = players.Length;
 
