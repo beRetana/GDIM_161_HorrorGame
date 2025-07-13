@@ -220,7 +220,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (!UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
 
         m_GameEnded = true;
-        m_SurrenderCount = 0;
+        m_PlayersDown = 0;
 
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
@@ -233,8 +233,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private bool UpdateSurrenderText()
     {
-        bool isMajority = m_SurrenderCount > m_TotalPlayers / 2;
-        m_TxtSurrenderPlayer.text = $"Surrender ({m_SurrenderCount}/{m_TotalPlayers})";
+        bool isMajority = m_PlayersDown > m_TotalPlayers / 2;
+        m_TxtSurrenderPlayer.text = $"Surrender ({m_PlayersDown}/{m_TotalPlayers})";
         m_TxtSurrenderPlayer.color = (isMajority) ? Color.green : Color.red;
         return isMajority;
     }
