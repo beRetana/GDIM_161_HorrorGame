@@ -42,6 +42,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     [SyncVar] private byte m_SurrenderCount;
     [SyncVar] private byte m_PlayersDown;
+    private byte m_TotalPlayers;
+    private bool m_Surrended;
     private bool m_GameEnded;
     private bool m_IsPaused;
     private bool m_Debugger;
@@ -122,6 +124,13 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (m_FirstPersonController == null) 
             m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
         m_FirstPersonController.OnPlayerUp += GameState;
+        GetTotalPlayers();
+    }
+
+    private void GetTotalPlayers()
+    {
+        PlayerBase[] playerList = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+        m_TotalPlayers = (byte) playerList.Length;
     }
 
     private void DisableButtons()
@@ -179,6 +188,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isLocalPlayer) return;
 
+        GetTotalPlayers();
         if (isServer) RpcPlayersDownCount(isPlayerUp);
         else          CmdPlayersDownCount(isPlayerUp);
     }
@@ -195,7 +205,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (isPlayerUp) ++m_PlayersDown;
         else            --m_PlayersDown;
 
-        if (m_PlayersDown < NewNetworkManager.NewSingleton.numPlayers) return;
+        if (m_PlayersDown < m_TotalPlayers) return;
         m_PlayersDown = 0;
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
@@ -204,7 +214,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private void Surrender()
     {
         if (!isLocalPlayer) return;
-
         if (isServer) RpcUpdateSurrenderCount();
         else          CmdUpdateSurrenderCount();
     }
@@ -227,9 +236,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private bool UpdateSurrenderText()
     {
-        int totalPlayers = NewNetworkManager.NewSingleton.numPlayers;
-        bool isMajority = m_SurrenderCount > NewNetworkManager.NewSingleton.numPlayers / 2;
-        m_TxtSurrenderPlayer.text = $"Surrender ({m_SurrenderCount}/{totalPlayers})";
+        bool isMajority = m_SurrenderCount > m_TotalPlayers / 2;
+        m_TxtSurrenderPlayer.text = $"Surrender ({m_SurrenderCount}/{m_TotalPlayers})";
         m_TxtSurrenderPlayer.color = (isMajority) ? Color.green : Color.red;
         return isMajority;
     }
