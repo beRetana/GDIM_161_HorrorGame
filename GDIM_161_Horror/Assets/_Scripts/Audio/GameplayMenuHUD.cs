@@ -196,7 +196,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         else          CmdPlayersDownCount(isPlayerUp);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdPlayersDownCount(bool isPlayerUp)
     {
         RpcPlayersDownCount(isPlayerUp);
@@ -225,12 +225,12 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void Surrender()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || m_Surrended) return;
         if (isServer) RpcUpdateSurrenderCount();
         else          CmdUpdateSurrenderCount();
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdUpdateSurrenderCount()
     {
         RpcUpdateSurrenderCount();
@@ -240,6 +240,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private void RpcUpdateSurrenderCount()
     {
         ++m_SurrenderCount;
+        m_Surrended = true;
         if (!UpdateSurrenderText() || m_GameEnded) return;
         m_GameEnded = true;
         m_SurrenderCount = 0;
@@ -255,7 +256,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         return isMajority;
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdStartSurrenderSetUp()
     {
         StartSurrenderSetUp();
