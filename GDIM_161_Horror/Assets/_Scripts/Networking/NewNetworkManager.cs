@@ -84,10 +84,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (scene.name != GetLobbyScene()) return;
 
         m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
-
-        for (int i = 0; i < GamePlayers.Count; ++i)
+        PlayerBase[] players = FindObjectsByType<PlayerBase>(FindObjectsSortMode.InstanceID);
+        
+        for (int i = 0; i < players.Length; ++i)
         {
-            GamePlayers[i].transform.position = m_SpawnPoints[i].transform.position;
+            players[i].transform.position = m_SpawnPoints[i].transform.position;
         }
     }
 
