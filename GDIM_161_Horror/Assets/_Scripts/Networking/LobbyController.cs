@@ -126,7 +126,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
 
         if(AllReady)
         {
-            if(LocalplayerController.PlayerIdNumber == 0)
+            if(LocalplayerController.PlayerID == 0)
             {
                 m_BtnStartGame.interactable = true;
                 m_TxtStartGame.text = "Start!";

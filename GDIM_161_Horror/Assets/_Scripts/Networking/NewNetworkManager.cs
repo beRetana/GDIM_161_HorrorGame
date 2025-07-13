@@ -11,12 +11,12 @@ public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private Transform[] _spawnPoints;
-    [Space(5f)]
-    [SerializeField] private string m_GameplaySceneName = "BUILD_1";
+    //[SerializeField] private Transform[] _spawnPoints;
 
     public event Action OnPlayersLoadedScene;
 
+    private NetworkStartPosition[] m_SpawnPoints;
+    private string m_GameplaySceneName = "BUILD_1";
     private int m_PlayersCount = 0;
     private int m_LoadedScenePlayerCount = 0;
     private bool m_PlayersReady;
@@ -29,42 +29,49 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
-    private void OnEnable()
+    public NetworkStartPosition[] SpawnPoints { get {return m_SpawnPoints; } }
+
+    public override void Start()
     {
-        SceneManager.sceneLoaded += SetPlayersPosition;
+        base.Start();
+        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
+        SceneManager.sceneLoaded += SetPlayerLobbyLocation;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= SetPlayersPosition;
+        SceneManager.sceneLoaded -= SetPlayerLobbyLocation;
     }
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
 
-        if (!IsGameplayScene(SceneManager.GetActiveScene().name)) return;
+        string sceneName = SceneManager.GetActiveScene().name;
 
-        ++m_LoadedScenePlayerCount;
+        if (!IsGameplayScene(sceneName)) return;
+
         m_PlayersReady = false;
+        ++m_LoadedScenePlayerCount;
 
-        if (m_LoadedScenePlayerCount == m_PlayersCount)
-        {
-            OnPlayersLoadedScene?.Invoke();
-            m_LoadedScenePlayerCount = 0;
-            m_PlayersReady = true;
-        }
+        if (m_LoadedScenePlayerCount != m_PlayersCount) return;
+
+        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
+        OnPlayersLoadedScene?.Invoke();
+        m_LoadedScenePlayerCount = 0;
+        m_PlayersReady = true;
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
         {
-            PlayerObjectController GamePlayerInstance = Instantiate(_playerController, 
-                                    _spawnPoints[m_PlayersCount].position, _spawnPoints[m_PlayersCount].rotation);
+            PlayerObjectController GamePlayerInstance = Instantiate(_playerController,
+                                    m_SpawnPoints[m_PlayersCount].transform.position,
+                                    m_SpawnPoints[m_PlayersCount].transform.rotation);
             ++m_PlayersCount;
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
-            GamePlayerInstance.PlayerIdNumber = GamePlayers.Count;
+            GamePlayerInstance.PlayerID = GamePlayers.Count;
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
@@ -72,24 +79,15 @@ public class NewNetworkManager : NetworkManager, IDebugger
         }
     }
 
-    private void SetPlayersPosition(Scene scene, LoadSceneMode mode)
+    private void SetPlayerLobbyLocation(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == GetMainMenuScene()) return;
+        if (scene.name != GetLobbyScene()) return;
+        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
 
-        PlayerObjectController[] players = FindObjectsByType<PlayerObjectController>(FindObjectsInactive.Include,FindObjectsSortMode.None);
-        NetworkStartPosition[] startingPositions = FindObjectsByType<NetworkStartPosition>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        m_PlayersCount = players.Length;
-
-        Debugger($"Spawning {m_PlayersCount} Players");
-        for (int i = 0; i < players.Length; ++i)
+        for (int i = 0; i < GamePlayers.Count; ++i)
         {
-            
-            Debugger($"List size is: {_spawnPoints.Length}");
-            Debugger($"Spawing player: {players[i].gameObject.name} " +
-                     $"at location: {startingPositions[i].transform.position}");
-
-            players[i].SetPlayerPosition(startingPositions[i].transform.position,
-                                         startingPositions[i].transform.rotation);
+            GamePlayers[i].transform.position = m_SpawnPoints[i].transform.position;
+            GamePlayers[i].transform.rotation = m_SpawnPoints[i].transform.rotation;
         }
     }
 
@@ -131,7 +129,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void OnStopHost()
     {
         SceneManager.LoadScene(offlineScene);
-        SceneManager.sceneLoaded -= SetPlayersPosition;
     }
 
     public override void OnStopClient()

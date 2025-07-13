@@ -285,7 +285,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public int ID() { return _myID; }
     private bool AssignID()
     {
-        int newID = GetComponent<PlayerObjectController>().PlayerIdNumber;
+        int newID = GetComponent<PlayerObjectController>().PlayerID;
 
         if (newID != -1)
         {

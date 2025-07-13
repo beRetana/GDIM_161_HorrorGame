@@ -83,7 +83,7 @@ public class PlayerManager : NetworkBehaviour
     {
         foreach (PlayerObjectController player in NetworkManager.GamePlayers)
         {
-            if (player.PlayerIdNumber != playerID) continue;
+            if (player.PlayerID != playerID) continue;
 
             return player.GetComponent<PlayerBase>();
         }

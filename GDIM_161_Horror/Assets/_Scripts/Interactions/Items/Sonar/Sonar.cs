@@ -41,7 +41,7 @@ namespace Interactions
                 _objectsRelativeLocation.Add(new Vector2(playerToObject.x, playerToObject.z) / _detectionRadius);
 
                 if (obj.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController))
-                    if (playerController.PlayerIdNumber == playerId) continue;
+                    if (playerController.PlayerID == playerId) continue;
                 
                 _objectsWorldLocation.Add(obj.transform.position);
                 Debugger($"Object Added To Work Location List: {obj.transform.name}");

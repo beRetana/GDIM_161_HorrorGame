@@ -199,7 +199,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private void Start()
     {
         if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
-            _playerID = playerController.PlayerIdNumber;
+            _playerID = playerController.PlayerID;
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();

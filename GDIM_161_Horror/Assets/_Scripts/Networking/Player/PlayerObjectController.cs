@@ -13,7 +13,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     // Player Data
     [SyncVar] public int ConnectionID;
-    [SyncVar] public int PlayerIdNumber;
+    [SyncVar] public int PlayerID;
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
@@ -37,6 +37,23 @@ public class PlayerObjectController : NetworkBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    private void OnEnable()
+    {
+        if (NewNetworkManager.NewSingleton.PlayersReady)
+        {
+            SetPlayerLocation();
+        }
+        else
+        {
+            NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
+        }
+    }
+
+    private void OnDisable()
+    {
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
+    }
+
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
         if (isServer)
@@ -50,10 +67,12 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
-    public void SetPlayerPosition(Vector3 position, Quaternion rotation)
+    private void SetPlayerLocation()
     {
-        if (!isServer) CmdSetPlayerLocation(position, rotation);
-        else RpcPlayerLocation(position, rotation);
+        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+        
+        if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
+        else RpcPlayerLocation(location.position, location.rotation);
     }
 
     [Command]
