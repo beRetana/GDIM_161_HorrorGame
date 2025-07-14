@@ -84,7 +84,6 @@ public class PlayerObjectController : NetworkBehaviour
     {
         if (!isServer) return;
         if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
-        Debug.Log($"SETTING LOBBY LOCATION");
         StartCoroutine(SetLobbyLocation());
     }
 
@@ -98,8 +97,7 @@ public class PlayerObjectController : NetworkBehaviour
     public void SetPlayerLocation()
     {
         Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-        Debug.Log($"Setting Player location to {location.position} {location.rotation}");
-
+        
         if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
         else RpcPlayerLocation(location.position, location.rotation);
     }
@@ -113,9 +111,6 @@ public class PlayerObjectController : NetworkBehaviour
     [ClientRpc]
     private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
     {
-        if (!isLocalPlayer) return;
-        Debug.Log($"Setting Player location to {position} {rotation}");
-
         transform.position = position;
         transform.rotation = rotation;
     }

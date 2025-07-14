@@ -224,7 +224,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_Surrended = false;
         m_GameEnded = true;
         m_PlayersDown = 0;
-
+        Debugger($"Starting Surrender");
         if (isServer) StartSurrenderSetUp();
         else          CmdStartSurrenderSetUp();
     }
