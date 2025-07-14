@@ -225,6 +225,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             Debugger($"Starting Surrender");
             if (isServer) StartSurrenderSetUp();
             else CmdStartSurrenderSetUp();
+
+            return;
         }
     }
 
@@ -256,6 +258,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
             if (!gameplayMenuHUD.isLocalPlayer) continue;
+            Debugger($"SERVER - Starting ROUTINE");
             gameplayMenuHUD.StartCoroutine();
         }
     }
