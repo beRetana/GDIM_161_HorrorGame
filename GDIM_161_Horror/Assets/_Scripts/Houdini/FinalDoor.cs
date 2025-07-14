@@ -1,5 +1,6 @@
 using Mirror;
 using StarterAssets;
+using System;
 using UnityEngine;
 
 public class FinalDoor : MoveDoors
@@ -14,6 +15,8 @@ public class FinalDoor : MoveDoors
     public DoorState State => m_DoorState;
     public int KeycardCount => m_KeycardCount;
     public int KeycardMax => m_KeycardMax;
+    public static FinalDoor Instance;
+    public event Action OnDoorEnteredAlert;
 
     public enum DoorState
     {
@@ -27,6 +30,15 @@ public class FinalDoor : MoveDoors
         base.Start();
         m_PlayersCheckedIn = new bool[m_KeycardMax];
         m_DoorState = DoorState.Locked;
+
+        if (Instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     public bool IsPlayerCheckedIn(int playerID)
@@ -116,6 +128,8 @@ public class FinalDoor : MoveDoors
         {
             monster.SetAggressiveStats();
         }
+
+        OnDoorEnteredAlert?.Invoke();
     }
 
     public bool TryUnlockDoor(int playerID)
