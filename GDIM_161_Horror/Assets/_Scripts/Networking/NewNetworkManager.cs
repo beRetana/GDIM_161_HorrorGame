@@ -11,7 +11,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private Transform[] m_LobbySpawnPoints;
 
     public event Action OnPlayersLoadedScene;
 
@@ -66,9 +65,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerID = GamePlayers.Count;
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
-            GamePlayerInstance.SetLobbyLocation(m_LobbySpawnPoints[m_PlayersCount].transform.position,
-                                                m_LobbySpawnPoints[m_PlayersCount].transform.rotation);
-
+            
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
             LobbyController.Instance.UpdatePlayerList();
             ++m_PlayersCount;
