@@ -40,13 +40,16 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (!IsGameplayScene(sceneName)) return;
-
+        if (GetMainMenuScene() == sceneName) return;
+        Debugger($"Active Scene: {sceneName}");
+        
         m_PlayersReady = false;
         ++m_LoadedScenePlayerCount;
-
-        if (m_LoadedScenePlayerCount != m_PlayersCount) return;
-
+        Debugger($"Ready Players: {m_LoadedScenePlayerCount}");
+        
+        if (m_LoadedScenePlayerCount < numPlayers) return;
+        Debugger($"Loading Locations and resetting values");
+        
         UpdateLocationList();
         OnPlayersLoadedScene?.Invoke();
         m_LoadedScenePlayerCount = 0;

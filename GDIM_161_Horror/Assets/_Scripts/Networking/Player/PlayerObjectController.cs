@@ -42,10 +42,6 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void OnEnable()
-    {
         SceneManager.sceneLoaded += SetPlayerLocation;
         if (NewNetworkManager.NewSingleton.PlayersReady)
         {
@@ -87,18 +83,13 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     {
         if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
         Debugger($"Loaded Lobby Scene: Starting Corutine");
-        StartCoroutine(SetLobbyLocation());
+        StartCoroutine(WaitToBeReady());
     }
 
-    private IEnumerator SetLobbyLocation()
+    private IEnumerator WaitToBeReady()
     {
-        Debugger($"Waiting for Client to be Ready");
-        yield return new WaitUntil(() => NetworkServer.active && NetworkClient.ready);
-        Debugger($"Client is Ready: Updating Position");
-        NewNetworkManager.NewSingleton.UpdateLocationList();
-        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-        transform.position = location.position;
-        transform.rotation = location.rotation;
+        yield return new WaitUntil(() => NewNetworkManager.NewSingleton.PlayersReady);
+        SetPlayerLocation();
     }
 
     public void SetPlayerLocation()
@@ -109,7 +100,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         else RpcPlayerLocation(location.position, location.rotation);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdSetPlayerLocation(Vector3 position, Quaternion rotation)
     {
         RpcPlayerLocation(position, rotation);
