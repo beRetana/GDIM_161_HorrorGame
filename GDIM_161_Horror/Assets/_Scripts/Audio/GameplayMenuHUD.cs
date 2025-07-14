@@ -207,9 +207,11 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
+        m_Surrended = !isPlayerUp;
+
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
-            if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
+            if (m_Surrended) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
             
             m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
@@ -219,7 +221,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             m_Surrended = false;
             m_GameEnded = true;
             m_PlayersDown = 0;
-            m_Surrended = !isPlayerUp;
 
             Debugger($"Starting Surrender");
             if (isServer) StartSurrenderSetUp();
@@ -250,8 +251,13 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [Server]
     private void StartSurrenderSetUp()
     {
-        //if (!isLocalPlayer) return;
-        StartCoroutine(SurrenderSetUp());
+        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+        foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
+        {
+            if (!isLocalPlayer) continue;
+            StartCoroutine(SurrenderSetUp());
+        }
     }
 
     private IEnumerator SurrenderSetUp()
