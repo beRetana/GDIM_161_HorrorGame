@@ -206,24 +206,22 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private void RpcPlayersDownCount(bool isPlayerUp)
     {
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        
+
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
             if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
+            
+            m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
-            if (!gameplayMenuHUD.UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
+            if (!gameplayMenuHUD.UpdateSurrenderText() || m_GameEnded) continue;
 
             m_Surrended = false;
             m_GameEnded = true;
             m_PlayersDown = 0;
+            m_Surrended = !isPlayerUp;
         }
-
-        m_Surrended = !isPlayerUp;
-
-        m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
-
-        
+       
         Debugger($"Starting Surrender");
         if (isServer) StartSurrenderSetUp();
         else CmdStartSurrenderSetUp();
