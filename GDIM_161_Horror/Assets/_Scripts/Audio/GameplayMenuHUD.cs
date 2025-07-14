@@ -40,7 +40,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private HandInventory m_HandInventory;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
-    [SyncVar] private byte m_SurrenderCount;
     [SyncVar] private byte m_PlayersDown;
     [SyncVar] private bool m_Surrended;
     [SyncVar] private bool m_GameEnded;
@@ -50,7 +49,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private bool m_Debugger;
 
     public byte PlayersDown { get { return m_PlayersDown; } set {  m_PlayersDown = value; } }
-
+    
     private void Start()
     {
         m_NavMeshQueryFilter = new NavMeshQueryFilter();
@@ -131,6 +130,13 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         UpdateSurrenderText();
     }
 
+    public void ResetSurrender()
+    {
+        m_PlayersDown = 0;
+        m_Surrended = false;
+        m_GameEnded = false;
+    }
+
     private void GetTotalPlayers()
     {
         PlayerBase[] playerList = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
@@ -208,26 +214,25 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         m_Surrended = !isPlayerUp;
+        m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
             if (m_Surrended) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
-            
-            m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
-            if (!gameplayMenuHUD.UpdateSurrenderText() || m_GameEnded) continue;
-
-            m_Surrended = false;
-            m_GameEnded = true;
-            m_PlayersDown = 0;
-
-            Debugger($"Starting Surrender");
-            if (isServer) StartSurrenderSetUp();
-            else CmdStartSurrenderSetUp();
-
-            return;
+            gameplayMenuHUD.UpdateSurrenderText();
         }
+
+        if (!UpdateSurrenderText() || m_GameEnded) return;
+        
+        m_Surrended = false;
+        m_GameEnded = true;
+        m_PlayersDown = 0;
+
+        Debugger($"Starting Surrender");
+        if (isServer) StartSurrenderSetUp();
+        else CmdStartSurrenderSetUp();
     }
 
     private void Surrender()
@@ -257,6 +262,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
+            gameplayMenuHUD.ResetSurrender();
             if (!gameplayMenuHUD.isLocalPlayer) continue;
             Debugger($"SERVER - Starting ROUTINE");
             gameplayMenuHUD.StartCoroutine();
