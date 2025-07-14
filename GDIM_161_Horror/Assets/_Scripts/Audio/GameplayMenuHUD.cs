@@ -220,11 +220,11 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             m_GameEnded = true;
             m_PlayersDown = 0;
             m_Surrended = !isPlayerUp;
+
+            Debugger($"Starting Surrender");
+            if (isServer) StartSurrenderSetUp();
+            else CmdStartSurrenderSetUp();
         }
-       
-        Debugger($"Starting Surrender");
-        if (isServer) StartSurrenderSetUp();
-        else CmdStartSurrenderSetUp();
     }
 
     private void Surrender()
