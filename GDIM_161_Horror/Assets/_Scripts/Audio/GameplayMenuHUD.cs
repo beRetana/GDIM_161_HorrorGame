@@ -221,6 +221,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
         if (!UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
 
+        m_Surrended = false;
         m_GameEnded = true;
         m_PlayersDown = 0;
 
