@@ -32,14 +32,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void Start()
     {
         base.Start();
-
-        SceneManager.sceneLoaded += OnLobbyLoaded;
-    }
-
-    private void OnLobbyLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (GetLobbyScene() != scene.name) return;
-        UpdateLocationList();
+        SceneManager.sceneLoaded += UpdateLocationList;
     }
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
@@ -77,6 +70,13 @@ public class NewNetworkManager : NetworkManager, IDebugger
             LobbyController.Instance.UpdatePlayerList();
             ++m_PlayersCount;
         }
+    }
+
+    private void UpdateLocationList(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == GetMainMenuScene()) return;
+        Debugger($"Updating the Location List");
+        UpdateLocationList();
     }
 
     public void UpdateLocationList()

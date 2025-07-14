@@ -1,5 +1,6 @@
 
 using Mirror;
+using OtherUtils;
 using Player;
 using StarterAssets;
 using Steamworks;
@@ -8,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class PlayerObjectController : NetworkBehaviour
+public class PlayerObjectController : NetworkBehaviour, IDebugger
 {
     public static PlayerObjectController LocalInstance { get; private set; }
 
@@ -21,6 +22,8 @@ public class PlayerObjectController : NetworkBehaviour
 
     [SyncVar] private Vector3 m_LobbyPosition;
     [SyncVar] private Quaternion m_LobbyRotation;
+
+    private bool m_Debugger;
 
     private NewNetworkManager manager;
     
@@ -83,14 +86,19 @@ public class PlayerObjectController : NetworkBehaviour
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
         if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+        Debugger($"Loaded Lobby Scene: Starting Corutine");
         StartCoroutine(SetLobbyLocation());
     }
 
     private IEnumerator SetLobbyLocation()
     {
+        Debugger($"Waiting for Client to be Ready");
         yield return new WaitUntil(() => NetworkServer.active && NetworkClient.ready);
+        Debugger($"Client is Ready: Updating Position");
         NewNetworkManager.NewSingleton.UpdateLocationList();
-        SetPlayerLocation();
+        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+        transform.position = location.position;
+        transform.rotation = location.rotation;
     }
 
     public void SetPlayerLocation()
@@ -181,5 +189,15 @@ public class PlayerObjectController : NetworkBehaviour
     public void CmdCanStartGame(string SceneName)
     {
         manager.StartGame(SceneName);
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }
