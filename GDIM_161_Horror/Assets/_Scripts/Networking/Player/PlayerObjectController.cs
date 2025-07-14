@@ -113,6 +113,7 @@ public class PlayerObjectController : NetworkBehaviour
     [ClientRpc]
     private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
     {
+        if (!isLocalPlayer) return;
         Debug.Log($"Setting Player location to {position} {rotation}");
 
         transform.position = position;
