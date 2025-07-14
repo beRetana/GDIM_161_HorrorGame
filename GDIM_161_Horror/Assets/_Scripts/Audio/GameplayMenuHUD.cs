@@ -212,21 +212,21 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             if (!isPlayerUp) ++gameplayMenuHUD.PlayersDown;
             else --gameplayMenuHUD.PlayersDown;
 
-            gameplayMenuHUD.UpdateSurrenderText();
+            if (!gameplayMenuHUD.UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
+
+            m_Surrended = false;
+            m_GameEnded = true;
+            m_PlayersDown = 0;
         }
 
         m_Surrended = !isPlayerUp;
 
         m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
-        if (!UpdateSurrenderText() || !isLocalPlayer || m_GameEnded) return;
-
-        m_Surrended = false;
-        m_GameEnded = true;
-        m_PlayersDown = 0;
+        
         Debugger($"Starting Surrender");
         if (isServer) StartSurrenderSetUp();
-        else          CmdStartSurrenderSetUp();
+        else CmdStartSurrenderSetUp();
     }
 
     private void Surrender()
@@ -245,13 +245,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [Command(requiresAuthority = false)]
     private void CmdStartSurrenderSetUp()
     {
+        Debugger($"CMD - Starting Surrender");
         StartSurrenderSetUp();
     }
 
     [Server]
     private void StartSurrenderSetUp()
     {
-        if (!isLocalPlayer) return;
+        //if (!isLocalPlayer) return;
         StartCoroutine(SurrenderSetUp());
     }
 
