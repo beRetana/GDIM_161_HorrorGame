@@ -19,8 +19,8 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
-    private Vector3 m_LobbyPosition;
-    private Quaternion m_LobbyRotation;
+    [SyncVar] private Vector3 m_LobbyPosition;
+    [SyncVar] private Quaternion m_LobbyRotation;
 
     private NewNetworkManager manager;
     
@@ -73,7 +73,6 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
     public void SetLobbyLocation(Vector3 position, Quaternion rotation)
     {
         m_LobbyPosition = position;
