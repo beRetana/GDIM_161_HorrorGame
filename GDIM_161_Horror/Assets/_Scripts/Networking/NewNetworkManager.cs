@@ -29,6 +29,18 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
     public NetworkStartPosition[] SpawnPoints { get {return m_SpawnPoints; } }
 
+    public override void Start()
+    {
+        base.Start();
+
+        SceneManager.sceneLoaded += OnLobbyLoaded;
+    }
+
+    private void OnLobbyLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (GetLobbyScene() != scene.name) return;
+        UpdateLocationList();
+    }
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
@@ -42,7 +54,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         if (m_LoadedScenePlayerCount != m_PlayersCount) return;
 
-        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
+        UpdateLocationList();
         OnPlayersLoadedScene?.Invoke();
         m_LoadedScenePlayerCount = 0;
         m_PlayersReady = true;
@@ -52,8 +64,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
         {
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController,
-                                    m_LobbySpawnPoints[m_PlayersCount].transform.position,
-                                    m_LobbySpawnPoints[m_PlayersCount].transform.rotation);
+                                    m_SpawnPoints[m_PlayersCount].transform.position,
+                                    m_SpawnPoints[m_PlayersCount].transform.rotation);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerID = GamePlayers.Count;
@@ -65,6 +77,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
             LobbyController.Instance.UpdatePlayerList();
             ++m_PlayersCount;
         }
+    }
+
+    public void UpdateLocationList()
+    {
+        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
     }
 
     public void StartGame(string SceneName)

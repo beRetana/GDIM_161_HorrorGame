@@ -82,10 +82,17 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
+        if (!isServer) return;
         if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
         Debug.Log($"SETTING LOBBY LOCATION");
-        transform.position = m_LobbyPosition;
-        transform.rotation = m_LobbyRotation;
+        StartCoroutine(SetLobbyLocation());
+    }
+
+    private IEnumerator SetLobbyLocation()
+    {
+        yield return new WaitUntil(() => NetworkServer.active && NetworkClient.ready);
+        NewNetworkManager.NewSingleton.UpdateLocationList();
+        SetPlayerLocation();
     }
 
     public void SetPlayerLocation()
