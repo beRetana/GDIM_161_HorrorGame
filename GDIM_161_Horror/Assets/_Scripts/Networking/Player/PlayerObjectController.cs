@@ -73,6 +73,7 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
     public void SetLobbyLocation(Vector3 position, Quaternion rotation)
     {
         m_LobbyPosition = position;
