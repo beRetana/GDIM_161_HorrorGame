@@ -11,7 +11,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
-    //[SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Transform[] m_LobbySpawnPoints;
 
     public event Action OnPlayersLoadedScene;
 
@@ -26,22 +26,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public int SpawnCount => m_PlayersCount;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
-
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
-
     public NetworkStartPosition[] SpawnPoints { get {return m_SpawnPoints; } }
-
-    public override void Start()
-    {
-        base.Start();
-        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
-        SceneManager.sceneLoaded += SetPlayerLobbyLocation;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= SetPlayerLobbyLocation;
-    }
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
@@ -66,24 +52,19 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
         {
             PlayerObjectController GamePlayerInstance = Instantiate(_playerController,
-                                    m_SpawnPoints[m_PlayersCount].transform.position,
-                                    m_SpawnPoints[m_PlayersCount].transform.rotation);
-            ++m_PlayersCount;
+                                    m_LobbySpawnPoints[m_PlayersCount].transform.position,
+                                    m_LobbySpawnPoints[m_PlayersCount].transform.rotation);
 
             GamePlayerInstance.ConnectionID = conn.connectionId;
             GamePlayerInstance.PlayerID = GamePlayers.Count;
             GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
+            GamePlayerInstance.SetLobbyLocation(m_LobbySpawnPoints[m_PlayersCount].transform.position,
+                                                m_LobbySpawnPoints[m_PlayersCount].transform.rotation);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
             LobbyController.Instance.UpdatePlayerList();
+            ++m_PlayersCount;
         }
-    }
-
-    private void SetPlayerLobbyLocation(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != GetLobbyScene()) return;
-
-        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
     }
 
     public void StartGame(string SceneName)

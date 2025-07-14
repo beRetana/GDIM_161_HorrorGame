@@ -19,6 +19,9 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
+    private Vector3 m_LobbyPosition;
+    private Quaternion m_LobbyRotation;
+
     private NewNetworkManager manager;
     
     private NewNetworkManager Manager
@@ -54,6 +57,7 @@ public class PlayerObjectController : NetworkBehaviour
     private void OnDisable()
     {
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
+        SceneManager.sceneLoaded -= SetPlayerLocation;
     }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
@@ -69,10 +73,18 @@ public class PlayerObjectController : NetworkBehaviour
         }
     }
 
+    public void SetLobbyLocation(Vector3 position, Quaternion rotation)
+    {
+        m_LobbyPosition = position;
+        m_LobbyRotation = rotation;
+    }
+
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
-        SetPlayerLocation();
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) || !isLocalPlayer) return;
+        
+        transform.position = m_LobbyPosition;
+        transform.rotation = m_LobbyRotation;
     }
 
     public void SetPlayerLocation()
