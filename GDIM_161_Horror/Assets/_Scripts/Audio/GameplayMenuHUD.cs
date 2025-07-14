@@ -255,9 +255,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
-            if (!isLocalPlayer) continue;
-            StartCoroutine(SurrenderSetUp());
+            if (!gameplayMenuHUD.isLocalPlayer) continue;
+            gameplayMenuHUD.StartCoroutine();
         }
+    }
+
+    public void StartCoroutine()
+    {
+        StartCoroutine(SurrenderSetUp());
     }
 
     private IEnumerator SurrenderSetUp()
