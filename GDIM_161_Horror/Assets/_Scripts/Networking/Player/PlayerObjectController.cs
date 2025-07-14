@@ -39,11 +39,11 @@ public class PlayerObjectController : NetworkBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-        SceneManager.sceneLoaded += SetPlayerLocation;
     }
 
     private void OnEnable()
     {
+        SceneManager.sceneLoaded += SetPlayerLocation;
         if (NewNetworkManager.NewSingleton.PlayersReady)
         {
             SetPlayerLocation();
@@ -56,6 +56,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void OnDisable()
     {
+        Debug.Log($"DISABLES");
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
         SceneManager.sceneLoaded -= SetPlayerLocation;
     }
@@ -81,8 +82,8 @@ public class PlayerObjectController : NetworkBehaviour
 
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) || !isLocalPlayer) return;
-        
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+        Debug.Log($"SETTING LOBBY LOCATION");
         transform.position = m_LobbyPosition;
         transform.rotation = m_LobbyRotation;
     }
