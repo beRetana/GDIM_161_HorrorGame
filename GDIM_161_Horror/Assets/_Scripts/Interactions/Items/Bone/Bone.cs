@@ -8,8 +8,10 @@ public class Bone : NetworkPickableItem
 {
     [Space(5), Header("Instance Properties")]
     [SerializeField] protected Transform[] m_BonePieceModels;
+    [SerializeField] protected Transform[] m_SpawnLocation;
     [SerializeField] protected Transform m_CrushedBone;
     [SerializeField] protected Transform m_NormalBone;
+    [SerializeField] protected Animator m_BoneAnimator;
     [SerializeField] protected LayerMask m_CrushableLayers;
     [SerializeField] protected LayerMask m_ObstructableLayers;
     [SerializeField] protected string m_CrushingText = "Hold To Crush Bone";
@@ -18,6 +20,7 @@ public class Bone : NetworkPickableItem
     protected Stack<BonePiece> m_BonePieces;
     protected Transform m_PlayerCameraTransform;
     protected PlayerInteractionsHUD m_PlayerHUD;
+    protected const string CRUSHING = "CRUSHING";
     protected int m_CurrentUses; 
     protected int m_MaxUses;
     protected bool m_IsOnDominantHand;
@@ -157,6 +160,7 @@ public class Bone : NetworkPickableItem
             case BoneState.CanCrush:
                 if (InteractionType.Tap == context.InputType) return;
                 m_PlayerHUD.StartHoldingUI();
+                m_BoneAnimator.SetBool(CRUSHING, true);
                 ChangeBoneState(BoneState.Crushing);
                 break;
             case BoneState.Crushing:
@@ -177,6 +181,7 @@ public class Bone : NetworkPickableItem
         {
             case InputActionPhase.Canceled:
                 m_PlayerHUD.CancelHoldingUI();
+                m_BoneAnimator.SetBool(CRUSHING, false);
                 ChangeBoneState(BoneState.CanCrush);
                 break;
             case InputActionPhase.Performed:
@@ -211,12 +216,13 @@ public class Bone : NetworkPickableItem
     protected void RpcDropPiece(int playerID, bool isLast)
     {
         Debugger($"Dropping bone piece");
-        ++m_CurrentUses;
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
-        m_BonePieceModels[m_CurrentUses].gameObject.SetActive(false);
-        bone.transform.position = m_BonePieceModels[m_CurrentUses].position;
+        m_SpawnLocation[m_CurrentUses].gameObject.SetActive(false);
+        bone.transform.position = m_SpawnLocation[m_CurrentUses].position;
+        bone.transform.rotation = m_SpawnLocation[m_CurrentUses].rotation;
         bone.gameObject.SetActive(true);
+        ++m_CurrentUses;
 
         if (!isLast) return;
 
