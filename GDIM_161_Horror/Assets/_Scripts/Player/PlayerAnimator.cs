@@ -11,6 +11,8 @@ public class PlayerAnimator : MonoBehaviour
     private const string RAISE_HAND = "RAISE_HAND";
     private const string RIGHT_DOMINANT = "RIGHT_DOMINANT";
 
+    private bool m_IsRaising;
+
     private void Start()
     {
         m_PlayerAnimator = GetComponent<Animator>();
@@ -34,11 +36,19 @@ public class PlayerAnimator : MonoBehaviour
 
     public void RaiseHand()
     {
+        if (m_IsRaising) return;
         m_PlayerAnimator?.SetTrigger(RAISE_HAND);
+        m_IsRaising = true;
+    }
+
+    public void DoneRaising()
+    {
+        m_IsRaising = false;
     }
 
     public void SwitchHands(bool isRightDominant)
     {
         m_PlayerAnimator?.SetBool(RIGHT_DOMINANT, isRightDominant);
+        DoneRaising();
     }
 }
