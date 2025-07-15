@@ -8,6 +8,8 @@ public class PlayerAnimator : MonoBehaviour
     private const string JUMP = "JUMP";
     private const string LADDER = "LADDER";
     private const string CRAWL = "CRAWL";
+    private const string RAISE_HAND = "RAISE_HAND";
+    private const string RIGHT_DOMINANT = "RIGHT_DOMINANT";
 
     private void Start()
     {
@@ -28,5 +30,16 @@ public class PlayerAnimator : MonoBehaviour
     public void SetAnimCrawl(bool crawl)
     {
         m_PlayerAnimator?.SetBool(CRAWL, crawl);
+    }
+
+    public void RaiseHand()
+    {
+        m_PlayerAnimator?.SetTrigger(RAISE_HAND);
+
+    }
+
+    public void SwitchHands(bool isRightDominant)
+    {
+        m_PlayerAnimator?.SetBool(RIGHT_DOMINANT, isRightDominant);
     }
 }

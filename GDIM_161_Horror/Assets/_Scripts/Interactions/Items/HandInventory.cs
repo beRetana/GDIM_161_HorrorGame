@@ -34,6 +34,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private static bool _staticDebugging;
 
     private InventorySlots _inventorySlots = new();
+    private PlayerAnimator m_PlayerAnimator;
     private PlayerControls _playerControls;
     private IInteractable _interactable;
     private int _playerID;
@@ -203,6 +204,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        m_PlayerAnimator = GetComponent<PlayerAnimator>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         if (!isLocalPlayer) return;
         SetUpControls();
@@ -323,6 +325,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     {
         _inventorySlots.SwapDominance();
         OnSwapingHands?.Invoke(PeekAtDominant());
+        m_PlayerAnimator.SwitchHands(!_inventorySlots.IsLHandDom);
     }
 
     public void OnInteraction(InputAction.CallbackContext context) 
