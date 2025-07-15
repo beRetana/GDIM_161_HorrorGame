@@ -35,7 +35,6 @@ public class PlayerAnimator : MonoBehaviour
     public void RaiseHand()
     {
         m_PlayerAnimator?.SetTrigger(RAISE_HAND);
-
     }
 
     public void SwitchHands(bool isRightDominant)
