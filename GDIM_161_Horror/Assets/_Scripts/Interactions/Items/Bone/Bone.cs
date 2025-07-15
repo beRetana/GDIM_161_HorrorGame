@@ -7,18 +7,19 @@ using UnityEngine.InputSystem;
 public class Bone : NetworkPickableItem
 {
     [Space(5), Header("Instance Properties")]
-    [SerializeField] protected Transform m_BonePiece;
-    [SerializeField] protected Transform m_SpawnPoint;
+    [SerializeField] protected Transform[] m_BonePieceModels;
+    [SerializeField] protected Transform m_CrushedBone;
+    [SerializeField] protected Transform m_NormalBone;
     [SerializeField] protected LayerMask m_CrushableLayers;
     [SerializeField] protected LayerMask m_ObstructableLayers;
     [SerializeField] protected string m_CrushingText = "Hold To Crush Bone";
     [SerializeField] protected float m_CrushingDistance = 1.2f;
-    [SerializeField] protected int m_MaxUses;
 
     protected Stack<BonePiece> m_BonePieces;
     protected Transform m_PlayerCameraTransform;
     protected PlayerInteractionsHUD m_PlayerHUD;
-    protected int m_CurrentUses;
+    protected int m_CurrentUses; 
+    protected int m_MaxUses;
     protected bool m_IsOnDominantHand;
     [SyncVar] protected BoneState m_State;
 
@@ -34,15 +35,16 @@ public class Bone : NetworkPickableItem
     {
         base.Start();
         m_BonePieces = new Stack<BonePiece>();
+        m_MaxUses = m_BonePieceModels.Length;
         m_State = BoneState.Uncrushed;
         SpawnPooledObject();
     }
 
     private void SpawnPooledObject()
     {
-        for (int i = 0; i < m_MaxUses; ++i)
+        for (int i = 0; i < m_BonePieceModels.Length; ++i)
         {
-            BonePiece piece = Instantiate(m_BonePiece).GetComponent<BonePiece>();
+            BonePiece piece = Instantiate(m_BonePieceModels[i]).GetComponent<BonePiece>();
             if (isServer) NetworkServer.Spawn(piece.transform.root.gameObject);
             m_BonePieces.Push(piece);
             piece.gameObject.SetActive(false);
@@ -181,9 +183,16 @@ public class Bone : NetworkPickableItem
                 m_PlayerHUD.CancelHoldingUI();
                 m_PlayerHUD.HideInteractUI();
                 m_PlayerHUD.SetIconKeyboardE();
+                OnCrushed();
                 ChangeBoneState(BoneState.Crushed);
                 break;
         }
+    }
+
+    private void OnCrushed()
+    {
+        m_NormalBone.gameObject.SetActive(false);
+        m_CrushedBone.gameObject.SetActive(true);
     }
 
     private void TrialDropping(int playerID)
@@ -205,7 +214,8 @@ public class Bone : NetworkPickableItem
         ++m_CurrentUses;
         BonePiece bone = m_BonePieces.Pop();
         if (bone == null) return;
-        bone.transform.position = m_SpawnPoint.position;
+        m_BonePieceModels[m_CurrentUses].gameObject.SetActive(false);
+        bone.transform.position = m_BonePieceModels[m_CurrentUses].position;
         bone.gameObject.SetActive(true);
 
         if (!isLast) return;
