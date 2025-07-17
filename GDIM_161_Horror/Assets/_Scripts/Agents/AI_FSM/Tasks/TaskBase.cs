@@ -17,7 +17,7 @@ namespace AI_FSM{
         /// <returns>Returns True if the task was successful and False if it failed.</returns>
         public event TaskNotify OnTaskCompleted;
 
-        private void Start()
+        protected virtual void Start()
         {
             _aiController = GetComponent<AIController>();
         }

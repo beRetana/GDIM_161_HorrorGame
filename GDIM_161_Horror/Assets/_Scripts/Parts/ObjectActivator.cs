@@ -45,7 +45,6 @@ public class ObjectActivator : Activator
             GameObject newObject = Instantiate(m_ObjectModel, m_SpawnLocations[i].position,
                                        m_SpawnLocations[i].rotation).gameObject;
             NetworkServer.Spawn(newObject);
-            //ServerSetActiveObject(newObject, false);
             m_SpawnLocations[i] = newObject.transform;
             yield return null; // Spawn one per frame to avoid FPS drop
         }

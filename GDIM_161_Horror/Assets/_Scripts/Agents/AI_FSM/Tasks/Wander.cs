@@ -12,22 +12,43 @@ namespace AI_FSM{
 
         public Action OnReachedLocation;
 
-        //WANDERING BEHAVIOR
+        private Coroutine m_Behaviour;
+
+        // This might be called from a different start function
+        // before its own start function making the call invalid
+        // that's why the coroutine will help wait until components get assigned.
         public override void StartBehaviour()
+        {
+            StartCoroutine(WaitFor<AIController>(_aiController, EnableBehaviour));
+        }
+
+        private void EnableBehaviour()
         {
             _aiController.MoveToRandomLocation(_wanderRadius);
             _aiController.onTaskCompleted += UpdateReachedLocation;
         }
 
+        private IEnumerator WaitFor<T>(T component, Action action) where T : Component
+        {
+            while (component == null)
+            {
+                yield return null;
+                component = GetComponent<T>();
+            }
+            
+            action();
+        }
+
         public override void StopBehaviour()
         {
-            StopCoroutine(MoveRandomly());
             _aiController.onTaskCompleted -= UpdateReachedLocation;
+            if (m_Behaviour == null) return;
+            StopCoroutine(m_Behaviour);
         }
 
         private void UpdateReachedLocation()
         {
-            StartCoroutine(MoveRandomly());
+            m_Behaviour = StartCoroutine(MoveRandomly());
         }
 
         IEnumerator MoveRandomly()

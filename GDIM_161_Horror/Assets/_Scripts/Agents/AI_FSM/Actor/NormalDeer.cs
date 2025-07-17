@@ -13,6 +13,9 @@ namespace AI
         private Rigidbody _rigidbody;
         private DeerAnimator _animator;
         private NavMeshAgent _controller;
+
+        private bool m_WanderEnabled;
+
         private void Start()
         {
             if (!isServer) return;
@@ -21,6 +24,7 @@ namespace AI
             _wander = GetComponent<Wander>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<DeerAnimator>();
+            EnableWander();
         }
 
         void Update()
@@ -42,32 +46,28 @@ namespace AI
             }
         }
 
-        private void OnEnable()
+        public void OnEnable()
         {
             EnableWander();
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             AbortBehaviors();
         }
 
-        private IEnumerator StartSequence()
-        {
-            yield return new WaitForSecondsRealtime(1f);
-            if (isServer) EnableWander();
-        }
-
         private void EnableWander()
         {
-            if (!isServer) return;
-            _wander?.StartBehaviour();
+            if (!isServer || m_WanderEnabled || _wander == null) return;
+            _wander.StartBehaviour();
+            m_WanderEnabled = true;
         }
 
         public override void AbortBehaviors()
         {
             if (!isServer) return;
-            _wander?.StopBehaviour();
+            _wander.StopBehaviour();
+            m_WanderEnabled = false;
         }
 
         public override void TransitionOfBehaviors()
