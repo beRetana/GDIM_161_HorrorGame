@@ -9,8 +9,9 @@ using System;
 
 public class NewNetworkManager : NetworkManager, IDebugger
 {
-    [Space(5f)]
+    [Header("Game Settings"), Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
+    [SerializeField] private string m_LabSceneName;
 
     public event Action OnPlayersLoadedScene;
 
@@ -22,6 +23,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
+    public string LabSceneName => m_LabSceneName;
     public int SpawnCount => m_PlayersCount;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
@@ -84,9 +86,14 @@ public class NewNetworkManager : NetworkManager, IDebugger
         m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
     }
 
-    public void StartGame(string SceneName)
+    public void LoadMazeScene()
     {
         ChangeScene(m_GameplaySceneName);
+    }
+
+    public void LoadLabScene()
+    {
+        ChangeScene(m_LabSceneName);
     }
 
     public void LoadLobbyScene()
@@ -116,7 +123,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public bool IsGameplayScene(string sceneName)
     {
-        return sceneName == m_GameplaySceneName;
+        return sceneName == m_GameplaySceneName || sceneName == m_LabSceneName;
     }
 
     public override void OnStopHost()

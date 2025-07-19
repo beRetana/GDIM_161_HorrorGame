@@ -179,7 +179,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     [Command]
     public void CmdCanStartGame(string SceneName)
     {
-        manager.StartGame(SceneName);
+        manager.LoadMazeScene();
     }
 
     public void Debugger(object log)
