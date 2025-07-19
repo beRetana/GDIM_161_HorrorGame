@@ -37,7 +37,7 @@ public class TransitionToLab : NetworkBehaviour
     {
         m_DoubleDoor.LockingDoors();
         yield return new WaitForSeconds(m_WaitingTime);
-        m_Text.gameObject.SetActive(true);
+        m_Text.gameObject.SetActive(true); 
         yield return new WaitForSeconds(2.2f);
         NewNetworkManager.NewSingleton.LoadLabScene();
     }
