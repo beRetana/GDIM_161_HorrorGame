@@ -1,8 +1,6 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
-using TMPro;
-using StarterAssets;
 
 public class ReturnToLobby : NetworkBehaviour
 {

@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 using Steamworks;
 using OtherUtils;
 using System;
+using System.Linq;
 
 public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Header("Game Settings"), Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
-    [SerializeField] private string m_LabSceneName;
+    [SerializeField] private string[] m_LabSceneNames;
 
     public event Action OnPlayersLoadedScene;
 
@@ -23,7 +24,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
-    public string LabSceneName => m_LabSceneName;
+    public string[] LabSceneName => m_LabSceneNames;
     public int SpawnCount => m_PlayersCount;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
@@ -93,7 +94,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public void LoadLabScene()
     {
-        ChangeScene(m_LabSceneName);
+        int lab = UnityEngine.Random.Range(0, m_LabSceneNames.Length);
+        ChangeScene(m_LabSceneNames[lab]);
     }
 
     public void LoadLobbyScene()
@@ -123,7 +125,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public bool IsGameplayScene(string sceneName)
     {
-        return sceneName == m_GameplaySceneName || sceneName == m_LabSceneName;
+        foreach (string lab in m_LabSceneNames)
+        {
+            if (lab == sceneName) return true;
+        }
+        return sceneName == m_GameplaySceneName;
     }
 
     public override void OnStopHost()
