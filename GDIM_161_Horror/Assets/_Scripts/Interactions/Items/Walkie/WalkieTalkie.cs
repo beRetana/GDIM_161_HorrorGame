@@ -3,6 +3,7 @@ using Interactions;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using UnityEngine.InputSystem;
 
 public class WalkieTalkie : NetworkPickableItem
 {

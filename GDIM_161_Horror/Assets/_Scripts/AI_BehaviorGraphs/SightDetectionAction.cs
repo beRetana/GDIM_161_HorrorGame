@@ -15,7 +15,7 @@ public partial class SightDetectionAction : Action
     {
         if (AISightSensor.Value.TargetDetected != null)
         {
-            Target.Value = AISightSensor.Value.TargetDetected;
+            Target.Value = AISightSensor.Value.TargetDetected.transform.root.gameObject;
             return Status.Success;
         }
         return Status.Failure;

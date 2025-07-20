@@ -235,10 +235,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638858507603999729
+  lastModified: 638873566227565944
   FileSizes:
   - Name: Desktop
-    Value: 856448
+    Value: 1020960
   Exists: 1
 --- !u!114 &-5367524864338901802
 MonoBehaviour:
@@ -306,7 +306,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638858507650746668
+  lastModified: 638873566228307962
   FileSizes:
   - Name: Desktop
     Value: 4003872
@@ -350,7 +350,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638858507596086330
+  lastModified: 638873566226100012
   FileSizes:
   - Name: Desktop
     Value: 129888
@@ -451,10 +451,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638858507658397208
+  lastModified: 638873566229908125
   FileSizes:
   - Name: Desktop
-    Value: 1127712
+    Value: 1177632
   Exists: 1
 --- !u!114 &-981276713472088124
 MonoBehaviour:
@@ -525,7 +525,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638858507604135938
+  lastModified: 638873566227713628
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -577,12 +577,17 @@ MonoBehaviour:
   - {fileID: -8902831560799369597}
   - {fileID: -5062076505125308038}
   - {fileID: -6098305500198496999}
+  - {fileID: 6324704383831810508}
+  - {fileID: 887531350501343897}
+  - {fileID: 8267158259940526390}
+  - {fileID: 7971006827378382367}
+  - {fileID: 746936757335320867}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638858507658397208
+  cacheTime: 638873566229908125
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -599,7 +604,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638858507651579267
+  lastModified: 638873566228823031
   FileSizes:
   - Name: Desktop
     Value: 107072
@@ -685,6 +690,60 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &746936757335320867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PA system/hornWarning
+  m_EditorClassIdentifier: 
+  Path: event:/PA system/hornWarning
+  Guid:
+    Data1: -295672891
+    Data2: 1193487857
+    Data3: 993474995
+    Data4: -131944392
+  Banks:
+  - {fileID: -1299140445480587344}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 9600
+  Length: 0
+--- !u!114 &887531350501343897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Torch/torchExtinguish
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Torch/torchExtinguish
+  Guid:
+    Data1: -313226148
+    Data2: 1330980452
+    Data3: -2083291220
+    Data4: -202417076
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1599044835148366132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,10 +759,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638858507604170997
+  lastModified: 638873566227738783
   FileSizes:
   - Name: Desktop
-    Value: 2416
+    Value: 2680
   Exists: 1
 --- !u!114 &2338621308737970198
 MonoBehaviour:
@@ -967,6 +1026,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 100
   Length: 680
+--- !u!114 &6324704383831810508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Door/doorClose
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Door/doorClose
+  Guid:
+    Data1: 1245980466
+    Data2: 1081569021
+    Data3: 734054564
+    Data4: 1755509996
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6846626182616586449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,3 +1107,57 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 85
   Length: 420
+--- !u!114 &7971006827378382367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Door/doorOpen
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Door/doorOpen
+  Guid:
+    Data1: 1747445673
+    Data2: 1132802292
+    Data3: -1312468819
+    Data4: -1486675040
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8267158259940526390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/Torch/torchFlicker
+  m_EditorClassIdentifier: 
+  Path: event:/Items/Torch/torchFlicker
+  Guid:
+    Data1: 620138334
+    Data2: 1243192428
+    Data3: 1009528254
+    Data4: -847792368
+  Banks:
+  - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0

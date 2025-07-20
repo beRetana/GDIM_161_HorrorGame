@@ -13,7 +13,6 @@ namespace StarterAssets
 
         private const float _THRESHOLD = 0.01f;
 
-        private string m_GameplaySceneName = "BUILD_1";
         private float _stepSoundTime;
         private bool _gravityOn = true;
         [SyncVar] private bool m_HasKeyCard;
@@ -47,39 +46,25 @@ namespace StarterAssets
             // Reset timeouts on start
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
-            m_GameplaySceneName = (NewNetworkManager.singleton as NewNetworkManager).GameplaySceneName;
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnDestroy()
         {
-            if (!isLocalPlayer) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (!isLocalPlayer) return;
-            if (scene.name != m_GameplaySceneName) return;
-            StartCoroutine(FindSpawnPoint());
-        }
-
-        private IEnumerator FindSpawnPoint()
-        {
-            yield return null;
-
-            PlayerSpawnPosition[] spawnPoints = FindObjectsByType<PlayerSpawnPosition>(FindObjectsSortMode.None);
-            
-            foreach (PlayerSpawnPosition spawnPoint in spawnPoints)
-            {
-                if (spawnPoint.IsOccupied) continue;
-                transform.position = spawnPoint.UseSpawner();
-                break;
-            }
+            m_EnableFunctionality = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
+            if (NewNetworkManager.NewSingleton.GetLobbyScene() == scene.name)
+                UpdateState(PlayerStateEnum.Unlocked);
         }
 
         private void Update()
         {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer || !m_EnableFunctionality) return;
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -87,13 +72,13 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer || !m_EnableFunctionality) return;
             UpdateSpeedAnimation();
         }
 
         private void LateUpdate()
         {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer || !m_EnableFunctionality) return;
             CameraRotation();
         }
 
@@ -116,7 +101,7 @@ namespace StarterAssets
             _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
             _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
 
-            Debugger($"X Rotation Velocity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
+            //Debugger($"X Rotation Velocity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
 
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0f);
@@ -207,6 +192,12 @@ namespace StarterAssets
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+
+        public void SpeedMultiplier(float value)
+        {
+            moveSpeed *= value;
+            sprintSpeed *= value;
         }
 
         private void SetHasKeycard(bool value)

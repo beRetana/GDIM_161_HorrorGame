@@ -6,13 +6,8 @@ using UnityEngine.InputSystem;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
-    protected Action OnPlayerInteract;
+    public event Action OnPlayerRecued;
     protected bool m_Loading;
-
-    protected override void Awake()
-    {
-        OnPlayerInteract = () => {  };
-    }
 
     protected override void Start()
     {
@@ -41,9 +36,10 @@ public class InteractablePlayer : InteractableItem, IDebugger
         if (context.InputType == InteractionType.Hold)
         {
             Debugger("Player Succesfully Rescued");
-            OnPlayerInteract?.Invoke();
+            OnPlayerRecued?.Invoke();
+            PlayerManager.Instance.GetPlayer(playerID).
+                GetComponent<PlayerDataTracker>().OnPlayerRezzed();
             m_Loading = false;
-            OnPlayerInteract = null;
         }
         else
         {
@@ -61,11 +57,5 @@ public class InteractablePlayer : InteractableItem, IDebugger
         m_Loading = false;
         PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<NetworkPlayerUI>().CancelHoldingUI();
-    }
-
-    public void SetPlayerInteraction(Action action)
-    {
-        Debugger("Interaction was set");
-        OnPlayerInteract = action;
     }
 }

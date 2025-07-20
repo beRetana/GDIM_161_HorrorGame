@@ -5,15 +5,23 @@ using UnityEngine;
 
 public class BonePiece : NetworkBehaviour
 {
-    private void Awake()
+    [SyncVar(hook =nameof(ChangingState))] private bool m_Active;
+
+    public void SetObjectActive(bool active)
     {
-        gameObject.SetActive(false);
+        if (isServer) m_Active = active;
+        else CmdSetObjectActive(active);
     }
 
-    [ClientRpc]
-    public void RpcSetObjectActive(bool value)
+    private void ChangingState(bool newValue, bool oldState)
     {
-        gameObject.SetActive(value);
+        gameObject.SetActive(newValue);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdSetObjectActive(bool active)
+    {
+        m_Active = active;
     }
 
     private void OnTriggerEnter(Collider other)

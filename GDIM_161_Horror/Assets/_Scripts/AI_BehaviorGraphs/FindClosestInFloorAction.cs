@@ -30,7 +30,7 @@ public partial class FindClosestInFloorAction : Action
         GameObject closestPlayer = null;
         foreach (GameObject player in playersFound)
         {
-            Debug.Log($" FIND_CLOSEST_PLAYER {agentPosition.y - player.transform.position.y}");
+            //Debug.Log($" FIND_CLOSEST_PLAYER {agentPosition.y - player.transform.position.y}");
             if (Mathf.Abs(agentPosition.y - player.transform.position.y) >= DistanceBuffer.Value)
                 continue;
 

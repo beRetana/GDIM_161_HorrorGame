@@ -38,14 +38,6 @@ public class F_CharFst : MonoBehaviour
         lm = LayerMask.GetMask("Ground");        
     }
 
-    /*
-    void Update()
-    {
-        // Shows drawn raycast for debugging
-        Debug.DrawRay(transform.position, Vector3.down * distance, Color.blue);
-    }
-    */
-
     void PlayRunEvent()
     {
         // Start with material check then instantiate sound

@@ -1726,6 +1726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeType: 0
+  volumeSlider: {fileID: 0}
 --- !u!1 &469797054712195232
 GameObject:
   m_ObjectHideFlags: 0
@@ -11301,10 +11302,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1ec6c1b1620cf449148fc0a42e2718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ResDropDown: {fileID: 2763771170267548229}
-  FullScreenToggle: {fileID: 8445104720868438973}
-  fovSlider: {fileID: 6674359493047832072}
-  mainCamera: {fileID: 0}
+  m_Camera: {fileID: 0}
+  m_ResDropDown: {fileID: 0}
+  m_FOVDropDown: {fileID: 0}
+  m_FPSDropDown: {fileID: 0}
+  m_FullScreenToggle: {fileID: 0}
+  m_BtnSaveChanges: {fileID: 0}
+  m_RotationSpeedSlider: {fileID: 0}
+  m_RotationSpeedText: {fileID: 0}
+  m_fpsSettings: 1e0000003c0000007800000090000000f0000000ffffffff
+  m_fovSettings: 28000000320000003c00000046000000500000005a000000640000006e00000078000000
 --- !u!1 &2582672964693318314
 GameObject:
   m_ObjectHideFlags: 0
@@ -11852,6 +11859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4963311599814058141}
   - component: {fileID: 7194364460372912911}
+  - component: {fileID: 6109907909159323454}
   m_Layer: 0
   m_Name: Main_Menu
   m_TagString: Untagged
@@ -11892,12 +11900,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a869535d1caf213408b9b237b62af0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 2616394024621208163}
-  firstSelected: {fileID: 0}
-  PauseMenu: {fileID: 2616394024621208163}
-  SettingsMenu: {fileID: 9000130955346623215}
-  volumeMenu: {fileID: 1616100350488365467}
-  firstPersonController: {fileID: 0}
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  m_MouseDot: {fileID: 0}
+  m_PauseMenu: {fileID: 0}
+  m_SettingsMenu: {fileID: 0}
+  m_VolumeMenu: {fileID: 0}
+  m_BtnReturnToGame: {fileID: 0}
+  m_BtnPauseToSettings: {fileID: 0}
+  m_BtnPauseToVolume: {fileID: 0}
+  m_BtnUnstuckPlayer: {fileID: 0}
+  m_BtnSurrenderPlayer: {fileID: 0}
+  m_TxtSurrenderPlayer: {fileID: 0}
+  m_BtnSettingReturnToPause: {fileID: 0}
+  m_BtnVolumeReturnToPause: {fileID: 0}
+  m_PlayerData: {fileID: 0}
+--- !u!114 &6109907909159323454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616394024621208163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 665400595
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &2625620538263041735
 GameObject:
   m_ObjectHideFlags: 0
@@ -17722,6 +17757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeType: 3
+  volumeSlider: {fileID: 0}
 --- !u!1 &4229895189284245625
 GameObject:
   m_ObjectHideFlags: 0
@@ -22986,6 +23022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeType: 2
+  volumeSlider: {fileID: 0}
 --- !u!1 &5709453386056577471
 GameObject:
   m_ObjectHideFlags: 0
@@ -31318,6 +31355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeType: 1
+  volumeSlider: {fileID: 0}
 --- !u!1 &8178426530139935403
 GameObject:
   m_ObjectHideFlags: 0

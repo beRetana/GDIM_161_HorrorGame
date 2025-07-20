@@ -5,11 +5,13 @@ using Mirror;
 using Steamworks;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
+using OtherUtils;
 
-public class LobbyController : MonoBehaviour
+public class LobbyController : NetworkBehaviour, IDebugger
 {
     public static LobbyController Instance;
-    [SerializeField] private bool debugger;
+    private bool debugger;
 
     //UI Elements
     public Text LobbyNameText;
@@ -25,8 +27,11 @@ public class LobbyController : MonoBehaviour
     private List<PlayerListItem> PlayerListItems = new List<PlayerListItem>();
     public PlayerObjectController LocalplayerController;
 
-    //Ready
-    public Button StartGameButton;
+    [Header("Buttons Functionality")]
+    [SerializeField] private Button m_BtnStartGame;
+    [SerializeField] private Button m_BtnReadyUp;
+    [SerializeField] private Button m_BtnExitLobby;
+    [SerializeField] private TextMeshProUGUI m_TxtStartGame;
     public Text ReadyButtonText;
 
     //Manager
@@ -50,7 +55,42 @@ public class LobbyController : MonoBehaviour
         if(Instance == null) {Instance = this;}
     }
 
-    public void ReadyPlayer()
+    private void Start()
+    {
+        m_BtnStartGame.onClick.AddListener(StartGame);
+        m_BtnReadyUp.onClick.AddListener(ReadyPlayer);
+        m_BtnExitLobby.onClick.AddListener(StopGame);
+
+        m_BtnStartGame.gameObject.SetActive(isServer);
+
+        m_BtnExitLobby.gameObject.SetActive(!isServer || IsLobbyEmpty());
+
+        StartCoroutine(SetUpLobby());
+    }
+
+    private IEnumerator SetUpLobby()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        LocalPlayerObject = GameObject.Find("LocalGamePlayer");
+
+        if (LocalPlayerObject != null)
+        {
+            LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
+        }
+
+        UpdatePlayerList();
+        UpdateLobbyName();
+    }
+
+    private void OnDestroy()
+    {
+        m_BtnExitLobby.onClick.RemoveListener(StopGame);
+        m_BtnReadyUp.onClick.RemoveListener(ReadyPlayer);
+        m_BtnStartGame.onClick.RemoveListener(StartGame);
+    }
+
+    private void ReadyPlayer()
     {
         LocalplayerController.ChangeReady();
     }
@@ -86,18 +126,21 @@ public class LobbyController : MonoBehaviour
 
         if(AllReady)
         {
-            if(LocalplayerController.PlayerIdNumber == 0)
+            if(LocalplayerController.PlayerID == 0)
             {
-                StartGameButton.interactable = true;
+                m_BtnStartGame.interactable = true;
+                m_TxtStartGame.text = "Start!";
+
             }
             else
             {
-                StartGameButton.interactable = false;
+                m_BtnStartGame.interactable = false;
             }
         }
         else
         {
-            StartGameButton.interactable = false;
+            m_BtnStartGame.interactable = false;
+            m_TxtStartGame.text = "Waiting For Players";
         }
     }
 
@@ -109,16 +152,17 @@ public class LobbyController : MonoBehaviour
 
     public void UpdatePlayerList()
     {
-        if(!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
-        if(PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
-        if(PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
-        if(PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
+        if (isServer) m_BtnExitLobby.gameObject.SetActive(IsLobbyEmpty());
+        if (!PlayerItemCreated) {CreateHostPlayerItem(); } //Host
+        if (PlayerListItems.Count < Manager.GamePlayers.Count) {CreateClientPlayerItem();}
+        if (PlayerListItems.Count > Manager.GamePlayers.Count) {RemovePlayerItem();}
+        if (PlayerListItems.Count == Manager.GamePlayers.Count) {UpdatePlayerItem();}
     }
 
     public void FindLocalPlayer()
     {
         LocalPlayerObject = GameObject.Find("LocalGamePlayer");
-        LocalplayerController= LocalPlayerObject.GetComponent<PlayerObjectController>();
+        LocalplayerController = LocalPlayerObject.GetComponent<PlayerObjectController>();
     }
 
     public void CreateHostPlayerItem()
@@ -214,12 +258,13 @@ public class LobbyController : MonoBehaviour
         }
     }
  
-    public void StartGame(string SceneName)
+    private void StartGame()
     {
-        LocalplayerController.CanStartGame(SceneName);
+        LocalplayerController.
+            CanStartGame(NewNetworkManager.NewSingleton.GameplaySceneName);
     }
 
-    public void StopGame()
+    private void StopGame()
     {
         SteamLobby.Instance.LeaveServer();
 
@@ -231,12 +276,34 @@ public class LobbyController : MonoBehaviour
         else
         {
             Debugger("CLIENT DISCONNECTING");
+            if (IsLobbyEmpty()) SetLeaveLobby();
             NetworkManager.singleton.StopClient();
         }
+    }
+
+    private bool IsLobbyEmpty()
+    {
+        return (Manager.GamePlayers.Count <= 1);
+    }
+
+    [Command]
+    private void SetLeaveLobby()
+    {
+        m_BtnExitLobby.gameObject.SetActive(true);
     }
 
     private void Debugger(object log)
     {
         if (debugger) Debug.Log(log);
+    }
+
+    void IDebugger.Debugger(object log)
+    {
+        Debugger(log);
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        throw new System.NotImplementedException();
     }
 }

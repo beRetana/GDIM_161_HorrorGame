@@ -62,6 +62,8 @@ public class SingleDoor : NetworkBehaviour
             
             yield return null;
         }
+
+        _interactableItem.SetInteractive(false);
     }
 
     private void Debugger(object log)

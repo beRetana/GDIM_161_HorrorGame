@@ -1,30 +1,32 @@
 using System.Collections;
 using Interactions;
-using Player;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
 using System;
+using OtherUtils;
 
 /// <summary>
 /// Allows the Player to interact with other items and store them in two slots.
 /// </summary>
-public class HandInventory : NetworkBehaviour
+public class HandInventory : NetworkBehaviour, IDebugger
 {
     [Header("General Settings")]
-    [SerializeField] private LayerMask _interactableLayer;
+    [SerializeField] private LayerMask m_InteractableLayers;
+    [SerializeField] private LayerMask m_Obstructables;
     [SerializeField] private Transform _rightHandTransform; // hands
     [SerializeField] private Transform _leftHandTransform;
 
-    [Header("Interaction Physics Settings")]
-    [SerializeField] private float _pickUpRange;
+    [Space(5f), Header("Interaction Physics Settings")]
+    [SerializeField] private float m_PickUpRange;
     [SerializeField] private float _pickUpForce;
     [SerializeField] private float _linearDrag;
     [SerializeField] private float _throwForce;
     [SerializeField] private MouseUI _mouse;
     [SerializeField] private Camera _playerCamera;
 
-    [Header("Debugging")]
+    [Space(5f), Header("Debugging")]
     [SerializeField] private bool _enableDebugging;
 
     public event Action<NetworkPickableItem> OnSwapingHands;
@@ -32,25 +34,30 @@ public class HandInventory : NetworkBehaviour
     private static bool _staticDebugging;
 
     private InventorySlots _inventorySlots = new();
+    private PlayerAnimator m_PlayerAnimator;
     private PlayerControls _playerControls;
     private IInteractable _interactable;
     private int _playerID;
+    private bool m_EnablePickingUp;
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
+    public int PlayerID => _playerID;
+    public bool EnablePickingUp { get { return m_EnablePickingUp; } set { m_EnablePickingUp = value; } }
+
     private class InventorySlot
     {
-        private NetworkPickableItem _pickableItem;
+        private NetworkPickableItem m_Item;
         private Rigidbody _itemRigidBody;
-        private Transform _itemTransform;
+        private Transform m_HandTransform;
         private bool _isDominant;
 
-        public NetworkPickableItem Item { get { return _pickableItem; } set { _pickableItem = value; } }
+        public NetworkPickableItem Item { get { return m_Item; } set { m_Item = value; } }
 
         public Rigidbody ItemRigidBody { get { return _itemRigidBody; } set { _itemRigidBody = value; } }
 
-        public Transform ItemTransform { get { return _itemTransform; } set { _itemTransform = value; } }
+        public Transform ItemTransform { get { return m_HandTransform; } set { m_HandTransform = value; } }
         public bool IsDominant { get { return _isDominant; } set { _isDominant = value; } }
 
         public void SetRigidBody(Rigidbody rigidBody, float linearDrag)
@@ -65,7 +72,7 @@ public class HandInventory : NetworkBehaviour
         public Rigidbody RemoveRigidBody()
         {
             Rigidbody rigidBodyToDrop = ItemRigidBody;
-
+            if (rigidBodyToDrop == null) return null;
             // Re-eanble physics
             ItemRigidBody.isKinematic = false;
             ItemRigidBody.useGravity = true;
@@ -106,7 +113,7 @@ public class HandInventory : NetworkBehaviour
             L_HandSlot.SetDominant(isLHandDom);
             R_HandSlot.SetDominant(!isLHandDom);
             IsLHandDom = isLHandDom;
-            Debugger(this);
+            StaticDebugger(this.ToString());
         }
 
         // Indexing
@@ -139,14 +146,14 @@ public class HandInventory : NetworkBehaviour
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
+                StaticDebugger($"Item placed in DOM hand: {(IsLHandDom ? "L" : "R")}");
                 return selectedHand;
             }
             selectedHand = GetOffHand();
             if (selectedHand.Item == null)
             {
                 selectedHand.Item = item;
-                Debugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
+                StaticDebugger($"Item placed in OFF hand, {(IsLHandDom ? "R" : "L")}");
                 return selectedHand;
             }
             return null;
@@ -177,28 +184,36 @@ public class HandInventory : NetworkBehaviour
 
         public InventorySlot GetDominantHand()
         {
-            Debugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
+            StaticDebugger($"getting DOM hand, {(IsLHandDom ? "L" : "R")}");
             return this[IsLHandDom ? 0 : 1];
         }
 
         public InventorySlot GetOffHand()
         {
-            Debugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
+            StaticDebugger($"getting OFF hand, {(IsLHandDom ? "R" : "L")}");
             return this[IsLHandDom ? 1 : 0];
         }
 
         public int GetDominantIndex() { return IsLHandDom ? 0 : 1; }
     }
 
-    void Start()
+    private void Start()
     {
         if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
-            _playerID = playerController.PlayerIdNumber;
+            _playerID = playerController.PlayerID;
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
+        m_PlayerAnimator = GetComponent<PlayerAnimator>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
         if (!isLocalPlayer) return;
         SetUpControls();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        m_EnablePickingUp = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
+        SetControlsActive(m_EnablePickingUp);
     }
 
     public void SetControlsActive(bool state)
@@ -222,7 +237,7 @@ public class HandInventory : NetworkBehaviour
 
     private void DisableControls()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || _playerControls == null) return;
         _playerControls.Player.Interact.started -= OnInteraction;
         _playerControls.Player.Interact.canceled -= OnInteraction;
         _playerControls.Player.Interact.performed -= OnInteraction;
@@ -230,6 +245,12 @@ public class HandInventory : NetworkBehaviour
         _playerControls.Player.UseItem.canceled -= OnUsePickable;
         _playerControls.Player.UseItem.performed -= OnUsePickable;
         _playerControls.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        DisableControls();
     }
 
     public void OnDisable()
@@ -245,6 +266,7 @@ public class HandInventory : NetworkBehaviour
 
     private void Update()
     {
+        if (!m_EnablePickingUp) return;
         CheckForRaycastInteractables();
     }
 
@@ -254,11 +276,11 @@ public class HandInventory : NetworkBehaviour
     private void CheckForRaycastInteractables()
     {
         Ray rayToInteract = _playerCamera.ViewportPointToRay(new Vector3(0.5f,0.5f, 0));
-
-        // If we hit something in the layer.
-        if (Physics.Raycast(rayToInteract, out RaycastHit hitInfo, _pickUpRange, _interactableLayer))
+        bool wasSomethingHit = Physics.Raycast(rayToInteract, out RaycastHit hitInfo, m_PickUpRange, m_InteractableLayers | m_Obstructables);
+        Debugger($"{(wasSomethingHit ? $"{hitInfo.collider.gameObject.name} was hit!" : "Nothing was Hit")}");
+        // Did we hit something and is this something in the interactable layer?
+        if (wasSomethingHit && (((1 << hitInfo.collider.gameObject.layer) & m_InteractableLayers) != 0))
         {
-
             IInteractable newInteractable = hitInfo.transform.GetComponentInChildren<IInteractable>();
 
             // If we didn't hit something in the previous frame.
@@ -303,6 +325,7 @@ public class HandInventory : NetworkBehaviour
     {
         _inventorySlots.SwapDominance();
         OnSwapingHands?.Invoke(PeekAtDominant());
+        m_PlayerAnimator.SwitchHands(!_inventorySlots.IsLHandDom);
     }
 
     public void OnInteraction(InputAction.CallbackContext context) 
@@ -375,7 +398,7 @@ public class HandInventory : NetworkBehaviour
         else CmdDropItem(_throwForce);
     }
 
-    private void SwapAction()
+    public void SwapAction()
     {
         if (isServer) RpcSwapDominance();
         else CmdSwapDominance();
@@ -403,7 +426,12 @@ public class HandInventory : NetworkBehaviour
         Debugger($"Is Player {_playerID} The Server: {isServer}");
         try
         {
-            if (isServer) ExecuteInteraction(_playerID, _interactable, context);
+            if (isServer)
+            {
+                Debugger($"The item {(_interactable as PolyInteractable).transform.parent.gameObject.name} has order: {(_interactable as PolyInteractable).Order}");
+                RpcOnPolyInteract(_interactable.GetNetworkID(), _playerID,
+                (_interactable as PolyInteractable).Order, context);
+            }
             else CmdOnPolyInteract(_interactable.GetNetworkID(), _playerID,
                 (_interactable as PolyInteractable).Order, context);
             _interactable = null;
@@ -420,11 +448,13 @@ public class HandInventory : NetworkBehaviour
     {
         Debugger($"RPC OnInteract being called");
         Debugger($"Interactable is: {interactableID.name}");
+        Debugger($"Poly Interactable of order: {order}");
         if (playerID != _playerID) return;
 
         PolyInteractable[] interactables = interactableID.GetComponentsInChildren<PolyInteractable>();
         foreach(PolyInteractable interactable in interactables)
         {
+            Debugger($"The item is {interactable.name} with order: {interactable.Order}");
             if (interactable.Order == order)
             {
                 ExecuteInteraction(_playerID, interactable, inputData);
@@ -503,9 +533,13 @@ public class HandInventory : NetworkBehaviour
         return _inventorySlots.GetDominantHand().Item;
     }
 
-    private static void Debugger(object log)
+    public static void StaticDebugger(string log)
     {
         if (_staticDebugging) Debug.Log(log);
+    }
+    public void Debugger(object log)
+    {
+        if (_enableDebugging) Debug.Log(log);
     }
 
     // This is to get references to the players through the network but player manager does this already.
@@ -520,5 +554,10 @@ public class HandInventory : NetworkBehaviour
         SwapAction();
         yield return null;
         ThrowAction();
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        _enableDebugging = active;
     }
 }

@@ -3,6 +3,7 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
+using System.Collections;
 using StarterAssets;
 
 [Serializable, GeneratePropertyBag]
@@ -14,10 +15,18 @@ public partial class AttackPlayerAction : Action
 
     protected override Status OnStart()
     {
-        FirstPersonController firstPersonController = Player.Value.GetComponent<FirstPersonController>();
+        PlayerBase player = Player.Value.GetComponent<PlayerBase>();
         MonsterAnimator monsterAnimator = Self.Value.GetComponent<MonsterAnimator>();
-        monsterAnimator.TriggerJump();
-        firstPersonController.DownPlayer();
+        
+        //player.LockPlayer();
+        
+        int attack = UnityEngine.Random.Range(0, 2);
+
+        if (attack == 0)
+            monsterAnimator.TriggerAttackBasic(player);
+        else 
+            monsterAnimator.TriggerAttackZombie(player);
+        
         return Status.Success;
     }
 }

@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using FMODUnity;
-using FMOD.Studio;
 using System;
 using Mirror;
 
@@ -13,7 +11,7 @@ namespace Interactions
         private const int SECONDS_PER_MINUTE = 60;
 
         [Header("Gameplay Stuff")]
-        [SerializeField, Range(1f, 20f)] float approxWoodLife_Minutes;
+        [SerializeField, Range(1f, 20f)] float APROX_WOOD_LIFE_MINUTES = 8f;
         [SerializeField, Range(0f, 1f)] float maxTickVariance_WoodBurn;
         [SerializeField, Range(1f, 1.2f)] float tickSpeedMultiplier_ByFloor;
         [Tooltip("Pyrolysis is the process of thermal decomposition of materials at elevated temperatures, often in an inert atmosphere without access to oxygen.")]
@@ -22,6 +20,7 @@ namespace Interactions
         [Header("Model Stuff")]
         [SerializeField] Transform torchAnchor;
         [SerializeField] Transform torchWood;
+        [SerializeField] private Transform m_CartoonFireTransform;
         [SerializeField] FireCollision torchFireCollider;
 
         [Header("Fire Stuff")]
@@ -40,6 +39,8 @@ namespace Interactions
             , Range(1.1f, 10f)] float flameGrowCurveB = 5f;
 
         [SerializeField] Light torchLight;
+        [SerializeField] private float m_StartTemp;
+        [SerializeField] private float m_EndTemp;
 
 
         [SerializeField] LayerMask groundLayers;
@@ -56,7 +57,7 @@ namespace Interactions
 
         private float maxFireLocalYPos;
 
-        private float maxFlameSize;
+        private float minFlameSize;
         private float flameSize;
         private float maxLightIntensity;
         private float lightIntensity = -1f;
@@ -69,17 +70,15 @@ namespace Interactions
         protected override void Start()
         {
             base.Start();
-            BurnTimer = SECONDS_PER_MINUTE * approxWoodLife_Minutes;
+            BurnTimer = SECONDS_PER_MINUTE * APROX_WOOD_LIFE_MINUTES;
             pyrolysisTimer = BurnTimer / pyrolysisIncrements;
             isLit = false;
             maxTorchWoodScale = torchWood.localScale.y;
             maxFireLocalYPos = flameBase.localPosition.y;
-            maxFlameSize = flameRed.localScale.y;
+            minFlameSize = 0.2f;
             maxLightIntensity = torchLight.intensity;
-            //torchFireCollider.enabled = false;
 
             ToggleFlame(false);
-            //LightFlame();
         }
 
         protected void Update()
@@ -101,8 +100,8 @@ namespace Interactions
         }
         public override void UseItem(int playerId, InputData context)
         {
-            //Debug.Log("Using torch");
-            //PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>().GetArms()?.ToggleHandMoveOutOrIn(null);
+            Debug.Log("Using torch");
+            PlayerManager.Instance.GetPlayer(playerId).GetComponent<PlayerAnimator>().RaiseHand();
         }
 
 
@@ -126,17 +125,20 @@ namespace Interactions
             {
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.TorchFlicker, this.transform.position);
                 WoodPyrolysis();
-                pyrolysisTimer = approxWoodLife_Minutes * SECONDS_PER_MINUTE / pyrolysisIncrements;
+                pyrolysisTimer = APROX_WOOD_LIFE_MINUTES * SECONDS_PER_MINUTE / pyrolysisIncrements;
             }
         }
 
         private void WoodPyrolysis()
         {
-            torchWoodScale = maxTorchWoodScale * BurnTimer / SECONDS_PER_MINUTE / approxWoodLife_Minutes;
+            float burntRatio = ((BurnTimer / SECONDS_PER_MINUTE) / APROX_WOOD_LIFE_MINUTES);
+            torchWoodScale = maxTorchWoodScale * burntRatio;
             torchWood.localScale = new Vector3(torchWood.localScale.x, torchWoodScale, torchWood.localScale.z);
 
-            float flameBaseNewLocalPosY = maxFireLocalYPos * BurnTimer / SECONDS_PER_MINUTE / approxWoodLife_Minutes;
+            float flameBaseNewLocalPosY = maxFireLocalYPos * burntRatio;
             flameBase.localPosition = new Vector3(flameBase.localPosition.x, flameBaseNewLocalPosY, flameBase.localPosition.z);
+
+            ScaleFlameScale(Mathf.Max(burntRatio, minFlameSize));
         }
 
         private void UpdateTimers()
@@ -216,6 +218,8 @@ namespace Interactions
             flameRed.localScale = newFlameScale;
             flameOrange.localScale = newFlameScale;
             flameYellow.localScale = newFlameScale;
+            torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * scalar; // Lerping starting temperature to ending temperature.
+
         }
         private void SetVisualLightIntensity(float intensePercent)
         {
@@ -226,7 +230,7 @@ namespace Interactions
         {
             isLit = true;
             torchWoodScale = maxTorchWoodScale;
-            flameSize = maxFlameSize;
+            flameSize = minFlameSize;
             torchLight.intensity = maxLightIntensity;
             ScaleFlameScale(1f);
         }
@@ -242,8 +246,33 @@ namespace Interactions
 
         private void NetworkDestroyTorch()
         {
-            Debug.Log("Destrying Torch");
-            Destroy(transform.parent.gameObject);
+            Debug.Log("Ending Torch");
+            HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
+            
+            if (inventory.PeekAtDominant() != this)
+            {
+                inventory.SwapAction();
+            }
+            
+            inventory.DropAction();
+            transform.root.gameObject.SetActive(false);
+
+            if (isServer) RpcTurnOff();
+            else CmdTurnOff();
+        }
+
+        [Command]
+        private void CmdTurnOff()
+        {
+            RpcTurnOff();
+        }
+
+        [ClientRpc]
+        private void RpcTurnOff()
+        {
+            transform.root.gameObject.SetActive(false);
+            _interactableItem.SetInteractive(false);
+            gameObject.SetActive(false);
         }
 
         #endregion flame_helpers
@@ -262,13 +291,12 @@ namespace Interactions
             //exponential decay
             for (float delta = 0f;  delta < burnOutTime; delta += Time.deltaTime)
             {
-                flameSize = maxFlameSize * Mathf.Exp(flameExpDecayRate * delta);
+                flameSize = minFlameSize * Mathf.Exp(flameExpDecayRate * delta);
                 lightIntensity = maxLightIntensity * Mathf.Exp(lightExpDecayRate * delta);
 
-                ScaleFlameScale(flameSize / maxFlameSize);
+                ScaleFlameScale(flameSize);
 
                 SetVisualLightIntensity(lightIntensity);
-
 
                 yield return null;
             }
@@ -298,18 +326,6 @@ namespace Interactions
             FlameFullSize();
         }
         #endregion flame_animations
-
-        /*public override void UnPossessItem()
-        {
-            isDropping = true;
-            base.UnPossessItem();
-        }*/
-
-
-        //public void BurnOutFlame() // via end of wood
-        //public void SmotherFlame() // via dropping
-
-        //watch velocity (and air pressure) or burn out
 
     }
 }

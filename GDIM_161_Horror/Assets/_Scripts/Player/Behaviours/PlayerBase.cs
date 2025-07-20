@@ -1,8 +1,10 @@
 using UnityEngine;
+using System;
 using Mirror;
 using Player;
 using OtherUtils;
 using UnityEngine.InputSystem;
+using Mono.CSharp;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -10,8 +12,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 {
     static private int _myID = 0; // 0, 1, 2, 3
     protected PlayerInput _playerInput;
-
     private NewNetworkManager _networkmanager;
+    public event Action<bool> OnPlayerUp;
 
     public NewNetworkManager NetworkManager
     {
@@ -25,6 +27,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         }
     }
 
+    //protected float m_
+    protected bool m_EnableFunctionality;
     protected bool _debugger;
 
     #region enums
@@ -146,7 +150,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     }
     public void UnlockPlayer()
     {
-        Debugger($"Unlocking Player{_myID}");
+        Debugger($"Unlocking Player {_myID}");
         EnterState(PlayerStateEnum.Unlocked);
     }
     public void LimpPlayer()
@@ -162,6 +166,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     private void UnlockPlayerSettings()
     {
+        _interaction.OnPlayerRecued -= UnlockPlayer;
         _interaction.SetInteractive(false);
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
@@ -174,12 +179,13 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
+        OnPlayerUp?.Invoke(true);
     }
 
     private void DownPlayerSettings()
     {
         _interaction.SetInteractive(true);
-        _interaction.SetPlayerInteraction(UnlockPlayer);
+        _interaction.OnPlayerRecued += UnlockPlayer;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
 
@@ -192,6 +198,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory.DropAllItems();
         SetInputState(false);
         cinemachineCameraTarget.transform.localPosition = downCamPosition;
+        OnPlayerUp?.Invoke(false);
     }
     private void EnterState(PlayerStateEnum enterState)
     {
@@ -209,10 +216,9 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     private void RpcChangeState(PlayerStateEnum enterState)
     {
         Debugger($"{name} entering {enterState}");
-        playerStateEnum = enterState;
         UpdateState(enterState);
     }
-    private void UpdateState(PlayerStateEnum enterState)
+    protected void UpdateState(PlayerStateEnum enterState)
     {
         switch (enterState)
         {
@@ -231,7 +237,10 @@ public class PlayerBase : NetworkBehaviour, IDebugger
                 currentStats = downedStats;
                 break;
         }
+        
         SetPlayerStats();
+        ApplyFetchedValues();
+        playerStateEnum = enterState;
     }
     private bool SetPlayerStats()
     {
@@ -261,12 +270,22 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         return true;
     }
 
+    private void ApplyFetchedValues()
+    {
+        switch (playerStateEnum)
+        {
+            case PlayerStateEnum.Unlocked:
+                //moveSpeed = 
+                break;
+        }
+    }
+
     #endregion PlayerState
 
     public int ID() { return _myID; }
     private bool AssignID()
     {
-        int newID = GetComponent<PlayerObjectController>().PlayerIdNumber;
+        int newID = GetComponent<PlayerObjectController>().PlayerID;
 
         if (newID != -1)
         {

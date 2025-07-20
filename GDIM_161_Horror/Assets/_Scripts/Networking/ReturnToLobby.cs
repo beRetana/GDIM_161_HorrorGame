@@ -1,25 +1,40 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
-using TMPro;
 
 public class ReturnToLobby : NetworkBehaviour
 {
     [SerializeField] private Button m_ReturnToLobby;
 
-    private string m_LobbyName;
+    private PlayerManagerHUD m_PlayerManagerHUD;
 
     private void Start()
     {
-        m_LobbyName = (NewNetworkManager.singleton as NewNetworkManager).GetOnlineScene();
+        m_PlayerManagerHUD = transform.root.GetComponent<PlayerManagerHUD>();
         if (!isServer) m_ReturnToLobby.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
         m_ReturnToLobby.onClick.AddListener(LoadLobby);
+    }
+
+    private void OnDisable()
+    {
+        m_ReturnToLobby.onClick.RemoveListener(LoadLobby);
     }
 
     [Server]
     private void LoadLobby()
     {
-        // Do all clean up here
-        NewNetworkManager.singleton.ServerChangeScene(m_LobbyName);
+        CleanUpScene();
+    }
+
+    [ClientRpc]
+    private void CleanUpScene()
+    {
+        if (!isLocalPlayer) return;
+        m_PlayerManagerHUD.ResetGameUI();
+        if (isServer) NewNetworkManager.NewSingleton.LoadLobbyScene();
     }
 }

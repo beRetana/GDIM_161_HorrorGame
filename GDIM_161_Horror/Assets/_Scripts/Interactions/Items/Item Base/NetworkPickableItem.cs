@@ -56,13 +56,26 @@ namespace Interactions
         public virtual void UnPossessItem(Vector3 throwDir, int playerID)
         {
             Debugger($"THROWWWW: " + throwDir);
-            this.transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
+            transform.parent.transform.GetComponent<Rigidbody>().AddForce(throwDir, ForceMode.Impulse);
             Physics.IgnoreCollision(_itemCollider, PlayerManager.Instance.GetPlayer(playerID).GetComponent<Collider>(), false);
-            this.SetPossessed(false, playerID);
-            this._targetHand = null;
+            _targetHand = null;
+            SetPossessed(false, playerID);
         }
 
-        public virtual void SetPossessed(bool toPossess, int playerID = 0)
+        public virtual void SetPossessed(bool isPossessed, int playerID = 0)
+        {
+            if (isServer) RpcSetPossessed(_targetHand, playerID);
+            else CmdSetPossessed(isPossessed, playerID);
+        }
+
+        [Command(requiresAuthority = false)]
+        public virtual void CmdSetPossessed(bool toPossess, int playerID)
+        {
+            RpcSetPossessed(toPossess, playerID);
+        }
+
+        [ClientRpc]
+        public virtual void RpcSetPossessed(bool toPossess, int playerID)
         {
             Debugger($"Player {playerID} {(toPossess ? "posessing" : "forfeiting")} {this.name}");
             _isPossessed = toPossess;

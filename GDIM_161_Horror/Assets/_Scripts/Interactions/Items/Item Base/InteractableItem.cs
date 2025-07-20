@@ -4,6 +4,7 @@ using TMPro;
 using Mirror;
 using OtherUtils;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class allows items to be interacted with a player.

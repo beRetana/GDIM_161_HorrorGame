@@ -1,6 +1,7 @@
 using Mirror;
 using OtherUtils;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class LadderManager : NetworkBehaviour, IDebugger
@@ -13,11 +14,11 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private Transform m_ClosestLadder;
     private float m_ClosestProbability;
     private bool m_OnlyOneLadder;
-    private bool m_Debug = true;
+    private bool m_Debug;
 
     public override void OnStartClient()
     {
-        Debug.Log($"[LadderManager] OnStartClient called on client - netId: {netId}");
+        Debugger($"[LadderManager] OnStartClient called on client - netId: {netId}");
     }
 
     private void Start()
@@ -29,8 +30,13 @@ public class LadderManager : NetworkBehaviour, IDebugger
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
 
+        StartCoroutine(LaddersOnStart());
+    }
+
+    private IEnumerator LaddersOnStart()
+    {
+        yield return new WaitForSecondsRealtime(1f);
         ActivateLadders(Vector3.zero);
-        RpcTesting();
     }
 
     public void PlayerCheckedIn(Vector3 playerPosition)
@@ -39,7 +45,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         else ActivateLadders(playerPosition);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void CmdActivateLadders(Vector3 playerPosition)
     {
         ActivateLadders(playerPosition);
@@ -70,18 +76,12 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private void ServerSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Server");
-        m_Ladders[index].gameObject.SetActive(true);
-        SetLadderActive(index);
+        //m_Ladders[index].gameObject.SetActive(true);
+        RpcSetLadderActive(index);
     }
 
     [ClientRpc]
-    private void RpcTesting()
-    {
-        Debugger("RPC this should be called.");
-    }
-
-    [ClientRpc]
-    public void SetLadderActive(int index)
+    public void RpcSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Client");
         m_Ladders[index].gameObject.SetActive(true);

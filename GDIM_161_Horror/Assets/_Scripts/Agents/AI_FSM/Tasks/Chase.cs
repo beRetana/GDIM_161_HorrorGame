@@ -69,7 +69,7 @@ namespace AI_FSM{
         /// <summary>
         /// Enabling Chase task will increase the speed of the AI to the chase speed.
         /// </summary>
-        public override void Enable()
+        public override void StartBehaviour()
         {
             _aiController.ChangeSpeed(_chaseSpeed);
         }
@@ -77,7 +77,7 @@ namespace AI_FSM{
         /// <summary>
         /// Disabling the Chase task will reset the speed of the AI to the default speed.
         /// </summary>
-        public override void Disable()
+        public override void StopBehaviour()
         {
             _aiController.onTaskCompleted -= OnCheckedLastLocation;
             _aiController.DefaultSpeed();
@@ -90,7 +90,7 @@ namespace AI_FSM{
         private void OnCheckedLastLocation()
         {
             SendNotification(successful:false);
-            Disable();
+            StopBehaviour();
         }
     }
 }

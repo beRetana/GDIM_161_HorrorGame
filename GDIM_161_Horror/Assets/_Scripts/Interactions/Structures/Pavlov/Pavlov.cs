@@ -19,7 +19,7 @@ public class Pavlov : NetworkBehaviour
 
     private void Start()
     {
-        if (!isLocalPlayer)
+        if (!isServer)
         {
             enabled = false;
             return;

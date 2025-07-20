@@ -11,18 +11,16 @@ namespace Interactions
     public class DoubleDoor : NetworkBehaviour, IDebugger
     {
         [Header("Door Settings/Components")]
-        [SerializeField] private List<DoorHandle> _doorHandles;
+        [SerializeField] private DoorButton[] _doorHandles;
         [SerializeField] private float _openDoorAnimationTime;
         [SerializeField] private float _openDoorDelay = 2f;
-        [SerializeField] private float _grabHandlesAnimationTime;
-        [SerializeField] private DoorData _rightDoor;
-        [SerializeField] private DoorData _leftDoor;
+        [SerializeField] private DoorData m_RightDoor;
+        [SerializeField] private DoorData m_LeftDoor;
 
-        private List<int> m_PlayersOnDoor;
+        private List<byte> m_PlayersOnDoor;
+        private Vector3 m_RightDoorOriginal;
+        private Vector3 m_LeftDoorOriginal;
         private bool _debugger;
-        public float DoorAnimTime => _openDoorAnimationTime;
-        public float DoorDelay => _openDoorDelay;
-        public float HandleGrabAnimTime => _grabHandlesAnimationTime;
 
         [Serializable]
         struct DoorData
@@ -31,8 +29,6 @@ namespace Interactions
             public Transform DoorOpenTarget;
         }
 
-        [SyncVar] private int _playersOnHandles;
-
         public enum DoorState
         {
             Locked = 1 << 0,
@@ -40,12 +36,15 @@ namespace Interactions
             Unlocked = 1 << 3,
         }
 
-        [SyncVar] private DoorState _doorState;
+        private DoorState _doorState;
+        public DoorState State => _doorState;
 
         private void Start()
         {
             _doorState = DoorState.Locked;
-            m_PlayersOnDoor = new List<int>();
+            m_RightDoorOriginal = m_RightDoor.DoorTransform.position;
+            m_LeftDoorOriginal = m_LeftDoor.DoorTransform.position;
+            m_PlayersOnDoor = new List<byte>();
         }
 
         public void UpdateDoorState(DoorState state)
@@ -63,7 +62,7 @@ namespace Interactions
         [ClientRpc]
         private void RpcDoorState(DoorState state)
         {
-            this._doorState = state;
+            _doorState = state;
             switch (_doorState)
             {
                 case DoorState.Locked:
@@ -78,47 +77,69 @@ namespace Interactions
 
         private void UnlockingDoors()
         {
-            foreach (DoorHandle handle in _doorHandles)
-                handle.MovePlayer();
-
-            StartCoroutine(OpenDoors(_rightDoor));
-            StartCoroutine(OpenDoors(_leftDoor));
+            StartCoroutine(OpenDoors(m_RightDoor.DoorTransform, m_RightDoorOriginal, m_RightDoor.DoorOpenTarget.position));
+            StartCoroutine(OpenDoors(m_LeftDoor.DoorTransform, m_LeftDoorOriginal, m_LeftDoor.DoorOpenTarget.position));
         }
 
-        IEnumerator OpenDoors(DoorData doorData)
+        public void LockingDoors()
+        {
+            StartCoroutine(OpenDoors(m_RightDoor.DoorTransform, m_RightDoor.DoorOpenTarget.position, m_RightDoorOriginal));
+            StartCoroutine(OpenDoors(m_LeftDoor.DoorTransform, m_LeftDoor.DoorOpenTarget.position, m_LeftDoorOriginal));
+        }
+
+        IEnumerator OpenDoors(Transform doorTransform, Vector3 startingPosition, Vector3 endingPosition)
         {
             yield return new WaitForSeconds(_openDoorDelay);
 
-            Vector3 doorOriginalPosition = doorData.DoorTransform.position;
             float ratio = 0;
             for (float timeElapsed = 0; ratio <= 1; ratio = timeElapsed / _openDoorAnimationTime)
             {
-                doorData.DoorTransform.position = Vector3.Lerp(doorOriginalPosition, doorData.DoorOpenTarget.position, ratio);
+                doorTransform.position = Vector3.Lerp(startingPosition, endingPosition, ratio);
                 yield return null;
                 timeElapsed += Time.deltaTime;
             }
-            doorData.DoorTransform.position = doorData.DoorOpenTarget.position;
+            doorTransform.position = endingPosition;
         }
 
-        public void OnPlayerHandleInteraction(bool isPlayerOnHandler)
+        public void AddPlayer(byte playerID)
         {
-            if (isPlayerOnHandler) ++_playersOnHandles; 
-            else --_playersOnHandles;
-            Debugger($"DOUBLE DOOR: There are {_playersOnHandles} players on the Handles");
-            if (_playersOnHandles >= _doorHandles.Count) UpdateDoorState(DoorState.Unlocking);
+            if (isServer) RpcAddPlayer(playerID);
+            else CmdAddPlayer(playerID);
         }
 
-        public void AddPlayerID(int playerID)
+        [Command]
+        private void CmdAddPlayer(byte playerID)
+        {
+            RpcAddPlayer(playerID);
+        }
+
+        [ClientRpc]
+        private void RpcAddPlayer(byte playerID)
         {
             m_PlayersOnDoor.Add(playerID);
+            if (m_PlayersOnDoor.Count < _doorHandles.Length) return;
+            UpdateDoorState(DoorState.Unlocking);
+        }
+        
+        public void RemovePlayer(byte playerID)
+        {
+            if (isServer) RpcRemovePlayer(playerID);
+            else CmdRemovePlayer(playerID);
         }
 
-        public void RemovePlayerID(int playerID)
+        [Command]
+        private void CmdRemovePlayer(byte playerID)
+        {
+            RpcRemovePlayer(playerID);
+        }
+
+        [ClientRpc]
+        private void RpcRemovePlayer(byte playerID)
         {
             m_PlayersOnDoor.Remove(playerID);
         }
 
-        public bool IsPlayerOnDoor(int playerID)
+        public bool HasPlayerPressed(byte playerID)
         {
             return m_PlayersOnDoor.Contains(playerID);
         }

@@ -1,0 +1,44 @@
+using UnityEngine;
+using Mirror;
+using Interactions;
+using System.Collections.Generic;
+using System.Collections;
+
+public class TransitionToLab : NetworkBehaviour
+{
+    [SerializeField] private DoubleDoor m_DoubleDoor;
+    [SerializeField] private Transform m_Text;
+    [SerializeField] private float m_WaitingTime;
+
+    private HashSet<byte> m_PlayerIDs;
+
+    private void Start()
+    {
+        m_PlayerIDs = new HashSet<byte>();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!isServer) return;
+
+        PlayerObjectController player;
+        if (!other.TryGetComponent<PlayerObjectController>(out player)) return;
+
+        if (!m_PlayerIDs.Contains((byte)player.PlayerID)) return;
+
+        m_PlayerIDs.Add((byte)player.PlayerID);
+
+        if (m_PlayerIDs.Count < NewNetworkManager.NewSingleton.numPlayers) return;
+
+        StartCoroutine(MovingToLab());
+    }
+
+    private IEnumerator MovingToLab()
+    {
+        m_DoubleDoor.LockingDoors();
+        yield return new WaitForSeconds(m_WaitingTime);
+        m_Text.gameObject.SetActive(true); 
+        yield return new WaitForSeconds(2.2f);
+        NewNetworkManager.NewSingleton.LoadLabScene();
+    }
+}

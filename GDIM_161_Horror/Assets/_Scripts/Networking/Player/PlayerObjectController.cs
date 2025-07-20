@@ -1,22 +1,29 @@
 
-using UnityEngine;
 using Mirror;
-using Steamworks;
+using OtherUtils;
 using Player;
 using StarterAssets;
+using Steamworks;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
-public class PlayerObjectController : NetworkBehaviour
+public class PlayerObjectController : NetworkBehaviour, IDebugger
 {
     public static PlayerObjectController LocalInstance { get; private set; }
 
     // Player Data
     [SyncVar] public int ConnectionID;
-    [SyncVar] public int PlayerIdNumber;
+    [SyncVar] public int PlayerID;
     [SyncVar] public ulong PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
+
+    [SyncVar] private Vector3 m_LobbyPosition;
+    [SyncVar] private Quaternion m_LobbyRotation;
+
+    private bool m_Debugger;
 
     private NewNetworkManager manager;
     
@@ -35,6 +42,22 @@ public class PlayerObjectController : NetworkBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += SetPlayerLocation;
+        if (NewNetworkManager.NewSingleton.PlayersReady)
+        {
+            SetPlayerLocation();
+        }
+        else
+        {
+            NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
+        }
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log($"DISABLES");
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
+        SceneManager.sceneLoaded -= SetPlayerLocation;
     }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
@@ -48,6 +71,46 @@ public class PlayerObjectController : NetworkBehaviour
         {
             LobbyController.Instance.UpdatePlayerList();
         }
+    }
+
+    public void SetLobbyLocation(Vector3 position, Quaternion rotation)
+    {
+        m_LobbyPosition = position;
+        m_LobbyRotation = rotation;
+    }
+
+    private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
+    {
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+        Debugger($"Loaded Lobby Scene: Starting Corutine");
+        StartCoroutine(WaitToBeReady());
+    }
+
+    private IEnumerator WaitToBeReady()
+    {
+        yield return new WaitUntil(() => NewNetworkManager.NewSingleton.PlayersReady);
+        SetPlayerLocation();
+    }
+
+    public void SetPlayerLocation()
+    {
+        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+        
+        if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
+        else RpcPlayerLocation(location.position, location.rotation);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdSetPlayerLocation(Vector3 position, Quaternion rotation)
+    {
+        RpcPlayerLocation(position, rotation);
+    }
+
+    [ClientRpc]
+    private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
     }
 
     [Command]
@@ -82,6 +145,7 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStopClient()
     {
         Manager.GamePlayers.Remove(this);
+        PlayerManager.Instance.RemovePlayer(GetComponent<HandInventory>().PlayerID);
         LobbyController.Instance.UpdatePlayerList();
     }
 
@@ -115,6 +179,16 @@ public class PlayerObjectController : NetworkBehaviour
     [Command]
     public void CmdCanStartGame(string SceneName)
     {
-        manager.StartGame(SceneName);
+        manager.LoadMazeScene();
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }

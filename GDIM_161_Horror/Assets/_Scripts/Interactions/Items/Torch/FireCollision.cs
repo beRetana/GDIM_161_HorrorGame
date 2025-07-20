@@ -21,7 +21,7 @@ namespace Interactions
             FireCollision colFire;
 
             if (!col.gameObject.TryGetComponent<FireCollision>(out colFire)) return;
-
+            if (fireableObject == null) return;
             Debugger($"COLLIDED FIRE {colFire.gameObject.name}, {this}");
 
             if (!colFire.IsLit()) return; //check if other fire is lit
@@ -31,6 +31,7 @@ namespace Interactions
 
         public virtual bool IsLit()
         {
+            if (fireableObject == null) return false;
             return fireableObject.IsLit();
         }
 
