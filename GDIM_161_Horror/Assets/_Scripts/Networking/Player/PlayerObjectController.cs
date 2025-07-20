@@ -1,5 +1,6 @@
 
 using Mirror;
+using Mono.CSharp;
 using OtherUtils;
 using Player;
 using StarterAssets;
@@ -42,7 +43,9 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+        if (!isLocalPlayer) return;
         SceneManager.sceneLoaded += SetPlayerLocation;
+
         if (NewNetworkManager.NewSingleton.PlayersReady)
         {
             SetPlayerLocation();
@@ -51,6 +54,8 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         {
             NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
         }
+
+        Debugger("STARTED");
     }
 
     private void OnDisable()
@@ -80,23 +85,30 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
 
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
-        Debugger($"Loaded Lobby Scene: Starting Corutine");
+        //if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+        Debugger($"Loaded Lobby Scene: Starting Coroutine");
         StartCoroutine(WaitToBeReady());
     }
 
     private IEnumerator WaitToBeReady()
     {
-        yield return new WaitUntil(() => NewNetworkManager.NewSingleton.PlayersReady);
+        while (!(NewNetworkManager.NewSingleton.PlayersReady && NetworkClient.ready))
+        {
+            Debugger("Contidion is false");
+            yield return null;
+        }
+        Debugger("Contidion is True");
         SetPlayerLocation();
     }
 
     public void SetPlayerLocation()
     {
+        NewNetworkManager.NewSingleton.UpdateLocationList();
         Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-        
-        if (!isServer) CmdSetPlayerLocation(location.position, location.rotation);
-        else RpcPlayerLocation(location.position, location.rotation);
+
+        Debugger("Setting new Location");
+        transform.position = location.position;
+        transform.rotation = location.rotation;
     }
 
     [Command(requiresAuthority = false)]
@@ -108,6 +120,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
     {
+        Debugger("Setting new Location");
         transform.position = position;
         transform.rotation = rotation;
     }
