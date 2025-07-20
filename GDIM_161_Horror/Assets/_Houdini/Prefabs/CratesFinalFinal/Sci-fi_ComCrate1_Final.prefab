@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 3646197659279223090}
   - component: {fileID: 7806652441243021245}
   - component: {fileID: 5797879930863500625}
-  - component: {fileID: 638202909620696919}
-  m_Layer: 0
+  - component: {fileID: 3341203605009631594}
+  - component: {fileID: 6803717753084569173}
+  m_Layer: 3
   m_Name: Sci-fi_ComCrate1_Final
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,8 +88,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &638202909620696919
-MeshCollider:
+--- !u!65 &3341203605009631594
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,7 +106,22 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5418972156026204670, guid: ef0667804f4adc942b6ab54eaaa5f22f, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.152086, y: 5.210238, z: 2.4024463}
+  m_Center: {x: 0, y: 0, z: 1.2012231}
+--- !u!208 &6803717753084569173
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8565712534888477118}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.0760001, y: 2.605, z: 1.2010001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 1.2010001}
+  m_TimeToStationary: 0.5
