@@ -265,6 +265,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             gameplayMenuHUD.ResetSurrender();
             if (!gameplayMenuHUD.isLocalPlayer) continue;
             Debugger($"SERVER - Starting ROUTINE");
+            gameplayMenuHUD.ToggleVolumeMenu();
             gameplayMenuHUD.StartCoroutine();
         }
     }

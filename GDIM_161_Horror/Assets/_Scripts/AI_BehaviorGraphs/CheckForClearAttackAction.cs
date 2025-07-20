@@ -12,29 +12,20 @@ public partial class CheckForClearAttackAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<float> Range;
 
-    private const float RADIUS = 1f;
-    private int player = 1 << 10;
     private int ground = 1 << 3;
     private int wall = 1 << 8;
     private int door = 1 << 11;
 
     protected override Status OnStart()
     {
-        int detectables = player | ground | wall | door;
-        RaycastHit hit;
-        if (!Physics.SphereCast(Self.Value.transform.position + Vector3.up , RADIUS,
-            Self.Value.transform.forward, out hit, Range.Value, detectables))
-        {
-            return Status.Failure;
-        }
+        bool isTargetInRange = (Target.Value.transform.position - Self.Value.transform.position).sqrMagnitude < Range.Value * Range.Value;
+        if (!isTargetInRange) return Status.Failure;
+        Debug.Log("Target is in range");
+        int obstacles = ground | wall | door;
+        bool isTargetObstructed = Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out _,Range.Value, obstacles);
         
-        if (hit.collider.transform.root.gameObject != Target.Value.gameObject)
-        {
-            Debug.Log($"Collided against {hit.collider.transform.root.gameObject}, " +
-                      $"current target is {Target.Value.gameObject}");
-            return Status.Failure;
-        }
-
+        if (isTargetObstructed) return Status.Failure;
+        Debug.Log("Target is in clear");
         return Status.Success;
     }
 }

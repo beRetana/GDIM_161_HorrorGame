@@ -55,7 +55,6 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
 
     private void OnDisable()
     {
-        Debug.Log($"DISABLES");
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
         SceneManager.sceneLoaded -= SetPlayerLocation;
     }
