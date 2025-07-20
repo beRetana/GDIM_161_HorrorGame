@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AI_FSM
 {
-    //[ExecuteInEditMode]
+    [ExecuteInEditMode]
 
     public class AISightSensor : MonoBehaviour
     {
