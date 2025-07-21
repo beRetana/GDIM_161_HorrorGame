@@ -122,14 +122,19 @@ public class FinalDoor : MoveDoors
 
     private void CrazySequence()
     {
+        KeyCard[] keycards = FindObjectsByType<KeyCard>(FindObjectsSortMode.None);
+
+        foreach (KeyCard keycard in keycards)
+        {
+            keycard.ChangeToAlertMode();
+        }
+
         MonsterData[] monsters = FindObjectsByType<MonsterData>(FindObjectsSortMode.None);
         Debugger($"Found {monsters.Length} monsters");
         foreach (MonsterData monster in monsters)
         {
             monster.SetAggressiveStats();
         }
-
-        OnDoorEnteredAlert?.Invoke();
     }
 
     public bool TryUnlockDoor(int playerID)
