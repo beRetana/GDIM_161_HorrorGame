@@ -16,9 +16,9 @@ public partial class AttackPlayerAction : Action
     protected override Status OnStart()
     {
         PlayerBase player = Player.Value.GetComponent<PlayerBase>();
-        MonsterAnimator monsterAnimator = Self.Value.GetComponent<MonsterAnimator>();
+        MonsterAnimator monsterAnimator = Self.Value.GetComponentInChildren<MonsterAnimator>();
         
-        //player.LockPlayer();
+        player.LockPlayer();
         
         int attack = UnityEngine.Random.Range(0, 2);
 
