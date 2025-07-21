@@ -47,7 +47,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         
         m_PlayersReady = false;
         ++m_LoadedScenePlayerCount;
-        Debugger($"Ready Players: {m_LoadedScenePlayerCount}");
+        Debugger($"Ready Players: {m_LoadedScenePlayerCount} out of {numPlayers}");
         
         if (m_LoadedScenePlayerCount < numPlayers) return;
         Debugger($"Loading Locations and resetting values");
