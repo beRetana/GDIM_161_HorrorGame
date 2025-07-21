@@ -29,7 +29,7 @@ public partial class CheckForClearAttackAction : Action
         int detectables = ground | wall | door | player;
 
         RaycastHit hit;
-        Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out hit, Range.Value, detectables);
+        if (!Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out hit, Range.Value, detectables)) return Status.Failure;
         
         bool isTargetObstructed = hit.collider.transform.root != Target.Value.transform;
         
