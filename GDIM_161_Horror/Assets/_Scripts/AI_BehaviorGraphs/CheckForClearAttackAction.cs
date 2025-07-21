@@ -20,12 +20,8 @@ public partial class CheckForClearAttackAction : Action
     protected override Status OnStart()
     {
         float distSqr = (Target.Value.transform.position - Self.Value.transform.position).sqrMagnitude;
-        Debug.Log($"Target: {Target.Value.gameObject} and Self: {Self.Value.gameObject}");
-        Debug.Log($"Distance: {distSqr} needed {Range.Value * Range.Value}");
         if (!(distSqr < Range.Value * Range.Value)) return Status.Failure;
-        Debug.Log("Target is in range");
         if (distSqr <= 1f) return Status.Success;
-        Debug.Log("Target is +1 of distance");
         int detectables = ground | wall | door | player;
 
         RaycastHit hit;
@@ -35,7 +31,6 @@ public partial class CheckForClearAttackAction : Action
         
         if (isTargetObstructed) return Status.Failure;
         
-        Debug.Log("Target is in clear");
         return Status.Success;
     }
 }
