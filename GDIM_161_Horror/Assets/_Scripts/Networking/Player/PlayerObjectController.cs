@@ -98,12 +98,13 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
             yield return null;
         }
         Debugger("Contidion is True");
+        NewNetworkManager.NewSingleton.UpdateLocationList();
+        yield return null;
         SetPlayerLocation();
     }
 
     public void SetPlayerLocation()
     {
-        NewNetworkManager.NewSingleton.UpdateLocationList();
         Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
 
         Debugger("Setting new Location");

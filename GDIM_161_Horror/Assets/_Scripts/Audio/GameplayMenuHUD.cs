@@ -3,12 +3,10 @@ using UnityEngine.InputSystem;
 using OtherUtils;
 using UnityEngine.UI;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 using TMPro;
 using StarterAssets;
 using System.Collections;
 using Mirror;
-using Unity.VisualScripting;
 
 public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
@@ -168,7 +166,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         }
     }
 
-    private void ChangeCursorState(bool freeMouse)
+    public void ChangeCursorState(bool freeMouse)
     {
         Cursor.lockState = (freeMouse) ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = freeMouse;
@@ -186,12 +184,17 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         Debugger($"The current state is paused: {m_IsPaused} the new state is pause: {!m_IsPaused}");
         if (!m_IsPaused) m_PauseMenu.SetActive(true);
         else SetMenuActive(false);
-        m_MouseDot.SetActive(m_IsPaused);
-        m_PlayerInput.enabled = m_IsPaused;
-        m_HandInventory.EnablePickingUp = m_IsPaused;
-        m_HandInventory.SetControlsActive(m_IsPaused);
+        SetControls(m_IsPaused);
         m_IsPaused = !m_IsPaused;
         ChangeCursorState(m_IsPaused);
+    }
+
+    public void SetControls(bool active)
+    {
+        m_MouseDot.SetActive(active);
+        m_PlayerInput.enabled = active;
+        m_HandInventory.EnablePickingUp = active;
+        m_HandInventory.SetControlsActive(active);
     }
 
     private void GameState(bool isPlayerUp)
@@ -231,8 +234,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_PlayersDown = 0;
 
         Debugger($"Starting Surrender");
-        if (isServer) StartSurrenderSetUp();
-        else CmdStartSurrenderSetUp();
+        if (isServer) StartGameOverSetUp(false);
+        else CmdStartGameOverSetUp();
     }
 
     private void Surrender()
@@ -249,14 +252,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdStartSurrenderSetUp()
+    private void CmdStartGameOverSetUp()
     {
         Debugger($"CMD - Starting Surrender");
-        StartSurrenderSetUp();
+        StartGameOverSetUp(false);
     }
 
     [Server]
-    private void StartSurrenderSetUp()
+    public void StartGameOverSetUp(bool won)
     {
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         
@@ -265,17 +268,18 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
             gameplayMenuHUD.ResetSurrender();
             if (!gameplayMenuHUD.isLocalPlayer) continue;
             Debugger($"SERVER - Starting ROUTINE");
-            gameplayMenuHUD.ToggleVolumeMenu();
-            gameplayMenuHUD.StartCoroutine();
+            gameplayMenuHUD.OpenVolumeMenu();
+            gameplayMenuHUD.ChangeCursorState(true);
+            gameplayMenuHUD.StartCoroutine(won);
         }
     }
 
-    public void StartCoroutine()
+    public void StartCoroutine(bool won)
     {
-        StartCoroutine(SurrenderSetUp());
+        StartCoroutine(SurrenderSetUp(won));
     }
 
-    private IEnumerator SurrenderSetUp()
+    private IEnumerator SurrenderSetUp(bool won)
     {
         m_PlayerData.EndGame();
         
@@ -285,7 +289,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         
         for (byte i = 0; i < playerManagerHUDs.Length; ++i)
         {
-            playerManagerHUDs[i].SetEndGame(false);
+            playerManagerHUDs[i].SetEndGame(won);
         }
 
         m_GameEnded = false;

@@ -7,6 +7,7 @@ public class PlayerManagerHUD : NetworkBehaviour
     [SerializeField] private GameObject m_InteractionGameObject;
     [SerializeField] private GameObject m_InGameMenuGameObject;
     [SerializeField] private GameObject m_EndGameGameObject;
+    [SerializeField] private GameObject m_CreditsGameObject;
 
     private Transform m_PlayerManagerHUD;
     private GameplayMenuHUD m_GameplayMenuHUD;
@@ -66,6 +67,11 @@ public class PlayerManagerHUD : NetworkBehaviour
         }
     }
 
+    public void SetCredits(bool active)
+    {
+        m_CreditsGameObject.SetActive(active);
+    }
+
     public void SetEndGame(bool won)
     {
         RpcSetEndGame(won);
@@ -75,6 +81,8 @@ public class PlayerManagerHUD : NetworkBehaviour
     private void RpcSetEndGame(bool won)
     {
         if (!isLocalPlayer) return;
+        m_GameplayMenuHUD.ChangeCursorState(true);
+        m_GameplayMenuHUD.SetControls(false);
         SetGameObjectsUI(false);
         m_EndGameHUD.SetEndGameUI(won);
     }
