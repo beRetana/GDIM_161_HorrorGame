@@ -5,7 +5,6 @@ public class KeyCard : InteractableItem
 {
     [SerializeField] private Transform m_Visuals;
     [SerializeField] private string m_WarningMessage;
-    private int m_X_Layer = 12;
 
     public virtual void ChangeToAlertMode()
     {
