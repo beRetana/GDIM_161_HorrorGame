@@ -93,8 +93,8 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     private void RpcSetPlayerLocation(Vector3 position, Quaternion rotation)
     {
         Debugger($"Setting new Location ({position}):({rotation})");
-        transform.position = position;
-        transform.rotation = rotation;
+        GetComponent<NetworkTransformUnreliable>().CmdTeleport(position, rotation);
+        
     }
 
     private IEnumerator WaitForCondition(Func<bool> condition, Action function)
