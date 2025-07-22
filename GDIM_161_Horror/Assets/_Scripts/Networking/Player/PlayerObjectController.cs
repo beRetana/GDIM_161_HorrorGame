@@ -21,9 +21,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
-    [SyncVar] private Vector3 m_LobbyPosition;
-    [SyncVar] private Quaternion m_LobbyRotation;
-
+    [SyncVar] private bool m_ClientsReady;
     private bool m_Debugger;
 
     private NewNetworkManager manager;
@@ -43,14 +41,13 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-        if (!isLocalPlayer) return;
+
         SceneManager.sceneLoaded += SetPlayerLocation;
 
         if (NewNetworkManager.NewSingleton.PlayersReady)
         {
             SetPlayerLocation();
         }
-
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
     }
 
@@ -73,16 +70,27 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         }
     }
 
-    public void SetLobbyLocation(Vector3 position, Quaternion rotation)
-    {
-        m_LobbyPosition = position;
-        m_LobbyRotation = rotation;
-    }
-
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
+        if (!isServer) return;
+
         Debugger($"Loaded Scene: Starting Coroutine");
         StartCoroutine(WaitToBeReady());
+    }
+
+    public void SetPlayerLocation()
+    {
+        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+
+        RpcSetPlayerLocation(location.position, location.rotation);
+    }
+
+    [ClientRpc]
+    private void RpcSetPlayerLocation(Vector3 position, Quaternion rotation)
+    {
+        Debugger("Setting new Location");
+        transform.position = position;
+        transform.rotation = rotation;
     }
 
     private IEnumerator WaitToBeReady()
@@ -93,32 +101,10 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
             yield return null;
         }
         Debugger("Contidion is True");
+        m_ClientsReady = true;
         NewNetworkManager.NewSingleton.UpdateLocationList();
         yield return null;
         SetPlayerLocation();
-    }
-
-    public void SetPlayerLocation()
-    {
-        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-
-        Debugger("Setting new Location");
-        transform.position = location.position;
-        transform.rotation = location.rotation;
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdSetPlayerLocation(Vector3 position, Quaternion rotation)
-    {
-        RpcPlayerLocation(position, rotation);
-    }
-
-    [ClientRpc]
-    private void RpcPlayerLocation(Vector3 position, Quaternion rotation)
-    {
-        Debugger("Setting new Location");
-        transform.position = position;
-        transform.rotation = rotation;
     }
 
     [Command]
