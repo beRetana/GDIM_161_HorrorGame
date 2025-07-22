@@ -778,7 +778,6 @@ GameObject:
   - component: {fileID: 8101340911783084350}
   - component: {fileID: 7151339707029349449}
   - component: {fileID: 1369710893841643461}
-  - component: {fileID: 711085083035516619}
   - component: {fileID: 1366506114539902964}
   m_Layer: 6
   m_Name: Monster_Base
@@ -973,7 +972,7 @@ MonoBehaviour:
           m_Value0: 18341614470001986583
           m_Value1: 6951489477359944025
         Name: SoundSensor
-        m_Value: {fileID: 711085083035516619}
+        m_Value: {fileID: 0}
     - rid: 6831410202846429265
       type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -1052,19 +1051,6 @@ MonoBehaviour:
   _debugSphereSizeDetectedObjects: 1
   _debugSegments: 10
   _enableDebugVisuals: 0
---- !u!114 &711085083035516619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6314777827733659042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bced0f9349ae2574fa1ffe5cde9079e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_debugger: 1
 --- !u!114 &1366506114539902964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1608,7 +1594,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 8247961765527365976}
-  m_CallBacks: {fileID: 0}
   m_MaxSpeed: 8
 --- !u!1 &8694717114070893362
 GameObject:
