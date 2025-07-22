@@ -224,7 +224,6 @@ namespace Interactions
             flameOrange.localScale = newFlameScale;
             flameYellow.localScale = newFlameScale;
             torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * scalar; // Lerping starting temperature to ending temperature.
-
         }
         private void SetVisualLightIntensity(float intensePercent)
         {
@@ -258,9 +257,10 @@ namespace Interactions
             {
                 inventory.SwapAction();
             }
-            
-            inventory.DropAction();
+
+
             transform.root.gameObject.SetActive(false);
+            inventory.DropAction();
 
             if (isServer) RpcTurnOff();
             else CmdTurnOff();
@@ -277,7 +277,6 @@ namespace Interactions
         {
             transform.root.gameObject.SetActive(false);
             _interactableItem.SetInteractive(false);
-            gameObject.SetActive(false);
         }
 
         #endregion flame_helpers
