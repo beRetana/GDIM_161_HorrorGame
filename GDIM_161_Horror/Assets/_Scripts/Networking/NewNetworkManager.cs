@@ -35,6 +35,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.Start();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        UpdateLocationList();
     }
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
@@ -85,7 +86,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        return;
         if (scene.name == GetMainMenuScene()) return;
         Debugger($"Updating the Location List");
         UpdateLocationList();
