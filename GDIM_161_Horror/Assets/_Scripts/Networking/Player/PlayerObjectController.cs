@@ -40,6 +40,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     {
         DontDestroyOnLoad(this.gameObject);
 
+        return;
         SceneManager.sceneLoaded += SetPlayerLocation;
         NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetStartLocation;
     }
