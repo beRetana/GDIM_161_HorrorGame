@@ -34,7 +34,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void Start()
     {
         base.Start();
-        SceneManager.sceneLoaded += UpdateLocationList;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
@@ -75,7 +75,15 @@ public class NewNetworkManager : NetworkManager, IDebugger
         }
     }
 
-    private void UpdateLocationList(Scene scene, LoadSceneMode mode)
+    public override void OnServerDisconnect(NetworkConnectionToClient conn)
+    {
+        PlayerObjectController player;
+        if (conn.identity?.TryGetComponent<PlayerObjectController>(out player) == null) return;
+        Debugger($"Player: {player.PlayerID}" + $"disconnected from server.");
+        GamePlayers.Remove(player);
+        base.OnServerDisconnect(conn);
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == GetMainMenuScene()) return;
         Debugger($"Updating the Location List");

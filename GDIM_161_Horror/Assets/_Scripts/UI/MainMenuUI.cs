@@ -16,7 +16,10 @@ public class MainMenuUI : MonoBehaviour
             Debug.LogError("Steam is not initialized.");
             return;
         }
+    }
 
+    private void OnEnable()
+    {
         m_HostButton.onClick.AddListener(OnClickedHost);
         m_JoinButton.onClick.AddListener(OnClickedJoin);
     }
@@ -35,15 +38,20 @@ public class MainMenuUI : MonoBehaviour
 
     private void OnClickedHost()
     {
-        Debugger("[MainMenuUI] : OnCliked Host, starting host");
+        Debugger("[MainMenuUI]: OnCliked Host, starting host");
         m_JoinButton.gameObject.SetActive(false);
-        SteamLobby manager = FindAnyObjectByType<SteamLobby>();
-        manager.HostLobby();
+        SteamLobby.Instance.HostLobby();
     }
 
     private void OnClickedJoin()
     {
         OpenOverlay();
+    }
+
+    private void OnDisable()
+    {
+        m_HostButton.onClick.AddListener(OnClickedHost);
+        m_JoinButton.onClick.AddListener(OnClickedJoin);
     }
 
     private void Debugger(object log)

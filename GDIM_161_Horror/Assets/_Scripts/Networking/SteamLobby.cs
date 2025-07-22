@@ -19,7 +19,7 @@ public class SteamLobby : MonoBehaviour
     private const string HostAddressKey = "HostAddress";
     private NewNetworkManager _manager;
 
-    [SerializeField] private const string MAIN_SCENE = "BUILD_MainMenu";
+    [SerializeField] private string MAIN_SCENE = "BUILD_MainMenu";
     [SerializeField] private bool _debugger;
 
     public ulong CurrentLobbyID { get => _currentLobbyID; set => _currentLobbyID = value; }
@@ -33,6 +33,7 @@ public class SteamLobby : MonoBehaviour
         }
 
         if (Instance == null) { Instance = this; }
+        else Destroy(this.gameObject);
 
         _manager = GetComponent<NewNetworkManager>();
         if (_manager == null)

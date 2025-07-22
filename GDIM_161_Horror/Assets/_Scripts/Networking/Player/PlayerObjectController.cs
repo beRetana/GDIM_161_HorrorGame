@@ -1,14 +1,13 @@
 
 using Mirror;
-using Mono.CSharp;
 using OtherUtils;
 using Player;
 using StarterAssets;
 using Steamworks;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class PlayerObjectController : NetworkBehaviour, IDebugger
 {
@@ -21,7 +20,6 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool Ready;
 
-    [SyncVar] private bool m_ClientsReady;
     private bool m_Debugger;
 
     private NewNetworkManager manager;
@@ -43,17 +41,12 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         DontDestroyOnLoad(this.gameObject);
 
         SceneManager.sceneLoaded += SetPlayerLocation;
-
-        if (NewNetworkManager.NewSingleton.PlayersReady)
-        {
-            SetPlayerLocation();
-        }
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetStartLocation;
     }
 
     private void OnDisable()
     {
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetPlayerLocation;
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetStartLocation;
         SceneManager.sceneLoaded -= SetPlayerLocation;
     }
 
@@ -75,36 +68,44 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         if (!isServer) return;
 
         Debugger($"Loaded Scene: Starting Coroutine");
-        StartCoroutine(WaitToBeReady());
+
+        Func<bool> condition = () => NewNetworkManager.NewSingleton.PlayersReady && NetworkClient.ready;
+        Action action = () => {
+            NewNetworkManager.NewSingleton.UpdateLocationList();
+            SetStartLocation();};
+
+        StartCoroutine(WaitForCondition(condition, action));
     }
 
-    public void SetPlayerLocation()
+    public void SetStartLocation()
     {
-        Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+        Func<bool> condition = () => NewNetworkManager.NewSingleton.SpawnPoints[PlayerID] != null;
+        Action action = () =>
+        {
+            Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
+            RpcSetPlayerLocation(location.position, location.rotation);
+        };
 
-        RpcSetPlayerLocation(location.position, location.rotation);
+        StartCoroutine(WaitForCondition(condition, action));
     }
 
     [ClientRpc]
     private void RpcSetPlayerLocation(Vector3 position, Quaternion rotation)
     {
-        Debugger("Setting new Location");
+        Debugger($"Setting new Location ({position}):({rotation})");
         transform.position = position;
         transform.rotation = rotation;
     }
 
-    private IEnumerator WaitToBeReady()
+    private IEnumerator WaitForCondition(Func<bool> condition, Action function)
     {
-        while (!(NewNetworkManager.NewSingleton.PlayersReady && NetworkClient.ready))
+        while (!condition())
         {
             Debugger("Contidion is false");
             yield return null;
         }
         Debugger("Contidion is True");
-        m_ClientsReady = true;
-        NewNetworkManager.NewSingleton.UpdateLocationList();
-        yield return null;
-        SetPlayerLocation();
+        function();
     }
 
     [Command]
