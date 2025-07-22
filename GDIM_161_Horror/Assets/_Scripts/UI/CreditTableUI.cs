@@ -5,7 +5,7 @@ using UnityEditor.Toolbars;
 
 public class CreditTableUI : MonoBehaviour
 {
-    [SerializeField] private HorizontalLayoutGroup m_HorizontalGrid;
+    [SerializeField] private VerticalLayoutGroup m_VerticalGrid;
     [SerializeField] private CreditsInformation m_Information;
     [SerializeField] private Transform m_CategoryTemplate;
     [SerializeField] private Transform m_InfoTemplate;
@@ -32,30 +32,24 @@ public class CreditTableUI : MonoBehaviour
     {
         for (byte index = 0; index < m_Information.CreditsCategories.Length; ++index)
         {
-            Transform category = Instantiate(m_CategoryTemplate, m_HorizontalGrid.transform);
-            PopulateCategory(category, index);
+            CreateCreditCell(m_CategoryTemplate, m_Information.CreditsCategories[index].Category);
+            PopulateCategory(index);
         }
     }
 
-    private void PopulateCategory(Transform container, byte index)
+    private void PopulateCategory(byte index)
     {
-        var information = m_Information.CreditsCategories[index];
-        Transform category = CreateCreditCell(container, information.Category);
-        TextMeshProUGUI content = category.GetComponent<TextMeshProUGUI>();
-        content.fontSize = 48f;
-        content.color = Color.red;
-        content.alignment = TextAlignmentOptions.Center;
-        content.fontStyle = FontStyles.Bold | FontStyles.Italic;
+        var lines = m_Information.CreditsCategories[index];
 
-        foreach (string text in information.Lines)
+        foreach (string text in lines.Lines)
         {
-            CreateCreditCell(container, text);
+            CreateCreditCell(m_InfoTemplate, text);
         }
     }
 
-    private Transform CreateCreditCell(Transform parent, string content)
+    private Transform CreateCreditCell(Transform template, string content)
     {
-        Transform container = Instantiate(m_InfoTemplate, parent);
+        Transform container = Instantiate(template, m_VerticalGrid.transform);
         TextMeshProUGUI textMesh;
         if (!container.TryGetComponent<TextMeshProUGUI>(out textMesh)) return null;
         textMesh.text = content;

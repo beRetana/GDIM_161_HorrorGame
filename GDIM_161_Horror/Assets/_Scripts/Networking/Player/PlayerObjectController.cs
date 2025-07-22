@@ -50,12 +50,8 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         {
             SetPlayerLocation();
         }
-        else
-        {
-            NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
-        }
 
-        Debugger("STARTED");
+        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetPlayerLocation;
     }
 
     private void OnDisable()
@@ -85,8 +81,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
 
     private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
     {
-        //if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
-        Debugger($"Loaded Lobby Scene: Starting Coroutine");
+        Debugger($"Loaded Scene: Starting Coroutine");
         StartCoroutine(WaitToBeReady());
     }
 

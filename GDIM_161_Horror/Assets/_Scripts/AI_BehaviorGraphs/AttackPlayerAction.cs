@@ -18,7 +18,7 @@ public partial class AttackPlayerAction : Action
         PlayerBase player = Player.Value.GetComponent<PlayerBase>();
         MonsterAnimator monsterAnimator = Self.Value.GetComponentInChildren<MonsterAnimator>();
         
-        player.LockPlayer();
+        //player.LockPlayer();
         
         int attack = UnityEngine.Random.Range(0, 2);
 
