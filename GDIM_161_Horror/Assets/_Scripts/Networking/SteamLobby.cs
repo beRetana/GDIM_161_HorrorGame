@@ -19,7 +19,6 @@ public class SteamLobby : MonoBehaviour
     private const string HostAddressKey = "HostAddress";
     private NewNetworkManager _manager;
 
-    [SerializeField] private string MAIN_SCENE = "BUILD_MainMenu";
     [SerializeField] private bool _debugger;
 
     public ulong CurrentLobbyID { get => _currentLobbyID; set => _currentLobbyID = value; }
