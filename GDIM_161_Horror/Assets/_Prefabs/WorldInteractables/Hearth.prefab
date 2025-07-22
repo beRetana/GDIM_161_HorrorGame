@@ -94,11 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de39ad5c95ec0d24caa2662c4e483c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   maybeFireable: {fileID: 2523596723460159556}
-  _debugger: 0
 --- !u!1 &2523596723460159556
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CAMPFIRE_VFX
       objectReference: {fileID: 0}
+    - target: {fileID: 1401886914597690457, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2347329676077029387, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -332,9 +332,53 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2679902376700411930, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680642507913552330, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680642507913552330, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4417382520000706268, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4417382520000706268, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5611199012649179293, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5611199012649179293, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7060209950102045673, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
       propertyPath: OverrideMaxDistance
       value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7554354803849772431, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7709277534202488509, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143976879359853992, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143976879359853992, guid: e36f8d879aaa2ab479b438f65d6bab04, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
