@@ -101,7 +101,14 @@ namespace Interactions
         public override void UseItem(int playerId, InputData context)
         {
             Debug.Log("Using torch");
-            PlayerManager.Instance.GetPlayer(playerId).GetComponent<PlayerAnimator>().RaiseHand();
+            if (!isServer) return;
+            RpcRaiseHand(playerId);
+        }
+
+        [ClientRpc]
+        private void RpcRaiseHand(int playerID)
+        {
+            PlayerManager.Instance.GetPlayer(playerID).GetComponent<PlayerAnimator>().RaiseHand();
         }
 
 
@@ -144,8 +151,6 @@ namespace Interactions
         private void UpdateTimers()
         {
             burnVelocity = CalcSmoothRandom(burnVelocity);
-            //Debug.Log($"burnAcceleration = {burnAcelleration}");
-            //Debug.Log($"burnVelocity = {burnVelocity}");
 
             pyrolysisTimer -= burnVelocity * Time.fixedDeltaTime;
             BurnTimer -= burnVelocity * Time.fixedDeltaTime; // * tickSpeedMultiplier_ByFloor
