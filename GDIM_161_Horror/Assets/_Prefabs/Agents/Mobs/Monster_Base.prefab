@@ -779,7 +779,6 @@ GameObject:
   - component: {fileID: 7151339707029349449}
   - component: {fileID: 1369710893841643461}
   - component: {fileID: 711085083035516619}
-  - component: {fileID: 3060021676725567711}
   - component: {fileID: 1366506114539902964}
   m_Layer: 6
   m_Name: Monster_Base
@@ -906,7 +905,7 @@ NavMeshAgent:
   m_Acceleration: 4
   avoidancePriority: 20
   m_AngularSpeed: 720
-  m_StoppingDistance: 3
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1047,12 +1046,12 @@ MonoBehaviour:
   _height: 2.5
   _scanFrequency: 2
   _maxDetectables: 10
-  _enableDebugger: 1
+  _enableDebugger: 0
   _debugMeshColor: {r: 0, g: 1, b: 0, a: 1}
   _debugColorObjectDectected: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
   _debugSphereSizeDetectedObjects: 1
   _debugSegments: 10
-  _enableDebugVisuals: 1
+  _enableDebugVisuals: 0
 --- !u!114 &711085083035516619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,21 +1065,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_debugger: 1
---- !u!114 &3060021676725567711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6314777827733659042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 999ef665100b7334293e9165d0351eda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 8247961765527365976}
-  m_CallBacks: {fileID: 4954179013797666766}
-  m_MaxSpeed: 8
 --- !u!114 &1366506114539902964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1552,7 +1536,7 @@ GameObject:
   - component: {fileID: 3595619777550554333}
   - component: {fileID: 8247961765527365976}
   - component: {fileID: 1574097073443286668}
-  - component: {fileID: 4954179013797666766}
+  - component: {fileID: 8138473432956522090}
   m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
@@ -1611,7 +1595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db97967d144d90499a830c83d47eef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4954179013797666766
+--- !u!114 &8138473432956522090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1620,9 +1604,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8657545777587111654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09bc6e954e34e2f47bec2ffa8ed1fd5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 999ef665100b7334293e9165d0351eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 8247961765527365976}
+  m_CallBacks: {fileID: 0}
+  m_MaxSpeed: 8
 --- !u!1 &8694717114070893362
 GameObject:
   m_ObjectHideFlags: 0

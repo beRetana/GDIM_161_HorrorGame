@@ -15,17 +15,22 @@ public partial class CheckForClearAttackAction : Action
     private int ground = 1 << 3;
     private int wall = 1 << 8;
     private int door = 1 << 11;
+    private int player = 1 << 10;
 
     protected override Status OnStart()
     {
-        bool isTargetInRange = (Target.Value.transform.position - Self.Value.transform.position).sqrMagnitude < Range.Value * Range.Value;
-        if (!isTargetInRange) return Status.Failure;
-        Debug.Log("Target is in range");
-        int obstacles = ground | wall | door;
-        bool isTargetObstructed = Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out _,Range.Value, obstacles);
+        float distSqr = (Target.Value.transform.position - Self.Value.transform.position).sqrMagnitude;
+        if (!(distSqr < Range.Value * Range.Value)) return Status.Failure;
+        if (distSqr <= 1f) return Status.Success;
+        int detectables = ground | wall | door | player;
+
+        RaycastHit hit;
+        if (!Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out hit, Range.Value, detectables)) return Status.Failure;
+        
+        bool isTargetObstructed = hit.collider.transform.root.tag == Target.Value.transform.tag;
         
         if (isTargetObstructed) return Status.Failure;
-        Debug.Log("Target is in clear");
+        
         return Status.Success;
     }
 }

@@ -11,7 +11,7 @@ namespace Interactions
     public class DoubleDoor : NetworkBehaviour, IDebugger
     {
         [Header("Door Settings/Components")]
-        [SerializeField] private DoorButton[] _doorHandles;
+        [SerializeField] private DoorButton[] m_DoorButtons;
         [SerializeField] private float _openDoorAnimationTime;
         [SerializeField] private float _openDoorDelay = 2f;
         [SerializeField] private DoorData m_RightDoor;
@@ -20,6 +20,7 @@ namespace Interactions
         private List<byte> m_PlayersOnDoor;
         private Vector3 m_RightDoorOriginal;
         private Vector3 m_LeftDoorOriginal;
+        private byte m_PlayersRequired;
         private bool _debugger;
 
         [Serializable]
@@ -45,6 +46,24 @@ namespace Interactions
             m_RightDoorOriginal = m_RightDoor.DoorTransform.position;
             m_LeftDoorOriginal = m_LeftDoor.DoorTransform.position;
             m_PlayersOnDoor = new List<byte>();
+            m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
+            
+            if (m_DoorButtons.Length > m_PlayersRequired)
+            {
+                AdjustButtonNumber();
+            }
+            else
+            {
+                m_PlayersRequired = (byte)m_DoorButtons.Length;
+            }
+        }
+
+        private void AdjustButtonNumber()
+        {
+            for (int i = m_DoorButtons.Length - 1; i >= m_PlayersRequired; --i)
+            {
+                m_DoorButtons[i].transform.parent.gameObject.SetActive(false);
+            }
         }
 
         public void UpdateDoorState(DoorState state)
@@ -117,7 +136,7 @@ namespace Interactions
         private void RpcAddPlayer(byte playerID)
         {
             m_PlayersOnDoor.Add(playerID);
-            if (m_PlayersOnDoor.Count < _doorHandles.Length) return;
+            if (m_PlayersOnDoor.Count < m_PlayersRequired) return;
             UpdateDoorState(DoorState.Unlocking);
         }
         

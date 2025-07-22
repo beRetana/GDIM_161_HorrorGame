@@ -31,7 +31,7 @@ public class MoveDoors : NetworkBehaviour, IDebugger
 
     protected virtual void Start()
     {
-        float doorSize = m_RightDoorTransform.GetComponent<Collider>().bounds.size.z;
+        float doorSize = m_RightDoorTransform.GetComponent<Collider>().bounds.size.x;
 
         m_LefDoorClosedPosition = m_LeftDoorTransform.position;
         m_LeftDoorOpenPosition = m_LefDoorClosedPosition + (transform.forward * doorSize);

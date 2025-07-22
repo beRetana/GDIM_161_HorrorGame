@@ -7,14 +7,15 @@ using System.Collections;
 public class TransitionToLab : NetworkBehaviour
 {
     [SerializeField] private DoubleDoor m_DoubleDoor;
+    [SerializeField] private Collider m_Collider;
     [SerializeField] private Transform m_Text;
     [SerializeField] private float m_WaitingTime;
 
-    private HashSet<byte> m_PlayerIDs;
+    private List<byte> m_PlayerIDs;
 
     private void Start()
     {
-        m_PlayerIDs = new HashSet<byte>();
+        m_PlayerIDs = new List<byte>();
     }
 
     private void OnTriggerExit(Collider other)
@@ -24,7 +25,7 @@ public class TransitionToLab : NetworkBehaviour
         PlayerObjectController player;
         if (!other.TryGetComponent<PlayerObjectController>(out player)) return;
 
-        if (!m_PlayerIDs.Contains((byte)player.PlayerID)) return;
+        if (m_PlayerIDs.Contains((byte)player.PlayerID)) return;
 
         m_PlayerIDs.Add((byte)player.PlayerID);
 
@@ -35,10 +36,11 @@ public class TransitionToLab : NetworkBehaviour
 
     private IEnumerator MovingToLab()
     {
+        m_Collider.isTrigger = false;
         m_DoubleDoor.LockingDoors();
         yield return new WaitForSeconds(m_WaitingTime);
         m_Text.gameObject.SetActive(true); 
-        yield return new WaitForSeconds(2.2f);
+        yield return new WaitForSeconds(5f);
         NewNetworkManager.NewSingleton.LoadLabScene();
     }
 }

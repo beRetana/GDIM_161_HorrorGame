@@ -5,18 +5,17 @@ using UnityEngine;
 
 public class FinalDoor : MoveDoors
 {
-    [SerializeField] protected int m_KeycardMax = 4;
-
     private bool[] m_PlayersCheckedIn;
 
     [SyncVar] private DoorState m_DoorState;
-    [SyncVar] private int m_KeycardCount;
+
+    protected int m_KeycardMax = 4;
+    private int m_KeycardCount;
 
     public DoorState State => m_DoorState;
     public int KeycardCount => m_KeycardCount;
     public int KeycardMax => m_KeycardMax;
     public static FinalDoor Instance;
-    public event Action OnDoorEnteredAlert;
 
     public enum DoorState
     {
@@ -28,6 +27,8 @@ public class FinalDoor : MoveDoors
     protected override void Start()
     {
         base.Start();
+
+        m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
         m_PlayersCheckedIn = new bool[m_KeycardMax];
         m_DoorState = DoorState.Locked;
 
@@ -122,14 +123,19 @@ public class FinalDoor : MoveDoors
 
     private void CrazySequence()
     {
+        KeyCard[] keycards = FindObjectsByType<KeyCard>(FindObjectsSortMode.None);
+
+        foreach (KeyCard keycard in keycards)
+        {
+            keycard.ChangeToAlertMode();
+        }
+
         MonsterData[] monsters = FindObjectsByType<MonsterData>(FindObjectsSortMode.None);
         Debugger($"Found {monsters.Length} monsters");
         foreach (MonsterData monster in monsters)
         {
             monster.SetAggressiveStats();
         }
-
-        OnDoorEnteredAlert?.Invoke();
     }
 
     public bool TryUnlockDoor(int playerID)
