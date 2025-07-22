@@ -39,7 +39,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
-
+        return;
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (GetMainMenuScene() == sceneName) return;
@@ -79,12 +79,13 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         PlayerObjectController player;
         if (conn.identity?.TryGetComponent<PlayerObjectController>(out player) == null) return;
-        Debugger($"Player: {player.PlayerID}" + $"disconnected from server.");
+        Debugger($"Player: {player.PlayerID}" + $" disconnected from server.");
         GamePlayers.Remove(player);
         base.OnServerDisconnect(conn);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        return;
         if (scene.name == GetMainMenuScene()) return;
         Debugger($"Updating the Location List");
         UpdateLocationList();
