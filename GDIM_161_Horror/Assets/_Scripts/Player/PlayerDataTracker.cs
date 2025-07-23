@@ -43,7 +43,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         SceneManager.sceneLoaded += OnReturnToLobby;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         m_FirstPersonController.OnPlayerUp -= OnPlayerKnocked;
         SceneManager.sceneLoaded -= OnReturnToLobby;

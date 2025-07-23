@@ -61,6 +61,8 @@ public class SingleDoor : NetworkBehaviour
             yield return null;
         }
         m_StartLocation.transform.position = endingPosition;
+
+        m_StartLocation.gameObject.SetActive(false);
         _interactableItem.SetInteractive(false);
     }
 

@@ -179,6 +179,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
         SetInputState(true);
+
+        if (!isLocalPlayer) return;
         OnPlayerUp?.Invoke(true);
     }
 
@@ -198,6 +200,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory.DropAllItems();
         SetInputState(false);
         cinemachineCameraTarget.transform.localPosition = downCamPosition;
+        if (!isLocalPlayer) return;
         OnPlayerUp?.Invoke(false);
     }
     private void EnterState(PlayerStateEnum enterState)
