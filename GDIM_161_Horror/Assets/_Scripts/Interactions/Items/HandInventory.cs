@@ -386,6 +386,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
 
     public void DropAction()
     {
+        if (!isLocalPlayer) return;
         Debugger($"Drop: Is Player {_playerID} Server: {isServer}");
         if (isServer) this._inventorySlots.RemoveItem(Vector3.zero, _playerID);
         else CmdDropItem(0f);
@@ -400,6 +401,8 @@ public class HandInventory : NetworkBehaviour, IDebugger
 
     public void SwapAction()
     {
+        if (!isLocalPlayer) return;
+
         if (isServer) RpcSwapDominance();
         else CmdSwapDominance();
     }
