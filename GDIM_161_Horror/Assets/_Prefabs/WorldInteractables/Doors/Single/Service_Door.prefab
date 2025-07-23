@@ -46,7 +46,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2304
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -54,6 +54,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6, y: 2.5, z: 0.13603021}
   m_Center: {x: -0.8, y: 1.25, z: 0}
+--- !u!1 &2241667537248538862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1292658944905991567}
+  m_Layer: 9
+  m_Name: EndingLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1292658944905991567
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241667537248538862}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7941971922182408235}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3939453782054589853
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +118,7 @@ Transform:
   m_Children:
   - {fileID: 8091993638461398104}
   - {fileID: 7850494042506359280}
+  - {fileID: 1292658944905991567}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &403282471960391960
@@ -119,7 +151,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2304
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -137,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7850494042506359280}
   m_Layer: 0
-  m_Name: Bisagra
+  m_Name: StartLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,8 +253,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  pivot: {fileID: 7941971922182408235}
-  _openRotation: 90
+  m_StartLocation: {fileID: 7850494042506359280}
+  m_EndingLocation: {fileID: 1292658944905991567}
   _openAnimDuration: 3
   _enableDebugging: 1
 --- !u!1001 &8097061444810192320

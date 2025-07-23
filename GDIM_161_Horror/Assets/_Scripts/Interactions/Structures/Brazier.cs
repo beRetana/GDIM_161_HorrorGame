@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Brazier : FireCollision
 {
-    [SerializeField, Tooltip("Life Span in Minutes")] 
+    [SerializeField, Tooltip("Life Span in Minutes")]
     private float m_DurationMins;
+    [SerializeField] private Transform m_VFX;
 
     private const byte SEC_PER_MIN = 60;
 
@@ -17,7 +18,7 @@ public class Brazier : FireCollision
     private IEnumerator LifeSpand()
     {
         yield return new WaitForSeconds(m_DurationMins * SEC_PER_MIN);
-        transform.root.gameObject.SetActive(false);
+        m_VFX.gameObject.SetActive(false);
     }
 
     protected override void OnTriggerEnter(Collider col)
