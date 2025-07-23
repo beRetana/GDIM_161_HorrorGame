@@ -18,10 +18,9 @@ public class LadderManager : NetworkBehaviour, IDebugger
 
     private void OnEnable()
     {
-        if (!isServer) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUpLadders;
 
-        if (NewNetworkManager.NewSingleton.ArePlayersReady())
+        if (NewNetworkManager.NewSingleton.PlayersReady)
         {
             SetUpLadders();
         }
@@ -35,10 +34,16 @@ public class LadderManager : NetworkBehaviour, IDebugger
     [Server]
     private void SetUpLadders()
     {
+        StartCoroutine(StartLate());
+    }
+
+    private IEnumerator StartLate()
+    {
+        yield return null;
         DeactivateLadders();
         CalculateProbabilities();
-        if (!m_SpawnAtStart) return;
-        ActivateLadders(Vector3.zero);
+        if (m_SpawnAtStart)
+            ActivateLadders(Vector3.zero);
     }
 
     public void PlayerCheckedIn(Vector3 playerPosition)
