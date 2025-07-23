@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class NewNetworkManager : NetworkManager, IDebugger
 {
@@ -19,14 +18,12 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private NetworkStartPosition[] m_SpawnPoints;
     private string m_GameplaySceneName = "BUILD_1";
-    private int m_PlayersCount = 0;
-    private int m_LoadedScenePlayerCount = 0;
     private bool m_PlayersReady;
     private bool m_Debugger;
 
     public string GameplaySceneName => m_GameplaySceneName;
     public string[] LabSceneName => m_LabSceneNames;
-    public int SpawnCount => m_PlayersCount;
+    public int SpawnCount => numPlayers;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -107,7 +104,9 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         startPositions.Clear();
         startPositionIndex = 0;
+
         NetworkStartPosition[] startingObjects = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
+        
         foreach (NetworkStartPosition startObject in startingObjects)
         {
             RegisterStartPosition(startObject.transform);

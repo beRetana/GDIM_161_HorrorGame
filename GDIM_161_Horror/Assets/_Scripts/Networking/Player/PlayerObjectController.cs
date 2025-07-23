@@ -39,16 +39,11 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-
-        return;
-        SceneManager.sceneLoaded += SetPlayerLocation;
-        NewNetworkManager.NewSingleton.OnPlayersServerReady += SetStartLocation;
     }
 
     private void OnDisable()
     {
-        NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetStartLocation;
-        SceneManager.sceneLoaded -= SetPlayerLocation;
+        
     }
 
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
@@ -62,40 +57,6 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-    }
-
-    private void SetPlayerLocation(Scene scene, LoadSceneMode mode)
-    {
-        if (!isServer) return;
-
-        Debugger($"Loaded Scene: Starting Coroutine");
-
-        Func<bool> condition = () => NewNetworkManager.NewSingleton.PlayersReady && NetworkClient.ready;
-        Action action = () => {
-            NewNetworkManager.NewSingleton.RefreshStartingLocations();
-            SetStartLocation();};
-
-        StartCoroutine(WaitForCondition(condition, action));
-    }
-
-    public void SetStartLocation()
-    {
-        Func<bool> condition = () => NewNetworkManager.NewSingleton.SpawnPoints[PlayerID] != null;
-        Action action = () =>
-        {
-            Transform location = NewNetworkManager.NewSingleton.SpawnPoints[PlayerID].transform;
-            RpcSetPlayerLocation(location.position, location.rotation);
-        };
-
-        StartCoroutine(WaitForCondition(condition, action));
-    }
-
-    [ClientRpc]
-    private void RpcSetPlayerLocation(Vector3 position, Quaternion rotation)
-    {
-        if (!isLocalPlayer) return;
-        Debugger($"Setting new Location ({position}):({rotation})");
-        GetComponent<NetworkTransformUnreliable>().CmdTeleport(position, rotation);
     }
 
     private IEnumerator WaitForCondition(Func<bool> condition, Action function)
