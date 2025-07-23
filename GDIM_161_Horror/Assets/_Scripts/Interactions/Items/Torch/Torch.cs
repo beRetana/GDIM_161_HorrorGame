@@ -90,8 +90,6 @@ namespace Interactions
 
         protected void FixedUpdate()
         {
-            //Debug.Log(BurnTimer);
-            //Debug.Log(pyrolysisTimer);
             if (!isLit) return;
             UpdateTimers();
             Burn();
@@ -100,7 +98,7 @@ namespace Interactions
         }
         public override void UseItem(int playerId, InputData context)
         {
-            Debug.Log("Using torch");
+            Debugger("Using torch");
             if (!isServer) return;
             RpcRaiseHand(playerId);
         }
@@ -110,7 +108,6 @@ namespace Interactions
         {
             PlayerManager.Instance.GetPlayer(playerID).GetComponent<PlayerAnimator>().RaiseHand();
         }
-
 
         private void SmotherCheck()
         {
@@ -189,13 +186,14 @@ namespace Interactions
         }
         public void LightFlame()
         {
-            if (isServer) RpcLightingObject();
+            if (isLit || !isServer) return;
+            RpcLightingObject();
         }
 
         [ClientRpc]
         private void RpcLightingObject()
         {
-            if (isLit) return;
+            if (isLit || !enabled) return;
             FlameFullExtinguish();
             isLit = true;
             StartCoroutine(IgniteFire(flameGrowRate, flameGrowCurveB));
@@ -212,7 +210,6 @@ namespace Interactions
             ToggleFlame(false);
         }
 
-
         #endregion flame_core
 
         #region flame_helpers
@@ -225,11 +222,13 @@ namespace Interactions
             flameYellow.localScale = newFlameScale;
             torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * scalar; // Lerping starting temperature to ending temperature.
         }
+
         private void SetVisualLightIntensity(float intensePercent)
         {
             lightIntensity = Mathf.Min(maxLightIntensity * intensePercent * intensePercent, maxLightIntensity);
             torchLight.intensity = lightIntensity;
         }
+
         private void FlameFullSize()
         {
             isLit = true;
@@ -238,6 +237,7 @@ namespace Interactions
             torchLight.intensity = maxLightIntensity;
             ScaleFlameScale(1f);
         }
+
         private void FlameFullExtinguish()
         {
             isLit = false;
@@ -299,6 +299,8 @@ namespace Interactions
             //exponential decay
             for (float delta = 0f;  delta < burnOutTime; delta += Time.deltaTime)
             {
+                if (!enabled) yield break;
+
                 flameSize = minFlameSize * Mathf.Exp(flameExpDecayRate * delta);
                 lightIntensity = maxLightIntensity * Mathf.Exp(lightExpDecayRate * delta);
 
@@ -324,6 +326,7 @@ namespace Interactions
 
             for(float delta = 0f; flameSize < 1f && delta < 5f; delta += Time.deltaTime)
             {
+                if (!enabled) yield break;
                 flameSize = 1.05f / (1f + flameGrowthB * Mathf.Exp(-1f * flameGrowthRate * delta));
                 ScaleFlameScale(flameSize);
                 SetVisualLightIntensity(delta * lightIntensityM);
