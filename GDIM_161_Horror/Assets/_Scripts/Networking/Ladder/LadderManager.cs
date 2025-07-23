@@ -31,16 +31,12 @@ public class LadderManager : NetworkBehaviour, IDebugger
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetUpLadders;
     }
 
+    [Server]
     private void SetUpLadders()
     {
-        Debug.Log("Setting Up");
         DeactivateLadders();
-
-        if (!isServer) return;
-
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
-
         ActivateLadders(Vector3.zero);
     }
 
@@ -56,6 +52,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         ActivateLadders(playerPosition);
     }
 
+    [ClientRpc]
     private void ActivateLadders(Vector3 playerPosition)
     {
         GetClosestLadder(playerPosition);
