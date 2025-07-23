@@ -18,7 +18,7 @@ public class ObjectActivator : Activator
     {
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
         if (!isServer) return;
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += StartPopulatingScene;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady += StartPopulatingScene;
 
         if (NewNetworkManager.NewSingleton.PlayersReady) 
             StartPopulatingScene();
@@ -26,7 +26,7 @@ public class ObjectActivator : Activator
 
     private void OnDisable()
     {
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= StartPopulatingScene;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady -= StartPopulatingScene;
     }
 
     private void StartPopulatingScene()

@@ -15,7 +15,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     [SerializeField] private PlayerObjectController _playerController;
     [SerializeField] private string[] m_LabSceneNames;
 
-    public event Action OnPlayersLoadedScene;
+    public event Action OnPlayersServerReady;
 
     private NetworkStartPosition[] m_SpawnPoints;
     private string m_GameplaySceneName = "BUILD_1";
@@ -55,31 +55,19 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.OnServerReady(conn);
 
-        if (numPlayers != 0)
+        if (numPlayers != 0 && startPositionIndex % numPlayers == 0)
         {
-            m_LoadedScenePlayerCount %= ++m_LoadedScenePlayerCount;
+            OnPlayersServerReady?.Invoke();
+        }
+
+        if (conn.identity != null )
+        {
             Transform location = GetStartPosition();
             conn.identity.GetComponent<NetworkTransformReliable>().ServerTeleport(location.position, location.rotation);
-            Debugger("Client Is Server Ready");
         }
-        
-        return;
-        string sceneName = SceneManager.GetActiveScene().name;
 
-        if (GetMainMenuScene() == sceneName) return;
-        Debugger($"Active Scene: {sceneName}");
-        
-        m_PlayersReady = false;
-        ++m_LoadedScenePlayerCount;
-        Debugger($"Ready Players: {m_LoadedScenePlayerCount} out of {numPlayers}");
-        
-        if (m_LoadedScenePlayerCount < numPlayers) return;
-        Debugger($"Loading Locations and resetting values");
-        
-        RefreshStartingLocations();
-        OnPlayersLoadedScene?.Invoke();
-        m_LoadedScenePlayerCount = 0;
-        m_PlayersReady = true;
+        Debugger("Client Is Server Ready");
+        return;
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -93,6 +81,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         NetworkServer.AddPlayerForConnection(conn, player.gameObject);
         LobbyController.Instance.UpdatePlayerList();
+
+
         Debugger("Player Added to Server");
     }
 
@@ -122,7 +112,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         {
             RegisterStartPosition(startObject.transform);
         }
-     }
+    }
 
     public void LoadMazeScene()
     {

@@ -42,12 +42,12 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
 
         return;
         SceneManager.sceneLoaded += SetPlayerLocation;
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene += SetStartLocation;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady += SetStartLocation;
     }
 
     private void OnDisable()
     {
-        NewNetworkManager.NewSingleton.OnPlayersLoadedScene -= SetStartLocation;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetStartLocation;
         SceneManager.sceneLoaded -= SetPlayerLocation;
     }
 
