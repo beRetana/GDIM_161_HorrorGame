@@ -18,8 +18,9 @@ public class LadderManager : NetworkBehaviour, IDebugger
 
     private void OnEnable()
     {
+        if (!isServer) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUpLadders;
-        
+
         if (NewNetworkManager.NewSingleton.ArePlayersReady())
         {
             SetUpLadders();
@@ -52,7 +53,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         ActivateLadders(playerPosition);
     }
 
-    [ClientRpc]
+    [Server]
     private void ActivateLadders(Vector3 playerPosition)
     {
         GetClosestLadder(playerPosition);
@@ -126,6 +127,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         }
     }
 
+    [ClientRpc]
     private void DeactivateLadders()
     {
         Debugger("Deactivating all ladders");
