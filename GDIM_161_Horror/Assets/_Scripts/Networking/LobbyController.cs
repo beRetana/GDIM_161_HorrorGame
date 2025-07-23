@@ -205,7 +205,7 @@ public class LobbyController : NetworkBehaviour, IDebugger
                 NewPlayerItem.transform.localScale = Vector3.one;
 
                 PlayerListItems.Add(NewPlayerItemScript); 
-                NetworkServer.Spawn(NewPlayerItem);
+                if (isServer) NetworkServer.Spawn(NewPlayerItem);
             }
         }
     }
