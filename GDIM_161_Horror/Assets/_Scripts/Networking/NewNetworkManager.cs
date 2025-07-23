@@ -91,7 +91,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         PlayerObjectController player;
         if (conn.identity?.TryGetComponent<PlayerObjectController>(out player) == null) return;
         GamePlayers.Remove(player);
-
+        --startPositionIndex;
         Debugger($"Player: {player.PlayerID}" + $" disconnected from server.");
 
         base.OnServerDisconnect(conn);
