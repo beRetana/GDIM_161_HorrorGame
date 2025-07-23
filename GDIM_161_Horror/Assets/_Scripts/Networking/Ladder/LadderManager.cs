@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LadderManager : NetworkBehaviour, IDebugger
 {
-    [SerializeField] private Transform[] m_Ladders;
+    [SerializeField] private Ladder[] m_Ladders;
     [SerializeField, Range(0f, 1f), Tooltip("Highest probability of choosing the closest ladder")]
     private float m_UpperBoundProbability;
     [SerializeField] private bool m_SpawnAtStart;
@@ -16,12 +16,17 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private bool m_OnlyOneLadder;
     private bool m_Debug;
 
-    public override void OnStartClient()
+    private void OnEnable()
     {
-        Debugger($"[LadderManager] OnStartClient called on client - netId: {netId}");
+        NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUpLadders;
     }
 
-    private void Start()
+    private void OnDisable()
+    {
+        NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetUpLadders;
+    }
+
+    private void SetUpLadders()
     {
         DeactivateLadders();
 
@@ -30,12 +35,6 @@ public class LadderManager : NetworkBehaviour, IDebugger
         CalculateProbabilities();
         if (!m_SpawnAtStart) return;
 
-        StartCoroutine(LaddersOnStart());
-    }
-
-    private IEnumerator LaddersOnStart()
-    {
-        yield return new WaitForSecondsRealtime(1f);
         ActivateLadders(Vector3.zero);
     }
 
@@ -76,7 +75,6 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private void ServerSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Server");
-        //m_Ladders[index].gameObject.SetActive(true);
         RpcSetLadderActive(index);
     }
 
@@ -84,7 +82,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
     public void RpcSetLadderActive(int index)
     {
         Debugger("Setting Ladder active in Client");
-        m_Ladders[index].gameObject.SetActive(true);
+        m_Ladders[index].SetLadderActive(true);
     }
 
     private int GetHighest(float[] array)
@@ -115,21 +113,23 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private void GetClosestLadder(Vector3 playerPosition)
     {
         float closestDistance = float.MaxValue;
-        foreach (Transform ladder in m_Ladders)
+        foreach (Ladder ladder in m_Ladders)
         {
-            float distanceSqr = (ladder.position - playerPosition).sqrMagnitude;
+            float distanceSqr = (ladder.transform.position - playerPosition).sqrMagnitude;
             Debugger($"Distance Squared for {ladder.gameObject} is {distanceSqr}");
             if (distanceSqr > closestDistance) continue;
             closestDistance = distanceSqr;
-            m_ClosestLadder = ladder;
+            m_ClosestLadder = ladder.transform;
         }
     }
 
     private void DeactivateLadders()
     {
         Debugger("Deactivating all ladders");
-        foreach(Transform ladder in m_Ladders)
-            ladder.gameObject.SetActive(false);
+        foreach(Ladder ladder in m_Ladders)
+        {
+            ladder.SetLadderActive(true);
+        }
     }
 
     public void Debugger(object log)
