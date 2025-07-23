@@ -32,6 +32,7 @@ public class NetworkPlayerUI : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcDisplayInteractUI(string text)
     {
+        if (!isLocalPlayer) return;
         Debugger($"REPLICATE - Display Interact UI, text: {text}");
         m_PlayerInteractUI.DisplayInteractUI(text);
     }
