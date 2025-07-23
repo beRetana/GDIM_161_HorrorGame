@@ -19,6 +19,8 @@ public partial class CheckForClearAttackAction : Action
 
     protected override Status OnStart()
     {
+        if (Target.Value == null || Self.Value == null) return Status.Failure;
+
         float distSqr = (Target.Value.transform.position - Self.Value.transform.position).sqrMagnitude;
         if (!(distSqr < Range.Value * Range.Value)) return Status.Failure;
         if (distSqr <= 1f) return Status.Success;

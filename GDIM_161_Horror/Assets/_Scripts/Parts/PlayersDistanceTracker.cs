@@ -1,8 +1,8 @@
 using Mirror;
 using UnityEngine;
-using System;
+using OtherUtils;
 
-public class PlayersDistanceTracker : NetworkBehaviour
+public class PlayersDistanceTracker : NetworkBehaviour, IDebugger
 {
     [SerializeField] private Activator[] m_Activators;
     [SerializeField] private float m_ChecksPerSecond;
@@ -10,12 +10,26 @@ public class PlayersDistanceTracker : NetworkBehaviour
     private Transform[] m_PlayerTransforms;
     private float m_Frequency;
     private float m_Timer;
+    private bool m_Debugger;
+    private bool m_PlayersReady;
 
-    private void Start()
+    private void OnEnable()
+    {
+        NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUp;
+    }
+
+    private void OnDisable()
+    {
+        NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetUp;
+    }
+
+    private void SetUp()
     {
         if (!isServer) return;
-        GetPlayers();
+        Debugger("Setting Up Activator");
         m_Frequency = 1f / m_ChecksPerSecond;
+        GetPlayers();
+        m_PlayersReady = true;
     }
 
     [Server]
@@ -31,7 +45,7 @@ public class PlayersDistanceTracker : NetworkBehaviour
 
     private void Update()
     {
-        if (!isServer) return;
+        if (!m_PlayersReady) return;
         if (m_Timer >= m_Frequency)
         {
             m_Timer = 0f;
@@ -55,5 +69,15 @@ public class PlayersDistanceTracker : NetworkBehaviour
         {
             activator.UpdateObjectsState(positions);
         }
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }

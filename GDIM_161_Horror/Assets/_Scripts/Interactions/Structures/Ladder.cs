@@ -1,10 +1,20 @@
+using Mirror;
 using StarterAssets;
 using UnityEngine;
 
 public class Ladder : MonoBehaviour
 {
+    [SerializeField] private Transform m_Filler;
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private bool _debugger;
+
+    public Transform Filler => m_Filler;
+
+    public void SetLadderActive(bool active)
+    {
+        gameObject.SetActive(active);
+        m_Filler.gameObject.SetActive(!active);
+    }
 
     private void OnTriggerEnter(Collider other)
     {

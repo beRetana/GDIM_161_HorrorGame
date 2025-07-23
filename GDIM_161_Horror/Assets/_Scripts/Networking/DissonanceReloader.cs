@@ -16,7 +16,7 @@ public class DissonanceReloader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) 
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) //|| NewNetworkManager.NewSingleton.GetLobbyScene() == scene.name)
         {
             _dissonanceComms = FindFirstObjectByType<DissonanceComms>();
             _dissonanceCommsNetwork = FindFirstObjectByType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
@@ -40,14 +40,14 @@ public class DissonanceReloader : MonoBehaviour
         // If MirrorIgnoranceCommsNetwork is used, stop the networking (without calling Initialize directly)
         if (_dissonanceCommsNetwork != null)
         {
-            Debug.Log("[Dissonance] Restarting MirrorIgnoranceCommsNetwork...");
+            // tk Debug.Log("[Dissonance] Restarting MirrorIgnoranceCommsNetwork...");
             _dissonanceCommsNetwork.Stop();  // Stop networking
             yield return new WaitForSeconds(0.5f); // Small delay to ensure it stops
 
             // You may want to manually restart the connection here or re-enable networking
             // This will depend on your network setup and how MirrorIgnorance is configured
             // Example: _dissonanceCommsNetwork.Start(); // Uncomment if such a method exists
-            Debug.Log("[Dissonance] MirrorIgnoranceCommsNetwork stopped.");
+            // tk Debug.Log("[Dissonance] MirrorIgnoranceCommsNetwork stopped.");
         }
 
         // Wait for Mirror to fully reinitialize players

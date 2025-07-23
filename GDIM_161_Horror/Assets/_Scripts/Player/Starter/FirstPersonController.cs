@@ -31,7 +31,6 @@ namespace StarterAssets
 
         private void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
             if (!isLocalPlayer) return;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }

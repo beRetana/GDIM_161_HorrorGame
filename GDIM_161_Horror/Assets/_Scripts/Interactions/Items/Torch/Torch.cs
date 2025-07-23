@@ -101,7 +101,14 @@ namespace Interactions
         public override void UseItem(int playerId, InputData context)
         {
             Debug.Log("Using torch");
-            PlayerManager.Instance.GetPlayer(playerId).GetComponent<PlayerAnimator>().RaiseHand();
+            if (!isServer) return;
+            RpcRaiseHand(playerId);
+        }
+
+        [ClientRpc]
+        private void RpcRaiseHand(int playerID)
+        {
+            PlayerManager.Instance.GetPlayer(playerID).GetComponent<PlayerAnimator>().RaiseHand();
         }
 
 
@@ -144,8 +151,6 @@ namespace Interactions
         private void UpdateTimers()
         {
             burnVelocity = CalcSmoothRandom(burnVelocity);
-            //Debug.Log($"burnAcceleration = {burnAcelleration}");
-            //Debug.Log($"burnVelocity = {burnVelocity}");
 
             pyrolysisTimer -= burnVelocity * Time.fixedDeltaTime;
             BurnTimer -= burnVelocity * Time.fixedDeltaTime; // * tickSpeedMultiplier_ByFloor
@@ -219,7 +224,6 @@ namespace Interactions
             flameOrange.localScale = newFlameScale;
             flameYellow.localScale = newFlameScale;
             torchLight.colorTemperature = m_EndTemp + (m_StartTemp - m_EndTemp) * scalar; // Lerping starting temperature to ending temperature.
-
         }
         private void SetVisualLightIntensity(float intensePercent)
         {
@@ -246,15 +250,20 @@ namespace Interactions
 
         private void NetworkDestroyTorch()
         {
-            Debug.Log("Ending Torch");
-            HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
-            
-            if (inventory.PeekAtDominant() != this)
+            Debugger("Ending Torch");
+
+            if (OwnerPlayerID == -1)
             {
-                inventory.SwapAction();
+                HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
+
+                if (inventory.PeekAtDominant() != this)
+                {
+                    inventory.SwapAction();
+                }
+
+                inventory.DropAction();
             }
-            
-            inventory.DropAction();
+
             transform.root.gameObject.SetActive(false);
 
             if (isServer) RpcTurnOff();
@@ -272,7 +281,6 @@ namespace Interactions
         {
             transform.root.gameObject.SetActive(false);
             _interactableItem.SetInteractive(false);
-            gameObject.SetActive(false);
         }
 
         #endregion flame_helpers
