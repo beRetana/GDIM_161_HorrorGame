@@ -26,7 +26,7 @@ public class PlayersDistanceTracker : NetworkBehaviour, IDebugger
     private void SetUp()
     {
         if (!isServer) return;
-        Debug.Log("Setting Up Activator");
+        Debugger("Setting Up Activator");
         m_Frequency = 1f / m_ChecksPerSecond;
         GetPlayers();
         m_PlayersReady = true;

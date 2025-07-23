@@ -19,6 +19,11 @@ public class LadderManager : NetworkBehaviour, IDebugger
     private void OnEnable()
     {
         NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUpLadders;
+        
+        if (NewNetworkManager.NewSingleton.ArePlayersReady())
+        {
+            SetUpLadders();
+        }
     }
 
     private void OnDisable()
@@ -28,6 +33,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
 
     private void SetUpLadders()
     {
+        Debug.Log("Setting Up");
         DeactivateLadders();
 
         if (!isServer) return;
@@ -128,7 +134,7 @@ public class LadderManager : NetworkBehaviour, IDebugger
         Debugger("Deactivating all ladders");
         foreach(Ladder ladder in m_Ladders)
         {
-            ladder.SetLadderActive(true);
+            ladder.SetLadderActive(false);
         }
     }
 

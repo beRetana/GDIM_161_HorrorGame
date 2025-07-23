@@ -59,7 +59,10 @@ public class NewNetworkManager : NetworkManager, IDebugger
         }
 
         Debugger($"There is {numPlayers} and {startPositionIndex} are ready");
-        if (numPlayers != 0 && startPositionIndex % numPlayers == 0)
+        
+        m_PlayersReady = ArePlayersReady();
+        
+        if (m_PlayersReady)
         {
             OnPlayersServerReady?.Invoke();
         }
@@ -99,6 +102,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         if (scene.name != GetLobbyScene()) return;
         RefreshStartingLocations();
+    }
+
+    public bool ArePlayersReady()
+    {
+        return numPlayers != 0 && startPositionIndex % numPlayers == 0;
     }
 
     public void RefreshStartingLocations()
