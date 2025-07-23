@@ -54,6 +54,7 @@ public class NetworkPlayerUI : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcHideInteractUI()
     {
+        if (!isLocalPlayer) return;
         Debugger($"REPLICATE - Hide Interact UI");
         m_PlayerInteractUI.HideInteractUI();
     }
@@ -75,6 +76,7 @@ public class NetworkPlayerUI : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RcpStartHoldingUI()
     {
+        if (!isLocalPlayer) return;
         Debugger($"REPLICATE - Start Holding UI");
         m_PlayerInteractUI.StartHoldingUI();
     }
@@ -96,6 +98,7 @@ public class NetworkPlayerUI : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcCancelHoldingUI()
     {
+        if (!isLocalPlayer) return;
         Debugger($"REPLICATE - Cancel Holding UI");
         m_PlayerInteractUI.CancelHoldingUI();
     }

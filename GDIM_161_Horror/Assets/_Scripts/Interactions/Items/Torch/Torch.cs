@@ -252,7 +252,7 @@ namespace Interactions
         {
             Debugger("Ending Torch");
 
-            if (OwnerPlayerID == -1)
+            if (OwnerPlayerID != -1)
             {
                 HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
 
