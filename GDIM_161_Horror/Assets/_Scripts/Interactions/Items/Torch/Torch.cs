@@ -250,17 +250,21 @@ namespace Interactions
 
         private void NetworkDestroyTorch()
         {
-            Debug.Log("Ending Torch");
-            HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
-            
-            if (inventory.PeekAtDominant() != this)
+            Debugger("Ending Torch");
+
+            if (OwnerPlayerID == -1)
             {
-                inventory.SwapAction();
+                HandInventory inventory = PlayerManager.Instance.GetPlayer(OwnerPlayerID).GetComponent<HandInventory>();
+
+                if (inventory.PeekAtDominant() != this)
+                {
+                    inventory.SwapAction();
+                }
+
+                inventory.DropAction();
             }
 
-
             transform.root.gameObject.SetActive(false);
-            inventory.DropAction();
 
             if (isServer) RpcTurnOff();
             else CmdTurnOff();
