@@ -16,7 +16,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     public event Action OnPlayersServerReady;
 
-    private NetworkStartPosition[] m_SpawnPoints;
     private string m_GameplaySceneName = "BUILD_1";
     private bool m_PlayersReady;
     private bool m_Debugger;
@@ -27,14 +26,15 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
-    public NetworkStartPosition[] SpawnPoints { get {return m_SpawnPoints; } }
 
     public override void Start()
     {
         base.Start();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        OnPlayersServerReady = () => Debugger($"All {numPlayers} players are ready");
         Debug.Log("[NewNetworkManager]: Script Started");
     }
+
     public override void OnServerChangeScene(string newSceneName)
     {
         base.OnServerChangeScene(newSceneName);
@@ -52,15 +52,16 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.OnServerReady(conn);
 
-        if (numPlayers != 0 && startPositionIndex % numPlayers == 0)
-        {
-            OnPlayersServerReady?.Invoke();
-        }
-
         if (conn.identity != null )
         {
             Transform location = GetStartPosition();
             conn.identity.GetComponent<NetworkTransformReliable>().ServerTeleport(location.position, location.rotation);
+        }
+
+        Debugger($"There is {numPlayers} and {startPositionIndex} are ready");
+        if (numPlayers != 0 && startPositionIndex % numPlayers == 0)
+        {
+            OnPlayersServerReady?.Invoke();
         }
 
         Debugger("Client Is Server Ready");

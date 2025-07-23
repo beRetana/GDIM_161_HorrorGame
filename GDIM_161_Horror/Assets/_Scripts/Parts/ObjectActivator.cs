@@ -1,4 +1,5 @@
 using Mirror;
+using Mono.CSharp;
 using OtherUtils;
 using System;
 using System.Collections;
@@ -14,14 +15,10 @@ public class ObjectActivator : Activator
     private float m_SqrProxRange;
     private bool m_SpawnedObjects;
 
-    private void Start()
+    private void OnEnable()
     {
         m_SqrProxRange = m_ProximityRange * m_ProximityRange;
-        if (!isServer) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady += StartPopulatingScene;
-
-        if (NewNetworkManager.NewSingleton.PlayersReady) 
-            StartPopulatingScene();
     }
 
     private void OnDisable()
@@ -31,7 +28,6 @@ public class ObjectActivator : Activator
 
     private void StartPopulatingScene()
     {
-        if (!isServer || m_SpawnedObjects) return;
         m_SpawnedObjects = true;
         StartCoroutine(PopulateServerPool());
     }
@@ -54,7 +50,7 @@ public class ObjectActivator : Activator
     [Server]
     public override void UpdateObjectsState(Vector3[] playerLocations)
     {
-        //Debugger($"Server: Updating Player location: {playerLocations}");
+        Debugger($"Server: Updating Player location: {playerLocations}");
         foreach (Transform pooledObject in m_SpawnLocations)
         {
             if (pooledObject == null) continue;
