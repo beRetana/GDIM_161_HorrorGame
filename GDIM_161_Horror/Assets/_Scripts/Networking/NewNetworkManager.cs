@@ -106,7 +106,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public void RefreshStartingLocations()
     {
         startPositions.Clear();
-
+        startPositionIndex = 0;
         NetworkStartPosition[] startingObjects = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
         foreach (NetworkStartPosition startObject in startingObjects)
         {
