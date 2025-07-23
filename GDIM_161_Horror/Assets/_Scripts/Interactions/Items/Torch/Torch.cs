@@ -250,7 +250,6 @@ namespace Interactions
 
         private void NetworkDestroyTorch()
         {
-            if (!isLocalPlayer) return;
             Debugger("Ending Torch");
 
             if (OwnerPlayerID != -1)
