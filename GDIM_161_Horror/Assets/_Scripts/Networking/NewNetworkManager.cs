@@ -1,12 +1,13 @@
+using Mirror;
+using OtherUtils;
+using Steamworks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Mirror;
-using UnityEngine.SceneManagement;
-using Steamworks;
-using OtherUtils;
-using System;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class NewNetworkManager : NetworkManager, IDebugger
 {
@@ -35,11 +36,33 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.Start();
         SceneManager.sceneLoaded += OnSceneLoaded;
-        UpdateLocationList();
+        Debug.Log("[NewNetworkManager]: Script Started");
     }
+    public override void OnServerChangeScene(string newSceneName)
+    {
+        base.OnServerChangeScene(newSceneName);
+        RefreshStartingLocations();
+        Debugger("Server Changed Scenes");
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        Debugger("Server Started");
+    }
+
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
+
+        if (numPlayers != 0)
+        {
+            m_LoadedScenePlayerCount %= ++m_LoadedScenePlayerCount;
+            Transform location = GetStartPosition();
+            conn.identity.GetComponent<NetworkTransformReliable>().ServerTeleport(location.position, location.rotation);
+            Debugger("Client Is Server Ready");
+        }
+        
         return;
         string sceneName = SceneManager.GetActiveScene().name;
 
@@ -53,48 +76,53 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (m_LoadedScenePlayerCount < numPlayers) return;
         Debugger($"Loading Locations and resetting values");
         
-        UpdateLocationList();
+        RefreshStartingLocations();
         OnPlayersLoadedScene?.Invoke();
         m_LoadedScenePlayerCount = 0;
         m_PlayersReady = true;
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == GetSceneName(onlineScene))
-        {
-            PlayerObjectController GamePlayerInstance = Instantiate(_playerController,
-                                    m_SpawnPoints[m_PlayersCount].transform.position,
-                                    m_SpawnPoints[m_PlayersCount].transform.rotation);
+        if (SceneManager.GetActiveScene().name != GetLobbyScene()) return;
 
-            GamePlayerInstance.ConnectionID = conn.connectionId;
-            GamePlayerInstance.PlayerID = GamePlayers.Count;
-            GamePlayerInstance.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
-            
-            NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
-            LobbyController.Instance.UpdatePlayerList();
-            ++m_PlayersCount;
-        }
+        Transform startPos = GetStartPosition();
+        PlayerObjectController player = Instantiate(_playerController, startPos.position, startPos.rotation);
+        player.ConnectionID = conn.connectionId;
+        player.PlayerID = GamePlayers.Count;
+        player.PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, GamePlayers.Count);
+
+        NetworkServer.AddPlayerForConnection(conn, player.gameObject);
+        LobbyController.Instance.UpdatePlayerList();
+        Debugger("Player Added to Server");
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         PlayerObjectController player;
         if (conn.identity?.TryGetComponent<PlayerObjectController>(out player) == null) return;
-        Debugger($"Player: {player.PlayerID}" + $" disconnected from server.");
         GamePlayers.Remove(player);
+
+        Debugger($"Player: {player.PlayerID}" + $" disconnected from server.");
+
         base.OnServerDisconnect(conn);
     }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == GetMainMenuScene()) return;
-        Debugger($"Updating the Location List");
-        UpdateLocationList();
+        if (scene.name != GetLobbyScene()) return;
+        RefreshStartingLocations();
     }
 
-    public void UpdateLocationList()
+    public void RefreshStartingLocations()
     {
-        m_SpawnPoints = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.InstanceID);
-    }
+        startPositions.Clear();
+
+        NetworkStartPosition[] startingObjects = FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None);
+        foreach (NetworkStartPosition startObject in startingObjects)
+        {
+            RegisterStartPosition(startObject.transform);
+        }
+     }
 
     public void LoadMazeScene()
     {

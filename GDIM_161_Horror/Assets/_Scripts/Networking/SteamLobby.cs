@@ -93,6 +93,6 @@ public class SteamLobby : MonoBehaviour
 
     private void Debugger(object log)
     {
-        if (_debugger) Debug.Log(log);
+        if (_debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
     }
 }

@@ -51,7 +51,7 @@ namespace Dissonance.Integrations.MirrorIgnorance
 
                 if (_comms != null)
                 {
-                    Debug.Log("[Dissonance] DissonanceComms found, resuming player tracking.");
+                    //Debug.Log("[Dissonance] DissonanceComms found, resuming player tracking.");
                     if (!string.IsNullOrEmpty(PlayerId))
                         StartTracking();
                 }

@@ -72,7 +72,7 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
 
         Func<bool> condition = () => NewNetworkManager.NewSingleton.PlayersReady && NetworkClient.ready;
         Action action = () => {
-            NewNetworkManager.NewSingleton.UpdateLocationList();
+            NewNetworkManager.NewSingleton.RefreshStartingLocations();
             SetStartLocation();};
 
         StartCoroutine(WaitForCondition(condition, action));
