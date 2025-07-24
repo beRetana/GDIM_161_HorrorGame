@@ -141,7 +141,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
-        UnlockPlayer();
+        UpdateState(PlayerState.Unlocked);
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
