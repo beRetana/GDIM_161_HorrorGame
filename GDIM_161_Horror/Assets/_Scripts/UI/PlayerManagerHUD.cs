@@ -44,7 +44,12 @@ public class PlayerManagerHUD : NetworkBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public IEnumerator ReplicateSetEndGame(bool won)
+    public void StartEndGameRoutine(bool won)
+    {
+        StartCoroutine(SpreadEndGame(won));
+    }
+
+    private IEnumerator SpreadEndGame(bool won)
     {
         yield return new WaitForSecondsRealtime(.2f);
 

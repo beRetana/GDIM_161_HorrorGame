@@ -277,7 +277,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         m_Surrended = !isPlayerUp;
-        m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
         foreach (var gameplayMenuHUD in gameplayMenuHUDs)
         {
@@ -323,16 +322,15 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         ActOnAllPlayers((GameplayMenuHUD playerUI) =>
         {
             playerUI.ResetSurrender();
+            playerUI.m_GameEnded = false;
             if (playerUI.isLocalPlayer)
             {
-                Debugger($"SERVER - Starting ROUTINE");
                 playerUI.ChangeCursorState(true);
             }
         });
 
         m_PlayerData.EndGame();
-        m_GameEnded = false;
-        StartCoroutine(m_PlayerManagerHUD.ReplicateSetEndGame(won));
+        m_PlayerManagerHUD.StartEndGameRoutine(won);
     }
 
     private void OpenSettingsMenu()
