@@ -69,6 +69,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         DisableInput();
         DisableButtons();
         if (!isServer) return;
+        if (NewNetworkManager.NewSingleton == null) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
     }
@@ -200,6 +201,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         SetControls(m_IsPaused);
         m_IsPaused = !m_IsPaused;
         ChangeCursorState(m_IsPaused);
+        UpdateSurrenderText();
     }
 
     public void SetControls(bool active)

@@ -1,3 +1,4 @@
+using Grpc.Core;
 using Mirror;
 using OtherUtils;
 using System;
@@ -52,20 +53,30 @@ namespace Interactions
             
             if (NewNetworkManager.NewSingleton.ArePlayersReady())
             {
-                RpcAdjustButtonNumber();
+                SetUpDoors();
             }
-            NewNetworkManager.NewSingleton.OnPlayersServerReady += RpcAdjustButtonNumber;
+            else
+            {
+                NewNetworkManager.NewSingleton.OnPlayersServerReady += SetUpDoors;
+            }
         }
 
         private void OnDisable()
         {
-            NewNetworkManager.NewSingleton.OnPlayersServerReady -= RpcAdjustButtonNumber;
+            NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetUpDoors;
+        }
+
+        [Server]
+        private void SetUpDoors()
+        {
+            m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
+            RpcAdjustButtonNumber(m_PlayersRequired);
         }
 
         [ClientRpc]
-        private void RpcAdjustButtonNumber()
+        private void RpcAdjustButtonNumber(byte playersRequired)
         {
-            m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
+            m_PlayersRequired = playersRequired;
 
             for (int i = m_DoorButtons.Length - 1; i >= m_PlayersRequired; --i)
             {
