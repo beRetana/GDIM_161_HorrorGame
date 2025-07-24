@@ -142,6 +142,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         UpdateSurrenderText();
     }
 
+    [ClientRpc]
     public void ResetSurrender()
     {
         m_PlayersSurrendered = 0;
