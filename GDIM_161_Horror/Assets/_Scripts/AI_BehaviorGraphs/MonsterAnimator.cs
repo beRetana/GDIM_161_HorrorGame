@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
+using Mirror;
 
-public class MonsterAnimator : MonoBehaviour
+public class MonsterAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator m_Animator;
     [SerializeField] private float m_MaxSpeed = 4.5f;
@@ -17,30 +17,36 @@ public class MonsterAnimator : MonoBehaviour
 
     private void Start()
     {
+        if (!isServer) enabled = false;
         m_Agent = transform.root.GetComponent<NavMeshAgent>();
         m_MaxSqrSpeed = Mathf.Pow(m_MaxSpeed, 2);
     }
 
     private void Update()
     {
+        if (!isServer) return;
         SetSpeedAnim();
     }
 
+    [Server]
     private void SetSpeedAnim()
     {
         m_Animator.SetFloat(SPEED, Mathf.Abs(m_Agent.velocity.sqrMagnitude / m_MaxSqrSpeed));
     }
 
+    [Server]
     public void TriggerAttackBasic(PlayerBase player)
     {
         StartAttack(player, ATTACK);
     }
 
+    [Server]
     public void TriggerAttackZombie(PlayerBase player)
     {
         StartAttack(player, ATTACK_2);
     }
 
+    [Server]
     private void StartAttack(PlayerBase player, string attack)
     {
         if (m_Player != null) return;
@@ -50,11 +56,13 @@ public class MonsterAnimator : MonoBehaviour
         m_Animator.SetTrigger(attack);
     }
 
+    [Server]
     public void Attack()
     {
         m_Player?.DownPlayer();
     }
 
+    [Server]
     public void EndAttack()
     {
         m_Player = null;
