@@ -72,6 +72,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     protected HandInventory _handInventory;
     protected PlayerAnimator _animator;
     protected CharacterController _controller;
+    protected PlayerInteractionsHUD _playerUI;
     protected LayerMask _interactLayer = 9;
     protected LayerMask _playerLayer = 10;
 
@@ -241,7 +242,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
                 currentStats = downedStats;
                 break;
         }
-        
+        _playerUI.HideInteractUI();
+        _playerUI.CancelHoldingUI();
         SetPlayerStats();
         playerStateEnum = enterState;
     }

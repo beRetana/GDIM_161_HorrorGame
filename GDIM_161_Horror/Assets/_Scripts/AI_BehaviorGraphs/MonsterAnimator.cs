@@ -56,15 +56,15 @@ public class MonsterAnimator : NetworkBehaviour
         m_Animator.SetTrigger(attack);
     }
 
-    [Server]
     public void Attack()
     {
+        if (!isServer) return;
         m_Player?.DownPlayer();
     }
 
-    [Server]
     public void EndAttack()
     {
+        if (!isServer) return;
         m_Player = null;
     }
 }
