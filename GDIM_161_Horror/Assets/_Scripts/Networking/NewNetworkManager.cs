@@ -15,6 +15,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
     [SerializeField] private string[] m_LabSceneNames;
 
     public event Action OnPlayersServerReady;
+    public event Action OnPlayerConnected;
+    public event Action OnPlayerDisconnected;
 
     private string m_GameplaySceneName = "BUILD_1";
     private bool m_PlayersReady;
@@ -82,8 +84,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         NetworkServer.AddPlayerForConnection(conn, player.gameObject);
         LobbyController.Instance.UpdatePlayerList();
-
-
+        OnPlayerConnected?.Invoke();
         Debugger("Player Added to Server");
     }
 
@@ -93,6 +94,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (conn.identity?.TryGetComponent<PlayerObjectController>(out player) == null) return;
         GamePlayers.Remove(player);
         --startPositionIndex;
+        OnPlayerDisconnected?.Invoke();
         Debugger($"Player: {player.PlayerID}" + $" disconnected from server.");
 
         base.OnServerDisconnect(conn);

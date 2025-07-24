@@ -140,8 +140,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
-        AssignID();
-        UpdateState(PlayerState.Unlocked); 
+        UnlockPlayer();
+        AssignID(); 
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
@@ -243,10 +243,12 @@ public class PlayerBase : NetworkBehaviour, IDebugger
                 currentStats = downedStats;
                 break;
         }
-        _playerUI.HideInteractUI();
-        _playerUI.CancelHoldingUI();
         SetPlayerStats();
         playerStateEnum = enterState;
+
+        if (!isLocalPlayer) return;
+        _playerUI.HideInteractUI();
+        _playerUI.CancelHoldingUI();
     }
     private bool SetPlayerStats()
     {

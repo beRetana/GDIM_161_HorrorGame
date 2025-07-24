@@ -1,13 +1,13 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
-using OtherUtils;
-using UnityEngine.UI;
-using UnityEngine.AI;
-using TMPro;
-using StarterAssets;
-using System.Collections;
 using Mirror;
+using OtherUtils;
+using StarterAssets;
+using System;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
@@ -31,6 +31,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     [Space(5f)]
     [SerializeField] private PlayerDataTracker m_PlayerData;
+    [SerializeField] private PlayerManagerHUD m_PlayerManagerHUD;
 
     private PlayerControls m_PlayerControls;
     private PlayerInput m_PlayerInput;
@@ -42,10 +43,10 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [SyncVar] private byte m_PlayersSurrendered;
     [SyncVar] private bool m_Surrended;
     [SyncVar] private bool m_GameEnded;
+    [SyncVar] private byte m_TotalPlayers;
 
     private HashSet<byte> m_PlayersDownList = new HashSet<byte>();
     
-    private byte m_TotalPlayers;
     private bool m_IsPaused;
     private bool m_Debugger;
 
@@ -57,12 +58,19 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_NavMeshQueryFilter = new NavMeshQueryFilter();
         m_NavMeshQueryFilter.agentTypeID = 0;
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
+
+        if (!isServer) return;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady += GetTotalPlayers;
+        NewNetworkManager.NewSingleton.OnPlayerDisconnected += GetTotalPlayers;
     }
 
     private void OnDestroy()
     {
         DisableInput();
         DisableButtons();
+        if (!isServer) return;
+        NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
+        NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
     }
 
     public void DisableMenuUI()
@@ -142,8 +150,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void GetTotalPlayers()
     {
-        PlayerBase[] playerList = FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
-        m_TotalPlayers = (byte) playerList.Length;
+        m_TotalPlayers = (byte)NewNetworkManager.NewSingleton.numPlayers;
     }
 
     private void DisableButtons()
@@ -221,28 +228,29 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isPlayerUp)
         {
-            GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsSortMode.None);
-            foreach (GameplayMenuHUD player in gameplayMenuHUDs)
-            {
-                player.m_PlayersDownList.Add(playerID);
-            }
+            ActOnAllPlayers((GameplayMenuHUD player) => player.m_PlayersDownList.Add(playerID));
+
             Debugger($"Player {playerID} has been Added - size {m_PlayersDownList.Count}");
             
             if (m_PlayersDownList.Count < m_TotalPlayers) return;
             
             Debugger($"Start Ending Game");
-            foreach (GameplayMenuHUD player in gameplayMenuHUDs)
-            {
-                player.m_PlayersDownList.Clear();
-            }
-
-            m_PlayersDownList.Clear();
+            ActOnAllPlayers((GameplayMenuHUD player) => player.m_PlayersDownList.Clear());
             SetEndGame();
         }
         else
         {
-            if (m_PlayersDownList.Remove(playerID))
-                Debugger($"Player {playerID} has been Removed");
+            ActOnAllPlayers((GameplayMenuHUD player) => player.m_PlayersDownList.Remove(playerID));
+            Debugger($"Player {playerID} has been Removed");
+        }
+    }
+
+    public static void ActOnAllPlayers<T>(Action<T> command) where T: UnityEngine.Object
+    {
+        T[] components = FindObjectsByType<T>(FindObjectsSortMode.None);
+        foreach (var playerComponent in components)
+        {
+            command(playerComponent);
         }
     }
 
@@ -268,7 +276,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_Surrended = !isPlayerUp;
         m_TotalPlayers = (byte)gameplayMenuHUDs.Length;
 
-        foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
+        foreach (var gameplayMenuHUD in gameplayMenuHUDs)
         {
             if (m_Surrended) ++gameplayMenuHUD.PlayersSurrendered;
             else --gameplayMenuHUD.PlayersSurrendered;
@@ -309,38 +317,19 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [Server]
     public void StartGameOverSetUp(bool won)
     {
-        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        
-        foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
+        ActOnAllPlayers((GameplayMenuHUD playerUI) =>
         {
-            gameplayMenuHUD.ResetSurrender();
-            if (!gameplayMenuHUD.isLocalPlayer) continue;
-            Debugger($"SERVER - Starting ROUTINE");
-            gameplayMenuHUD.OpenVolumeMenu();
-            gameplayMenuHUD.ChangeCursorState(true);
-            gameplayMenuHUD.StartCoroutine(won);
-        }
-    }
+            playerUI.ResetSurrender();
+            if (playerUI.isLocalPlayer)
+            {
+                Debugger($"SERVER - Starting ROUTINE");
+                playerUI.ChangeCursorState(true);
+            }
+        });
 
-    public void StartCoroutine(bool won)
-    {
-        StartCoroutine(SurrenderSetUp(won));
-    }
-
-    private IEnumerator SurrenderSetUp(bool won)
-    {
         m_PlayerData.EndGame();
-        
-        yield return new WaitForSecondsRealtime(.2f);
-        
-        PlayerManagerHUD[] playerManagerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
-        
-        for (byte i = 0; i < playerManagerHUDs.Length; ++i)
-        {
-            playerManagerHUDs[i].SetEndGame(won);
-        }
-
         m_GameEnded = false;
+        StartCoroutine(m_PlayerManagerHUD.ReplicateSetEndGame(won));
     }
 
     private void OpenSettingsMenu()

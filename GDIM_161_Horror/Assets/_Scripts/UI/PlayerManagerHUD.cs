@@ -1,4 +1,5 @@
 using Mirror;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,6 +42,13 @@ public class PlayerManagerHUD : NetworkBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public IEnumerator ReplicateSetEndGame(bool won)
+    {
+        yield return new WaitForSecondsRealtime(.2f);
+
+        GameplayMenuHUD.ActOnAllPlayers((PlayerManagerHUD HUDmanager) => HUDmanager.SetEndGame(won));
     }
 
     private void OnGameSceneSetUp()
