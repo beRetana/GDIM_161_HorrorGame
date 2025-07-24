@@ -54,12 +54,12 @@ public class PlayerSpeedTracker : MonoBehaviour
 
         if (difference < 0)
         {
-            --m_FloorIndex;
+            m_FloorIndex = Mathf.Max(--m_FloorIndex, 0);
             m_FirstPersonController.SpeedMultiplier(m_InverseMultiplier);
         }
         else
         {
-            ++m_FloorIndex;
+            m_FloorIndex = Mathf.Min(++m_FloorIndex, m_FloorHeights.Length);
             m_FirstPersonController.SpeedMultiplier(m_Multiplier);
         }
     }
