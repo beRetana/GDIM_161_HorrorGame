@@ -33,7 +33,7 @@ public class PlayerManagerHUD : NetworkBehaviour
         {
             OnGameSceneSetUp();
         }
-        else if (scene.name == NewNetworkManager.NewSingleton.GetLobbyScene())
+        else if (scene.name == NewNetworkManager.NewSingleton.GetLobbySceneName())
         {
             OnLobbySceneSetUp();
         }

@@ -75,7 +75,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
 
     private void OnReturnToLobby(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name != NewNetworkManager.NewSingleton.GetLobbyScene()) return;
+        if (scene.name != NewNetworkManager.NewSingleton.GetLobbySceneName()) return;
 
         m_StartTime = 0;
         m_RezzedUpCount = 0;

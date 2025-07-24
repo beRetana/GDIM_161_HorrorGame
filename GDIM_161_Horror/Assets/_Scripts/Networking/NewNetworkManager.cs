@@ -12,13 +12,13 @@ public class NewNetworkManager : NetworkManager, IDebugger
 {
     [Header("Game Settings"), Space(5f)]
     [SerializeField] private PlayerObjectController _playerController;
+    [SerializeField] private string m_GameplaySceneName = "BUILD_1";
     [SerializeField] private string[] m_LabSceneNames;
 
     public event Action OnPlayersServerReady;
     public event Action OnPlayerConnected;
     public event Action OnPlayerDisconnected;
 
-    private string m_GameplaySceneName = "BUILD_1";
     private bool m_PlayersReady;
     private bool m_Debugger;
 
@@ -74,7 +74,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     }
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name != GetLobbyScene()) return;
+        if (SceneManager.GetActiveScene().name != GetLobbySceneName()) return;
 
         Transform startPos = GetStartPosition();
         PlayerObjectController player = Instantiate(_playerController, startPos.position, startPos.rotation);
@@ -102,8 +102,15 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name != GetLobbyScene()) return;
-        RefreshStartingLocations();
+        if (GetMainMenuScene() == scene.name)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (IsGameplayScene(scene.name))
+        {
+            RefreshStartingLocations();
+        }
     }
 
     public bool ArePlayersReady()
@@ -150,7 +157,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
         m_GameplaySceneName = name;
     }
 
-    public string GetLobbyScene()
+    public string GetLobbySceneName()
     {
         return GetSceneName(onlineScene);
     }
