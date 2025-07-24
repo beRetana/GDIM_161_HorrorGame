@@ -221,10 +221,21 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     {
         if (!isPlayerUp)
         {
-            if (!m_PlayersDownList.Add(playerID)) return;
+            GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsSortMode.None);
+            foreach (GameplayMenuHUD player in gameplayMenuHUDs)
+            {
+                player.m_PlayersDownList.Add(playerID);
+            }
             Debugger($"Player {playerID} has been Added - size {m_PlayersDownList.Count}");
+            
             if (m_PlayersDownList.Count < m_TotalPlayers) return;
+            
             Debugger($"Start Ending Game");
+            foreach (GameplayMenuHUD player in gameplayMenuHUDs)
+            {
+                player.m_PlayersDownList.Clear();
+            }
+
             m_PlayersDownList.Clear();
             SetEndGame();
         }

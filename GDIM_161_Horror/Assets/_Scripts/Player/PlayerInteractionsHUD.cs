@@ -1,9 +1,10 @@
+using Mirror;
 using OtherUtils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInteractionsHUD : MonoBehaviour, IDebugger
+public class PlayerInteractionsHUD : NetworkBehaviour, IDebugger
 {
     [Header("Tap Interaction")]
     [SerializeField] private Animator m_InteractAnimator;
@@ -26,6 +27,7 @@ public class PlayerInteractionsHUD : MonoBehaviour, IDebugger
 
     private void Start()
     {
+        if (!isServer) enabled = false;
         SetIconKeyboardE();
     }
 

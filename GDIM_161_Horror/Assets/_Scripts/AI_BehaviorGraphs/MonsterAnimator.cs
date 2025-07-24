@@ -53,6 +53,7 @@ public class MonsterAnimator : NetworkBehaviour
 
         m_Player = player;
         m_Player.LockPlayer();
+        m_Animator.ResetTrigger(attack);
         m_Animator.SetTrigger(attack);
     }
 
