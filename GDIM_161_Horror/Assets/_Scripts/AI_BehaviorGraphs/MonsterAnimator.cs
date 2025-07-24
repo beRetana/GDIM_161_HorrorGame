@@ -14,7 +14,6 @@ public class MonsterAnimator : MonoBehaviour
     private const string ATTACK = "ATTACK";
     private const string ATTACK_2 = "ATTACK2";
     private float m_MaxSqrSpeed;
-    private bool m_Attacking;
 
     private void Start()
     {
@@ -44,10 +43,10 @@ public class MonsterAnimator : MonoBehaviour
 
     private void StartAttack(PlayerBase player, string attack)
     {
-        if (m_Attacking) return;
+        if (m_Player != null) return;
 
         m_Player = player;
-        m_Attacking = true;
+        m_Player.LockPlayer();
         m_Animator.SetTrigger(attack);
     }
 
@@ -58,8 +57,6 @@ public class MonsterAnimator : MonoBehaviour
 
     public void EndAttack()
     {
-        if (!m_Attacking) return;
         m_Player = null;
-        m_Attacking = true;
     }
 }

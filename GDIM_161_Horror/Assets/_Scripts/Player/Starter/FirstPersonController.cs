@@ -61,7 +61,7 @@ namespace StarterAssets
             m_EnableFunctionality = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
             if (NewNetworkManager.NewSingleton.GetLobbyScene() == scene.name)
             {
-                UpdateState(PlayerStateEnum.Unlocked);
+                UpdateState(PlayerState.Unlocked);
                 m_HasKeyCard = false;
             }
         }

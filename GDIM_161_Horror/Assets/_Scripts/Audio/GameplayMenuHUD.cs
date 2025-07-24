@@ -7,6 +7,7 @@ using TMPro;
 using StarterAssets;
 using System.Collections;
 using Mirror;
+using System.Collections.Generic;
 
 public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
@@ -38,15 +39,18 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private HandInventory m_HandInventory;
     private NavMeshQueryFilter m_NavMeshQueryFilter;
 
-    [SyncVar] private byte m_PlayersDown;
+    [SyncVar] private byte m_PlayersSurrendered;
     [SyncVar] private bool m_Surrended;
     [SyncVar] private bool m_GameEnded;
+
+    private HashSet<byte> m_PlayersDownList = new HashSet<byte>();
     
     private byte m_TotalPlayers;
     private bool m_IsPaused;
     private bool m_Debugger;
 
-    public byte PlayersDown { get { return m_PlayersDown; } set {  m_PlayersDown = value; } }
+    public HashSet<byte> PlayersDownList => m_PlayersDownList;
+    public byte PlayersSurrendered { get { return m_PlayersSurrendered; } set {  m_PlayersSurrendered = value; } }
     
     private void Start()
     {
@@ -131,7 +135,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     public void ResetSurrender()
     {
-        m_PlayersDown = 0;
+        m_PlayersSurrendered = 0;
         m_Surrended = false;
         m_GameEnded = false;
     }
@@ -198,22 +202,54 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_HandInventory.SetControlsActive(active);
     }
 
-    private void GameState(bool isPlayerUp)
+    private void GameState(byte playerID, bool isPlayerUp)
     {
-        if (!isLocalPlayer || isPlayerUp) return;
+        if (!isLocalPlayer) return;
 
-        if (isServer) RpcPlayersDownCount(m_Surrended);
-        else          CmdPlayersDownCount(m_Surrended);
+        if (isServer) RpcPlayersDown(playerID, isPlayerUp); 
+        else CmdPlayersDown(playerID, isPlayerUp);
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdPlayersDownCount(bool isPlayerUp)
+    private void CmdPlayersDown(byte playerID, bool isPlayerUp)
     {
-        RpcPlayersDownCount(isPlayerUp);
+        RpcPlayersDown(playerID, isPlayerUp);
     }
 
     [ClientRpc]
-    private void RpcPlayersDownCount(bool isPlayerUp)
+    private void RpcPlayersDown(byte playerID, bool isPlayerUp)
+    {
+        if (!isPlayerUp)
+        {
+            if (!m_PlayersDownList.Add(playerID)) return;
+            
+            if (m_PlayersDownList.Count < m_TotalPlayers) return;
+            
+            m_PlayersDownList.Clear();
+            SetEndGame();
+        }
+        else
+        {
+            m_PlayersDownList.Remove(playerID);
+        }
+    }
+
+    private void Surrender()
+    {
+        if (!isLocalPlayer || m_Surrended) return;
+
+        if (isServer) RpcPlayersSurrenderCount(m_Surrended);
+        else CmdPlayersSurrenderedCount(m_Surrended);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdPlayersSurrenderedCount(bool isPlayerUp)
+    {
+        RpcPlayersSurrenderCount(isPlayerUp);
+    }
+
+    [ClientRpc]
+    private void RpcPlayersSurrenderCount(bool isPlayerUp)
     {
         GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
@@ -222,32 +258,31 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
         foreach (GameplayMenuHUD gameplayMenuHUD in gameplayMenuHUDs)
         {
-            if (m_Surrended) ++gameplayMenuHUD.PlayersDown;
-            else --gameplayMenuHUD.PlayersDown;
+            if (m_Surrended) ++gameplayMenuHUD.PlayersSurrendered;
+            else --gameplayMenuHUD.PlayersSurrendered;
 
             gameplayMenuHUD.UpdateSurrenderText();
         }
 
         if (!UpdateSurrenderText() || m_GameEnded) return;
-        
+        SetEndGame();
+    }
+
+    private void SetEndGame()
+    {
         m_Surrended = false;
         m_GameEnded = true;
-        m_PlayersDown = 0;
+        m_PlayersSurrendered = 0;
 
         Debugger($"Starting Surrender");
         if (isServer) StartGameOverSetUp(false);
         else CmdStartGameOverSetUp();
     }
 
-    private void Surrender()
-    {
-        GameState(m_Surrended);
-    }
-
     private bool UpdateSurrenderText()
     {
-        bool isMajority = m_PlayersDown > m_TotalPlayers / 2;
-        m_TxtSurrenderPlayer.text = $"Surrender ({m_PlayersDown}/{m_TotalPlayers})";
+        bool isMajority = m_PlayersSurrendered > m_TotalPlayers / 2;
+        m_TxtSurrenderPlayer.text = $"Surrender ({m_PlayersSurrendered}/{m_TotalPlayers})";
         m_TxtSurrenderPlayer.color = (isMajority) ? Color.green : Color.red;
         return isMajority;
     }

@@ -13,7 +13,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     static private int _myID = 0; // 0, 1, 2, 3
     protected PlayerInput _playerInput;
     private NewNetworkManager _networkmanager;
-    public event Action<bool> OnPlayerUp;
+    public event Action<byte, bool> OnPlayerUp;
 
     public NewNetworkManager NetworkManager
     {
@@ -32,7 +32,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     protected bool _debugger;
 
     #region enums
-    public enum PlayerStateEnum
+    public enum PlayerState
     {
         Locked,
         Unlocked,
@@ -78,8 +78,9 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     #endregion
     #region Useful Stats
     private SO_PlayerStats currentStats;
-    private PlayerStateEnum playerStateEnum;
-    private PlayerActionEnum playerActionEnum;
+    private PlayerState playerStateEnum;
+
+    public PlayerState CurrentState => playerStateEnum;
 
     #endregion
     #region Player Stats
@@ -138,7 +139,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
         AssignID();
-        UpdateState(PlayerStateEnum.Unlocked); 
+        UpdateState(PlayerState.Unlocked); 
     }
     public override string ToString() { return $"Player ID: {_myID}"; }
 
@@ -146,22 +147,22 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public void LockPlayer()
     {
         Debugger($"Locking Player{_myID}");
-        EnterState(PlayerStateEnum.Locked);
+        EnterState(PlayerState.Locked);
     }
     public void UnlockPlayer()
     {
         Debugger($"Unlocking Player {_myID}");
-        EnterState(PlayerStateEnum.Unlocked);
+        EnterState(PlayerState.Unlocked);
     }
     public void LimpPlayer()
     {
         Debugger($"Limping Player{_myID}");
-        EnterState(PlayerStateEnum.Limp);
+        EnterState(PlayerState.Limp);
     }
     public void DownPlayer()
     {
         Debugger($"Locking Player{_myID}");
-        EnterState(PlayerStateEnum.Downed);
+        EnterState(PlayerState.Downed);
     }
 
     private void UnlockPlayerSettings()
@@ -181,7 +182,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         SetInputState(true);
 
         if (!isLocalPlayer) return;
-        OnPlayerUp?.Invoke(true);
+        OnPlayerUp?.Invoke((byte)_handInventory.PlayerID, true);
     }
 
     private void DownPlayerSettings()
@@ -200,49 +201,48 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _handInventory.DropAllItems();
         SetInputState(false);
         cinemachineCameraTarget.transform.localPosition = downCamPosition;
-        if (!isLocalPlayer) return;
-        OnPlayerUp?.Invoke(false);
+        if (!isLocalPlayer || playerStateEnum == PlayerState.Downed) return;
+        OnPlayerUp?.Invoke((byte)_handInventory.PlayerID, false);
     }
-    private void EnterState(PlayerStateEnum enterState)
+    private void EnterState(PlayerState enterState)
     {
         if (isServer) RpcChangeState(enterState);
         else CmdChangeState(enterState);
     }
 
     [Command]
-    private void CmdChangeState(PlayerStateEnum enterState)
+    private void CmdChangeState(PlayerState enterState)
     {
         RpcChangeState(enterState);
     }
 
     [ClientRpc]
-    private void RpcChangeState(PlayerStateEnum enterState)
+    private void RpcChangeState(PlayerState enterState)
     {
         Debugger($"{name} entering {enterState}");
         UpdateState(enterState);
     }
-    protected void UpdateState(PlayerStateEnum enterState)
+    protected void UpdateState(PlayerState enterState)
     {
         switch (enterState)
         {
-            case PlayerStateEnum.Locked:
+            case PlayerState.Locked:
                 currentStats = lockedStats;
                 break;
-            case PlayerStateEnum.Unlocked:
+            case PlayerState.Unlocked:
                 UnlockPlayerSettings();
                 currentStats = unlockedStats;
                 break;
-            case PlayerStateEnum.Limp:
+            case PlayerState.Limp:
                 currentStats = limpStats;
                 break;
-            case PlayerStateEnum.Downed:
+            case PlayerState.Downed:
                 DownPlayerSettings();
                 currentStats = downedStats;
                 break;
         }
         
         SetPlayerStats();
-        ApplyFetchedValues();
         playerStateEnum = enterState;
     }
     private bool SetPlayerStats()
@@ -271,16 +271,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         bottomClamp = currentStats.BottomClamp;
 
         return true;
-    }
-
-    private void ApplyFetchedValues()
-    {
-        switch (playerStateEnum)
-        {
-            case PlayerStateEnum.Unlocked:
-                //moveSpeed = 
-                break;
-        }
     }
 
     #endregion PlayerState

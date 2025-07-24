@@ -121,9 +121,9 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         }
     }
 
-    private void OnPlayerKnocked(bool isPlayerUp)
+    private void OnPlayerKnocked(byte playerID, bool isPlayerUp)
     {
-        if (isPlayerUp) return;
+        if (isPlayerUp || playerID != m_PlayerController.PlayerID) return;
         Debugger($"Player Knocked {m_KnockedDownCount}");
         if (!isServer) CmdOnPlayerKnocked();
         else ++m_KnockedDownCount;

@@ -37,13 +37,13 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private PlayerAnimator m_PlayerAnimator;
     private PlayerControls _playerControls;
     private IInteractable _interactable;
-    private int _playerID;
+    private byte _playerID;
     private bool m_EnablePickingUp;
 
     private const int _LEFT_HAND_ID = 0;
     private const int _RIGHT_HAND_ID = 1;
 
-    public int PlayerID => _playerID;
+    public byte PlayerID => _playerID;
     public bool EnablePickingUp { get { return m_EnablePickingUp; } set { m_EnablePickingUp = value; } }
 
     private class InventorySlot
@@ -200,7 +200,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
     private void Start()
     {
         if (gameObject.TryGetComponent<PlayerObjectController>(out PlayerObjectController playerController)) 
-            _playerID = playerController.PlayerID;
+            _playerID = (byte)playerController.PlayerID;
         _staticDebugging = _enableDebugging;
         Debugger($"The Player ID is: {_playerID}");
         SetHandTransforms();
@@ -233,6 +233,7 @@ public class HandInventory : NetworkBehaviour, IDebugger
         _playerControls.Player.UseItem.started += OnUsePickable;
         _playerControls.Player.UseItem.canceled += OnUsePickable;
         _playerControls.Player.UseItem.performed += OnUsePickable;
+        m_EnablePickingUp = true;
     }
 
     private void DisableControls()
@@ -245,6 +246,8 @@ public class HandInventory : NetworkBehaviour, IDebugger
         _playerControls.Player.UseItem.canceled -= OnUsePickable;
         _playerControls.Player.UseItem.performed -= OnUsePickable;
         _playerControls.Disable();
+        m_EnablePickingUp = false;
+        _mouse.DefaultEffect();
     }
 
     private void OnDestroy()

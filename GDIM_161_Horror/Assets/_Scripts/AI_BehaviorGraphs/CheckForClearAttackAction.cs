@@ -32,7 +32,7 @@ public partial class CheckForClearAttackAction : Action
         bool isTargetObstructed = hit.collider.transform.root.tag != Target.Value.transform.tag;
         Debug.Log("Detected a player");
         if (isTargetObstructed) return Status.Failure;
-        
+        Target.Value = hit.collider.transform.root.gameObject;
         return Status.Success;
     }
 }
