@@ -253,7 +253,6 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         moveSpeed = currentStats.MoveSpeed;
         sprintSpeed = currentStats.SprintSpeed;
-        rotationSpeed = currentStats.RotationSpeed;
         accelerationRate = currentStats.AccelerationRate;
         decelerationRate = currentStats.DecelerationRate;
 

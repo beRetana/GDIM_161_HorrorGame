@@ -222,15 +222,16 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (!isPlayerUp)
         {
             if (!m_PlayersDownList.Add(playerID)) return;
-            
+            Debugger($"Player {playerID} has been Added");
             if (m_PlayersDownList.Count < m_TotalPlayers) return;
-            
+            Debugger($"Start Ending Game");
             m_PlayersDownList.Clear();
             SetEndGame();
         }
         else
         {
-            m_PlayersDownList.Remove(playerID);
+            if (m_PlayersDownList.Remove(playerID))
+                Debugger($"Player {playerID} has been Removed");
         }
     }
 
