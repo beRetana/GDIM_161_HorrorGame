@@ -10,16 +10,6 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
     [SerializeField] private TextMeshProUGUI m_EndGameTitle;
     private bool m_Debugger;
 
-    public void Debugger(object log)
-    {
-        if (m_Debugger) Debug.Log(log);
-    }
-
-    public void SetDebugActive(bool active)
-    {
-        m_Debugger = active;
-    }
-
     public void SetEndGameUI(bool won)
     {
         SetEndGameTittle(won);
@@ -38,6 +28,11 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
 
     private void SetStatsBoard()
     {
+        foreach (var statsBoard in m_StatsBoardUI)
+        {
+            statsBoard.gameObject.SetActive(false);
+        }
+
         PlayerDataTracker[] playersInGame = FindObjectsByType<PlayerDataTracker>(FindObjectsSortMode.None);
 
         for (byte i = 0; i < playersInGame.Length; ++i)
@@ -46,5 +41,15 @@ public class EndGameHUD : NetworkBehaviour, IDebugger
             m_StatsBoardUI[i].SetPlayerStats(playersInGame[i]);
             m_StatsBoardUI[i].gameObject.SetActive(true);
         }
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log(log);
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }
