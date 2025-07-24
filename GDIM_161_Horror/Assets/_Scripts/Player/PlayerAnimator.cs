@@ -34,21 +34,15 @@ public class PlayerAnimator : MonoBehaviour
         m_PlayerAnimator?.SetBool(CRAWL, crawl);
     }
 
-    public void RaiseHand()
+    public void ToggleRaiseHand()
     {
-        if (m_IsRaising) return;
-        m_PlayerAnimator?.SetTrigger(RAISE_HAND);
-        m_IsRaising = true;
-    }
-
-    public void DoneRaising()
-    {
-        m_IsRaising = false;
+        m_IsRaising = !m_IsRaising;
+        m_PlayerAnimator?.SetBool(RAISE_HAND, m_IsRaising);
     }
 
     public void SwitchHands(bool isRightDominant)
     {
+        if (m_IsRaising) ToggleRaiseHand();
         m_PlayerAnimator?.SetBool(RIGHT_DOMINANT, isRightDominant);
-        DoneRaising();
     }
 }

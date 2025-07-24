@@ -5,7 +5,8 @@ using Mirror;
 
 public class TheEnd : NetworkBehaviour
 {
-    [SerializeField] private float m_EndTime = 5f;
+    [SerializeField] private float m_CreditsTime = 15f;
+    [SerializeField] private float m_EndTime = 3f;
 
     private List<byte> m_PlayersOut;
 
@@ -34,17 +35,24 @@ public class TheEnd : NetworkBehaviour
     private void StartSequence()
     {
         Debug.Log("Client - Ending Coroutine");
-        StartCoroutine(EndSequece());
+        StartCoroutine(EndSequence());
     }
 
-    private IEnumerator EndSequece()
+    private IEnumerator EndSequence()
     {
         Debug.Log("Client - Waiting");
         yield return new WaitForSecondsRealtime(m_EndTime);
 
+        foreach(var playerID in m_PlayersOut)
+        {
+            PlayerBase player = PlayerManager.Instance.GetPlayer(playerID);
+            player.LockPlayer();
+            player.SetInputState(false);
+        }
+
         SetCredits(true); 
         Debug.Log("Client - Credits on");
-        yield return new WaitForSecondsRealtime(m_EndTime);
+        yield return new WaitForSecondsRealtime(m_CreditsTime);
         Debug.Log("Client - Credits off");
         SetCredits(false);
         EndTheGame();
@@ -52,22 +60,13 @@ public class TheEnd : NetworkBehaviour
 
     private void SetCredits(bool active)
     {
-        PlayerManagerHUD[] playerHUDs = FindObjectsByType<PlayerManagerHUD>(FindObjectsSortMode.None);
-
-        foreach (PlayerManagerHUD player in playerHUDs)
-        {
-            player.SetCredits(active);
-        }
+        GameplayMenuHUD.ActOnAllPlayers((PlayerManagerHUD playerHUD) => playerHUD.SetCredits(active));
     }
 
     private void EndTheGame()
     {
-        GameplayMenuHUD[] players = FindObjectsByType<GameplayMenuHUD>(FindObjectsSortMode.None);
+        if (!isServer) return;
 
-        foreach (GameplayMenuHUD player in players)
-        {
-            if (!isServer) continue;
-            player.StartGameOverSetUp(true);
-        }
+        GameplayMenuHUD.ActOnAllPlayers((GameplayMenuHUD player) => player.StartGameOverSetUp(true));
     }
 }

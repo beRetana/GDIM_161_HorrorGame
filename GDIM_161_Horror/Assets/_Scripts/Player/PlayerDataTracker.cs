@@ -22,7 +22,6 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
     [SyncVar] private ushort m_RezzedUpCount;
     [SyncVar] private ushort m_TrialNumber;
 
-    private bool m_WasLobbyPrevious;
     private bool m_Debugger;
 
     public Vector3 SavedPosition { get { return m_SavedPosition; } 
@@ -39,6 +38,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
     {
         m_PlayerController = GetComponent<PlayerObjectController>();
         m_FirstPersonController = GetComponent<FirstPersonController>();
+
         m_FirstPersonController.OnPlayerUp += OnPlayerKnocked;
         SceneManager.sceneLoaded += OnLoadedGameScene;
         SceneManager.sceneLoaded += OnReturnToLobby;
@@ -53,23 +53,14 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
 
     private void OnLoadedGameScene(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == NewNetworkManager.NewSingleton.GetLobbyScene())
-        {
-            m_WasLobbyPrevious = true;
-            m_PlayerSteamID = m_PlayerController.PlayerSteamID;
-            m_PlayerName = m_PlayerController.PlayerName;
-            m_SavedPosition = Vector3.zero;
-            m_RezzedUpCount = 0;
-            m_KnockedDownCount = 0;
-        }
-        else if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) && m_WasLobbyPrevious)
-        {
-            m_StartTime = (ulong)Time.time;
-            if (!isServer || !isLocalPlayer) return;
-            m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
-            SetTrialNumber(m_TrialNumber);
-            m_WasLobbyPrevious = false;
-        }
+        if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+
+        m_PlayerSteamID = m_PlayerController.PlayerSteamID;
+        m_PlayerName = m_PlayerController.PlayerName;
+        m_StartTime = (ulong)Time.time;
+        if (!isServer || !isLocalPlayer) return;
+        m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
+        SetTrialNumber(m_TrialNumber);
     }
 
     private void SetTrialNumber(ushort number)
@@ -90,7 +81,9 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         m_RezzedUpCount = 0;
         m_TotalTime = 0;
         m_TrialNumber = 0;
-        
+        m_KnockedDownCount = 0;
+        m_SavedPosition = Vector3.zero;
+
         for (byte i = 0; i < m_TimePerFloor.Length; ++i)
         {
             m_TimePerFloor[i] = 0;

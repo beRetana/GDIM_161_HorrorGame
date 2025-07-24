@@ -26,10 +26,11 @@ public class CreditTableUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void DisplayCredits()
+    public void SetCreditsActive(bool active)
     {
-        gameObject.SetActive(true);
-        m_AnimatorCredits.SetTrigger(START_CREDITS);
+        gameObject.SetActive(active);
+        if (active) m_AnimatorCredits.SetTrigger(START_CREDITS);
+        else m_AnimatorCredits.ResetTrigger(START_CREDITS);
     }
 
     private void CreateCategories()

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using Mirror;
-
+using UnityEngine.InputSystem;
 
 namespace Interactions
 {
@@ -100,13 +100,15 @@ namespace Interactions
         {
             Debugger("Using torch");
             if (!isServer) return;
+            if (context.InputType != InteractionType.Tap) return;
+            if (context.InputPhase != InputActionPhase.Performed) return;
             RpcRaiseHand(playerId);
         }
 
         [ClientRpc]
         private void RpcRaiseHand(int playerID)
         {
-            PlayerManager.Instance.GetPlayer(playerID).GetComponent<PlayerAnimator>().RaiseHand();
+            PlayerManager.Instance.GetPlayer(playerID).GetComponent<PlayerAnimator>().ToggleRaiseHand();
         }
 
         private void SmotherCheck()

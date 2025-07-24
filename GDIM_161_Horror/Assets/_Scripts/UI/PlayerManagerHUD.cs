@@ -82,7 +82,7 @@ public class PlayerManagerHUD : NetworkBehaviour
 
     public void SetCredits(bool active)
     {
-        m_CreditsGameObject.SetActive(active);
+        m_CreditsGameObject.GetComponent<CreditTableUI>().SetCreditsActive(active);
     }
 
     public void SetEndGame(bool won)
