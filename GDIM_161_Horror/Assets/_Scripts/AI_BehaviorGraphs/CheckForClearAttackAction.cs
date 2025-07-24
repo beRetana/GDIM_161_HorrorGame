@@ -25,12 +25,12 @@ public partial class CheckForClearAttackAction : Action
         if (!(distSqr < Range.Value * Range.Value)) return Status.Failure;
         if (distSqr <= 1f) return Status.Success;
         int detectables = ground | wall | door | player;
-
+        Debug.Log("Player is within Range");
         RaycastHit hit;
         if (!Physics.SphereCast(Self.Value.transform.position + Vector3.up, 0.5f, (Target.Value.transform.position - Self.Value.transform.position), out hit, Range.Value, detectables)) return Status.Failure;
-        
+        Debug.Log("Detected Something");
         bool isTargetObstructed = hit.collider.transform.root.tag != Target.Value.transform.tag;
-        
+        Debug.Log("Detected a player");
         if (isTargetObstructed) return Status.Failure;
         
         return Status.Success;
