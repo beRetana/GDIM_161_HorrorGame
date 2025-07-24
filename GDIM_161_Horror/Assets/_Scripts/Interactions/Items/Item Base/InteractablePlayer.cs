@@ -39,15 +39,14 @@ public class InteractablePlayer : InteractableItem, IDebugger
             OnPlayerRecued?.Invoke();
             PlayerManager.Instance.GetPlayer(playerID).
                 GetComponent<PlayerDataTracker>().OnPlayerRezzed();
-            m_Loading = false;
         }
         else
         {
-            Debugger("Another Interaction was Succesful before Holding; Loading Cancelled");
-            m_Loading = false;
-            PlayerManager.Instance.GetPlayer(playerID).
-                GetComponent<NetworkPlayerUI>().CancelHoldingUI();
+            Debugger("Another Interaction was Succesful before Holding; Loading Cancelled");  
         }
+        m_Loading = false;
+        PlayerManager.Instance.GetPlayer(playerID).
+                GetComponent<NetworkPlayerUI>().CancelHoldingUI();
     }
 
     public override void StoppedDetecting(int playerID)

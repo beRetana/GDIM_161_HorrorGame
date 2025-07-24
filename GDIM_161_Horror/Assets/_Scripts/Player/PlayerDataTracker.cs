@@ -43,7 +43,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         SceneManager.sceneLoaded += OnReturnToLobby;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         m_FirstPersonController.OnPlayerUp -= OnPlayerKnocked;
         SceneManager.sceneLoaded -= OnReturnToLobby;
@@ -124,6 +124,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
     private void OnPlayerKnocked(bool isPlayerUp)
     {
         if (isPlayerUp) return;
+        Debugger($"Player Knocked {m_KnockedDownCount}");
         if (!isServer) CmdOnPlayerKnocked();
         else ++m_KnockedDownCount;
     }

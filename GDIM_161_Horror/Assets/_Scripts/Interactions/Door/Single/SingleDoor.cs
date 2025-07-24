@@ -2,13 +2,13 @@ using UnityEngine;
 using Interactions;
 using Mirror;
 using System.Collections;
-using UnityEngine.Splines.Interpolators;
+using Unity.VisualScripting;
 
 public class SingleDoor : NetworkBehaviour
 {
     [Header("Door Settings")]
-    [SerializeField] private Transform pivot;
-    [SerializeField] private float _openRotation = 90f;
+    [SerializeField] private Transform m_StartLocation;
+    [SerializeField] private Transform m_EndingLocation;
     [SerializeField] private float _openAnimDuration = 3f;
 
     [Header("Debugging")]
@@ -23,7 +23,6 @@ public class SingleDoor : NetworkBehaviour
     {
         _interactableItem = GetComponent<InteractableItem>();
         _networkIdentity = transform.parent.GetComponent<NetworkIdentity>();
-        _endingRotation = Quaternion.Euler(new Vector3(0, _openRotation, 0));
         _interactableItem.SetInteractAction(OpenDoor);
     }
 
@@ -41,7 +40,7 @@ public class SingleDoor : NetworkBehaviour
         if (this._networkIdentity != doorID) return;
         this._isOpen = true;
         _interactableItem.SetInteractive(false);
-        StartCoroutine(OpenDoorAnim(pivot.rotation, pivot.rotation * _endingRotation, _openAnimDuration));
+        StartCoroutine(OpenDoorAnim(m_StartLocation.position, m_EndingLocation.position, _openAnimDuration));
         AudioManager.instance.PlayOneShot(FMODEvents.instance.SingleDoorOpen, this.transform.position);
     }
 
@@ -51,18 +50,19 @@ public class SingleDoor : NetworkBehaviour
         RpcSetState(doorID);
     }
 
-    private IEnumerator OpenDoorAnim(Quaternion rotation, Quaternion endingRotation, float duration)
+    private IEnumerator OpenDoorAnim(Vector3 startingPosition, Vector3 endingPosition, float duration)
     {
-        Quaternion startingRotation = rotation;
         float timeElapsed = 0f;
 
         for (; timeElapsed <= duration; timeElapsed += Time.deltaTime)
         {
-            pivot.rotation = Quaternion.Slerp(startingRotation, endingRotation, Mathf.Clamp01(timeElapsed / duration));
+            m_StartLocation.transform.position = Vector3.Lerp(startingPosition, endingPosition, Mathf.Clamp01(timeElapsed / duration));
             
             yield return null;
         }
+        m_StartLocation.transform.position = endingPosition;
 
+        m_StartLocation.gameObject.SetActive(false);
         _interactableItem.SetInteractive(false);
     }
 

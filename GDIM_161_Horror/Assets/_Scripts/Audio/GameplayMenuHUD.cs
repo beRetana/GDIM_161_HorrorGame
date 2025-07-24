@@ -123,6 +123,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         
         if (m_FirstPersonController == null) 
             m_FirstPersonController = transform.root.GetComponent<FirstPersonController>();
+        
         m_FirstPersonController.OnPlayerUp += GameState;
         GetTotalPlayers();
         UpdateSurrenderText();
@@ -199,7 +200,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void GameState(bool isPlayerUp)
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || isPlayerUp) return;
 
         if (isServer) RpcPlayersDownCount(m_Surrended);
         else          CmdPlayersDownCount(m_Surrended);
