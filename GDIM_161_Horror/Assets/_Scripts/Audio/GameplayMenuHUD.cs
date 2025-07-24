@@ -293,10 +293,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void SetEndGame()
     {
-        m_Surrended = false;
-        m_GameEnded = true;
-        m_PlayersSurrendered = 0;
-
         Debugger($"Starting Surrender");
         if (isServer) StartGameOverSetUp(false);
         else CmdStartGameOverSetUp();
@@ -320,16 +316,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [Server]
     public void StartGameOverSetUp(bool won)
     {
-        ActOnAllPlayers((GameplayMenuHUD playerUI) =>
-        {
-            playerUI.ResetSurrender();
-            playerUI.m_GameEnded = false;
-            if (playerUI.isLocalPlayer)
-            {
-                playerUI.ChangeCursorState(true);
-            }
-        });
-
         m_PlayerData.EndGame();
         m_PlayerManagerHUD.StartEndGameRoutine(won);
     }
