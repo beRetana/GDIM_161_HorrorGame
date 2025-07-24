@@ -22,6 +22,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
     [SyncVar] private ushort m_RezzedUpCount;
     [SyncVar] private ushort m_TrialNumber;
 
+    private bool m_WasLobbyPrevious;
     private bool m_Debugger;
 
     public Vector3 SavedPosition { get { return m_SavedPosition; } 
@@ -52,15 +53,23 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
 
     private void OnLoadedGameScene(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name != NewNetworkManager.NewSingleton.GameplaySceneName) return;
-
-        m_StartTime = (ulong) Time.time;
-        m_PlayerSteamID = m_PlayerController.PlayerSteamID;
-        m_PlayerName = m_PlayerController.PlayerName;
-        m_SavedPosition = Vector3.zero;
-        if (!isServer || !isLocalPlayer) return;
-        m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
-        SetTrialNumber(m_TrialNumber);
+        if (scene.name == NewNetworkManager.NewSingleton.GetLobbyScene())
+        {
+            m_WasLobbyPrevious = true;
+            m_PlayerSteamID = m_PlayerController.PlayerSteamID;
+            m_PlayerName = m_PlayerController.PlayerName;
+            m_SavedPosition = Vector3.zero;
+            m_RezzedUpCount = 0;
+            m_KnockedDownCount = 0;
+        }
+        else if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) && m_WasLobbyPrevious)
+        {
+            m_StartTime = (ulong)Time.time;
+            if (!isServer || !isLocalPlayer) return;
+            m_TrialNumber = (ushort)UnityEngine.Random.Range(1000, 10000);
+            SetTrialNumber(m_TrialNumber);
+            m_WasLobbyPrevious = false;
+        }
     }
 
     private void SetTrialNumber(ushort number)

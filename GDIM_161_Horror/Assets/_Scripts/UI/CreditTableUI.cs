@@ -5,10 +5,13 @@ using UnityEditor.Toolbars;
 
 public class CreditTableUI : MonoBehaviour
 {
+    [SerializeField] private Animator m_AnimatorCredits;
     [SerializeField] private VerticalLayoutGroup m_VerticalGrid;
     [SerializeField] private CreditsInformation m_Information;
     [SerializeField] private Transform m_CategoryTemplate;
     [SerializeField] private Transform m_InfoTemplate;
+
+    private const string START_CREDITS = "START_CREDITS";
 
     [ContextMenu("Generate Credits Table")]
     private void GenerateInEditor()
@@ -26,6 +29,7 @@ public class CreditTableUI : MonoBehaviour
     public void DisplayCredits()
     {
         gameObject.SetActive(true);
+        m_AnimatorCredits.SetTrigger(START_CREDITS);
     }
 
     private void CreateCategories()
