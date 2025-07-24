@@ -8,6 +8,8 @@ namespace StarterAssets
 {
     public class FirstPersonController : PlayerBase
     {
+        [SerializeField] private float m_AvoidanceDistance;
+        [SerializeField] private LayerMask m_Obstacles;
         private StarterAssetsInputs _input;
         private PlayerHeadBobbing _headBobbing;
 
@@ -148,6 +150,14 @@ namespace StarterAssets
 
             if (_input.move != Vector2.zero)
                 inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+
+            bool isFacingObstacle = Physics.Raycast(transform.position + transform.up, transform.forward, m_AvoidanceDistance, m_Obstacles);
+            bool isMovingTowards = Vector3.Dot(inputDirection, transform.forward) > 0;
+            
+            if (isFacingObstacle && isMovingTowards)
+            {
+                _speed = 0;
+            }
 
             _headBobbing.SetNoise(_speed / sprintSpeed);
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
