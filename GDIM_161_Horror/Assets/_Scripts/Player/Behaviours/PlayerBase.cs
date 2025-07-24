@@ -131,6 +131,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         if (isLocalPlayer)
             _playerInput = GetComponent<PlayerInput>();
         _controller = GetComponent<CharacterController>();
+        _playerUI = GetComponent<PlayerInteractionsHUD>();
         _animator = GetComponent<PlayerAnimator>();
         _handInventory = GetComponent<HandInventory>();
 
