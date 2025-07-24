@@ -53,7 +53,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     public HashSet<byte> PlayersDownList => m_PlayersDownList;
     public byte PlayersSurrendered { get { return m_PlayersSurrendered; } set {  m_PlayersSurrendered = value; } }
     
-    private void Start()
+    private void OnEnable()
     {
         m_NavMeshQueryFilter = new NavMeshQueryFilter();
         m_NavMeshQueryFilter.agentTypeID = 0;
@@ -64,7 +64,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         NewNetworkManager.NewSingleton.OnPlayerDisconnected += GetTotalPlayers;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         DisableInput();
         DisableButtons();
@@ -151,6 +151,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     private void GetTotalPlayers()
     {
         m_TotalPlayers = (byte)NewNetworkManager.NewSingleton.numPlayers;
+        UpdateSurrenderText();
     }
 
     private void DisableButtons()

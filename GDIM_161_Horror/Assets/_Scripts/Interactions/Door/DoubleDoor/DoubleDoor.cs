@@ -17,10 +17,11 @@ namespace Interactions
         [SerializeField] private DoorData m_RightDoor;
         [SerializeField] private DoorData m_LeftDoor;
 
+        [SyncVar] private byte m_PlayersRequired;
+
         private List<byte> m_PlayersOnDoor;
         private Vector3 m_RightDoorOriginal;
         private Vector3 m_LeftDoorOriginal;
-        private byte m_PlayersRequired;
         private bool _debugger;
 
         [Serializable]
@@ -46,20 +47,26 @@ namespace Interactions
             m_RightDoorOriginal = m_RightDoor.DoorTransform.position;
             m_LeftDoorOriginal = m_LeftDoor.DoorTransform.position;
             m_PlayersOnDoor = new List<byte>();
-            m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
+
+            if (!isServer) return;
             
-            if (m_DoorButtons.Length > m_PlayersRequired)
+            if (NewNetworkManager.NewSingleton.ArePlayersReady())
             {
-                AdjustButtonNumber();
+                RpcAdjustButtonNumber();
             }
-            else
-            {
-                m_PlayersRequired = (byte)m_DoorButtons.Length;
-            }
+            NewNetworkManager.NewSingleton.OnPlayersServerReady += RpcAdjustButtonNumber;
         }
 
-        private void AdjustButtonNumber()
+        private void OnDisable()
         {
+            NewNetworkManager.NewSingleton.OnPlayersServerReady -= RpcAdjustButtonNumber;
+        }
+
+        [ClientRpc]
+        private void RpcAdjustButtonNumber()
+        {
+            m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
+
             for (int i = m_DoorButtons.Length - 1; i >= m_PlayersRequired; --i)
             {
                 m_DoorButtons[i].transform.parent.gameObject.SetActive(false);

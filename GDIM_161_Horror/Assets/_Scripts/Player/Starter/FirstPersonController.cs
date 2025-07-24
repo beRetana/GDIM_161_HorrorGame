@@ -224,10 +224,5 @@ namespace StarterAssets
         {
             this.m_HasKeyCard = value;
         }
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = grounded ? new Color(0.0f, 1.0f, 0.0f, 0.35f) : new Color(1.0f, 0.0f, 0.0f, 0.35f);
-            Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
-        }
     }
 }
