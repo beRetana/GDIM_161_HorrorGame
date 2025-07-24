@@ -62,6 +62,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     [SerializeField] private SO_PlayerStats downedStats;
 
     [Space(5)]
+    [SerializeField] protected CapsuleCollider _capsuleCollider;
     [SerializeField] protected InteractablePlayer _interaction;
 
     [Space(5)]
@@ -172,6 +173,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         _controller.center = new Vector3(0f, .98f, 0f);
         _controller.height = 2f;
+        _capsuleCollider.center = Vector3.up;
+        _capsuleCollider.direction = 1;
 
         _animator.SetAnimCrawl(false);
         cinemachineCameraTarget.transform.localPosition = initialPosition;
@@ -190,6 +193,8 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         _controller.center = new Vector3(0f, .4f, 0f);
         _controller.height = .5f;
+        _capsuleCollider.center = new Vector3(0f, 0.5f, 0f);
+        _capsuleCollider.direction = 2;
 
         _animator.SetAnimCrawl(true);
         _handInventory.DropAllItems();
