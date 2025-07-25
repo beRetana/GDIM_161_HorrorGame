@@ -33,6 +33,7 @@ public class FinalDoor : MoveDoors
         m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
         m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
+        Debug.Log($"Max {m_KeycardMax}");
         if (m_KeycardMax == 0) return;
         SetRequiredNumber(m_KeycardMax);
     }
@@ -41,6 +42,7 @@ public class FinalDoor : MoveDoors
     private void SetRequiredNumber(int value)
     {
         m_KeycardMax = value;
+        Debug.Log($"Max {m_KeycardMax}");
     }
 
     public void OnStartedInteraction(int playerID)
