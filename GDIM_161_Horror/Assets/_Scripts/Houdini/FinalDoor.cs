@@ -60,19 +60,6 @@ public class FinalDoor : MoveDoors
 
     private void UpdateCheckedInList(byte playerID)
     {
-        if (isServer) RpcUpdateCheckedInList(playerID);
-        else CmdUpdateCheckedInList(playerID);
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdUpdateCheckedInList(byte playerID)
-    {
-        RpcUpdateCheckedInList(playerID);
-    }
-
-    [ClientRpc]
-    private void RpcUpdateCheckedInList(byte playerID)
-    {
         m_PlayersCheckedIn.Add(playerID);
     }
 
@@ -132,15 +119,14 @@ public class FinalDoor : MoveDoors
         }
     }
 
-    public bool TryUnlockDoor(byte playerID)
+    public void TryUnlockDoor(byte playerID)
     {
-        UpdateCheckedInList(playerID);
-        bool result = KeycardCount >= m_KeycardMax;
-        if (result)
-        {
-            UpdateState(DoorState.Unlocked);
-        }
-        return result;
+        m_PlayersCheckedIn.Add(playerID);
+        if (KeycardCount < m_KeycardMax) return;
+        m_DoorState = DoorState.Unlocked;
+        m_Interactable.SetDisplayMessage($"HOLD To Open");
+        PlayerManager.Instance.GetPlayer(playerID).
+                    GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
     }
 
     public void OnPerformedInput(int playerID, InputData context)
@@ -165,6 +151,7 @@ public class FinalDoor : MoveDoors
                         GetComponent<NetworkPlayerUI>().CancelHoldingUI();
                 if (context.InputType != InteractionType.Hold) return;
                 EnterAlertState(playerID);
+                m_Interactable.SetDisplayMessage($"You Need A Keycard");
                 break;
             case DoorState.Alert:
                 if (context.InputType != InteractionType.Tap) return;
@@ -178,6 +165,7 @@ public class FinalDoor : MoveDoors
 
                 if (context.InputType != InteractionType.Hold) return;
                 OpenDoors();
+                GetComponent<Collider>().enabled = false;
                 break;
         }
     }
@@ -189,21 +177,22 @@ public class FinalDoor : MoveDoors
 
         if (!hasKeycard)
         {
+            PlayerManager.Instance.GetPlayer(playerID).
+                        GetComponent<NetworkPlayerUI>().HideInteractUI();
             m_Interactable.SetDisplayMessage($"You Need A Keycard");
             return;
         }
 
         if (IsPlayerCheckedIn(playerID))
         {
+            PlayerManager.Instance.GetPlayer(playerID).
+                        GetComponent<NetworkPlayerUI>().HideInteractUI();
             m_Interactable.SetDisplayMessage($"One Keycard Per Person");
             return;
         }
 
+        TryUnlockDoor(playerID);
         Debugger($"Player {playerID} successfully checked in; " +
                  $"Increasing count to {KeycardCount}");
-
-        if (!TryUnlockDoor(playerID)) return;
-
-        m_Interactable.SetDisplayMessage($"HOLD To Open");
     }
 }
