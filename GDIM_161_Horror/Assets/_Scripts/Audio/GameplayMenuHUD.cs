@@ -60,21 +60,21 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_NavMeshQueryFilter.agentTypeID = 0;
         m_NavMeshQueryFilter.areaMask = NavMesh.AllAreas;
 
+        SceneManager.sceneLoaded += OnSceneLoaded;
         if (!isServer) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady += GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected += GetTotalPlayers;
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
         DisableInput();
         DisableButtons();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         if (!isServer) return;
         if (NewNetworkManager.NewSingleton == null) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
-        NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers; 
     }
 
     public void DisableMenuUI()
