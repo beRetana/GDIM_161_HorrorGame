@@ -33,8 +33,10 @@ public class ReturnToLobby : NetworkBehaviour
     [ClientRpc]
     private void CleanUpScene()
     {
-        if (!isLocalPlayer) return;
-        m_PlayerManagerHUD.ResetGameUI();
-        if (isServer) NewNetworkManager.NewSingleton.LoadLobbyScene();
+        GameplayMenuHUD.ActOnAllPlayers((PlayerManagerHUD playerHUD) =>
+        {
+            if (playerHUD.isLocalPlayer) playerHUD.ResetGameUI();
+        });
+        if (isServer && isLocalPlayer) NewNetworkManager.NewSingleton.LoadLobbyScene();
     }
 }
