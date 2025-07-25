@@ -9,7 +9,7 @@ public class KeyCard : NetworkBehaviour
         else CmdSetKeyActive(active);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdSetKeyActive(bool active)
     {
         RpcSetKeyActive(active);
