@@ -302,7 +302,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         });
 
         if (!UpdateSurrenderText() || m_GameEnded) return;
-        m_Surrended = false;
+        ActOnAllPlayers((GameplayMenuHUD playerHUD) => playerHUD.m_Surrended = false);
         SetEndGame();
     }
 
