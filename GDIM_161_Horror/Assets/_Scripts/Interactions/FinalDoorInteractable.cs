@@ -44,6 +44,7 @@ public class FinalDoorInteractable : InteractableItem
                 break;
             case FinalDoor.DoorState.Alert:
                 if (context.InputType != InteractionType.Tap) return;
+                Debugger($"Player {playerID} Unlocking Door");
                 UnlockingDoor((byte)playerID);
                 break;
             case FinalDoor.DoorState.Unlocked:
