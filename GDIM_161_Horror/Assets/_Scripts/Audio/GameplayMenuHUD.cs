@@ -85,6 +85,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         ChangeCursorState(true);
         m_MouseDot.SetActive(false);
         gameObject.SetActive(false);
+        m_Surrended = false;
     }
 
     public void EnableMenuUI()
