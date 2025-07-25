@@ -2,18 +2,19 @@ using Mirror;
 using StarterAssets;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class FinalDoor : MoveDoors
 {
-    private bool[] m_PlayersCheckedIn;
+    private HashSet<byte> m_PlayersCheckedIn;
 
     [SyncVar] private DoorState m_DoorState;
 
-    protected int m_KeycardMax = 4;
+    protected int m_KeycardMax;
     private int m_KeycardCount;
 
     public DoorState State => m_DoorState;
-    public int KeycardCount => m_KeycardCount;
+    public int KeycardCount => m_PlayersCheckedIn.Count;
     public int KeycardMax => m_KeycardMax;
     public static FinalDoor Instance;
 
@@ -29,22 +30,13 @@ public class FinalDoor : MoveDoors
         base.Start();
 
         m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
-        m_PlayersCheckedIn = new bool[m_KeycardMax];
+        m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
-
-        if (Instance != null)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
     }
 
-    public bool IsPlayerCheckedIn(int playerID)
+    public bool IsPlayerCheckedIn(byte playerID)
     {
-        return m_PlayersCheckedIn[playerID];
+        return m_PlayersCheckedIn.Contains(playerID);
     }
 
     private void UpdateState(DoorState state)
@@ -65,22 +57,22 @@ public class FinalDoor : MoveDoors
         m_DoorState = state;
     }
 
-    private void UpdateCheckedInList(int playerID)
+    private void UpdateCheckedInList(byte playerID)
     {
         if (isServer) RpcUpdateCheckedInList(playerID);
         else CmdUpdateCheckedInList(playerID);
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdUpdateCheckedInList(int playerID)
+    private void CmdUpdateCheckedInList(byte playerID)
     {
         RpcUpdateCheckedInList(playerID);
     }
 
     [ClientRpc]
-    private void RpcUpdateCheckedInList(int playerID)
+    private void RpcUpdateCheckedInList(byte playerID)
     {
-        m_PlayersCheckedIn[playerID] = true;
+        m_PlayersCheckedIn.Add(playerID);
     }
 
     public void OnStartedInteraction(int playerID)
@@ -138,11 +130,10 @@ public class FinalDoor : MoveDoors
         }
     }
 
-    public bool TryUnlockDoor(int playerID)
+    public bool TryUnlockDoor(byte playerID)
     {
         UpdateCheckedInList(playerID);
-        ++m_KeycardCount;
-        bool result = m_KeycardCount >= m_KeycardMax;
+        bool result = KeycardCount >= m_KeycardMax;
         if (result)
         {
             UpdateState(DoorState.Unlocked);

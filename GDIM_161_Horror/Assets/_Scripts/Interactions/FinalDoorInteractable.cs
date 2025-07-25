@@ -44,7 +44,7 @@ public class FinalDoorInteractable : InteractableItem
                 break;
             case FinalDoor.DoorState.Alert:
                 if (context.InputType != InteractionType.Tap) return;
-                UnlockingDoor(playerID);
+                UnlockingDoor((byte)playerID);
                 break;
             case FinalDoor.DoorState.Unlocked:
                 Debugger($"Player {playerID} successfully held; Opening Doors");
@@ -57,7 +57,7 @@ public class FinalDoorInteractable : InteractableItem
         }
     }
 
-    private void UnlockingDoor(int playerID)
+    private void UnlockingDoor(byte playerID)
     {
         bool hasKeycard = PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<FirstPersonController>().HasKeyCard;
@@ -74,7 +74,7 @@ public class FinalDoorInteractable : InteractableItem
             return;
         }
 
-        Debugger($"Player {playerID} successfully held; " +
+        Debugger($"Player {playerID} successfully checked in; " +
                  $"Increasing count to {m_FinalDoor.KeycardCount}");
 
         if (!m_FinalDoor.TryUnlockDoor(playerID)) return;
