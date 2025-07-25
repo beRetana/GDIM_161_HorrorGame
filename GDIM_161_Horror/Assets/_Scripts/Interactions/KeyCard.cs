@@ -1,31 +1,23 @@
-using StarterAssets;
+using Mirror;
 using UnityEngine;
 
-public class KeyCard : InteractableItem
+public class KeyCard : NetworkBehaviour
 {
-    [SerializeField] private Transform m_Visuals;
-    [SerializeField] private string m_WarningMessage;
-
-    public virtual void ChangeToAlertMode()
+    public void SetKeyActive(bool active)
     {
-        Debug.Log("CALED");
-        m_Visuals.gameObject.layer = LayerMask.NameToLayer("X-Ray");
+        if (isServer) RpcSetKeyActive(active);
+        else CmdSetKeyActive(active);
     }
 
-    public override void PerformedInteraction(int playerID, InputData data)
+    [Command]
+    private void CmdSetKeyActive(bool active)
     {
-        FirstPersonController controller = (PlayerManager.Instance.GetPlayer(playerID) as FirstPersonController);
-        if (controller.HasKeyCard) return;
-        controller.HasKeyCard = true;
-        gameObject.SetActive(false);
+        RpcSetKeyActive(active);
     }
 
-    public override void Detected(int playerID)
+    [ClientRpc]
+    private void RpcSetKeyActive(bool active)
     {
-        if (!m_IsInteractable) return;
-        FirstPersonController controller = (PlayerManager.Instance.GetPlayer(playerID) as FirstPersonController);
-        PlayerInteractionsHUD interactable = controller.GetComponent<PlayerInteractionsHUD>();
-        if (controller.HasKeyCard) interactable.DisplayInteractUI(m_WarningMessage);
-        else interactable.DisplayInteractUI(m_DisplayText);
+        gameObject.SetActive(active);
     }
 }

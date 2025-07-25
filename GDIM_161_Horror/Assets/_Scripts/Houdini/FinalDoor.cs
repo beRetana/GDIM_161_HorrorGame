@@ -115,9 +115,9 @@ public class FinalDoor : MoveDoors
 
     private void CrazySequence()
     {
-        KeyCard[] keycards = FindObjectsByType<KeyCard>(FindObjectsSortMode.None);
+        KeyCardInteractable[] keycards = FindObjectsByType<KeyCardInteractable>(FindObjectsSortMode.None);
 
-        foreach (KeyCard keycard in keycards)
+        foreach (KeyCardInteractable keycard in keycards)
         {
             keycard.ChangeToAlertMode();
         }

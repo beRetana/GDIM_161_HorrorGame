@@ -304,6 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 26808315810642293}
   - component: {fileID: 6529895124804226382}
+  - component: {fileID: 872575327569573651}
   - component: {fileID: 1490809790407746434}
   - component: {fileID: 7231588519262738235}
   m_Layer: 9
@@ -346,6 +347,21 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &872575327569573651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7327295067926597819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420ab12a122967a42b35167d033f492e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!114 &1490809790407746434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,9 +378,6 @@ MonoBehaviour:
   m_DisplayText: ???
   m_Visuals: {fileID: 1840586658433468202}
   m_WarningMessage: Pockets are Full
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4096
 --- !u!65 &7231588519262738235
 BoxCollider:
   m_ObjectHideFlags: 0
