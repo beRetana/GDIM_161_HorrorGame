@@ -53,15 +53,6 @@ public class PlayerManagerHUD : NetworkBehaviour
 
     private IEnumerator SpreadEndGame(bool won)
     {
-        GameplayMenuHUD.ActOnAllPlayers((GameplayMenuHUD playerUI) =>
-        {
-            playerUI.ResetSurrender();
-            if (playerUI.isLocalPlayer)
-            {
-                playerUI.ChangeCursorState(true);
-            }
-        });
-
         yield return new WaitForSecondsRealtime(.2f);
 
         GameplayMenuHUD.ActOnAllPlayers((PlayerManagerHUD HUDmanager) => HUDmanager.SetEndGame(won));
@@ -107,6 +98,7 @@ public class PlayerManagerHUD : NetworkBehaviour
         if (!isLocalPlayer) return;
         m_GameplayMenuHUD.ChangeCursorState(true);
         m_GameplayMenuHUD.SetControls(false);
+        m_GameplayMenuHUD.ResetSurrender();
         SetGameObjectsUI(false);
         m_EndGameHUD.SetEndGameUI(won);
     }

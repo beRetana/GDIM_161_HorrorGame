@@ -74,10 +74,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (NewNetworkManager.NewSingleton == null) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
-    }
-
-    private void OnDestroy()
-    {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -157,7 +153,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         }
     }
 
-    [ClientRpc]
     public void ResetSurrender()
     {
         m_PlayersSurrendered = 0;
@@ -302,7 +297,6 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         });
 
         if (!UpdateSurrenderText() || m_GameEnded) return;
-        ActOnAllPlayers((GameplayMenuHUD playerHUD) => playerHUD.m_Surrended = false);
         SetEndGame();
     }
 
