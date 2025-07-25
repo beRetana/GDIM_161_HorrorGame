@@ -273,7 +273,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void Surrender()
     {
-        if (!isLocalPlayer || m_Surrended) return;
+        if (!isLocalPlayer) return;
 
         if (isServer) RpcPlayersSurrenderCount(m_Surrended);
         else CmdPlayersSurrenderedCount(m_Surrended);
