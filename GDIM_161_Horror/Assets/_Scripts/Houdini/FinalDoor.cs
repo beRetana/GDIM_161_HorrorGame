@@ -29,10 +29,17 @@ public class FinalDoor : MoveDoors
     {
         base.Start();
 
-        m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
         m_Interactable = GetComponent<FinalDoorInteractable>();
         m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
+        if (!isServer) return;
+        SetRequiredNumber(NewNetworkManager.NewSingleton.numPlayers);
+    }
+
+    [ClientRpc]
+    private void SetRequiredNumber(int value)
+    {
+        m_KeycardMax = value;
     }
 
     public void OnStartedInteraction(int playerID)
