@@ -57,8 +57,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (conn.identity != null )
         {
             Transform location = GetStartPosition();
-            conn.identity.transform.position = location.position;
-            conn.identity.transform.rotation = location.rotation;
+            conn.identity.GetComponent<NetworkTransformReliable>().
+                RpcTeleport(location.position, location.rotation);
         }
 
         Debugger($"There is {numPlayers} and {startPositionIndex} are ready");

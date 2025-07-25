@@ -16,6 +16,8 @@ public class PlayerManagerHUD : NetworkBehaviour
     private SettingMenuManager m_SettingsMenuHUD;
     private PlayerInteractionsHUD m_InteractionsHUD;
 
+    public PlayerInteractionsHUD InteractionsHUD => m_InteractionsHUD;
+
     private void Start()
     {
         m_PlayerManagerHUD = m_InGameMenuGameObject.transform.parent;
@@ -53,6 +55,7 @@ public class PlayerManagerHUD : NetworkBehaviour
     {
         GameplayMenuHUD.ActOnAllPlayers((GameplayMenuHUD playerUI) =>
         {
+            playerUI.ResetSurrender();
             if (playerUI.isLocalPlayer)
             {
                 playerUI.ChangeCursorState(true);

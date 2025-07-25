@@ -221,6 +221,8 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_MouseDot.SetActive(active);
         m_PlayerInput.enabled = active;
         m_HandInventory.EnablePickingUp = active;
+        m_PlayerManagerHUD.InteractionsHUD.CancelHoldingUI();
+        m_PlayerManagerHUD.InteractionsHUD.HideInteractUI();
         m_HandInventory.SetControlsActive(active);
     }
 
