@@ -33,16 +33,12 @@ public class FinalDoor : MoveDoors
         m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
         m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
-        Debug.Log($"Max {m_KeycardMax}");
-        if (m_KeycardMax == 0) return;
-        SetRequiredNumber(m_KeycardMax);
     }
 
     [ClientRpc]
     private void SetRequiredNumber(int value)
     {
         m_KeycardMax = value;
-        Debug.Log($"Max {m_KeycardMax}");
     }
 
     public void OnStartedInteraction(int playerID)
@@ -82,6 +78,8 @@ public class FinalDoor : MoveDoors
         m_Interactable.SetDisplayMessage($"{m_KeycardMax - KeycardCount} More Keys Needed");
         m_DoorState = DoorState.Alert;
         CrazySequence();
+        if (m_KeycardMax == 0) return;
+        SetRequiredNumber(NewNetworkManager.NewSingleton.numPlayers);
     }
 
     private void CrazySequence()
