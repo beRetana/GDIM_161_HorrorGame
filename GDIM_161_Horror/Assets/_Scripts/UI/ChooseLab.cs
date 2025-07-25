@@ -1,60 +1,41 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ChooseLab : MonoBehaviour
 {
-    [SerializeField] private Button m_SmallGameScene;
-    [SerializeField] private Button m_BigGameScene;
-    [SerializeField] private Button m_BuildGameScene;
-    [SerializeField] private Button m_LabGameScene;
-    [SerializeField] private string m_BuildName;
-    [SerializeField] private string m_SmallName;
-    [SerializeField] private string m_BigName;
-    [SerializeField] private string m_LabName;
+    [SerializeField] private LabChooser[] m_LabButtons;
     [SerializeField] private Color m_selected;
     [SerializeField] private Color m_Unselected;
 
+    [Serializable]
+    private struct LabChooser
+    {
+        public string Name;
+        public Button Button;
+    }
+
     private void Start()
     {
-        m_SmallGameScene.onClick.AddListener(SetSmallScene);
-        m_BigGameScene.onClick.AddListener(SetBigScene);
-        m_BuildGameScene.onClick.AddListener(SetBuildScene);
-        m_LabGameScene.onClick.AddListener(SetLabScene);
+        foreach (var labButton in m_LabButtons)
+        {
+            labButton.Button.onClick.AddListener(() => PickLab(labButton.Name));
+        }
     }
 
-    private void SetSmallScene()
+    private void PickLab(string labName)
     {
-        m_SmallGameScene.image.color = m_selected;
-        m_BigGameScene.image.color = m_Unselected;
-        m_BuildGameScene.image.color = m_Unselected;
-        m_LabGameScene.image.color = m_Unselected;
-        (NewNetworkManager.singleton as NewNetworkManager).SetGameSceneName(m_SmallName);
-    }
-
-    private void SetBigScene()
-    {
-        m_BigGameScene.image.color = m_selected;
-        m_SmallGameScene.image.color = m_Unselected;
-        m_BuildGameScene.image.color = m_Unselected;
-        m_LabGameScene.image.color = m_Unselected;
-        (NewNetworkManager.singleton as NewNetworkManager).SetGameSceneName(m_BigName);
-    }
-
-    private void SetBuildScene()
-    {
-        m_BigGameScene.image.color = m_Unselected;
-        m_SmallGameScene.image.color = m_Unselected;
-        m_BuildGameScene.image.color = m_selected;
-        m_LabGameScene.image.color = m_Unselected;
-        (NewNetworkManager.singleton as NewNetworkManager).SetGameSceneName(m_BuildName);
-    }
-
-    private void SetLabScene()
-    {
-        m_BigGameScene.image.color = m_Unselected;
-        m_SmallGameScene.image.color = m_Unselected;
-        m_BuildGameScene.image.color = m_Unselected;
-        m_LabGameScene.image.color = m_selected;
-        (NewNetworkManager.singleton as NewNetworkManager).SetGameSceneName(m_LabName);
+        foreach(var labButton in m_LabButtons)
+        {
+            if (labButton.Name == labName)
+            {
+                labButton.Button.image.color = m_selected;
+                NewNetworkManager.NewSingleton.SetGameSceneName(labName);
+            }
+            else
+            {
+                labButton.Button.image.color = m_Unselected;
+            }
+        }
     }
 }
