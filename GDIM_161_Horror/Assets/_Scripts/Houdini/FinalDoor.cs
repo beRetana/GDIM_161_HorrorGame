@@ -35,34 +35,6 @@ public class FinalDoor : MoveDoors
         m_DoorState = DoorState.Locked;
     }
 
-    public bool IsPlayerCheckedIn(byte playerID)
-    {
-        return m_PlayersCheckedIn.Contains(playerID);
-    }
-
-    private void UpdateState(DoorState state)
-    {
-        if (isServer) RpcUpdateState(state);
-        else CmdUpdateState(state);
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdUpdateState(DoorState state)
-    {
-        RpcUpdateState(state);
-    }
-
-    [ClientRpc]
-    private void RpcUpdateState(DoorState state)
-    {
-        m_DoorState = state;
-    }
-
-    private void UpdateCheckedInList(byte playerID)
-    {
-        m_PlayersCheckedIn.Add(playerID);
-    }
-
     public void OnStartedInteraction(int playerID)
     {
         switch (m_DoorState)
@@ -121,13 +93,7 @@ public class FinalDoor : MoveDoors
 
     public void TryUnlockDoor(byte playerID)
     {
-        m_PlayersCheckedIn.Add(playerID);
-        if (KeycardCount < m_KeycardMax) return;
-        m_DoorState = DoorState.Unlocked;
-        m_Interactable.SetDisplayMessage($"HOLD To Open");
-        PlayerManager.Instance.GetPlayer(playerID).
-                    GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
-    }
+        }
 
     public void OnPerformedInput(int playerID, InputData context)
     {
@@ -174,24 +140,26 @@ public class FinalDoor : MoveDoors
     {
         bool hasKeycard = PlayerManager.Instance.GetPlayer(playerID).
             GetComponent<FirstPersonController>().HasKeyCard;
-
+        Debugger($"Player: {playerID} {(hasKeycard ? "has keycard" : "does not have keycard")}");
         if (!hasKeycard)
         {
-            PlayerManager.Instance.GetPlayer(playerID).
-                        GetComponent<NetworkPlayerUI>().HideInteractUI();
             m_Interactable.SetDisplayMessage($"You Need A Keycard");
             return;
         }
 
-        if (IsPlayerCheckedIn(playerID))
+        if (!m_PlayersCheckedIn.Add(playerID))
         {
-            PlayerManager.Instance.GetPlayer(playerID).
-                        GetComponent<NetworkPlayerUI>().HideInteractUI();
             m_Interactable.SetDisplayMessage($"One Keycard Per Person");
             return;
         }
+        Debugger($"Player: {playerID} has Checked in!");
+        if (m_PlayersCheckedIn.Count < m_KeycardMax) return;
+        
+        m_DoorState = DoorState.Unlocked;
+        m_Interactable.SetDisplayMessage($"HOLD To Open");
+        PlayerManager.Instance.GetPlayer(playerID).
+                    GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
 
-        TryUnlockDoor(playerID);
         Debugger($"Player {playerID} successfully checked in; " +
                  $"Increasing count to {KeycardCount}");
     }
