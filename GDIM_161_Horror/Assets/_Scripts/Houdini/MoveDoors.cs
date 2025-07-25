@@ -41,19 +41,6 @@ public class MoveDoors : NetworkBehaviour, IDebugger
 
     public void OpenDoors()
     {
-        if (isServer) RpcOpenDoors();
-        else CmdOpenDoors();
-    }
-
-    [Command]
-    private void CmdOpenDoors()
-    {
-        RpcOpenDoors();
-    }
-
-    [ClientRpc]
-    protected virtual void RpcOpenDoors()
-    {
         StartCoroutine(MoveTo(m_LeftDoorTransform, m_LeftDoorOpenPosition));
         StartCoroutine(MoveTo(m_RightDoorTransform, m_RightDoorOpenPosition));
     }

@@ -7,11 +7,11 @@ using System.Collections.Generic;
 public class FinalDoor : MoveDoors
 {
     private HashSet<byte> m_PlayersCheckedIn;
+    private FinalDoorInteractable m_Interactable;
 
     [SyncVar] private DoorState m_DoorState;
 
     protected int m_KeycardMax;
-    private int m_KeycardCount;
 
     public DoorState State => m_DoorState;
     public int KeycardCount => m_PlayersCheckedIn.Count;
@@ -30,6 +30,7 @@ public class FinalDoor : MoveDoors
         base.Start();
 
         m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
+        m_Interactable = GetComponent<FinalDoorInteractable>();
         m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
     }
@@ -109,8 +110,9 @@ public class FinalDoor : MoveDoors
     public void EnterAlertState(int playerID)
     {
         Debugger($"Player {playerID} successfully held; switching to {DoorState.Alert}");
+        m_Interactable.SetDisplayMessage($"{m_KeycardMax - KeycardCount} More Keys Needed");
+        m_DoorState = DoorState.Alert;
         CrazySequence();
-        UpdateState(DoorState.Alert);
     }
 
     private void CrazySequence()
@@ -121,7 +123,7 @@ public class FinalDoor : MoveDoors
         {
             keycard.ChangeToAlertMode();
         }
-
+        if (!isServer) return;
         MonsterData[] monsters = FindObjectsByType<MonsterData>(FindObjectsSortMode.None);
         Debugger($"Found {monsters.Length} monsters");
         foreach (MonsterData monster in monsters)
@@ -141,10 +143,67 @@ public class FinalDoor : MoveDoors
         return result;
     }
 
-    [ClientRpc]
-    protected override void RpcOpenDoors()
+    public void OnPerformedInput(int playerID, InputData context)
     {
-        GetComponent<Collider>().enabled = false;
-        base.RpcOpenDoors();
+        if (isServer) RpcOnPerformedInput(playerID, context);
+        else CmdOnPerformedInput(playerID, context);
+    }
+
+    [Command]
+    private void CmdOnPerformedInput(int playerID, InputData context)
+    {
+        RpcOnPerformedInput(playerID, context);
+    }
+
+    [ClientRpc]
+    private void RpcOnPerformedInput(int playerID, InputData context)
+    {
+        switch (m_DoorState)
+        {
+            case DoorState.Locked:
+                PlayerManager.Instance.GetPlayer(playerID).
+                        GetComponent<NetworkPlayerUI>().CancelHoldingUI();
+                if (context.InputType != InteractionType.Hold) return;
+                EnterAlertState(playerID);
+                break;
+            case DoorState.Alert:
+                if (context.InputType != InteractionType.Tap) return;
+                Debugger($"Player {playerID} Unlocking Door");
+                UnlockingDoor((byte)playerID);
+                break;
+            case DoorState.Unlocked:
+                Debugger($"Player {playerID} successfully held; Opening Doors");
+                PlayerManager.Instance.GetPlayer(playerID).
+                    GetComponent<NetworkPlayerUI>().CancelHoldingUI();
+
+                if (context.InputType != InteractionType.Hold) return;
+                OpenDoors();
+                break;
+        }
+    }
+
+    private void UnlockingDoor(byte playerID)
+    {
+        bool hasKeycard = PlayerManager.Instance.GetPlayer(playerID).
+            GetComponent<FirstPersonController>().HasKeyCard;
+
+        if (!hasKeycard)
+        {
+            m_Interactable.SetDisplayMessage($"You Need A Keycard");
+            return;
+        }
+
+        if (IsPlayerCheckedIn(playerID))
+        {
+            m_Interactable.SetDisplayMessage($"One Keycard Per Person");
+            return;
+        }
+
+        Debugger($"Player {playerID} successfully checked in; " +
+                 $"Increasing count to {KeycardCount}");
+
+        if (!TryUnlockDoor(playerID)) return;
+
+        m_Interactable.SetDisplayMessage($"HOLD To Open");
     }
 }
