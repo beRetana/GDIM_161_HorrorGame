@@ -91,10 +91,6 @@ public class FinalDoor : MoveDoors
         }
     }
 
-    public void TryUnlockDoor(byte playerID)
-    {
-        }
-
     public void OnPerformedInput(int playerID, InputData context)
     {
         if (isServer) RpcOnPerformedInput(playerID, context);
@@ -121,7 +117,7 @@ public class FinalDoor : MoveDoors
                 break;
             case DoorState.Alert:
                 if (context.InputType != InteractionType.Tap) return;
-                Debugger($"Player {playerID} Unlocking Door");
+                Debugger($"Player {playerID} Trying to open Door");
                 UnlockingDoor((byte)playerID);
                 break;
             case DoorState.Unlocked:
@@ -152,15 +148,12 @@ public class FinalDoor : MoveDoors
             m_Interactable.SetDisplayMessage($"One Keycard Per Person");
             return;
         }
-        Debugger($"Player: {playerID} has Checked in!");
+
+        Debugger($"Player: {playerID} has Checked in - {m_PlayersCheckedIn.Count}/{m_KeycardMax}!");
         if (m_PlayersCheckedIn.Count < m_KeycardMax) return;
-        
+        Debugger("Door Ready to Unlock!");
         m_DoorState = DoorState.Unlocked;
         m_Interactable.SetDisplayMessage($"HOLD To Open");
-        PlayerManager.Instance.GetPlayer(playerID).
-                    GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
-
-        Debugger($"Player {playerID} successfully checked in; " +
-                 $"Increasing count to {KeycardCount}");
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
     }
 }
