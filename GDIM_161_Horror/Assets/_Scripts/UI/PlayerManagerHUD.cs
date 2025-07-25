@@ -53,7 +53,6 @@ public class PlayerManagerHUD : NetworkBehaviour
     {
         GameplayMenuHUD.ActOnAllPlayers((GameplayMenuHUD playerUI) =>
         {
-            playerUI.ResetSurrender();
             if (playerUI.isLocalPlayer)
             {
                 playerUI.ChangeCursorState(true);

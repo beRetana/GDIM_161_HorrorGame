@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 {
@@ -62,6 +63,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (!isServer) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady += GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected += GetTotalPlayers;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -72,6 +74,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (NewNetworkManager.NewSingleton == null) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void DisableMenuUI()
@@ -140,6 +143,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         m_FirstPersonController.OnPlayerUp += GameState;
         GetTotalPlayers();
         UpdateSurrenderText();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == NewNetworkManager.NewSingleton.GetMainMenuScene())
+        {
+            ResetSurrender();
+        }
     }
 
     [ClientRpc]
@@ -275,17 +286,14 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
     [ClientRpc]
     private void RpcPlayersSurrenderCount(bool isPlayerUp)
     {
-        GameplayMenuHUD[] gameplayMenuHUDs = FindObjectsByType<GameplayMenuHUD>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
         m_Surrended = !isPlayerUp;
-
-        foreach (var gameplayMenuHUD in gameplayMenuHUDs)
+        ActOnAllPlayers((GameplayMenuHUD playerHUD) =>
         {
-            if (m_Surrended) ++gameplayMenuHUD.PlayersSurrendered;
-            else --gameplayMenuHUD.PlayersSurrendered;
+            if (m_Surrended) ++playerHUD.PlayersSurrendered;
+            else --playerHUD.PlayersSurrendered;
 
-            gameplayMenuHUD.UpdateSurrenderText();
-        }
+            playerHUD.UpdateSurrenderText();
+        });
 
         if (!UpdateSurrenderText() || m_GameEnded) return;
         SetEndGame();
