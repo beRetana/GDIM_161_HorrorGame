@@ -74,6 +74,10 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
         if (NewNetworkManager.NewSingleton == null) return;
         NewNetworkManager.NewSingleton.OnPlayersServerReady -= GetTotalPlayers;
         NewNetworkManager.NewSingleton.OnPlayerDisconnected -= GetTotalPlayers;
+    }
+
+    private void OnDestroy()
+    {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
