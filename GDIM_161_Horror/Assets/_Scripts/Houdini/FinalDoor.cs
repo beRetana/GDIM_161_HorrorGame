@@ -32,8 +32,9 @@ public class FinalDoor : MoveDoors
         m_Interactable = GetComponent<FinalDoorInteractable>();
         m_PlayersCheckedIn = new();
         m_DoorState = DoorState.Locked;
-        if (!isServer) return;
-        SetRequiredNumber(NewNetworkManager.NewSingleton.numPlayers);
+        m_KeycardMax = NewNetworkManager.NewSingleton.numPlayers;
+        if (m_KeycardMax == 0) return;
+        SetRequiredNumber(m_KeycardMax);
     }
 
     [ClientRpc]
