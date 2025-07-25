@@ -147,7 +147,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == NewNetworkManager.NewSingleton.GetMainMenuScene())
+        if (scene.name == NewNetworkManager.NewSingleton.GetLobbySceneName())
         {
             ResetSurrender();
         }
