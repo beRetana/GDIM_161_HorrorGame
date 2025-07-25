@@ -150,8 +150,8 @@ public class FinalDoor : MoveDoors
             m_Interactable.SetDisplayMessage($"You Need A Keycard");
             return;
         }
-        m_PlayersCheckedIn.Add(playerID);
-        if (m_PlayersCheckedIn.Contains(playerID))
+        bool justCheckedIn = m_PlayersCheckedIn.Add(playerID);
+        if (justCheckedIn && m_PlayersCheckedIn.Contains(playerID))
         {
             m_Interactable.SetDisplayMessage($"One Keycard Per Person");
             return;
