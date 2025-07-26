@@ -90,6 +90,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     public Transform CameraTransform => cinemachineCameraTarget.transform;
 
     protected Vector3 downCamPosition;
+    protected Vector3 m_InitialControllerCenter;
     protected Vector3 initialPosition;
     protected float moveSpeed;
     protected float sprintSpeed;
@@ -140,6 +141,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
         initialPosition = cinemachineCameraTarget.transform.localPosition;
         downCamPosition = new Vector3(0f, -0.8f, 0.6f);
+        m_InitialControllerCenter = _controller.center;
         AssignID();
         UpdateState(PlayerState.Unlocked);
     }
@@ -174,7 +176,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
 
-        _controller.center = new Vector3(0f, .98f, 0f);
+        _controller.center = m_InitialControllerCenter;
         _controller.height = 2f;
         _capsuleCollider.center = Vector3.up;
         _capsuleCollider.direction = 1;
@@ -246,7 +248,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         SetPlayerStats();
         playerStateEnum = enterState;
 
-        if (!isLocalPlayer || !_playerUI.gameObject.activeInHierarchy) return;
+        if (!isLocalPlayer) return;
         _playerUI.HideInteractUI();
         _playerUI.CancelHoldingUI();
     }
