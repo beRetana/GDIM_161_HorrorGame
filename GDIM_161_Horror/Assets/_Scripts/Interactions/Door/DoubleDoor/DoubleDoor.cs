@@ -48,8 +48,6 @@ namespace Interactions
             m_RightDoorOriginal = m_RightDoor.DoorTransform.position;
             m_LeftDoorOriginal = m_LeftDoor.DoorTransform.position;
             m_PlayersOnDoor = new List<byte>();
-
-            if (!isServer) return;
             
             if (NewNetworkManager.NewSingleton.ArePlayersReady())
             {
@@ -76,11 +74,13 @@ namespace Interactions
         [ClientRpc]
         private void RpcAdjustButtonNumber(byte playersRequired)
         {
-            m_PlayersRequired = playersRequired;
-
-            for (int i = m_DoorButtons.Length - 1; i >= m_PlayersRequired; --i)
+            m_PlayersRequired = (byte) Mathf.Min(playersRequired, m_DoorButtons.Length);
+            
+            if (m_DoorButtons.Length <= playersRequired) return;
+            
+            for (int index = m_DoorButtons.Length - 1; index >= playersRequired; --index)
             {
-                m_DoorButtons[i].transform.parent.gameObject.SetActive(false);
+                m_DoorButtons[index].transform.parent.gameObject.SetActive(false);
             }
         }
 
