@@ -154,12 +154,14 @@ public class FinalDoor : MoveDoors
         Debugger($"Player: {playerID} {(player.HasKeyCard ? "has keycard" : "does not have keycard")}");
         if (!player.HasKeyCard)
         {
+            if (!player.isLocalPlayer) return;
             ChangeDisplayTextUI($"You Need A Keycard", playerUI);
             return;
         }
 
         if (!m_PlayersCheckedIn.Add(playerID))
         {
+            if (!player.isLocalPlayer) return;
             ChangeDisplayTextUI($"One Keycard Per Person", playerUI);
             return;
         }
@@ -172,6 +174,7 @@ public class FinalDoor : MoveDoors
             return;
         }
 
+        if (!player.isLocalPlayer) return;
         ChangeDisplayTextUI($"{m_PlayersCheckedIn.Count}/{m_KeycardMax} Keycards Checked In", playerUI);
         Debugger($"Player: {playerID} has Checked in - {m_PlayersCheckedIn.Count}/{m_KeycardMax}!");
     }
