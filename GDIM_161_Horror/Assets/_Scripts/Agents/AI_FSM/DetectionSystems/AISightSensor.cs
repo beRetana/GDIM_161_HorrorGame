@@ -17,6 +17,7 @@ namespace AI_FSM
         [SerializeField] private float _height;
         [SerializeField, Range(1, 60)] private int _scanFrequency = 30;
         [SerializeField, Range(1,50)] private int _maxDetectables = 50;
+        [SerializeField, Range(1, 5)] private float m_CloseRangeDetection;
         [SerializeField] private bool _enableDebugger;
 
         public delegate void SightSensor(GameObject target);
@@ -54,6 +55,7 @@ namespace AI_FSM
             _scanInterval = 1/_scanFrequency;
             _colliders = new Collider[_maxDetectables];
             _angleCos = Mathf.Cos(_angle * .5f * Mathf.Deg2Rad);
+            m_CloseRangeDetection *= m_CloseRangeDetection;
         }
 
         void Update(){
@@ -129,7 +131,7 @@ namespace AI_FSM
 
             Debbuger($"The Dot product is {dotProduct} and COS is {_angleCos} and sqrmag is {targetDirection.sqrMagnitude}");
 
-            if (dotProduct >= _angleCos || (dotProduct >= 0 && targetDirection.sqrMagnitude <= 22f))
+            if (dotProduct >= _angleCos || targetDirection.sqrMagnitude <= m_CloseRangeDetection)
             {
                 Debbuger($"The target {target} is within angle.");
                 if ((transform.position.y + _initialPosition.y) <= target.transform.position.y && target.transform.position.y <= (transform.position.y + _initialPosition.y + _height))
@@ -236,6 +238,7 @@ namespace AI_FSM
             if (_enableDebugger) Debug.Log($"[{this.GetType().Name}] {log}");
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos(){
             if(_enableDebugVisuals){
                 if(_debugMesh){
@@ -257,6 +260,7 @@ namespace AI_FSM
                 }
             }
         }
+#endif
     }
 }
 
