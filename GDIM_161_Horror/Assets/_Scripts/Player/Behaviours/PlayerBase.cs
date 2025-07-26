@@ -246,7 +246,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         SetPlayerStats();
         playerStateEnum = enterState;
 
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || !_playerUI.gameObject.activeInHierarchy) return;
         _playerUI.HideInteractUI();
         _playerUI.CancelHoldingUI();
     }

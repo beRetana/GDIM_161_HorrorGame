@@ -1,10 +1,7 @@
-using MessengerSystem;
 using Mirror;
 using OtherUtils;
 using System.Collections;
-using Unity.AppUI.UI;
 using UnityEngine;
-using UnityEngine.Splines.Interpolators;
 
 namespace Interactions
 {
@@ -37,7 +34,7 @@ namespace Interactions
 
         public void OnInteracted(int playerID)
         {
-            // if the button is in use return
+            if (!PlayerManager.Instance.GetPlayer(playerID).isLocalPlayer) return;
             if (m_IsButtonPressed) return;
             if (m_DoorsManager.HasPlayerPressed((byte)playerID)) return;
             ButtonPressed((byte)playerID);
