@@ -148,7 +148,7 @@ public class FinalDoor : MoveDoors
 
     private void UnlockingDoor(byte playerID)
     {
-        FirstPersonController player = PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>();
+        var player = PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>();
         var playerUI = player.GetComponent<NetworkPlayerUI>();
 
         Debugger($"Player: {playerID} {(player.HasKeyCard ? "has keycard" : "does not have keycard")}");

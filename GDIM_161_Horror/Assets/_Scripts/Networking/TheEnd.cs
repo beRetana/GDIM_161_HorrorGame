@@ -2,29 +2,28 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Mirror;
+using OtherUtils;
 
-public class TheEnd : NetworkBehaviour
+public class TheEnd : NetworkBehaviour, IDebugger
 {
     [SerializeField] private float m_CreditsTime = 15f;
     [SerializeField] private float m_EndTime = 3f;
 
-    private List<byte> m_PlayersOut;
+    private HashSet<byte> m_PlayersOut;
+    private bool m_Debugger;
 
     private void Start()
     {
-        m_PlayersOut = new List<byte>();
+        m_PlayersOut = new HashSet<byte>();
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!isServer) return;
-
-        PlayerObjectController player;
-        if (!other.transform.root.TryGetComponent<PlayerObjectController>(out player)) return;
+        Debugger(other.gameObject.name);
+        if (!other.transform.root.TryGetComponent<PlayerObjectController>(out var player)) return;
         
-        if (m_PlayersOut.Contains((byte)player.PlayerID)) return;
-
-        m_PlayersOut.Add((byte)player.PlayerID);
+        if (!m_PlayersOut.Add((byte)player.PlayerID)) return;
 
         if (m_PlayersOut.Count < NewNetworkManager.NewSingleton.numPlayers) return;
 
@@ -34,13 +33,13 @@ public class TheEnd : NetworkBehaviour
     [ClientRpc]
     private void StartSequence()
     {
-        Debug.Log("Client - Ending Coroutine");
+        Debugger("Client - Ending Coroutine");
         StartCoroutine(EndSequence());
     }
 
     private IEnumerator EndSequence()
     {
-        Debug.Log("Client - Waiting");
+        Debugger("Client - Waiting");
         yield return new WaitForSecondsRealtime(m_EndTime);
 
         foreach(var playerID in m_PlayersOut)
@@ -51,9 +50,9 @@ public class TheEnd : NetworkBehaviour
         }
 
         SetCredits(true); 
-        Debug.Log("Client - Credits on");
+        Debugger("Client - Credits on");
         yield return new WaitForSecondsRealtime(m_CreditsTime);
-        Debug.Log("Client - Credits off");
+        Debugger("Client - Credits off");
         SetCredits(false);
         EndTheGame();
     }
@@ -68,5 +67,15 @@ public class TheEnd : NetworkBehaviour
         if (!isServer) return;
 
         GameplayMenuHUD.ActOnAllPlayers((GameplayMenuHUD player) => player.StartGameOverSetUp(true));
+    }
+
+    public void Debugger(object log)
+    {
+        if (m_Debugger) Debug.Log($"[{GetType().ToString()}]: {log}");
+    }
+
+    public void SetDebugActive(bool active)
+    {
+        m_Debugger = active;
     }
 }
