@@ -142,10 +142,10 @@ public class FinalDoor : MoveDoors
 
     private void UnlockingDoor(byte playerID)
     {
-        bool hasKeycard = PlayerManager.Instance.GetPlayer(playerID).
-            GetComponent<FirstPersonController>().HasKeyCard;
-        Debugger($"Player: {playerID} {(hasKeycard ? "has keycard" : "does not have keycard")}");
-        if (!hasKeycard)
+        FirstPersonController player = PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>();
+        var playerUI = player.GetComponent<NetworkPlayerUI>();
+        Debugger($"Player: {playerID} {(player.HasKeyCard ? "has keycard" : "does not have keycard")}");
+        if (!player.HasKeyCard)
         {
             m_Interactable.SetDisplayMessage($"You Need A Keycard");
             return;
@@ -167,6 +167,5 @@ public class FinalDoor : MoveDoors
         Debugger("Door Ready to Unlock!");
         m_DoorState = DoorState.Unlocked;
         m_Interactable.SetDisplayMessage($"HOLD To Open");
-        PlayerManager.Instance.GetPlayer(playerID).GetComponent<NetworkPlayerUI>().DisplayInteractUI($"HOLD To Open");
     }
 }
