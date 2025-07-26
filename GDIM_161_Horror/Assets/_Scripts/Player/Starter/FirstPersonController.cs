@@ -151,12 +151,12 @@ namespace StarterAssets
             if (_input.move != Vector2.zero)
                 inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 
-            bool isFacingObstacle = Physics.Raycast(transform.position + transform.up, transform.forward, m_AvoidanceDistance, m_Obstacles);
-            bool isMovingTowards = Vector3.Dot(inputDirection, transform.forward) > 0;
+            bool isMovingTowardsObstacle = Physics.Raycast(transform.position + transform.up, inputDirection, out RaycastHit hit, m_AvoidanceDistance, m_Obstacles);
+            float angleRatio = Vector3.Dot(inputDirection, hit.normal);
             
-            if (isFacingObstacle && isMovingTowards)
+            if (isMovingTowardsObstacle)
             {
-                _speed = 0;
+                _speed *= 1 + angleRatio;
             }
 
             _headBobbing.SetNoise(_speed / sprintSpeed);

@@ -258,7 +258,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6669948610441848201
 MonoBehaviour:
@@ -338,7 +338,7 @@ MonoBehaviour:
   _pickableItemSO: {fileID: 11400000, guid: 1920f8aae981fab43b0499259eb70451, type: 2}
   _debugger: 0
   _itemCollider: {fileID: 5805892794512141954}
-  APROX_WOOD_LIFE_MINUTES: 8
+  APROX_WOOD_LIFE_MINUTES: 12
   maxTickVariance_WoodBurn: 0.192
   tickSpeedMultiplier_ByFloor: 1.0887
   pyrolysisIncrements: 36
@@ -376,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Range
-      value: 12
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Intensity
@@ -384,7 +384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Lightmapping
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1515530972461610683, guid: 86427e9d45829e544a2a1a9c6cfb99a2, type: 3}
       propertyPath: m_Shadows.m_Type
