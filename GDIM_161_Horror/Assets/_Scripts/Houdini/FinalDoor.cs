@@ -161,6 +161,7 @@ public class FinalDoor : MoveDoors
         {
             m_Interactable.SetDisplayMessage($"{m_PlayersCheckedIn.Count}/{m_KeycardMax} Keycards Checked In");
             Debugger($"Player: {playerID} has Checked in - {m_PlayersCheckedIn.Count}/{m_KeycardMax}!");
+            return;
         }
 
         Debugger("Door Ready to Unlock!");
