@@ -41,8 +41,6 @@ public class CameraController : NetworkBehaviour
         m_PlayerFollowCamera.SetActive(active);
         m_PlayerCamera.SetActive(active);
         m_CameraHolder.SetActive(active);
-
-        m_CharacterController.enabled = active;
         m_PlayerInput.enabled = active;
         
         m_HandInventory.enabled = active;
