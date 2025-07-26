@@ -82,6 +82,12 @@ public class FinalDoor : MoveDoors
         SetRequiredNumber(NewNetworkManager.NewSingleton.numPlayers);
     }
 
+    private void ChangeDisplayTextUI(string text, NetworkPlayerUI playerUI)
+    {
+        m_Interactable.SetDisplayMessage(text);
+        playerUI.DisplayInteractUI(text);
+    }
+
     private void CrazySequence()
     {
         KeyCardInteractable[] keycards = FindObjectsByType<KeyCardInteractable>(FindObjectsSortMode.None);
@@ -144,28 +150,29 @@ public class FinalDoor : MoveDoors
     {
         FirstPersonController player = PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>();
         var playerUI = player.GetComponent<NetworkPlayerUI>();
+
         Debugger($"Player: {playerID} {(player.HasKeyCard ? "has keycard" : "does not have keycard")}");
         if (!player.HasKeyCard)
         {
-            m_Interactable.SetDisplayMessage($"You Need A Keycard");
+            ChangeDisplayTextUI($"You Need A Keycard", playerUI);
             return;
         }
 
-        if (m_PlayersCheckedIn.Add(playerID))
+        if (!m_PlayersCheckedIn.Add(playerID))
         {
-            m_Interactable.SetDisplayMessage($"One Keycard Per Person");
+            ChangeDisplayTextUI($"One Keycard Per Person", playerUI);
             return;
         }
 
-        if (m_PlayersCheckedIn.Count < m_KeycardMax)
+        if (m_PlayersCheckedIn.Count >= m_KeycardMax)
         {
-            m_Interactable.SetDisplayMessage($"{m_PlayersCheckedIn.Count}/{m_KeycardMax} Keycards Checked In");
-            Debugger($"Player: {playerID} has Checked in - {m_PlayersCheckedIn.Count}/{m_KeycardMax}!");
+            Debugger("Door Ready to Unlock!");
+            m_DoorState = DoorState.Unlocked;
+            ChangeDisplayTextUI($"HOLD To Open", playerUI);
             return;
         }
 
-        Debugger("Door Ready to Unlock!");
-        m_DoorState = DoorState.Unlocked;
-        m_Interactable.SetDisplayMessage($"HOLD To Open");
+        ChangeDisplayTextUI($"{m_PlayersCheckedIn.Count}/{m_KeycardMax} Keycards Checked In", playerUI);
+        Debugger($"Player: {playerID} has Checked in - {m_PlayersCheckedIn.Count}/{m_KeycardMax}!");
     }
 }
