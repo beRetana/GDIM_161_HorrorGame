@@ -75,6 +75,9 @@ public class LadderManager : NetworkBehaviour, IDebugger
         Debugger($"Setting the first ladder active");
         ServerSetLadderActive(GetHighest(numbers));
 
+        Debugger($"Setting the first ladder active");
+        ServerSetLadderActive(GetHighest(numbers));
+
         if (m_OnlyOneLadder) return;
         Debugger($"Setting the Second ladder active");
         ServerSetLadderActive(GetHighest(numbers));

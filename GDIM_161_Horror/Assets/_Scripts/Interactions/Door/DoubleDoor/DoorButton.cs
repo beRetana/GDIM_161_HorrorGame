@@ -85,7 +85,7 @@ namespace Interactions
             else CmdUpdateHandleState(isPlayerOnHandle);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdUpdateHandleState(bool isPlayerOnHandle)
         {
             m_IsButtonPressed = isPlayerOnHandle;
@@ -97,7 +97,7 @@ namespace Interactions
             else CmdSetInteractive(isInteractive);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdSetInteractive(bool isInteractive)
         {
             RpcSetInteractive(isInteractive);
