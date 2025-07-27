@@ -1,6 +1,7 @@
 using Grpc.Core;
 using Interactions;
 using Mirror;
+using StarterAssets;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -150,6 +151,7 @@ public class Bone : NetworkPickableItem
 
     public override void UseItem(int playerID, InputData context)
     {
+        if (!PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>().isLocalPlayer) return;
         base.UseItem(playerID, context);
         Debugger($"Player {playerID} sent input of Type: {context.InputType}" +
                  $" and Phase: {context.InputPhase}");
