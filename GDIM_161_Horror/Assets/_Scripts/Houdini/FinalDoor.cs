@@ -111,7 +111,7 @@ public class FinalDoor : MoveDoors
         else CmdOnPerformedInput(playerID, context);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnPerformedInput(int playerID, InputData context)
     {
         RpcOnPerformedInput(playerID, context);
