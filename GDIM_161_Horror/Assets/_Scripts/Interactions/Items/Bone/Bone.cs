@@ -15,7 +15,7 @@ public class Bone : NetworkPickableItem
     [SerializeField] protected LayerMask m_CrushableLayers;
     [SerializeField] protected LayerMask m_ObstructableLayers;
     [SerializeField] protected string m_CrushingText = "Hold To Crush Bone";
-    [SerializeField] protected float m_CrushingDistance = 1.2f;
+    [SerializeField] protected float m_CrushingDistance = 1.3f;
 
     protected Stack<BonePiece> m_BonePieces;
     protected Transform m_PlayerCameraTransform;
@@ -57,13 +57,15 @@ public class Bone : NetworkPickableItem
     [ClientRpc]
     public override void RpcSetPossessed(bool toPossess, int playerID)
     {
+        HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).
+                GetComponent<HandInventory>();
+        
+        if (!inventory.isLocalPlayer) return;
+
         base.RpcSetPossessed(toPossess, playerID);
 
         if (toPossess)
         {
-            HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).
-                GetComponent<HandInventory>();
-
             m_PlayerCameraTransform = inventory.GetComponent<PlayerBase>().CameraTransform;
             m_PlayerHUD = inventory.GetComponent<PlayerInteractionsHUD>();
             inventory.OnSwapingHands += OnSwappedHands;
@@ -71,8 +73,7 @@ public class Bone : NetworkPickableItem
         }
         else
         {
-            PlayerManager.Instance.GetPlayer(playerID).
-                GetComponent<HandInventory>().OnSwapingHands -= OnSwappedHands;
+            inventory.OnSwapingHands -= OnSwappedHands;
             m_PlayerCameraTransform = null;
             m_PlayerHUD = null;
         }
@@ -126,7 +127,7 @@ public class Bone : NetworkPickableItem
         
         bool canCrushBone = hasWallInFront && !isObstructed;
 
-        //Debugger($"Bone State is: {m_State} and can crush bune: {canCrushBone}");
+        Debugger($"Bone State is: {m_State} and can crush bune: {canCrushBone}");
 
         switch (m_State)
         {
@@ -149,7 +150,6 @@ public class Bone : NetworkPickableItem
 
     public override void UseItem(int playerID, InputData context)
     {
-        if (!isLocalPlayer) return;
         base.UseItem(playerID, context);
         Debugger($"Player {playerID} sent input of Type: {context.InputType}" +
                  $" and Phase: {context.InputPhase}");
