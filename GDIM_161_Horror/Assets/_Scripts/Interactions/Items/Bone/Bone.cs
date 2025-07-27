@@ -172,7 +172,7 @@ public class Bone : NetworkPickableItem
             case BoneState.Crushed:
                 if (context.InputPhase != InputActionPhase.Performed) return;
                 if (context.InputType != InteractionType.Tap) return;
-                TrialDropping(playerID);
+                if (isServer) TrialDropping(playerID);
                 break;
         }
     }
