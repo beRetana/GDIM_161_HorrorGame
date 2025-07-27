@@ -151,7 +151,6 @@ public class Bone : NetworkPickableItem
 
     public override void UseItem(int playerID, InputData context)
     {
-        if (!PlayerManager.Instance.GetPlayer(playerID).GetComponent<FirstPersonController>().isLocalPlayer) return;
         base.UseItem(playerID, context);
         Debugger($"Player {playerID} sent input of Type: {context.InputType}" +
                  $" and Phase: {context.InputPhase}");
@@ -222,7 +221,7 @@ public class Bone : NetworkPickableItem
         else RpcDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     protected void CmdDropPiece(int playerID, bool isLast)
     {
         RpcDropPiece(playerID, isLast);
