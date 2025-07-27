@@ -181,14 +181,14 @@ public class Bone : NetworkPickableItem
         switch (context.InputPhase)
         {
             case InputActionPhase.Canceled:
-                m_PlayerHUD.CancelHoldingUI();
+                m_PlayerHUD?.CancelHoldingUI();
                 m_BoneAnimator.SetBool(CRUSHING, false);
                 ChangeBoneState(BoneState.CanCrush);
                 break;
             case InputActionPhase.Performed:
-                m_PlayerHUD.CancelHoldingUI();
-                m_PlayerHUD.HideInteractUI();
-                m_PlayerHUD.SetIconKeyboardE();
+                m_PlayerHUD?.CancelHoldingUI();
+                m_PlayerHUD?.HideInteractUI();
+                m_PlayerHUD?.SetIconKeyboardE();
                 OnCrushed();
                 ChangeBoneState(BoneState.Crushed);
                 break;
