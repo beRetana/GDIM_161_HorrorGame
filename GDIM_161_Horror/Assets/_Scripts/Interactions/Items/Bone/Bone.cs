@@ -112,6 +112,7 @@ public class Bone : NetworkPickableItem
     private void Update()
     {
         if (!_isPossessed) return;
+        if (!m_PlayerHUD.isLocalPlayer) return;
         CheckForWalls();
     }
 
