@@ -215,16 +215,10 @@ public class Bone : NetworkPickableItem
         RpcOnCrushed();
     }
 
+    [ClientRpc]
     private void TrialDropping(int playerID)
     {
-        if (!isServer) CmdDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
-        else RpcDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
-    }
-
-    [Command(requiresAuthority = false)]
-    protected void CmdDropPiece(int playerID, bool isLast)
-    {
-        RpcDropPiece(playerID, isLast);
+        if (isServer) RpcDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
     }
 
     [ClientRpc]
