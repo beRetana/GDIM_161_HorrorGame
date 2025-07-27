@@ -12,6 +12,7 @@ public class TransitionToLab : NetworkBehaviour
     [SerializeField] private float m_WaitingTime = 5f;
 
     private HashSet<byte> m_PlayerIDs;
+    private const int REACHED_LAB = 4;
 
     private void Start()
     {
@@ -26,7 +27,7 @@ public class TransitionToLab : NetworkBehaviour
         if (!other.TryGetComponent<PlayerObjectController>(out player)) return;
 
         if (!m_PlayerIDs.Add((byte)player.PlayerID)) return;
-        player.GetComponent<PlayerDataTracker>().OnReachedNewFloor(4);
+        player.GetComponent<PlayerDataTracker>().OnReachedNewFloor(REACHED_LAB);
         if (m_PlayerIDs.Count < NewNetworkManager.NewSingleton.numPlayers) return;
 
         StartCoroutine(MovingToLab());
