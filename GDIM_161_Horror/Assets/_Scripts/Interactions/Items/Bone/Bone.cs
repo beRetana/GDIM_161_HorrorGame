@@ -192,7 +192,6 @@ public class Bone : NetworkPickableItem
                 m_PlayerHUD?.HideInteractUI();
                 m_PlayerHUD?.SetIconKeyboardE();
                 OnCrushed();
-                ChangeBoneState(BoneState.Crushed);
                 break;
         }
     }
@@ -208,6 +207,7 @@ public class Bone : NetworkPickableItem
     {
         m_NormalBone.gameObject.SetActive(false);
         m_CrushedBone.gameObject.SetActive(true);
+        m_State = BoneState.Crushed;
     }
 
     [Command(requiresAuthority = false)]
@@ -218,12 +218,12 @@ public class Bone : NetworkPickableItem
 
     private void TrialDropping(int playerID)
     {
-        if (!isServer) return;
-        DropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
+        if (!isServer) CmdDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
+        else RpcDropPiece(playerID, m_CurrentUses >= m_MaxUses - 1);
     }
 
-    [Server]
-    protected void DropPiece(int playerID, bool isLast)
+    [Command]
+    protected void CmdDropPiece(int playerID, bool isLast)
     {
         RpcDropPiece(playerID, isLast);
     }
