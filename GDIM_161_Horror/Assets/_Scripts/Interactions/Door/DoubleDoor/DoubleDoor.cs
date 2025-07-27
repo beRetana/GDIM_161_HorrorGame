@@ -4,7 +4,6 @@ using OtherUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Interactions
@@ -90,7 +89,7 @@ namespace Interactions
             else CmdDoorState(state);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdDoorState(DoorState state)
         {
             RpcDoorState(state);
@@ -144,7 +143,7 @@ namespace Interactions
             else CmdAddPlayer(playerID);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdAddPlayer(byte playerID)
         {
             RpcAddPlayer(playerID);
@@ -164,7 +163,7 @@ namespace Interactions
             else CmdRemovePlayer(playerID);
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void CmdRemovePlayer(byte playerID)
         {
             RpcRemovePlayer(playerID);
