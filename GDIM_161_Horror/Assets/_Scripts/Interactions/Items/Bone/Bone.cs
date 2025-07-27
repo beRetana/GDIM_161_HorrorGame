@@ -104,9 +104,9 @@ public class Bone : NetworkPickableItem
     {
         m_IsOnDominantHand = false;
         ChangeBoneState(BoneState.Uncrushed);
-        m_PlayerHUD.CancelHoldingUI();
-        m_PlayerHUD.HideInteractUI();
-        m_PlayerHUD.SetIconKeyboardE();
+        m_PlayerHUD?.CancelHoldingUI();
+        m_PlayerHUD?.HideInteractUI();
+        m_PlayerHUD?.SetIconKeyboardE();
     }
 
     private void Update()
@@ -159,7 +159,7 @@ public class Bone : NetworkPickableItem
                 break;
             case BoneState.CanCrush:
                 if (InteractionType.Tap == context.InputType) return;
-                m_PlayerHUD.StartHoldingUI();
+                m_PlayerHUD?.StartHoldingUI();
                 m_BoneAnimator.SetBool(CRUSHING, true);
                 ChangeBoneState(BoneState.Crushing);
                 break;
@@ -196,8 +196,21 @@ public class Bone : NetworkPickableItem
 
     private void OnCrushed()
     {
+        if (isServer) RpcOnCrushed();
+        else CmdOnCrushed();
+    }
+
+    [ClientRpc]
+    private void RpcOnCrushed()
+    {
         m_NormalBone.gameObject.SetActive(false);
         m_CrushedBone.gameObject.SetActive(true);
+    }
+
+    [Command]
+    private void CmdOnCrushed()
+    {
+        RpcOnCrushed();
     }
 
     private void TrialDropping(int playerID)
