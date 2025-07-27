@@ -149,6 +149,7 @@ public class Bone : NetworkPickableItem
 
     public override void UseItem(int playerID, InputData context)
     {
+        if (!isLocalPlayer) return;
         base.UseItem(playerID, context);
         Debugger($"Player {playerID} sent input of Type: {context.InputType}" +
                  $" and Phase: {context.InputPhase}");
