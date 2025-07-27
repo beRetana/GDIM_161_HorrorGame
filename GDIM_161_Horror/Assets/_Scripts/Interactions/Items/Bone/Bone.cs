@@ -210,7 +210,7 @@ public class Bone : NetworkPickableItem
         m_CrushedBone.gameObject.SetActive(true);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnCrushed()
     {
         RpcOnCrushed();
