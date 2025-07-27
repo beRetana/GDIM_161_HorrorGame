@@ -99,7 +99,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         else CmdOnReachedNewFloor(timeStamp, floorNum);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnReachedNewFloor(ulong timeStamp, byte floorNum)
     {
         RpcOnReachedNewFloor(timeStamp, floorNum);
@@ -131,7 +131,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         else ++m_KnockedDownCount;
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnPlayerKnocked()
     {
         ++m_KnockedDownCount;
@@ -143,7 +143,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         else ++m_RezzedUpCount;
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdOnPlayerRezzed()
     {
         ++m_RezzedUpCount;
