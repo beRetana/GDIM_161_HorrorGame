@@ -58,12 +58,10 @@ public class Bone : NetworkPickableItem
     [ClientRpc]
     public override void RpcSetPossessed(bool toPossess, int playerID)
     {
+        base.RpcSetPossessed(toPossess, playerID);
+
         HandInventory inventory = PlayerManager.Instance.GetPlayer(playerID).
                 GetComponent<HandInventory>();
-        
-        if (!inventory.isLocalPlayer) return;
-
-        base.RpcSetPossessed(toPossess, playerID);
 
         if (toPossess)
         {
