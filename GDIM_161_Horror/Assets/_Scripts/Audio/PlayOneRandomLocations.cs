@@ -65,8 +65,9 @@ public class PlayOneRandomLocations : MonoBehaviour
         //    randomLocation = location3.transform.position;
         //}
         AudioManager.instance.PlayOneShot(FMODEvents.instance.MonsterDeerCall, this.transform.position);
+
         //RuntimeManager.PlayOneShot(MonsterCall, randomLocation);
-        //Debug.Log(randomLocation);
+        Debug.Log("played at" + location1);
     
     }
 
