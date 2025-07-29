@@ -1646,6 +1646,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7624549636062358831, guid: b4990ff639c55e444920805371198c7c, type: 3}
+    - {fileID: 1574097073443286668, guid: b4990ff639c55e444920805371198c7c, type: 3}
+    - {fileID: -697658232261480605, guid: b4990ff639c55e444920805371198c7c, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7159446600733010458, guid: b4990ff639c55e444920805371198c7c, type: 3}
     - {fileID: 499216475265842899, guid: b4990ff639c55e444920805371198c7c, type: 3}
@@ -1672,6 +1674,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6314777827733659042, guid: b4990ff639c55e444920805371198c7c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8589504043989264051}
+    - targetCorrespondingSourceObject: {fileID: 6314777827733659042, guid: b4990ff639c55e444920805371198c7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4388279804590596844}
+    - targetCorrespondingSourceObject: {fileID: 8657545777587111654, guid: b4990ff639c55e444920805371198c7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8288833936590004335}
+    - targetCorrespondingSourceObject: {fileID: 8657545777587111654, guid: b4990ff639c55e444920805371198c7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 471382287195266476}
   m_SourcePrefab: {fileID: 100100000, guid: b4990ff639c55e444920805371198c7c, type: 3}
 --- !u!1 &2133546689200265550 stripped
 GameObject:
@@ -1701,6 +1712,66 @@ CapsuleCollider:
   m_Height: 3.5
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0.22}
+--- !u!114 &4388279804590596844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133546689200265550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1821281277
+      Data2: 1103859881
+      Data3: 2554017
+      Data4: 110715856
+    Path: event:/Monsters/HumanoidMonster/HMonsterBreathe
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!1 &3610956238028702218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8657545777587111654, guid: b4990ff639c55e444920805371198c7c, type: 3}
+  m_PrefabInstance: {fileID: 5348439703688168684}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8288833936590004335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3610956238028702218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a5ced6ba2bf9643bc13a33a1b0531b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &471382287195266476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3610956238028702218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c47637d59b9613b42a95ff816d6e194d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8925937313400803377 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3595619777550554333, guid: b4990ff639c55e444920805371198c7c, type: 3}
