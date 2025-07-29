@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 7151339707029349449}
   - component: {fileID: 1369710893841643461}
   - component: {fileID: 1366506114539902964}
+  - component: {fileID: -697658232261480605}
   m_Layer: 6
   m_Name: Monster_Base
   m_TagString: Monster
@@ -1036,7 +1037,7 @@ MonoBehaviour:
   _height: 2.5
   _scanFrequency: 2
   _maxDetectables: 10
-  m_CloseRangeDetection: 4
+  m_CloseRangeDetection: 5
   _enableDebugger: 0
   _debugMeshColor: {r: 0, g: 1, b: 0, a: 1}
   _debugColorObjectDectected: {r: 0.81960785, g: 0.089483626, b: 0, a: 1}
@@ -1059,6 +1060,19 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   m_StatsSO: {fileID: 11400000, guid: 6452549504a3006408837315d8fc17b9, type: 2}
+--- !u!114 &-697658232261480605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314777827733659042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 087fbddab90f3d048b8ab37fbc55e2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location1: {fileID: 6314777827733659042}
 --- !u!1 &6952360902458710909
 GameObject:
   m_ObjectHideFlags: 0
