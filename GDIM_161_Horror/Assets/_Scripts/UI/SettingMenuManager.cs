@@ -97,8 +97,12 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         foreach (Resolution res in Screen.resolutions)
         {
             string newRes = res.width.ToString() + " x " + res.height.ToString();
-            if (res.height == Screen.height && res.width == Screen.width && m_IndexResolution == -1)
+            
+            if (res.height == Display.main.systemHeight && res.width == Display.main.systemWidth && m_IndexResolution == -1)
+            {
                 m_IndexResolution = defResolution;
+            }
+            
             if (options.Contains(newRes)) continue;
 
             options.Add(newRes);
@@ -109,7 +113,9 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
         m_ResDropDown.AddOptions(options);
         
         if (m_IndexResolution != -1)
+        {
             ApplyChangeResolution();
+        }
         else
         {
             ApplyChangeFullScreen();
@@ -153,7 +159,7 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
                  $"{m_ResolutionSettings[m_IndexResolution].width} x " +
                  $"{m_ResolutionSettings[m_IndexResolution].height}; " +
                  $"{(m_IsFullScreen ? "Full Screen" : "Windowed")}");
-
+        m_ResDropDown.value = m_IndexResolution;
         Screen.SetResolution(m_ResolutionSettings[m_IndexResolution].width, 
                              m_ResolutionSettings[m_IndexResolution].height, 
                              m_IsFullScreen);
