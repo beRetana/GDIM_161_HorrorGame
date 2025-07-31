@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,6 +36,9 @@ public class NewNetworkManager : NetworkManager, IDebugger
         SceneManager.sceneLoaded += OnSceneLoaded;
         OnPlayersServerReady = () => Debugger($"All {numPlayers} players are ready");
         Debug.Log("[NewNetworkManager]: Script Started");
+
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
     }
 
     public override void OnServerChangeScene(string newSceneName)

@@ -61,11 +61,11 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
     private void LoadSettings()
     {
         Debugger("Loading Saved Settings");
-        m_IsFullScreen = PlayerPrefs.GetInt(FULL_SCREEN, 0) == 1 ? true : false;
-        m_IndexFOV = PlayerPrefs.GetInt(FOV, 0);
-        ChangeFPS(PlayerPrefs.GetInt(FPS, 0));
-        m_IndexResolution = PlayerPrefs.GetInt(RESOLUTION, 0);
-        m_RotationSpeed = PlayerPrefs.GetFloat(ROTATION_SPEED, 1);
+        m_IsFullScreen = PlayerPrefs.GetInt(FULL_SCREEN, 1) == 1 ? true : false;
+        m_IndexFOV = PlayerPrefs.GetInt(FOV, 4);
+        ChangeFPS(PlayerPrefs.GetInt(FPS, 5));
+        m_IndexResolution = PlayerPrefs.GetInt(RESOLUTION, -1);
+        m_RotationSpeed = PlayerPrefs.GetFloat(ROTATION_SPEED, .5f);
     }
 
     private void SetUpFullScreen()
@@ -93,20 +93,27 @@ public class SettingMenuManager : MonoBehaviour, IDebugger
     private void SetUpResolutionsDropDown()
     {
         List<string> options = new List<string>();
-
+        int defResolution = 0;
         foreach (Resolution res in Screen.resolutions)
         {
             string newRes = res.width.ToString() + " x " + res.height.ToString();
-            
+            if (res.height == Screen.height && res.width == Screen.width && m_IndexResolution == -1)
+                m_IndexResolution = defResolution;
             if (options.Contains(newRes)) continue;
 
             options.Add(newRes);
             m_ResolutionSettings.Add(res);
+            ++defResolution;
         }
 
         m_ResDropDown.AddOptions(options);
-        m_ResDropDown.value = m_IndexResolution;
-        ApplyChangeResolution();
+        
+        if (m_IndexResolution != -1)
+            ApplyChangeResolution();
+        else
+        {
+            ApplyChangeFullScreen();
+        }
     }
 
     private void SetUpFOVDropDown()

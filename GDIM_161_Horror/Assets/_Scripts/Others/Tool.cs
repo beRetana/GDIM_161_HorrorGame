@@ -63,6 +63,13 @@ public class MeshCombinerEditor : MonoBehaviour
 
         Debug.Log("Mesh combining complete. Combined " + combineList.Count + " meshes.");
     }
+
+    [MenuItem("Tools/Reset PlayerPrefs")]
+    private static void ResetPlayerprefs()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+    }
 }
 
 #endif

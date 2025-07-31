@@ -7,7 +7,6 @@ using Steamworks;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerObjectController : NetworkBehaviour, IDebugger
 {
@@ -57,17 +56,6 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         {
             LobbyController.Instance.UpdatePlayerList();
         }
-    }
-
-    private IEnumerator WaitForCondition(Func<bool> condition, Action function)
-    {
-        while (!condition())
-        {
-            Debugger("Contidion is false");
-            yield return null;
-        }
-        Debugger("Contidion is True");
-        function();
     }
 
     [Command]

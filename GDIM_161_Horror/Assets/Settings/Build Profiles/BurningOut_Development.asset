@@ -121,7 +121,7 @@ MonoBehaviour:
     - line: '|   bakeCollisionMeshes: 1'
     - line: '|   forceSingleInstance: 1'
     - line: '|   useFlipModelSwapchain: 1'
-    - line: '|   resizableWindow: 1'
+    - line: '|   resizableWindow: 0'
     - line: '|   useMacAppStoreValidation: 0'
     - line: '|   macAppStoreCategory: public.app-category.games'
     - line: '|   gpuSkinning: 1'
@@ -133,7 +133,7 @@ MonoBehaviour:
     - line: '|   xboxEnableFitness: 0'
     - line: '|   visibleInBackground: 0'
     - line: '|   allowFullscreenSwitch: 1'
-    - line: '|   fullscreenMode: 1'
+    - line: '|   fullscreenMode: 0'
     - line: '|   xboxSpeechDB: 0'
     - line: '|   xboxEnableHeadOrientation: 0'
     - line: '|   xboxEnableGuest: 0'
@@ -875,7 +875,7 @@ MonoBehaviour:
     - line: '|   platformArchitecture: {}'
     - line: '|   scriptingBackend:'
     - line: '|     Android: 1'
-    - line: '|     Standalone: 1'
+    - line: '|     Standalone: 0'
     - line: '|   il2cppCompilerConfiguration: {}'
     - line: '|   il2cppCodeGeneration: {}'
     - line: '|   il2cppStacktraceInformation: {}'
@@ -999,9 +999,9 @@ MonoBehaviour:
       type: {class: WindowsPlatformSettings, ns: UnityEditor.WindowsStandalone, asm: UnityEditor.WindowsStandalone.Extensions}
       data:
         m_Development: 1
-        m_ConnectProfiler: 0
-        m_BuildWithDeepProfilingSupport: 0
-        m_AllowDebugging: 0
+        m_ConnectProfiler: 1
+        m_BuildWithDeepProfilingSupport: 1
+        m_AllowDebugging: 1
         m_WaitForManagedDebugger: 0
         m_ManagedDebuggerFixedPort: 0
         m_ExplicitNullChecks: 0

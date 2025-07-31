@@ -156,6 +156,7 @@ public class GameplayMenuHUD : NetworkBehaviour, IDebugger
 
     public void ResetSurrender()
     {
+        m_PlayersDownList.Clear();
         m_PlayersSurrendered = 0;
         m_Surrended = false;
         m_GameEnded = false;
