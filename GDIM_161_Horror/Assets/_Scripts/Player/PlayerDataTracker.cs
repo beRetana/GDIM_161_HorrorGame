@@ -40,6 +40,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         m_FirstPersonController = GetComponent<FirstPersonController>();
 
         m_FirstPersonController.OnPlayerUp += OnPlayerKnocked;
+        m_FirstPersonController.OnPlayerUp += OnPlayerRezzed;
         SceneManager.sceneLoaded += OnLoadedGameScene;
         SceneManager.sceneLoaded += OnReturnToLobby;
     }
@@ -47,6 +48,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
     private void OnDisable()
     {
         m_FirstPersonController.OnPlayerUp -= OnPlayerKnocked;
+        m_FirstPersonController.OnPlayerUp -= OnPlayerRezzed;
         SceneManager.sceneLoaded -= OnReturnToLobby;
         SceneManager.sceneLoaded -= OnLoadedGameScene;
     }
@@ -125,7 +127,7 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
 
     private void OnPlayerKnocked(byte playerID, bool isPlayerUp)
     {
-        if (isPlayerUp || playerID != m_PlayerController.PlayerID) return;
+        if (isPlayerUp || playerID != m_PlayerController.PlayerID || !isLocalPlayer) return;
         Debugger($"Player Knocked {m_KnockedDownCount}");
         if (!isServer) CmdOnPlayerKnocked();
         else ++m_KnockedDownCount;
@@ -137,8 +139,9 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
         ++m_KnockedDownCount;
     }
 
-    public void OnPlayerRezzed()
+    public void OnPlayerRezzed(byte playerID, bool isPlayerUp)
     {
+        if (!isPlayerUp || !isLocalPlayer) return;
         if (!isServer) CmdOnPlayerRezzed();
         else ++m_RezzedUpCount;
     }

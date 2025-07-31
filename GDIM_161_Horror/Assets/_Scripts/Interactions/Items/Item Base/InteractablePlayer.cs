@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InteractablePlayer : InteractableItem, IDebugger
 {
-    public event Action OnPlayerRecued;
+    public event Action OnPlayerRescued;
     protected bool m_Loading;
 
     protected override void Start()
@@ -36,9 +36,7 @@ public class InteractablePlayer : InteractableItem, IDebugger
         if (context.InputType == InteractionType.Hold)
         {
             Debugger("Player Succesfully Rescued");
-            OnPlayerRecued?.Invoke();
-            PlayerManager.Instance.GetPlayer(playerID).
-                GetComponent<PlayerDataTracker>().OnPlayerRezzed();
+            OnPlayerRescued?.Invoke();
         }
         else
         {

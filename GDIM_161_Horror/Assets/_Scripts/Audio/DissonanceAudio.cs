@@ -9,7 +9,6 @@ public class DissonanceAudio : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
             return;
         }
 

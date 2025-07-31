@@ -171,7 +171,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
 
     private void UnlockPlayerSettings()
     {
-        _interaction.OnPlayerRecued -= UnlockPlayer;
+        _interaction.OnPlayerRescued -= UnlockPlayer;
         _interaction.SetInteractive(false);
         gameObject.layer = _playerLayer;
         gameObject.tag = PLAYER_TAG;
@@ -192,7 +192,7 @@ public class PlayerBase : NetworkBehaviour, IDebugger
     private void DownPlayerSettings()
     {
         _interaction.SetInteractive(true);
-        _interaction.OnPlayerRecued += UnlockPlayer;
+        _interaction.OnPlayerRescued += UnlockPlayer;
         gameObject.layer = _interactLayer;
         gameObject.tag = DOWN_PLAYER_TAG;
 
