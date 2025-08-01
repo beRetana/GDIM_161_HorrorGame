@@ -235,7 +235,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638873566227565944
+  lastModified: 638893200674392353
   FileSizes:
   - Name: Desktop
     Value: 1020960
@@ -306,7 +306,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638873566228307962
+  lastModified: 638893200675256433
   FileSizes:
   - Name: Desktop
     Value: 4003872
@@ -335,6 +335,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-3714170933775341587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/HumanoidMonster/HMonsterFootstep
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/HumanoidMonster/HMonsterFootstep
+  Guid:
+    Data1: -2000392714
+    Data2: 1091346883
+    Data3: 284448439
+    Data4: -464462901
+  Banks:
+  - {fileID: 270847151526712670}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3454834273344955169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,7 +377,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638873566226100012
+  lastModified: 638893200673199109
   FileSizes:
   - Name: Desktop
     Value: 129888
@@ -451,7 +478,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638873566229908125
+  lastModified: 638893200676995247
   FileSizes:
   - Name: Desktop
     Value: 1177632
@@ -525,7 +552,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638873566227713628
+  lastModified: 638893202724646924
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -550,6 +577,7 @@ MonoBehaviour:
   - {fileID: -3454834273344955169}
   - {fileID: -5788099683331802207}
   - {fileID: -4997491258284619187}
+  - {fileID: 270847151526712670}
   EditorEvents:
   - {fileID: 7531683133953282101}
   - {fileID: 5939572221690513463}
@@ -582,12 +610,15 @@ MonoBehaviour:
   - {fileID: 8267158259940526390}
   - {fileID: 7971006827378382367}
   - {fileID: 746936757335320867}
+  - {fileID: 6710154245648938037}
+  - {fileID: 8636184174404869383}
+  - {fileID: -3714170933775341587}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638873566229908125
+  cacheTime: 638893202728397611
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -604,10 +635,30 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638873566228823031
+  lastModified: 638893200676382892
   FileSizes:
   - Name: Desktop
     Value: 107072
+  Exists: 1
+--- !u!114 &270847151526712670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/MonstersSFX.bank
+  m_EditorClassIdentifier: 
+  Path: Burning Out FMOD/Build/Desktop/MonstersSFX.bank
+  Name: MonstersSFX
+  StudioPath: bank:/MonstersSFX
+  lastModified: 638893202728397611
+  FileSizes:
+  - Name: Desktop
+    Value: 312224
   Exists: 1
 --- !u!114 &408356832103984802
 MonoBehaviour:
@@ -759,10 +810,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638873566227738783
+  lastModified: 638893202724672240
   FileSizes:
   - Name: Desktop
-    Value: 2680
+    Value: 2884
   Exists: 1
 --- !u!114 &2338621308737970198
 MonoBehaviour:
@@ -1053,6 +1104,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &6710154245648938037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/HumanoidMonster/HMonsterBreathe
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/HumanoidMonster/HMonsterBreathe
+  Guid:
+    Data1: -1821281277
+    Data2: 1103859881
+    Data3: 2554017
+    Data4: 110715856
+  Banks:
+  - {fileID: 270847151526712670}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 20500
 --- !u!114 &6846626182616586449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,6 +1232,33 @@ MonoBehaviour:
     Data4: -847792368
   Banks:
   - {fileID: -5788099683331802207}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8636184174404869383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/HumanoidMonster/HMonsterClicks
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/HumanoidMonster/HMonsterClicks
+  Guid:
+    Data1: -1572965846
+    Data2: 1160278027
+    Data3: -1119797354
+    Data4: 1536758372
+  Banks:
+  - {fileID: 270847151526712670}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
