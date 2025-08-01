@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
@@ -62,3 +63,4 @@ public class MeshCombinerEditor : MonoBehaviour
         Debug.Log("Mesh combining complete. Combined " + combineList.Count + " meshes.");
     }
 }
+#endif
