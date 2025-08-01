@@ -47,9 +47,9 @@ namespace Dissonance
         [SerializeField, UsedImplicitly] private bool _isMuted;
         [SerializeField, UsedImplicitly] private bool _isDeafened;
         [SerializeField, UsedImplicitly] private float _oneMinusBaseRemoteVoiceVolume;
-        #pragma warning disable 0649 //field not used
+#pragma warning disable 0649 //field not used
         [SerializeField, UsedImplicitly] private VoicePlayback _playbackPrefab;
-        #pragma warning restore 0649
+#pragma warning restore 0649
         [SerializeField, UsedImplicitly] private GameObject _playbackPrefab2;
         [SerializeField, UsedImplicitly] private string _micName;
         [SerializeField, UsedImplicitly] private ChannelPriority _playerPriority = ChannelPriority.Default;
@@ -273,17 +273,19 @@ namespace Dissonance
         }
         #endregion
 
-        [UsedImplicitly] private void Awake()
+        [UsedImplicitly]
+        private void Awake()
         {
-            if (_singleton != null)
-            {
-                Destroy(this.gameObject);
-            }
             _singleton = this;
+
+
             DontDestroyOnLoad(gameObject);
+
+
         }
 
-        [UsedImplicitly] private void Start()
+        [UsedImplicitly]
+        private void Start()
         {
             // Unity is unreliable about late loading DLLs so try to load dependencies as early as possible.
             try
@@ -392,7 +394,8 @@ namespace Dissonance
         /// Get the instance of DissonanceComms in the current scene. This will return null if DissonanceComms does not exist in the scene.
         /// </summary>
         /// <returns></returns>
-        [CanBeNull] public static DissonanceComms GetSingleton()
+        [CanBeNull]
+        public static DissonanceComms GetSingleton()
         {
             if (!_singleton)
             {
@@ -403,7 +406,8 @@ namespace Dissonance
             return _singleton;
         }
 
-        [UsedImplicitly] private void OnEnable()
+        [UsedImplicitly]
+        private void OnEnable()
         {
             if (_started)
                 _capture.Resume("DissonanceComms OnEnable called");
@@ -413,7 +417,8 @@ namespace Dissonance
 #endif
         }
 
-        [UsedImplicitly] private void OnDisable()
+        [UsedImplicitly]
+        private void OnDisable()
         {
             if (_started)
                 _capture.Pause();
@@ -433,7 +438,8 @@ namespace Dissonance
         }
 
         [UnityEditor.Callbacks.DidReloadScripts]
-        [UsedImplicitly] private static void OnScriptsReloaded()
+        [UsedImplicitly]
+        private static void OnScriptsReloaded()
         {
             if (UnityEditor.EditorApplication.isPlaying)
                 Log.Error("Dissonance does not support reloading scripts reloading while in play mode");
@@ -647,7 +653,8 @@ namespace Dissonance
         /// </summary>
         /// <param name="playerId"></param>
         /// <returns></returns>
-        [CanBeNull] public VoicePlayerState FindPlayer([NotNull] string playerId)
+        [CanBeNull]
+        public VoicePlayerState FindPlayer([NotNull] string playerId)
         {
             if (playerId == null)
                 throw new ArgumentNullException(nameof(playerId));
@@ -658,7 +665,8 @@ namespace Dissonance
             return null;
         }
 
-        [UsedImplicitly] private void Update()
+        [UsedImplicitly]
+        private void Update()
         {
             Profiler.BeginSample("Write Multithreaded Logs", this);
             Logs.WriteMultithreadedLogs();
@@ -685,7 +693,8 @@ namespace Dissonance
             Profiler.EndSample();
         }
 
-        [UsedImplicitly] private void OnDestroy()
+        [UsedImplicitly]
+        private void OnDestroy()
         {
             _capture.Destroy();
 
