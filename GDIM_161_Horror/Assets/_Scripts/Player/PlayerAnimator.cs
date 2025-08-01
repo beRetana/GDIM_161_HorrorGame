@@ -21,9 +21,9 @@ public class PlayerAnimator : MonoBehaviour
     {
         m_PlayerAnimator?.SetFloat(SPEED, speed);
     }
-    public void SetAnimJump(bool jump)
+    public void SetAnimJump()
     {
-        m_PlayerAnimator?.SetBool(JUMP, jump);
+        m_PlayerAnimator?.SetTrigger(JUMP);
     }
     public void SetAnimLadder(bool ladder)
     {

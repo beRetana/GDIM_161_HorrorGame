@@ -406,7 +406,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""cf20c3f3-a48a-4da2-b27a-0f99637eaea6"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -494,7 +494,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""018d65b9-5ddf-46f9-b87e-35bd1f3002b5"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",

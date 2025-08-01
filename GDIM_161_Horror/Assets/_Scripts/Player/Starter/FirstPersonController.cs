@@ -167,11 +167,14 @@ namespace StarterAssets
                     _verticalVelocity = -2f;
 
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                {
                     _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    _animator.SetAnimJump();
+                }
+                    
 
                 if (_jumpTimeoutDelta >= 0.0f)
                     _jumpTimeoutDelta -= Time.deltaTime;
-
             }
             else
             {
@@ -181,13 +184,11 @@ namespace StarterAssets
                     _fallTimeoutDelta -= Time.deltaTime;
 
                 _input.jump = false;
-                _animator.SetAnimJump(false);
             }
 
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += gravity * Time.deltaTime;
-                _animator.SetAnimJump(true);
             }
         }
 
