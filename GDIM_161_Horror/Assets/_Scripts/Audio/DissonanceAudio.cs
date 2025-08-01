@@ -4,17 +4,19 @@ using UnityEngine.SceneManagement;
 public class DissonanceAudio : MonoBehaviour
 {
     [SerializeField] private const string MAIN_SCENE = "BUILD_MainMenu";
-    static DissonanceAudio instance;
+    static public DissonanceAudio instance;
+
     void Start()
     {
-        if (instance != null && instance != this)
+        if (instance != null)
         {
+            Destroy(this.gameObject);
             return;
         }
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-        SceneManager.sceneLoaded += DestroyOnMainMenu;
+        //SceneManager.sceneLoaded += DestroyOnMainMenu;
     }
 
     private void DestroyOnMainMenu(Scene scene, LoadSceneMode mode)
