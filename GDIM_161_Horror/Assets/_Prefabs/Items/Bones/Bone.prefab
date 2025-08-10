@@ -768,6 +768,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 831233360205059484, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
       insertIndex: 6
       addedObject: {fileID: 8613655821963732507}
+    - targetCorrespondingSourceObject: {fileID: 831233360205059484, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8829139157693625931}
+    - targetCorrespondingSourceObject: {fileID: 831233360205059484, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3052168745021470845}
   m_SourcePrefab: {fileID: 100100000, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
 --- !u!65 &1616682103446223155 stripped
 BoxCollider:
@@ -823,6 +829,49 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8829139157693625931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581109085370827309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1383607896
+      Data2: 1167231004
+      Data3: 1245975441
+      Data4: 1594609269
+    Path: event:/Items/Bone/boneLand
+  Event: 
+  EventPlayTrigger: 7
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &3052168745021470845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581109085370827309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e72550eccafd0341b5713389f66f6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7897675740986593514 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3127496283845560155, guid: b2207154d2eda6147bf75f4b85979934, type: 3}
