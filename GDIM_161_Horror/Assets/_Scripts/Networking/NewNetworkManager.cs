@@ -61,7 +61,14 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         if (conn.identity != null )
         {
-            conn.identity.GetComponent<LoadingScreen>().SetLoadingScreenActive(true);
+            if (SceneManager.GetActiveScene().name == GetLobbySceneName())
+            {
+                StartCoroutine(MovePlayersCounter(0f));
+            }
+            else
+            {
+                conn.identity.GetComponent<LoadingScreen>().SetLoadingScreenActive(true);
+            }
         }
 
         Debugger($"There is {numPlayers} and {startPositionIndex} are ready");
@@ -147,12 +154,12 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private void MovePlayers()
     {
-        StartCoroutine(MovePlayersCounter());
+        StartCoroutine(MovePlayersCounter(m_LoadingPlayersTime));
     }
 
-    private IEnumerator MovePlayersCounter()
+    private IEnumerator MovePlayersCounter(float timeToWait)
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(timeToWait);
 
         foreach (var player in GamePlayers)
         {
