@@ -1,4 +1,5 @@
 using Mirror;
+using Mirror.Examples.Common.Controllers.Player;
 using OtherUtils;
 using Steamworks;
 using System;
@@ -15,6 +16,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     [SerializeField] private PlayerObjectController _playerController;
     [SerializeField] private string m_GameplaySceneName = "BUILD_1";
     [SerializeField] private string[] m_LabSceneNames;
+    [SerializeField] private int m_LoadingPlayersTime = 10;
 
     public event Action OnPlayersServerReady;
     public event Action OnPlayerConnected;
@@ -26,6 +28,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
     public string GameplaySceneName => m_GameplaySceneName;
     public string[] LabSceneName => m_LabSceneNames;
     public int SpawnCount => numPlayers;
+    public int LoadingPlayersTime => m_LoadingPlayersTime;
     public bool PlayersReady => m_PlayersReady;
     public static NewNetworkManager NewSingleton => (NewNetworkManager.singleton as NewNetworkManager);
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
@@ -58,9 +61,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         if (conn.identity != null )
         {
-            Transform location = GetStartPosition();
-            conn.identity.GetComponent<NetworkTransformReliable>().
-                RpcTeleport(location.position, location.rotation);
+            conn.identity.GetComponent<LoadingScreen>().SetLoadingScreenActive(true);
         }
 
         Debugger($"There is {numPlayers} and {startPositionIndex} are ready");
@@ -70,6 +71,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
         if (m_PlayersReady)
         {
             OnPlayersServerReady?.Invoke();
+            StartLoading();
+            MovePlayers();
         }
 
         Debugger("Client Is Server Ready");
@@ -131,6 +134,31 @@ public class NewNetworkManager : NetworkManager, IDebugger
         foreach (NetworkStartPosition startObject in startingObjects)
         {
             RegisterStartPosition(startObject.transform);
+        }
+    }
+
+    private void StartLoading()
+    {
+        foreach (var player in GamePlayers)
+        {
+            player.GetComponent<LoadingScreen>().StartLoadingScreenCounter();
+        }
+    }
+
+    private void MovePlayers()
+    {
+        StartCoroutine(MovePlayersCounter());
+    }
+
+    private IEnumerator MovePlayersCounter()
+    {
+        yield return new WaitForSeconds(10f);
+
+        foreach (var player in GamePlayers)
+        {
+            Transform location = GetStartPosition();
+            player.GetComponent<NetworkTransformReliable>().
+                RpcTeleport(location.position, location.rotation);
         }
     }
 
