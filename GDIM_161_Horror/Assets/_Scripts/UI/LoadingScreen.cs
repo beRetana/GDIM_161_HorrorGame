@@ -3,6 +3,7 @@ using OtherUtils;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class LoadingScreen : NetworkBehaviour, IDebugger
@@ -11,7 +12,7 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
     [SerializeField] private TextMeshProUGUI m_LoadingText;
     [SerializeField] private byte m_MaxLoadingTime = 15;
 
-    private PlayerBase m_Player;
+    private PlayerInput m_Player;
     private bool m_IsLoading = false;
     private bool m_Debugger;
 
@@ -19,7 +20,7 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
     {
         m_LoadingText.text = "Loading";
         m_LoadingScreen.SetActive(false);
-        m_Player = GetComponent<PlayerBase>();
+        m_Player = GetComponent<PlayerInput>();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -50,7 +51,7 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
 
     private IEnumerator LoadingAnim()
     {
-        m_Player.LockPlayer();
+        m_Player.enabled = false;
 
         int i = 0;
 
@@ -72,7 +73,7 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
             i = (++i) % 4;
         }
 
-        m_Player.UnlockPlayer();
+        m_Player.enabled = true;
         m_LoadingText.text = "Loading";
     }
 
