@@ -18,7 +18,19 @@ public class DissonanceReloader : MonoBehaviour
     {
         if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name))
         {
-            _dissonanceComms = FindFirstObjectByType<DissonanceComms>();
+            // Find all DissonanceComms 
+            var allComms = FindObjectsByType<DissonanceComms>(FindObjectsSortMode.None);
+
+            // more than one? destory 
+            if (allComms.Length > 1)
+            {
+                Debug.LogWarning("[Dissonance] More than one DissonanceComms found. Destroying the new one to avoid duplicates.");
+                Destroy(gameObject);
+                return; 
+            }
+
+            // Safe to continue 
+            _dissonanceComms = allComms.Length > 0 ? allComms[0] : null;
             _dissonanceCommsNetwork = FindFirstObjectByType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
 
             if (_dissonanceComms != null && _dissonanceCommsNetwork != null)
@@ -34,39 +46,26 @@ public class DissonanceReloader : MonoBehaviour
 
     private IEnumerator RestartDissonance()
     {
-        // Disable DissonanceComms to restart the networking process
         _dissonanceComms.enabled = false;
 
-        // If MirrorIgnoranceCommsNetwork is used, stop the networking (without calling Initialize directly)
         if (_dissonanceCommsNetwork != null)
         {
-            // tk Debug.Log("[Dissonance] Restarting MirrorIgnoranceCommsNetwork...");
-            _dissonanceCommsNetwork.Stop();  // Stop networking
-            yield return new WaitForSeconds(0.5f); // Small delay to ensure it stops
-
-            // You may want to manually restart the connection here or re-enable networking
-            // This will depend on your network setup and how MirrorIgnorance is configured
-            // Example: _dissonanceCommsNetwork.Start(); // Uncomment if such a method exists
-            // tk Debug.Log("[Dissonance] MirrorIgnoranceCommsNetwork stopped.");
+            _dissonanceCommsNetwork.Stop();
+            yield return new WaitForSeconds(0.5f);
         }
 
-        // Wait for Mirror to fully reinitialize players
         yield return new WaitUntil(() => NetworkClient.ready);
+        yield return new WaitForSeconds(1.5f);
 
-        // Wait for additional time to ensure synchronization
-        yield return new WaitForSeconds(1.5f); // Extra delay to ensure networking syncs
-
-        // Re-enable DissonanceComms
         _dissonanceComms.enabled = true;
         Debug.Log("[Dissonance] DissonanceComms restarted after Mirror was ready.");
 
-        // Ensure the local player is re-registered (update this to your method of finding the player)
         yield return StartCoroutine(ReRegisterLocalPlayer());
     }
 
     private IEnumerator ReRegisterLocalPlayer()
     {
-        yield return new WaitForSeconds(1); // Give time for network updates
+        yield return new WaitForSeconds(1);
 
         if (_dissonanceComms == null)
         {
@@ -74,13 +73,11 @@ public class DissonanceReloader : MonoBehaviour
             yield break;
         }
 
-        // Find the local player. Replace with correct method if you have a different player tracking method
         var localPlayer = FindLocalPlayer();
         if (localPlayer != null)
         {
             Debug.Log("[Dissonance] Local player found, ensuring they are tracked.");
-            // Replace with the correct way to register or track the local player
-            RegisterLocalPlayer(localPlayer); // Adjust based on your player management system
+            RegisterLocalPlayer(localPlayer);
         }
         else
         {
@@ -88,18 +85,14 @@ public class DissonanceReloader : MonoBehaviour
         }
     }
 
-    // Replace with your actual method for identifying the local player
     private GameObject FindLocalPlayer()
     {
-        // Example method to find local player by tag
-        return GameObject.FindWithTag("Player"); // Replace with your actual way to find the player
+        return GameObject.FindWithTag("Player");
     }
 
-    // Replace with your actual way of registering or tracking the player
     private void RegisterLocalPlayer(GameObject localPlayer)
     {
-        // This may involve adding the player to Dissonance's tracking system or setting up voice for the player
-        // Example: _dissonanceComms.TrackPlayer(localPlayer.transform); // Adjust based on actual functionality
+        // Example placeholder
     }
 
     private void OnDestroy()
