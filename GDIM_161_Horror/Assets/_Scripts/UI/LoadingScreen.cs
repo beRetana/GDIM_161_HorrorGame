@@ -12,7 +12,7 @@ public class LoadingScreen : NetworkBehaviour
     private void Start()
     {
         m_LoadingText.text = "Loading";
-        SetLoadingScreenActive(false);
+        m_LoadingScreen.SetActive(false);
     }
 
     [ClientRpc]
@@ -47,6 +47,6 @@ public class LoadingScreen : NetworkBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        SetLoadingScreenActive(false);
+        m_LoadingScreen.SetActive(true);
     }
 }
