@@ -23,8 +23,11 @@ public class LoadingScreen : NetworkBehaviour
         StartCoroutine(LoadingAnim());
     }
 
+    [ClientRpc]
     public void SetLoadingScreenActive(bool active)
     {
+        if (!isLocalPlayer) return;
+
         m_LoadingScreen.SetActive(active);
     }
 
