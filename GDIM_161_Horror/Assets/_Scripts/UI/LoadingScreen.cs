@@ -1,5 +1,6 @@
 using Mirror;
 using OtherUtils;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
     [SerializeField] private GameObject m_LoadingScreen;
     [SerializeField] private TextMeshProUGUI m_LoadingText;
     [SerializeField] private byte m_MaxLoadingTime = 15;
+
+    public event Action OnScreenLoaded;
 
     private PlayerInput m_Player;
     private bool m_IsLoading = false;
@@ -82,6 +85,7 @@ public class LoadingScreen : NetworkBehaviour, IDebugger
         yield return new WaitForSeconds(m_MaxLoadingTime);
         m_LoadingScreen.SetActive(false);
         m_IsLoading = false;
+        OnScreenLoaded?.Invoke();
     }
 
     public void Debugger(object log)
