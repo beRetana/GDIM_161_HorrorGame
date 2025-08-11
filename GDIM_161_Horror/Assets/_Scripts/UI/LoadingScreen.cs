@@ -47,6 +47,6 @@ public class LoadingScreen : NetworkBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        m_LoadingScreen.SetActive(true);
+        m_LoadingScreen.SetActive(false);
     }
 }
