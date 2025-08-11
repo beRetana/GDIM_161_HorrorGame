@@ -13,6 +13,7 @@ public class ObjectActivator : Activator
 
     private const float HEIGHT_BUFFER = 2f;
     private float m_SqrProxRange;
+    private bool m_Loaded;
 
     private void OnEnable()
     {
@@ -27,6 +28,8 @@ public class ObjectActivator : Activator
 
     private void StartPopulatingScene()
     {
+        if (m_Loaded) return;
+        m_Loaded = true;
         StartCoroutine(PopulateServerPool());
     }
 

@@ -59,29 +59,19 @@ public class NewNetworkManager : NetworkManager, IDebugger
     {
         base.OnServerReady(conn);
 
-        if (conn.identity != null )
+        if (conn.identity != null && SceneManager.GetActiveScene().name == GetLobbySceneName())
         {
-            Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} it exists");
-            if (SceneManager.GetActiveScene().name == GetLobbySceneName())
-            {
-                StartCoroutine(MovePlayersCounter(0f));
-                Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
-            }
-            else
-            {
-                conn.identity.GetComponent<LoadingScreen>().SetLoadingScreenActive(true);
-            }
+            StartCoroutine(MovePlayersCounter(0f));
+            Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
         }
 
         Debugger($"There is {numPlayers} and {startPositionIndex} are ready");
         
         m_PlayersReady = ArePlayersReady();
         
-        if (m_PlayersReady)
+        if (m_PlayersReady && SceneManager.GetActiveScene().name != GetLobbySceneName())
         {
-            StartLoading();
-            if (SceneManager.GetActiveScene().name != GetLobbySceneName())
-                MovePlayers();
+            MovePlayers();
         }
 
         Debugger("Client Is Server Ready");
@@ -146,14 +136,6 @@ public class NewNetworkManager : NetworkManager, IDebugger
         }
     }
 
-    private void StartLoading()
-    {
-        foreach (var player in GamePlayers)
-        {
-            player.GetComponent<LoadingScreen>().StartLoadingScreenCounter();
-        }
-    }
-
     private void MovePlayers()
     {
         StartCoroutine(MovePlayersCounter(m_LoadingPlayersTime));
@@ -161,6 +143,10 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
     private IEnumerator MovePlayersCounter(float timeToWait)
     {
+        foreach (var player in GamePlayers)
+        {
+            player.GetComponent<LoadingScreen>().StartLoadingScreenCounter();
+        }
         yield return new WaitForSeconds(timeToWait);
 
         OnPlayersServerReady?.Invoke();
