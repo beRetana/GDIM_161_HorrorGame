@@ -48,5 +48,7 @@ public class LoadingScreen : NetworkBehaviour
         }
 
         m_LoadingScreen.SetActive(false);
+
+        m_LoadingText.text = "Loading";
     }
 }
