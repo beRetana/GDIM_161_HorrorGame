@@ -61,9 +61,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         if (conn.identity != null )
         {
+            Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} it exists");
             if (SceneManager.GetActiveScene().name == GetLobbySceneName())
             {
                 StartCoroutine(MovePlayersCounter(0f));
+                Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
             }
             else
             {
@@ -77,9 +79,9 @@ public class NewNetworkManager : NetworkManager, IDebugger
         
         if (m_PlayersReady)
         {
-            OnPlayersServerReady?.Invoke();
             StartLoading();
-            MovePlayers();
+            if (SceneManager.GetActiveScene().name != GetLobbySceneName())
+                MovePlayers();
         }
 
         Debugger("Client Is Server Ready");
@@ -160,6 +162,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
     private IEnumerator MovePlayersCounter(float timeToWait)
     {
         yield return new WaitForSeconds(timeToWait);
+
+        OnPlayersServerReady?.Invoke();
 
         foreach (var player in GamePlayers)
         {
