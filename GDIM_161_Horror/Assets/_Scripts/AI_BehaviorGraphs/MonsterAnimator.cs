@@ -52,7 +52,7 @@ public class MonsterAnimator : NetworkBehaviour
         if (m_Player != null) return;
 
         m_Player = player;
-        m_Player.LockPlayer();
+        //m_Player.LockPlayer();
         m_Animator.ResetTrigger(attack);
         m_Animator.SetTrigger(attack);
     }
@@ -60,7 +60,7 @@ public class MonsterAnimator : NetworkBehaviour
     public void Attack()
     {
         if (!isServer) return;
-        m_Player?.DownPlayer();
+        //m_Player?.DownPlayer();
     }
 
     public void EndAttack()
