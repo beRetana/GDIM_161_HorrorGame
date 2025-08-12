@@ -26,11 +26,19 @@ public class DissonanceReloader : MonoBehaviour
         
         Destroy(this.gameObject);
 
-        StartCoroutine(RestartDissonance());
+       
     }
+
+   
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "BUILD_Lobby")
+        {
+            StartCoroutine(RestartDissonance());
+        }
+
+
         if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
 
         // Find all DissonanceComms 
