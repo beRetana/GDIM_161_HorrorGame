@@ -60,7 +60,7 @@ public class MonsterAnimator : NetworkBehaviour
     public void Attack()
     {
         if (!isServer) return;
-        //m_Player?.DownPlayer();
+        m_Player?.DownPlayer();
     }
 
     public void EndAttack()
