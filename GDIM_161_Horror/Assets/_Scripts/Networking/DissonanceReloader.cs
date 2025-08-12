@@ -14,6 +14,7 @@ public class DissonanceReloader : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.activeSceneChanged += OnSceneChanged;
+        StartCoroutine(RestartDissonance());
     }
 
     private void OnSceneChanged(Scene current, Scene next)
@@ -24,6 +25,8 @@ public class DissonanceReloader : MonoBehaviour
         SceneManager.activeSceneChanged -= OnSceneChanged;
         
         Destroy(this.gameObject);
+
+
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
