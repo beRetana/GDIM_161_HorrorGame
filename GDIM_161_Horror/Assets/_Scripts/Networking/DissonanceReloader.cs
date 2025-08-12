@@ -1,9 +1,8 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using Dissonance;
 using Mirror;
 using System.Collections;
-using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DissonanceReloader : MonoBehaviour
 {
@@ -14,51 +13,37 @@ public class DissonanceReloader : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnSceneChanged;
+    }
 
-        //if (Singleton == null)
-        //{
-        //    Singleton = this;
-        //}
-        //else
-        //{
-        //    Destroy(gameObject);
-        //}
-
+    private void OnSceneChanged(Scene current, Scene next)
+    {
+        if (NewNetworkManager.NewSingleton.GetLobbySceneName() != next.name) return;
+        
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.activeSceneChanged -= OnSceneChanged;
+        
+        Destroy(this.gameObject);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.GetLobbySceneName() == scene.name)
+        if (!NewNetworkManager.NewSingleton.IsGameplayScene(scene.name)) return;
+
+        // Find all DissonanceComms 
+        var allComms = FindObjectsByType<DissonanceComms>(FindObjectsSortMode.None);
+
+        // Safe to continue 
+        _dissonanceComms = allComms.Length > 0 ? allComms[0] : null;
+        _dissonanceCommsNetwork = FindFirstObjectByType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
+
+        if (_dissonanceComms != null && _dissonanceCommsNetwork != null)
         {
-            Destroy(this.gameObject);
-        
+            StartCoroutine(RestartDissonance());
         }
-           
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name))
+        else
         {
-            // Find all DissonanceComms 
-            var allComms = FindObjectsByType<DissonanceComms>(FindObjectsSortMode.None);
-
-            //// more than one? destory 
-            //if (allComms.Length > 1)
-            //{
-            //    Debug.LogWarning("[Dissonance] More than one DissonanceComms found. Destroying the new one to avoid duplicates.");
-            //    Destroy(gameObject);
-            //    return; 
-            //}
-
-            // Safe to continue 
-            _dissonanceComms = allComms.Length > 0 ? allComms[0] : null;
-            _dissonanceCommsNetwork = FindFirstObjectByType<Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork>();
-
-            if (_dissonanceComms != null && _dissonanceCommsNetwork != null)
-            {
-                StartCoroutine(RestartDissonance());
-            }
-            else
-            {
-                Debug.LogError("[Dissonance] DissonanceComms or MirrorIgnoranceCommsNetwork not found in the scene.");
-            }
+            Debug.LogError("[Dissonance] DissonanceComms or MirrorIgnoranceCommsNetwork not found in the scene.");
         }
     }
 
