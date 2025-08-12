@@ -5,7 +5,7 @@
 			<value>sonarPing</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{72ed2b26-e254-4f87-8ea5-5dddda844151}</destination>
@@ -96,6 +96,7 @@
 	<object class="MixerBusEffectChain" id="{853c0c86-2ebe-4ec2-9581-f449cca02c39}">
 		<relationship name="effects">
 			<destination>{7fa79472-acd3-4b85-92d4-8790700ec3f4}</destination>
+			<destination>{bdad7d72-558c-40f8-bc95-2e8400d6f4ab}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{4099cdbf-5fac-4318-8620-30a506f411e1}" />
@@ -106,4 +107,5 @@
 	</object>
 	<object class="MixerBusFader" id="{101d1186-b371-4939-ba45-418c17e87eee}" />
 	<object class="MixerBusFader" id="{7fa79472-acd3-4b85-92d4-8790700ec3f4}" />
+	<object class="SpatialiserEffect" id="{bdad7d72-558c-40f8-bc95-2e8400d6f4ab}" />
 </objects>
