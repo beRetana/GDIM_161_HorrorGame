@@ -28,7 +28,7 @@ public class DissonanceReloader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name))
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) || NewNetworkManager.NewSingleton.GetLobbySceneName() == scene.name)
         {
             // Find all DissonanceComms 
             var allComms = FindObjectsByType<DissonanceComms>(FindObjectsSortMode.None);
