@@ -11,24 +11,30 @@ public class DissonanceReloader : MonoBehaviour
     private DissonanceComms _dissonanceComms;
     private Dissonance.Integrations.MirrorIgnorance.MirrorIgnoranceCommsNetwork _dissonanceCommsNetwork;
 
-    private void Awake()
+    private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        if (Singleton == null)
-        {
-            Singleton = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //if (Singleton == null)
+        //{
+        //    Singleton = this;
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //}
 
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name) || NewNetworkManager.NewSingleton.GetLobbySceneName() == scene.name)
+        if (NewNetworkManager.NewSingleton.GetLobbySceneName() == scene.name)
+        {
+            Destroy(this.gameObject);
+        
+        }
+           
+        if (NewNetworkManager.NewSingleton.IsGameplayScene(scene.name))
         {
             // Find all DissonanceComms 
             var allComms = FindObjectsByType<DissonanceComms>(FindObjectsSortMode.None);
