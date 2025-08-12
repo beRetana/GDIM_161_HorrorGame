@@ -51,6 +51,9 @@ public class FMODEvents : MonoBehaviour
     [field: Header("SingleDoorClose")]
     [field: SerializeField] public EventReference SingleDoorClose { get; private set; }
 
+    [field: Header("monsterDeerCharge")]
+    [field: SerializeField] public EventReference monsterDeerCharge { get; private set; }
+
 
     //Example for future one shot referrences
     //AudioManager.instance.PlayOneShot(FMODEvents.instance.sonarPing, this.transform.position);
