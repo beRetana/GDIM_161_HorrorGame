@@ -61,6 +61,7 @@ public class MonsterAnimator : NetworkBehaviour
     {
         if (!isServer) return;
         //m_Player?.DownPlayer();
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.monsterDeerCharge, this.transform.position);
     }
 
     public void EndAttack()
