@@ -60,8 +60,7 @@ public class MonsterAnimator : NetworkBehaviour
     public void Attack()
     {
         if (!isServer) return;
-        //m_Player?.DownPlayer();
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.monsterDeerCharge, this.transform.position);
+        m_Player?.DownPlayer();
     }
 
     public void EndAttack()

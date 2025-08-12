@@ -61,7 +61,12 @@ public class NewNetworkManager : NetworkManager, IDebugger
 
         if (conn.identity != null && SceneManager.GetActiveScene().name == GetLobbySceneName())
         {
-            StartCoroutine(MovePlayersCounter(0f));
+            foreach (var player in GamePlayers)
+            {
+                Transform location = GetStartPosition();
+                player.GetComponent<NetworkTransformReliable>().
+                    RpcTeleport(location.position, location.rotation);
+            }
             Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
         }
 
