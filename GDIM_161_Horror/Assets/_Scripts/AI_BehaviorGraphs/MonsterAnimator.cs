@@ -61,6 +61,12 @@ public class MonsterAnimator : NetworkBehaviour
     {
         if (!isServer) return;
         m_Player?.DownPlayer();
+        RpcPlaySoundEffect();
+    }
+
+    [ClientRpc]
+    private void RpcPlaySoundEffect()
+    {
         AudioManager.instance.PlayOneShot(FMODEvents.instance.monsterDeerCharge, this.transform.position);
     }
 
