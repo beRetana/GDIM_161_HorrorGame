@@ -252,6 +252,12 @@ public class PlayerBase : NetworkBehaviour, IDebugger
         _playerUI.HideInteractUI();
         _playerUI.CancelHoldingUI();
     }
+
+    public void ResetPlayerStats()
+    {
+        SetPlayerStats();
+    }
+
     private bool SetPlayerStats()
     {
         if (!isLocalPlayer) return false;

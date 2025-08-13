@@ -31,6 +31,12 @@ public class PlayerSpeedTracker : MonoBehaviour
     protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         m_IsPlaying = NewNetworkManager.NewSingleton.IsGameplayScene(scene.name);
+        m_IsPlaying = !(m_IsPlaying && scene.name != NewNetworkManager.NewSingleton.GetLobbySceneName());
+        
+        if (!m_IsPlaying)
+        {
+            m_FirstPersonController.ResetPlayerStats();
+        }
     }
 
     protected virtual void Update()

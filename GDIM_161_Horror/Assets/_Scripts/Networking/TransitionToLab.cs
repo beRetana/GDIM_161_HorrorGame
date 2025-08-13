@@ -30,6 +30,12 @@ public class TransitionToLab : NetworkBehaviour
         player.GetComponent<PlayerDataTracker>().OnReachedNewFloor(REACHED_LAB);
         if (m_PlayerIDs.Count < NewNetworkManager.NewSingleton.numPlayers) return;
 
+        MoveToLab();
+    }
+
+    [ClientRpc]
+    private void MoveToLab()
+    {
         StartCoroutine(MovingToLab());
     }
 
@@ -40,6 +46,6 @@ public class TransitionToLab : NetworkBehaviour
         yield return new WaitForSeconds(m_WaitingTime);
         m_Text.gameObject.SetActive(true); 
         yield return new WaitForSeconds(m_WaitingTime);
-        NewNetworkManager.NewSingleton.LoadLabScene();
+        if (isServer) NewNetworkManager.NewSingleton.LoadLabScene();
     }
 }
