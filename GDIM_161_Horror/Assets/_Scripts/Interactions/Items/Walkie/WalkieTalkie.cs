@@ -57,7 +57,7 @@ public class WalkieTalkie : NetworkPickableItem
             return;
 
         // Start talking
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // 2D one-shot
             RuntimeManager.PlayOneShot(walkieStart);
@@ -70,7 +70,7 @@ public class WalkieTalkie : NetworkPickableItem
         }
 
         // Stop talking
-        if (Input.GetKeyUp(KeyCode.V))
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             RuntimeManager.PlayOneShot(walkieEnd);
 
