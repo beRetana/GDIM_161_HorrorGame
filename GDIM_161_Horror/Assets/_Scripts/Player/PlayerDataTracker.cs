@@ -94,8 +94,8 @@ public class PlayerDataTracker : NetworkBehaviour, IDebugger
 
     public void OnReachedNewFloor(byte floorNum)
     {
-        float previousTime = (floorNum != 0) ? m_TimePerFloor[--floorNum] : m_StartTime;
-        ulong timeStamp = (ulong)(Time.time - previousTime);
+        ulong previousTime = (floorNum != 0) ? m_TimePerFloor[--floorNum] : m_StartTime;
+        ulong timeStamp = ((ulong)Time.time - previousTime);
 
         if (isServer) RpcOnReachedNewFloor(timeStamp, floorNum);
         else CmdOnReachedNewFloor(timeStamp, floorNum);

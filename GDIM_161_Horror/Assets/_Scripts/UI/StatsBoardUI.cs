@@ -38,7 +38,7 @@ public class StatsBoardUI : MonoBehaviour
 
     private static string FormatTime(ulong time)
     {
-        return $"{(time / 3600)}:{DoubleDigit((time/60) % 60)}:{DoubleDigit(time % 60)}";
+        return $"{(ulong)(time / 3600)}:{DoubleDigit((ulong)(time/60) % 60)}:{DoubleDigit((ulong)(time % 60))}";
     }
 
     private static string DoubleDigit(ulong time)
