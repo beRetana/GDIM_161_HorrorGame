@@ -15,6 +15,7 @@ public class WalkieTalkie : NetworkPickableItem
     private EventInstance radioStaticInstance;
     private bool isLoopPlaying = false;
     private bool isPossessed = false;
+    private bool isDominantHand = false;
 
     protected override void PickItem(int playerId)
     {
@@ -30,6 +31,10 @@ public class WalkieTalkie : NetworkPickableItem
         radioStaticInstance = RuntimeManager.CreateInstance(radioStatic);
         // No set3DAttributes() call here
         isLoopPlaying = false;
+
+        var inventory = PlayerManager.Instance.GetPlayer(playerId).GetComponent<HandInventory>();
+        OnHandsSwapped(inventory.PeekAtDominant());
+        inventory.OnSwapingHands += OnHandsSwapped;
     }
 
     public override void UnPossessItem(Vector3 throwDir, int playerID)
@@ -49,15 +54,20 @@ public class WalkieTalkie : NetworkPickableItem
         }
 
         isLoopPlaying = false;
+        PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>().OnSwapingHands -= OnHandsSwapped;
+    }
+
+    private void OnHandsSwapped(NetworkPickableItem heldItem)
+    {
+        isDominantHand = heldItem == this;
     }
 
     private void Update()
     {
-        if (!isPossessed)
-            return;
+        if (!isPossessed || !isDominantHand) return;
 
         // Start talking
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // 2D one-shot
             RuntimeManager.PlayOneShot(walkieStart);
@@ -70,7 +80,7 @@ public class WalkieTalkie : NetworkPickableItem
         }
 
         // Stop talking
-        if (Input.GetKeyUp(KeyCode.V))
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             RuntimeManager.PlayOneShot(walkieEnd);
 
