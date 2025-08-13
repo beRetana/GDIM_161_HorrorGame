@@ -316,10 +316,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/ItemsSFX.bank
   Name: ItemsSFX
   StudioPath: bank:/ItemsSFX
-  lastModified: 638903977342011443
+  lastModified: 638906096536552088
   FileSizes:
   - Name: Desktop
-    Value: 1061152
+    Value: 1061440
   Exists: 1
 --- !u!114 &-5367524864338901802
 MonoBehaviour:
@@ -387,7 +387,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638903977392058961
+  lastModified: 638905498124585073
   FileSizes:
   - Name: Desktop
     Value: 4004096
@@ -431,7 +431,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/AnimalSFX.bank
   Name: AnimalSFX
   StudioPath: bank:/AnimalSFX
-  lastModified: 638903977333885212
+  lastModified: 638905498121542064
   FileSizes:
   - Name: Desktop
     Value: 130656
@@ -532,10 +532,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/WorldSpace.bank
   Name: WorldSpace
   StudioPath: bank:/WorldSpace
-  lastModified: 638903977400074100
+  lastModified: 638904704018290982
   FileSizes:
   - Name: Desktop
-    Value: 1350784
+    Value: 1440928
   Exists: 1
 --- !u!114 &-981276713472088124
 MonoBehaviour:
@@ -606,7 +606,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638903977342183111
+  lastModified: 638905498122868942
   FileSizes:
   - Name: Desktop
     Value: 5026
@@ -671,12 +671,13 @@ MonoBehaviour:
   - {fileID: 2143243010552776700}
   - {fileID: 4949110770210415730}
   - {fileID: 369454401374700566}
+  - {fileID: 6304609887392669099}
   EditorParameters: []
   MasterBanks:
   - {fileID: -238223770636140962}
   StringsBanks:
   - {fileID: 1599044835148366132}
-  cacheTime: 638903977400074100
+  cacheTime: 638906096536552088
   cacheVersion: 131623
 --- !u!114 &32562135611507061
 MonoBehaviour:
@@ -693,7 +694,7 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/PlayerSFX.bank
   Name: PlayerSFX
   StudioPath: bank:/PlayerSFX
-  lastModified: 638903977392896973
+  lastModified: 638905498125407061
   FileSizes:
   - Name: Desktop
     Value: 107584
@@ -875,10 +876,10 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638903977342208251
+  lastModified: 638905498122894260
   FileSizes:
   - Name: Desktop
-    Value: 3086
+    Value: 3134
   Exists: 1
 --- !u!114 &2143243010552776700
 MonoBehaviour:
@@ -1058,7 +1059,7 @@ MonoBehaviour:
   Banks:
   - {fileID: -5788099683331802207}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -1223,6 +1224,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 100
   Length: 680
+--- !u!114 &6304609887392669099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monsters/monsterDeerCharge
+  m_EditorClassIdentifier: 
+  Path: event:/Monsters/monsterDeerCharge
+  Guid:
+    Data1: -1335792985
+    Data2: 1129504569
+    Data3: -1995456593
+    Data4: 286032834
+  Banks:
+  - {fileID: 9167473013789095892}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6324704383831810508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1373,8 +1401,8 @@ MonoBehaviour:
   Path: Burning Out FMOD/Build/Desktop/MonstersSFX.bank
   Name: MonstersSFX
   StudioPath: bank:/MonstersSFX
-  lastModified: 638903977345691167
+  lastModified: 638905509223804304
   FileSizes:
   - Name: Desktop
-    Value: 312224
+    Value: 322720
   Exists: 1

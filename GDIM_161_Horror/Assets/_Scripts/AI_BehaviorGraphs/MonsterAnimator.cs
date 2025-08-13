@@ -52,7 +52,7 @@ public class MonsterAnimator : NetworkBehaviour
         if (m_Player != null) return;
 
         m_Player = player;
-        m_Player.LockPlayer();
+        //m_Player.LockPlayer();
         m_Animator.ResetTrigger(attack);
         m_Animator.SetTrigger(attack);
     }
@@ -61,6 +61,7 @@ public class MonsterAnimator : NetworkBehaviour
     {
         if (!isServer) return;
         m_Player?.DownPlayer();
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.monsterDeerCharge, this.transform.position);
     }
 
     public void EndAttack()
