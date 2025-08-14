@@ -65,7 +65,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
             {
                 Transform location = GetStartPosition();
                 player.GetComponent<NetworkTransformReliable>().
-                    RpcTeleport(location.position, location.rotation);
+                    ServerTeleport(location.position, location.rotation);
             }
             Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
         }
@@ -152,9 +152,11 @@ public class NewNetworkManager : NetworkManager, IDebugger
         {
             player.GetComponent<LoadingScreen>().StartLoadingScreenCounter();
         }
-        yield return new WaitForSeconds(timeToWait);
+        yield return new WaitForSeconds(3);
 
         OnPlayersServerReady?.Invoke();
+
+        yield return new WaitForSeconds(2);
 
         foreach (var player in GamePlayers)
         {
@@ -163,8 +165,22 @@ public class NewNetworkManager : NetworkManager, IDebugger
             player.transform.position = location.position;
             player.transform.rotation = location.rotation;
 
-            player.GetComponent<NetworkTransformReliable>().RpcTeleport(location.position, location.rotation);
+            player.GetComponent<NetworkTransformReliable>().ServerTeleport(location.position, location.rotation);
             
+            yield return new WaitForSeconds(1);
+        }
+
+        StartCoroutine(RollBackLocation());
+    }
+
+    private IEnumerator RollBackLocation()
+    {
+        yield return new WaitForSeconds(1);
+
+        foreach (var player in GamePlayers)
+        {
+            player.GetComponent<NetworkTransformReliable>().ServerTeleport(player.transform.position, player.transform.rotation);
+
             yield return new WaitForSeconds(1f);
         }
     }
