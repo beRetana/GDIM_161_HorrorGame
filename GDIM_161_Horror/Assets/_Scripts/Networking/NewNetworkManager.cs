@@ -65,7 +65,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
             {
                 Transform location = GetStartPosition();
                 player.GetComponent<NetworkTransformReliable>().
-                    ServerTeleport(location.position, location.rotation);
+                    RpcTeleport(location.position, location.rotation);
             }
             Debugger($"Player {conn.identity.GetComponent<PlayerObjectController>().PlayerID} is ready in lobby");
         }
@@ -165,7 +165,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
             player.transform.position = location.position;
             player.transform.rotation = location.rotation;
 
-            //player.GetComponent<NetworkTransformReliable>().ServerTeleport(location.position, location.rotation);
+            player.GetComponent<NetworkTransformReliable>().RpcTeleport(location.position, location.rotation);
             
             yield return new WaitForSeconds(1);
         }
