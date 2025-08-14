@@ -18,6 +18,7 @@ namespace StarterAssets
         private float _stepSoundTime;
         private bool _gravityOn = true;
         [SyncVar] private bool m_HasKeyCard;
+        private float sensScale = 0.01f;
 
         public bool HasKeyCard { get { return m_HasKeyCard; } set { SetHasKeycard(value); } }
         public bool isWalking { get; private set; }
@@ -72,6 +73,7 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            CameraRotation();
         }
 
         private void FixedUpdate()
@@ -82,8 +84,8 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            if (!isLocalPlayer || !m_EnableFunctionality) return;
-            CameraRotation();
+            //if (!isLocalPlayer || !m_EnableFunctionality) return;
+            //CameraRotation();
         }
 
         private void UpdateSpeedAnimation()
@@ -102,9 +104,10 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude < _THRESHOLD) return;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetPitch += _input.look.y * rotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = _input.look.x * rotationSpeed * deltaTimeMultiplier;
+            _cinemachineTargetPitch += _input.look.y * rotationSpeed * sensScale;
+            _rotationVelocity = _input.look.x * rotationSpeed * sensScale;
 
+            Debug.Log($"X Rotation Velocity: {_input.look.x} * {rotationSpeed} * {sensScale}");
             //Debugger($"X Rotation Velocity: {_input.look.x} * {rotationSpeed} * {deltaTimeMultiplier}");
 
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
