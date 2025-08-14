@@ -63,9 +63,9 @@ namespace Interactions
             NewNetworkManager.NewSingleton.OnPlayersServerReady -= SetUpDoors;
         }
 
-        [Server]
         private void SetUpDoors()
         {
+            if (!isServer) return;
             m_PlayersRequired = (byte)NewNetworkManager.NewSingleton.numPlayers;
             RpcAdjustButtonNumber(m_PlayersRequired);
         }
