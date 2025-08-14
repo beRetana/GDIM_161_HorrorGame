@@ -45,6 +45,15 @@ public class PlayerObjectController : NetworkBehaviour, IDebugger
         
     }
 
+    [ClientRpc]
+    public void PlayerSetPosition(Vector3 Position, Quaternion Rotation)
+    {
+        if (!isLocalPlayer) return;
+
+        transform.position = Position;
+        transform.rotation = Rotation;
+    }
+
     private void PlayerReadyUpdate(bool oldValue, bool newValue)
     {
         if (isServer)

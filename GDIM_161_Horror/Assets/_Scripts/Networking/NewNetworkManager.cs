@@ -162,11 +162,9 @@ public class NewNetworkManager : NetworkManager, IDebugger
         {
             Transform location = GetStartPosition();
 
-            player.transform.position = location.position;
-            player.transform.rotation = location.rotation;
+            player.GetComponent<PlayerObjectController>().PlayerSetPosition(location.position, location.rotation);
+            //player.GetComponent<NetworkTransformReliable>().RpcTeleport(location.position, location.rotation);
 
-            player.GetComponent<NetworkTransformReliable>().RpcTeleport(location.position, location.rotation);
-            
             yield return new WaitForSeconds(1);
         }
 
