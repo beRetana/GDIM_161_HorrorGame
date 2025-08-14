@@ -170,7 +170,7 @@ public class NewNetworkManager : NetworkManager, IDebugger
             yield return new WaitForSeconds(1);
         }
 
-        StartCoroutine(RollBackLocation());
+        //StartCoroutine(RollBackLocation());
     }
 
     private IEnumerator RollBackLocation()
