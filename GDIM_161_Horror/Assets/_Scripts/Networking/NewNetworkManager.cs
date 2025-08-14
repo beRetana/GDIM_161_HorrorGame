@@ -159,8 +159,8 @@ public class NewNetworkManager : NetworkManager, IDebugger
         foreach (var player in GamePlayers)
         {
             Transform location = GetStartPosition();
-            player.GetComponent<NetworkTransformReliable>().
-                RpcTeleport(location.position, location.rotation);
+            player.GetComponent<NetworkTransformReliable>().RpcTeleport(location.position, location.rotation);
+            yield return new WaitForSeconds(1f);
         }
     }
 
