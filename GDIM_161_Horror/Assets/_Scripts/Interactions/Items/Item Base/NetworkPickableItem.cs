@@ -41,16 +41,23 @@ namespace Interactions
                 Debugger($"tried PICK UP on {this}, but is already possessed");
                 return;
             }
+            try
+            {
+                HandInventory playerInventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
 
-            HandInventory playerInventory = PlayerManager.Instance.GetPlayer(playerID).GetComponent<HandInventory>();
-            
-            if (playerInventory.IsInventoryFull()) return;
+                if (playerInventory.IsInventoryFull()) return;
 
-            bool success = playerInventory.PickUpItem(this);
-            if (!success) return;
+                bool success = playerInventory.PickUpItem(this);
+                if (!success) return;
 
-            SetPossessed(true, playerID);
-            AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
+                SetPossessed(true, playerID);
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.torchGrab, this.transform.position);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error picking up item {this.name}: {e.Message}");
+                Debug.LogError($"Player with ID {playerID}");
+            }
         }
 
         public virtual void UnPossessItem(Vector3 throwDir, int playerID)
